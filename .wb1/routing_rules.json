@@ -1,0 +1,12 @@
+{
+  "updated_at": "2026-09-05T16:12:22Z",
+  "source_verdict": 5553018248,
+  "rules": [
+    "AI_ADVICE != KR_DECISION",
+    "KR explicit action => KR_DECISION（唯一法定来源）",
+    "AI/KR conflict + no hard-risk trigger => KR may override, log KR_OVERRIDE",
+    "hard-risk trigger + evidence => KR_GATE + RED_FLAG + explicit confirmation",
+    "uncertainty only => UNKNOWN -> gather evidence / JUDGE, not KR_GATE",
+    "KR_GATE != KR_BOOT_GATE（需KR决定≠需KR开机）"
+  ]
+}
