@@ -35,6 +35,12 @@
       "ref": "",
       "status": "AUTHORIZED",
       "at": "2026-09-05T16:21:00Z"
+    },
+    {
+      "verdict_id": 5552023775,
+      "ref": "",
+      "status": "AUTHORIZED",
+      "at": "2026-09-05T16:21:06Z"
     }
   ]
 }
