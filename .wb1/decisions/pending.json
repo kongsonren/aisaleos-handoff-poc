@@ -1,0 +1,1 @@
+{"pending":[{"decision_id":"D-20260905-001","title":"8501待KR决定闭环的KR决策入口方式","question":"云端1号已建好决策卡(GitHub云态)+企微通知。KR在手机上用什么方式对决策卡做A/B/STOP？","options":{"A":"GitHub评论[KR_DECISION]：手机GitHub App直接回，零额外依赖，最云原生","B":"企微单聊回复：体验更顺，但需云端回读企微消息","STOP":"暂不启用该闭环"},"context":"REWORK②最小待KR决定闭环机制自举","created_at":"2026-09-05T14:56:03Z","status":"PENDING"}]}
