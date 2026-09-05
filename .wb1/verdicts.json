@@ -17,6 +17,12 @@
       "ref": "5552434833",
       "status": "PASS_WITH_CONDITIONS",
       "at": "2026-09-05T16:12:29Z"
+    },
+    {
+      "verdict_id": 5553071697,
+      "ref": "",
+      "status": "REWORK",
+      "at": "2026-09-05T16:20:29Z"
     }
   ]
 }
