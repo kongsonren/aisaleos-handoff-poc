@@ -28,6 +28,20 @@
       "resolved_at": "2026-09-05T16:46:55Z",
       "kr_choice": "A",
       "kr_text": "验收通过，定为KR_GATE标准手机入口"
+    },
+    {
+      "decision_id": "D-SOV-20260906-001",
+      "title": "TEST_ONLY 主权验收：KR 手机亲点 8501 生成 [KR_DECISION]",
+      "question": "这是一条明确标注 TEST_ONLY 的验收卡（非真实架构决策）。请在手机上点 A 确认主权入口可用；或输入一条测试指令；或点 STOP。",
+      "options": {
+        "A": "确认主权入口可用（手机亲点成功，8501 生成 [KR_DECISION]）",
+        "B": "暂不确认，保留观察",
+        "STOP": "终止本次主权验收"
+      },
+      "context": "KR 主权验收 · TEST_ONLY=YES · 仅验证 手机→8501→[KR_DECISION]→WB1 闭环",
+      "test_only": true,
+      "created_at": "2026-09-06T00:56:00Z",
+      "status": "PENDING"
     }
   ]
 }
