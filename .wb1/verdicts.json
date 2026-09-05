@@ -5,6 +5,12 @@
       "ref": "",
       "status": "",
       "at": "2026-09-05T16:12:09Z"
+    },
+    {
+      "verdict_id": 5553018248,
+      "ref": "5552843987",
+      "status": "PASS_WITH_CONDITIONS",
+      "at": "2026-09-05T16:12:19Z"
     }
   ]
 }
