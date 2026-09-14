@@ -1,3 +1,11 @@
 {
-  "pending": []
+  "pending": [
+    {
+      "kind": "SELF_SOLVE",
+      "source_comment_id": 5659842966,
+      "note": "WB1 授权内可闭环；若需本机文件/服务则由黑武士上线消费",
+      "created_at": "2026-09-14T06:18:59Z",
+      "status": "queued"
+    }
+  ]
 }
