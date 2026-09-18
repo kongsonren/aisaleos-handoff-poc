@@ -13,6 +13,13 @@
       "source_comment_id": 5553018248,
       "status": "PENDING_LOCAL",
       "created_at": "2026-09-18T06:14:57Z"
+    },
+    {
+      "type": "TEST_ADVANCE",
+      "ref": "NONE",
+      "source_comment_id": 5553019807,
+      "status": "PENDING_LOCAL",
+      "created_at": "2026-09-18T06:15:02Z"
     }
   ]
 }
