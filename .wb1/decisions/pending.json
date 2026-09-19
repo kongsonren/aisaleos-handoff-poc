@@ -42,6 +42,14 @@
       "test_only": true,
       "created_at": "2026-09-06T00:56:00Z",
       "status": "PENDING"
+    },
+    {
+      "id": "D-CLOUD-20260919-040631",
+      "status": "PENDING",
+      "source": "ISSUE#6",
+      "comment_id": 5738871589,
+      "created_at": "2026-09-19T04:06:32Z",
+      "summary": "[CHATGPT-COMMITTEE-ROUTING-VERDICT]"
     }
   ]
 }
