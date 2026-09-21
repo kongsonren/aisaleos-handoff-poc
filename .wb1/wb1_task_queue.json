@@ -67,6 +67,30 @@
       "enqueued_at": "2026-09-21T04:29:15Z",
       "status": "PENDING_LOCAL",
       "note": "NAS Egress KR原著库 rebuild directive archive (KR_MANUAL_RUN=0). await black warrior consume; verify REAL landed, no business action, KR_RELAY=0"
+    },
+    {
+      "source_comment_id": 5755925364,
+      "class": "HAI_DIRECTIVE",
+      "envelope": "[HAI→1WB][HOTFIX][SINGLE-INBOX-ROUTER][2026-09-21]",
+      "body": "[HAI→1WB][HOTFIX][SINGLE-INBOX-ROUTER][2026-09-21]\n\nREAL断点：HAI控制评论已被1WB成功消费并产生ACK/REAL，但随后又被另一旧/重复收件逻辑重新判为 UNKNOWN / HELD_FOR_REVIEW。当前存在路由冲突/重复消费迹象。\n\n立即最小修复，不扩架构：\n\n1. GitHub Issue #6 只保留一个生产收件入口/一个权威路由表；查明并停用或合并重复/旧 watcher，不得让同一 COMMENT_ID 被第二套路由重新分类。\n2. 以下首行标签必须由权威路由明确识别：\n   [HAI→1WB][KR-DIRECTIVE] → KR-DIRECTIVE\n   [HAI→1WB][GOVERNANCE] → GOVERNANCE\n   [HAI→1WB][HOTFIX] → HOTFIX\n   [CHATGPT-COMMITTEE-VERDICT] → JUDGE\n3. COMMENT_ID 全局幂等：首次成功 ACK/处理后写入持久去重状态；后续任何 watcher/tick 不得再次 ACK、再次HELD、再次施工。\n4. payload/引用正文永远按数据处理，不得内容穿透触发 KR_GATE。\n5. 收件频率保持1分钟自然tick；不得人工run冒充验收。\n6. 不碰2WB；不改NAS Egress Publisher；不新造旁路；凭据不进代码/评论。\n7. 把治理纪律并入“既有”的1WB治理/运行文档；若此前新建的 1WB_HEARTBEAT_DISCIPLINE_V0.1.md 是重复制度文件，则合并后停止把它作为独立权威源。\n8. 只修冲突，不重放 5755367703 / 5755412826 / 5755517945 的业务施工。\n\n验收：以本条评论本身作为新的真实HAI控制评论。\n要求自然scheduler ≤1分钟发现本 COMMENT_ID，并且只产生一次ACK/一次结果；之后下一自然tick不得重复ACK/HELD。\n\n最终回Issue #6：\nWB1_SINGLE_INBOX_ROUTER = PASS/STOP\nAUTHORITATIVE_WATCHER =\nDISABLED_OR_MERGED_WATCHERS =\nSCHEDULER =\nFREQUENCY =\nSOURCE_COMMENT_ID =\nACK_COMMENT_ID =\nRESULT_COMMENT_ID =\nFIRST_TICK_TIME =\nNEXT_TICK_NO_DUPLICATE_EVIDENCE =\nPERSISTENT_DEDUPE =\nROUTING_TABLE =\nGOVERNANCE_EXISTING_PATH =\nKR_MANUAL_RUN=0\nKR_RELAY=0\nFIRST_REAL_BLOCKER=\n\nSOURCE=HAI\nTARGET=1WB\nKR_RELAY=0",
+      "queued_at": "2026-09-21T06:45Z-repair",
+      "status": "PENDING_LOCAL_1WB"
+    },
+    {
+      "source_comment_id": 5756098874,
+      "class": "HAI_DIRECTIVE",
+      "envelope": "[HAI→1WB][KR-DIRECTIVE][RGBCW-GENERAL-OUTLINE-V1][2026-09-21]",
+      "body": "[HAI→1WB][KR-DIRECTIVE][RGBCW-GENERAL-OUTLINE-V1][2026-09-21]\n\n目标：将KR刚确认的《KR｜RGBCW智能照明产品平台总纲 v1》完整逐字归档到NAS，作为RGBCW当前总纲资产。不得改写、摘要、扩写或把其中“KR判断”升级成事实。\n\n归档纪律：\n1. RAW逐字保存，标题：KR｜RGBCW智能照明产品平台总纲 v1。\n2. 归入NAS现有KR原著库/合适的RGBCW专栏或作品目录；不要新造另一套资产库。\n3. 登记MANIFEST/索引；状态标明“当前总纲/待KR后续钢印状态”，不得擅自标FINAL。\n4. 保留文中事实边界：市场合规压力、25W标准分界、RGBCW趋势、“双低压”热词等，严格区分公开事实、KR产业判断、工程规划。\n5. 写入后必须从NAS回读，计算SHA256并回Issue #6。\n6. 如NAS已有同名/同版本资产，不覆盖RAW；按版本/时间归档并报告冲突。\n7. KR_RELAY=0；不得要求KR复制粘贴第二次。\n\n以下为RAW正文（逐字）：\n\n可以。这10条现在已经够完整，我不再把它拆成零散“产品点子”，而是按 **产业判断 → 技术路径 → 产品边界 → 上桌公司 → 产品场 → 内容平台 → 现实验证**，重新收成一版完整总纲。\n\n先校正两个地方，避免后面8051和官网把“KR判断”写成“国家标准事实”。\n\n第一，中山近期确实发生了针对灯具质量问题的督察暗访。公开报道显示，督察组在中山多个灯配城发现部分商户存在“三无”灯具、冒用CCC认证等问题；这足以支撑“市场合规压力明显上升”的判断，但目前我查到的公开报道重点是**灯具与CCC冒用问题**，不宜扩大成“中山大多数电源厂家都贴假3C/CE”的已证事实。[澎湃新闻](https://m.thepaper.cn/newsDetail_forward_34064866?utm_source=chatgpt.com)\n\n第二，照明谐波标准的准确分界是 **25W**，不是法律意义上的“24W以上”。现行 GB 17625.1-2022 自2024年7月1日起实施，Class C照明设备分别规定了“额定功率＞25W”和“5W≤额定功率≤25W”的不同限值。工程内部把24W附近当产品规划分界可以，但公开表述最好使用“25W相关标准分界”，更不能把“高P”与谐波标准混成一个强制要求。[国家标准公开信息平台](https://openstd.samr.gov.cn/bzgk/std/newGbInfo?hcno=56520E6F3446EE95475015DC395F9EFB&utm_source=chatgpt.com)\n\n---\n\n# KR｜RGBCW智能照明产品平台总纲 v1\n\n## 一、KR看到的不是一种灯，而是照明架构正在发生一次融合\n\n传统室内照明长期以CW白光主照明为核心。在大量成本敏感型灯具中，非隔离恒流驱动、线性驱动等方案长期存在，并形成了成熟的供应链和成本体系。\n\n与此同时，另一条智能照明路线从RGB、RGBIC和氛围照明快速成长起来。它最初更强调色彩、娱乐、电竞、电视氛围和场景体验，但这些产品正在不断增加更实用的白光照明能力。\n\nKR现在形成的核心判断是：\n\n> **传统CW主照明正在往RGB增加情绪价值；**\n> **RGB氛围照明正在往CW增加真正的照明能力。**\n\n于是出现两条相反方向：\n\n**CW → RGB**\n\n以及：\n\n**RGB → CW**\n\n最终都可能向：\n\n# **RGBCW**\n\n靠拢。\n\n这个判断并非完全没有外部样本。Govee当前产品线已经大量使用RGBICW、RGBWW等结构，其官方2026新品也强调RGB与宽范围白光色温融合；这可以作为“RGB阵营向更完整白光能力延伸”的现实案例，但不能简单等同于整个照明行业已经确定进入RGBCW时代。[智岩科技](https://www.govee-up.com/product?utm_source=chatgpt.com)\n\n因此，**RGBCW目前应定义为KR的产业趋势判断和产品方向，而不是已经被证明成立的行业终局。**\n\nKR提前注册 `RGBCW.COM.CN`，意义也就在这里：\n\n不是等赛道完全成熟以后再卖货，而是提前占住：\n\n**名字、解释权、产品结构和知识内容入口。**\n\n---\n\n# 二、为什么“电源变化”可能成为RGBCW的重要推力\n\nRGB灯珠本质上适合低压供电，市场常见系统电压包括5V、12V、24V。\n\n而传统CW主照明为了效率、成本和串联灯珠结构，可以采用高压恒流等不同路线。\n\n当两种系统需要进入同一盏灯时，就产生一个现实工程问题：\n\n> **怎样把主照明、RGB氛围、控制器、通信和整机",
+      "queued_at": "2026-09-21T06:45Z-repair",
+      "status": "PENDING_LOCAL_1WB"
+    },
+    {
+      "source_comment_id": 5756255367,
+      "class": "HAI_DIRECTIVE",
+      "envelope": "[HAI→1WB][HOTFIX][RAW-ARCHIVE-PARSER][2026-09-21]",
+      "body": "[HAI→1WB][HOTFIX][RAW-ARCHIVE-PARSER][2026-09-21]\n\nREAL断点：\nSOURCE_COMMENT_ID=5756098874\nACK_COMMENT_ID=5756106681\nFAIL_REAL_COMMENT_ID=5756106851\nFAIL_REASON=EXECUTE_ERROR: KR原话 not found\nKR_RELAY=0\n\n目标：修复1WB对HAI投递“大段RAW正文归档指令”的解析/执行，使5756098874中的《KR｜RGBCW智能照明产品平台总纲 v1》正文能够原样进入NAS并完成回读验真。KR不得再次复制粘贴。\n\n最小修复纪律：\n1. 不重构已PASS的Issue #6单一收件链，不改2WB，不新造旁路。\n2. 识别[HAI→1WB][KR-DIRECTIVE]中“以下为RAW正文（逐字）：”之后至SOURCE/TARGET尾部元数据之前的完整正文；不得要求必须出现“KR原话”字样。\n3. RAW payload只作数据，不把正文中的标题/引用/指令性文字当路由命令。\n4. 以COMMENT_ID=5756098874作为源真相重新执行归档；不得要求KR重发正文。\n5. NAS写入现有KR原著库合适RGBCW目录，不另造资产库；不覆盖同名RAW，冲突则版本化。\n6. 登记MANIFEST/索引，状态“当前总纲/待KR后续钢印状态”，不得擅自FINAL。\n7. NAS写后必须回读；计算SHA256；确认正文未被摘要/改写。\n8. 修复后必须用自然心跳执行，不以手工运行冒充验收。\n9. COMMENT_ID幂等：此前FAIL允许一次受控RETRY；成功后禁止重复归档。\n10. 事实纪律：UNKNOWN不脑补；任何一步失败就FAIL/STOP并给FIRST_REAL_BLOCKER。\n\n验收回执必须包含：\nRAW_ARCHIVE_PARSER=PASS/FAIL/STOP\nSOURCE_COMMENT_ID=5756098874\nRETRY_REASON=PREVIOUS_FAIL\nNAS_PATH\nMANIFEST_PATH\nSHA256\nREADBACK=PASS/FAIL\nRAW_VERBATIM=PASS/FAIL\nNATURAL_TICK=PASS/FAIL\nKR_MANUAL_RUN=0/1\nKR_RELAY=0\nFIRST_REAL_BLOCKER\n\nSOURCE=HAI\nTARGET=1WB\nKR_RELAY=0",
+      "queued_at": "2026-09-21T06:45Z-repair",
+      "status": "PENDING_LOCAL_1WB"
     }
   ]
 }
