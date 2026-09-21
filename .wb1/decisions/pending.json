@@ -56,6 +56,20 @@
         "resolved_at": "2026-09-21T04:27:26Z",
         "source_comment_id": 5754891256
       }
+    },
+    {
+      "decision_id": "D-CLOUD-20260921-041437",
+      "title": "KR_GATE 主权/高风险决策待 KR 裁定",
+      "status": "RESOLVED",
+      "created_at": "2026-09-21T04:14:37Z",
+      "source_comment_id": 5754891256,
+      "kr_entry": "KR 请就决策卡 D-CLOUD-20260921-041437 回复：[KR_DECISION] D-CLOUD-20260921-041437 CHOICE=A|B|STOP TEXT=<说明>",
+      "resolution": {
+        "choice": "VERDICT_NULLIFIED",
+        "text": "Second-order mis-route: created this run FROM verdict 5754891256 (a JUDGE verdict, not a KR_GATE trigger). Auto-nullified. KR_RELAY=0.",
+        "resolved_at": "2026-09-21T04:28:35Z",
+        "source_comment_id": 5754891256
+      }
     }
   ]
 }
