@@ -56,6 +56,17 @@
       "enqueued_at": "2026-09-21T03:08:20Z",
       "status": "PENDING_LOCAL",
       "note": "NAS Egress Publisher natural-tick probe (KR_MANUAL_RUN=0); await black warrior consume; verify REAL scheduler auto-tick delivery"
+    },
+    {
+      "comment_id": 5755164679,
+      "kind": "SELF_SOLVE",
+      "event_id": "KR-ORIGINAL-EGRESS-20260921-001",
+      "asset_id": "KR-DIRECTIVE-20260921-REBUILD",
+      "source_sha256": "cd0ca6dec89a4a9de6f7773646e1d4941e8ec706d7e7b57f4354278709709d6d",
+      "message_type": "KR_ORIGINAL_ARCHIVED",
+      "enqueued_at": "2026-09-21T04:29:15Z",
+      "status": "PENDING_LOCAL",
+      "note": "NAS Egress KR原著库 rebuild directive archive (KR_MANUAL_RUN=0). await black warrior consume; verify REAL landed, no business action, KR_RELAY=0"
     }
   ]
 }
