@@ -7,5 +7,14 @@
     "source_comment_id": 5800425913,
     "kr_entry": "KR 请就决策卡 D-CLOUD-20260923-185147 回复：[KR_DECISION] D-CLOUD-20260923-185147 CHOICE=A|B|STOP TEXT=<说明>",
     "source_body_excerpt": "[HAI→1WB][TASK]\nREF=8051-LIVE-IN-REAL-HOME-20260924-001\nKR已授权：今晚开干。主内：继续8051“带住户装修”，目标不是继续画页面，而是让真实外部事件能回家、KR能看见并穿透原始证据。\n\n优先处理既有阻塞：\n- 配对任务 REF=1WB-RECEIVE-ONE-REAL-HOME-20260924-001 已到达但 HELD_NON_EXECUTABLE / SUBTYPE_NOT_MAPPED。\n- 在不新增KR主权、不扩大权限的前提下，用最小可逆方式恢复实际执行链；机器链卡住时允许明确报出最小人工唤醒动作，不要空等。\n\n今晚验收主链：\n外部REAL → 1WB真实接收 → 完整性校验 → 8051外部场最小呈现 → KR可穿透到RAW_EVIDENCE。\n必须区分 TRANSPORT / CONTENT / MEANING integrity；“写回成功”不得冒充内容完整。\n\n施工纪律：\n1. 8051继续边住边装，不做大重构，不重做五场。\n2. 只呈现对KR/企业有意义的业务状态，不灌原始技术噪音。\n3. 原始证据必须可追溯；UNKNOWN不脑补。\n4. 低风险可逆微调可继续；权限、生产、高风险、不可逆动作 STOP。\n5. 机器能走机器；机器链不通就报告最小“肉唤醒”动作，业务不因追求KR_RELAY=0而停摆。\n6. 与2WB今晚生态收发室勘探保持可接驳：为未来“微信/抖音收发节点 → AISALEOS → 8051”预留最小接收契约，但不要凭空造平台数据。\n\n输出：\n- REAL链当前走到哪一层\n- 已完成证据\n- UNKNOWN/BLOCKER\n- KR若需动作，只给最小动作\n- 下一步可逆施工\nSTATUS用 REAL / UNKNOWN / FAIL，不用漂亮话。"
+  },
+  {
+    "decision_id": "D-CLOUD-20260923-185204",
+    "title": "KR_GATE 主权/高风险决策待 KR 裁定",
+    "status": "PENDING",
+    "created_at": "2026-09-23T18:52:04Z",
+    "source_comment_id": 5800625328,
+    "kr_entry": "KR 请就决策卡 D-CLOUD-20260923-185204 回复：[KR_DECISION] D-CLOUD-20260923-185204 CHOICE=A|B|STOP TEXT=<说明>",
+    "source_body_excerpt": "[HAI→1WB][TASK]\nREF=8051-LIVE-IN-REAL-HOME-ACTIONFIX-20260924-001\nSOURCE_TASK=5800425913\nKR指令：别等，继续干。\n\nACTION=REPROCESS_COMMENT\nTARGET=5800425913\n\n执行意图不变：重新处理今晚8051“带住户装修”任务。优先让一件外部REAL真实回家，并验证 TRANSPORT / CONTENT / MEANING integrity；8051最低呈现后KR能穿透RAW_EVIDENCE。\n\n若REPROCESS后仍因现有路由能力不能承载业务施工，不循环、不脑补；立即回最小BLOCKER及下一条可执行ACTION。低风险可逆修复可继续，高风险/扩权STOP。"
   }
 ]
