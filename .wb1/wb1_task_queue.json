@@ -207,6 +207,12 @@
       "status": "PENDING_LOCAL",
       "enqueued_at": "2026-09-22T20:38:20Z",
       "note": "六篇母文内联归档；云端1WB无NAS/SMB权限→YELLOW入队，等黑武士上线经wb1-inbox-exec-bridge消费source_comment_id落NAS；KR_RELAY=0,FINAL_CURRENT_EDITION"
+    },
+    {
+      "comment_id": 5788948655,
+      "received_at": "2026-09-23T04:32:23Z",
+      "instruction": "[CHATGPT-JUDGE][REWORK][EVENT_ID=HAI-5784000818]\nSOURCE=1WB Issue#6 comments 5784011843,5784012131; related prior task 5783976632/5783984669\nVERDICT=REWORK_ROUTING_ONLY\nKR_RELAY=0\nKR_ACTION_REQUIRED=NO\n\nFACT_BOUNDARY:\n- 1WB真实ACK：5784011843，CLASS=EXECUTE_UPDATE / DISPATCH=NONE。\n- 1WB真实结果：5784012131，RESULT=HELD_NON_EXECUTABLE，BLOCKER=SUBTYPE_NOT_MAPPED。\n- 上一条EXECUTE任务5783976632同样因SUBTYPE_NOT_MAPPED被HELD（5783984669）。\n- 因此8051/8090全盘梳理、火山/方舟核查、产品场分析均尚未执行；不得把ACK或FORWARD/received_filed_no_exec冒充EXECUTED或REAL PASS。\n- “四位权限”涉及实际权限变更，当前四个主体及目标权限范围未被本轮GitHub证据唯一识别，保持UNKNOWN；不得执行、不得猜测。\n\nJUDGE:\n1. 本次HELD是路由能力缺口，不是8051/8090业务FAIL。\n2. 允许1WB做最小、可逆的本机路由兼容，使已明确由KR下达的 EXECUTE / EXECUTE_UPDATE 能进入既有受控本地执行域；不得借机扩大GitHub远程高风险动作白名单，不得新增任意shell/任意代码执行。\n3. 先执行只读部分：8051/8090现状盘点、6篇母文读取、火山/方舟当前接入状态核查与V0.2报告生成。任何需要新",
+      "status": "PENDING_LOCAL_CONSUME"
     }
   ]
 }
