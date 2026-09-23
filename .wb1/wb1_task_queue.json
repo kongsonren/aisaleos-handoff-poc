@@ -254,6 +254,13 @@
       "received_at": "2026-09-23T16:38:28Z",
       "instruction": "[HAI→1WB][SELF_SOLVE]\nREF=8051-WALKTHROUGH-CONTINUE-20260923\nSOURCE_KR_DECISION=5792751925\nKR_RELAY=0\nDATE=2026-09-23\n\n当前通信已确认推进到：\n- 5792751925 已被重新识别为 CLASS=KR_DECISION\n- ACTION=EXECUTE_AUTHORIZED_RECEIVED / KR_DECISION\n- JUDGE 路由已恢复\n因此不要继续停在通信讨论，接回原KR任务。\n\n唯一目标：\n沿 comment_id=5792751925 的原始授权继续执行“8051 EXISTING-HOUSE WALKTHROUGH”，把现有8051 Web真实现房亮给KR看。\n\n执行纪律：\n1. 5792751925 仍是唯一业务授权源，不改写、不重建、不扩大。\n2. 先核本地执行队列是否已真实存在5792751925；有则直接消费，禁止重复入队。\n3. 若尚未真实落盘，只做最小、可逆兼容，把5792751925送入既有受控执行路径，并给queue真实落盘/回读证据；不得建设新的通用执行器。\n4. 随后立即执行原任务：只读盘点当前8051真实Web现房。\n5. 优先回传真实首页截图/访问入口、真实导航与页面路径、五场现状、典型二三级页面、真实进入/退出路径、现有视觉基础。\n6. 没有的页面/入口明确标 SHELL / UNKNOWN / NOT_PRESENT；不得补画Mockup，不得拿飞书Base/策划稿/历史截图冒充当前8051 Web。\n7. 本轮不重建8051、不新建Dashboard、不重画IA、不迁移真源、不扩权限、不先装修。\n8. 如果执行中出现新的通信小断点，按近一周临时纪律：边干正事边做最小修通，不因追求完美通信而干等；高风险/不可逆",
       "status": "PENDING_LOCAL_CONSUME"
+    },
+    {
+      "comment_id": 5798165000,
+      "received_at": "2026-09-23T16:44:00Z",
+      "type": "SELF_SOLVE",
+      "instruction": "[HAI→1WB][SELF_SOLVE]\nREF=12WB-RENOVATION-1WB-20260923\nKR_RELAY=0\nSOURCE_KR_DECISION=5792751925\nSTATUS=EXECUTE\n\n【1WB｜8051装修入住执行令】\nKR已授权进入“装修入住”阶段。沿原KR决定 #5792751925 继续执行，不另造授权、不扩大边界。\n\n目标：保留8051现有骨架，先亮真实现房，在现房上装修；KR同步入住、边住边装。不是重建8051。\n\n本轮：\n1. 先完成现房真实盘点：现有首页、导航、五场、典型二三级页面、真实入口/退出路径、当前视觉基础。\n2. 没有的明确 SHELL / UNKNOWN / NOT_PRESENT；不得拿飞书Base、策划稿、历史截图、Mockup冒充当前8051 Web。\n3. 在真实现房基础上做最低可入住施工：优先解决KR“进得去、看得懂、干得了、退得回”。\n4. 五场保持：外部场、内部场、经营场、产品场、设置用户场。先复用真实数据源，不做大迁移。\n5. 1WB负责内部场及8051侧接收/组织/呈现；2WB外部结果后续回家。\n6. 视觉可逐步鲜活、醒目，RGBCW可作为视觉语言参考，但先服从真实状态与可用性，不先做漂亮空壳。\n7. KR正常使用中发现的问题就是REAL输入；低风险可逆微调可继续，高风险/不可逆/权限扩张/重大迁移 STOP。\n8. 通信若出现小断点，按近一周临时纪律：边干正事边最小修通，不因追求完美通信而干等。\n\n回执必须给真实页面/截图/路径/运行证据及 REAL / UNKNOWN / STOP / FAILED；仅ACK/PROCESSED不算完成。\n完成第一轮最低可入住施工后STOP，等KR肉身入住验收。",
+      "status": "PENDING_LOCAL_CONSUME"
     }
   ]
 }
