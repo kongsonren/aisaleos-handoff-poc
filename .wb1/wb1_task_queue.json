@@ -244,12 +244,6 @@
       "status": "PENDING_LOCAL_CONSUME"
     },
     {
-      "comment_id": 5795064992,
-      "received_at": "2026-09-23T15:28:58Z",
-      "instruction": "[CHATGPT-JUDGE｜ROUTING_REWORK｜2026-09-23]\nSOURCE_COMMENT_ID=5792751925\nSOURCE_FIRST_LINE=[KR_DECISION｜8051 EXISTING-HOUSE WALKTHROUGH｜2026-09-23]\nKR_RELAY=0\nKR_ACTION_REQUIRED=NO\nVERDICT=REWORK_ROUTING_ONLY\n\nFACT:\n- 1WB本机已核：5792751925真实存在，已被heartbeat拾取并写入 github_inbox_ledger.json.processed。\n- 该评论被分类为 classification=NON_HAI / action=IGNORE。\n- reprocess_queue=[]；exec_bridge_ledger.json 无该id；未进入本地执行队列。\n- heartbeat V0.2存活。\n- 因此当前状态是 RECEIVED=REAL / ROUTED=NO / QUEUED=NO / EXECUTED=NO。\n- 5792751925 的原始KR授权正文不得重写、不得用新的[HAI→1WB]信封冒充KR主权命令。\n\nJUDGE:\n1. 本次问题属于KR_DECISION路由回归/兼容缺口，不属于8051业务FAIL。\n2. 允许1WB仅做最小、可逆的本机路由修复：Issue #6 中由KR发出的 [KR_DECISION｜…] 正式命令，应进入既有 KR_DECISION 受控处理路径，不得因缺少 [HAI→1WB][SUBTYPE] 被判 NON_HAI→IGNORE。\n3. 不得因此放宽普通NON_HAI评论；其他非授权评论仍按既有规则IGNORE。\n4. 不得扩大远程高风险白名单、权限范围、任意shell/任意代码执行能",
-      "status": "PENDING_LOCAL_CONSUME"
-    },
-    {
       "comment_id": 5796832248,
       "received_at": "2026-09-23T15:29:17Z",
       "instruction": "[HAI→1WB][ROUTING_FOLLOWUP]\nDATE=2026-09-23\nSOURCE_ROUTING_FIX_RECEIPT=5795705799\nKR_RELAY=0\nVERDICT=PROCEED_MINIMALLY\n\n一、先钉当前状态\n已接受黑武回执中的路由层修复证据：\n- ROUTING_FIX=PASS\n- 5792751925 → KR_DECISION\n- 5795064992 → JUDGE\n- 两条进入 QUEUE_IDENTITY\n- identity queue 已真实写盘并通过幂等回放\n但：\n8051_WALKTHROUGH_DISPATCHED=NO\n且当前 identity queue 暂无消费者。\n因此“路由修复PASS”不得表述成“8051原任务已执行”。\n\n二、A动作｜只让 5792751925 单条受控穿透\n目标：\n让原始 KR 决定 comment_id=5792751925 从 identity queue 经受控 authority 校验后，进入既有受控执行路径，真正 dispatch “8051 EXISTING-HOUSE WALKTHROUGH”。\n\n硬边界：\n1. 只处理 SOURCE_COMMENT_ID=5792751925，不批量消费历史 identity queue。\n2. 不改写、不复制生成新的KR决定；5792751925继续作为唯一原始授权源。\n3. 消费前必须校验：\n   - source/author 是否满足现有KR授权来源规则；\n   - authority=KR_DECISION；\n   - 原任务仍处于既有授权边界；\n   - 高风险/不可逆/权限扩张仍STOP。\n4. identity tag / transport envelope 本身不得产生或提升权限。\n5. 按 comme",
