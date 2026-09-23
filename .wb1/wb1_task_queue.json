@@ -261,6 +261,13 @@
       "type": "SELF_SOLVE",
       "instruction": "[HAI→1WB][SELF_SOLVE]\nREF=12WB-RENOVATION-1WB-20260923\nKR_RELAY=0\nSOURCE_KR_DECISION=5792751925\nSTATUS=EXECUTE\n\n【1WB｜8051装修入住执行令】\nKR已授权进入“装修入住”阶段。沿原KR决定 #5792751925 继续执行，不另造授权、不扩大边界。\n\n目标：保留8051现有骨架，先亮真实现房，在现房上装修；KR同步入住、边住边装。不是重建8051。\n\n本轮：\n1. 先完成现房真实盘点：现有首页、导航、五场、典型二三级页面、真实入口/退出路径、当前视觉基础。\n2. 没有的明确 SHELL / UNKNOWN / NOT_PRESENT；不得拿飞书Base、策划稿、历史截图、Mockup冒充当前8051 Web。\n3. 在真实现房基础上做最低可入住施工：优先解决KR“进得去、看得懂、干得了、退得回”。\n4. 五场保持：外部场、内部场、经营场、产品场、设置用户场。先复用真实数据源，不做大迁移。\n5. 1WB负责内部场及8051侧接收/组织/呈现；2WB外部结果后续回家。\n6. 视觉可逐步鲜活、醒目，RGBCW可作为视觉语言参考，但先服从真实状态与可用性，不先做漂亮空壳。\n7. KR正常使用中发现的问题就是REAL输入；低风险可逆微调可继续，高风险/不可逆/权限扩张/重大迁移 STOP。\n8. 通信若出现小断点，按近一周临时纪律：边干正事边最小修通，不因追求完美通信而干等。\n\n回执必须给真实页面/截图/路径/运行证据及 REAL / UNKNOWN / STOP / FAILED；仅ACK/PROCESSED不算完成。\n完成第一轮最低可入住施工后STOP，等KR肉身入住验收。",
       "status": "PENDING_LOCAL_CONSUME"
+    },
+    {
+      "comment_id": 5799003669,
+      "received_at": "2026-09-23T17:46:08Z",
+      "type": "SELF_SOLVE",
+      "instruction": "[HAI→1WB][EXECUTE]\nREF=1WB-RECEIVE-ONE-REAL-HOME-20260924-001\nSOURCE_KR_DECISION=5792751925\nPAIR_2WB_REF=2WB-ONE-REAL-HOME-20260924-001\nPAIR_2WB_COMMENT=5798989574\nSTATUS=EXECUTE\n\n【1WB｜接一件外部REAL回家最小闭环】\n\nKR已明确继续执行。当前8051第一轮最低可入住装修已完成，1WB回执5798594100标记外部场=UNKNOWN/NOT_PRESENT，等待2WB。\n2WB现已收到配对任务5798989574：只选择一件已经真实发生的外部REAL，保留原始证据并送回现有交接链路。\n\n本轮1WB不要继续扩建8051，不重画IA，不做大Dashboard。只负责把2WB送回来的这一件真实外部事件“接进家”。\n\n一、本轮目标\n验证最小闭环后半段：\n2WB结构化外部REAL → 1WB真实接收 → 内容/意义完整性核验 → 8051外部场最低呈现 → KR看得见 → KR能穿透回原始REAL。\n\n不得因为收到2WB的“已发送”声明就推断1WB已接收；不得因为1WB已接收就推断8051已呈现。\n\n二、接收对象\n接收的是“公司在外部世界真实发生的一件事”，不是2WB工作日报，也不是技术日志堆。\n\n预期字段：\nEVENT\nSTATUS\nIMPACT\nSOURCE\nRAW_EVIDENCE\nNEED_KR\nTIME\n\n若2WB实际返回字段有差异，以真实收到内容为准，不脑补缺失字段；缺失标UNKNOWN。\n\n三、完整性三验\n必须分别验证：\nTRANSPORT_INTEGRITY：1WB是否真实收到\nCONTENT_INTEGRITY：收到内容是否完整可读，尤其检查中文乱码/????问题\nMEANING_",
+      "status": "PENDING_LOCAL_CONSUME"
     }
   ]
 }
