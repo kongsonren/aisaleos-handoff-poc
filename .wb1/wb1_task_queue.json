@@ -268,6 +268,13 @@
       "type": "SELF_SOLVE",
       "instruction": "[HAI→1WB][EXECUTE]\nREF=1WB-RECEIVE-ONE-REAL-HOME-20260924-001\nSOURCE_KR_DECISION=5792751925\nPAIR_2WB_REF=2WB-ONE-REAL-HOME-20260924-001\nPAIR_2WB_COMMENT=5798989574\nSTATUS=EXECUTE\n\n【1WB｜接一件外部REAL回家最小闭环】\n\nKR已明确继续执行。当前8051第一轮最低可入住装修已完成，1WB回执5798594100标记外部场=UNKNOWN/NOT_PRESENT，等待2WB。\n2WB现已收到配对任务5798989574：只选择一件已经真实发生的外部REAL，保留原始证据并送回现有交接链路。\n\n本轮1WB不要继续扩建8051，不重画IA，不做大Dashboard。只负责把2WB送回来的这一件真实外部事件“接进家”。\n\n一、本轮目标\n验证最小闭环后半段：\n2WB结构化外部REAL → 1WB真实接收 → 内容/意义完整性核验 → 8051外部场最低呈现 → KR看得见 → KR能穿透回原始REAL。\n\n不得因为收到2WB的“已发送”声明就推断1WB已接收；不得因为1WB已接收就推断8051已呈现。\n\n二、接收对象\n接收的是“公司在外部世界真实发生的一件事”，不是2WB工作日报，也不是技术日志堆。\n\n预期字段：\nEVENT\nSTATUS\nIMPACT\nSOURCE\nRAW_EVIDENCE\nNEED_KR\nTIME\n\n若2WB实际返回字段有差异，以真实收到内容为准，不脑补缺失字段；缺失标UNKNOWN。\n\n三、完整性三验\n必须分别验证：\nTRANSPORT_INTEGRITY：1WB是否真实收到\nCONTENT_INTEGRITY：收到内容是否完整可读，尤其检查中文乱码/????问题\nMEANING_",
       "status": "PENDING_LOCAL_CONSUME"
+    },
+    {
+      "comment_id": 5800862565,
+      "received_at": "2026-09-23T18:52:22Z",
+      "type": "SELF_SOLVE",
+      "instruction": "[HAI→1WB][TASK]\nREF=8051-RECEIVE-FIRST-PLATFORM-REAL-20260924-001\n\nKR拍板：配合2WB R2真实平台联调，准备接“AISALEOS生态收发室”的第一封真信。\n\n2WB任务 REF=ECOSYSTEM-MAILROOM-R2-PLATFORM-REAL-20260924-001。\n\n1WB目标：\n当2WB产生第一条真实微信或抖音官方事件handoff后，立即完成：\nhandoff真实接收 → 完整性校验 → RAW_EVIDENCE定位 → 8051外部场最小呈现 → KR可穿透原始证据。\n\n纪律：\n- 没有真实handoff不得造样例冒充；\n- TRANSPORT / CONTENT / MEANING integrity分开；\n- 平台REAL未到之前状态=WAITING_FOR_PLATFORM_REAL，不冒充完成；\n- 只做最小可逆接入，不重构8051；\n- 若现有路由语法阻塞，立即报最小可执行ACTION/BLOCKER，不长期等自动链；\n- 高风险/扩权STOP。\n\n验收：KR在8051看到第一条真实平台事件，并能钻回2WB保存的原始证据。",
+      "status": "PENDING_LOCAL_CONSUME"
     }
   ]
 }
