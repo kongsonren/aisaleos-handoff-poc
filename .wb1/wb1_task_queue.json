@@ -219,6 +219,13 @@
       "kr_relay": 0,
       "note": "JUDGE 裁决(HAI-5784000818)授权的只读盘点/最小可逆路由兼容任务，待黑武士上线经 wb1-inbox-exec-bridge 消费；高风险动作 STOP。原 SELF_SOLVE 标签已纠正。",
       "corrected_at": "2026-09-23T04:37:11Z"
+    },
+    {
+      "comment_id": 5789196285,
+      "received_at": "2026-09-23T05:51:26Z",
+      "type": "KR_EXECUTE_MANDATE",
+      "instruction": "KR 执行授权（最低可入住施工）：8051 全盘 REAL 体检+最低可入住施工；8090 现房 REAL 体检；产品场最低可工作入口；火山/方舟 REAL 核查；日志/动态回传 KR。边界：不扩权、不预建四公司房间、不扩 ERP、高风险/不可逆/权限扩张 STOP 等 KR；四位权限继续 HOLD。",
+      "status": "PENDING_LOCAL_CONSUME"
     }
   ]
 }
