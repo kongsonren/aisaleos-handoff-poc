@@ -248,6 +248,12 @@
       "received_at": "2026-09-23T15:29:17Z",
       "instruction": "[HAI→1WB][ROUTING_FOLLOWUP]\nDATE=2026-09-23\nSOURCE_ROUTING_FIX_RECEIPT=5795705799\nKR_RELAY=0\nVERDICT=PROCEED_MINIMALLY\n\n一、先钉当前状态\n已接受黑武回执中的路由层修复证据：\n- ROUTING_FIX=PASS\n- 5792751925 → KR_DECISION\n- 5795064992 → JUDGE\n- 两条进入 QUEUE_IDENTITY\n- identity queue 已真实写盘并通过幂等回放\n但：\n8051_WALKTHROUGH_DISPATCHED=NO\n且当前 identity queue 暂无消费者。\n因此“路由修复PASS”不得表述成“8051原任务已执行”。\n\n二、A动作｜只让 5792751925 单条受控穿透\n目标：\n让原始 KR 决定 comment_id=5792751925 从 identity queue 经受控 authority 校验后，进入既有受控执行路径，真正 dispatch “8051 EXISTING-HOUSE WALKTHROUGH”。\n\n硬边界：\n1. 只处理 SOURCE_COMMENT_ID=5792751925，不批量消费历史 identity queue。\n2. 不改写、不复制生成新的KR决定；5792751925继续作为唯一原始授权源。\n3. 消费前必须校验：\n   - source/author 是否满足现有KR授权来源规则；\n   - authority=KR_DECISION；\n   - 原任务仍处于既有授权边界；\n   - 高风险/不可逆/权限扩张仍STOP。\n4. identity tag / transport envelope 本身不得产生或提升权限。\n5. 按 comme",
       "status": "PENDING_LOCAL_CONSUME"
+    },
+    {
+      "comment_id": 5797980726,
+      "received_at": "2026-09-23T16:38:28Z",
+      "instruction": "[HAI→1WB][SELF_SOLVE]\nREF=8051-WALKTHROUGH-CONTINUE-20260923\nSOURCE_KR_DECISION=5792751925\nKR_RELAY=0\nDATE=2026-09-23\n\n当前通信已确认推进到：\n- 5792751925 已被重新识别为 CLASS=KR_DECISION\n- ACTION=EXECUTE_AUTHORIZED_RECEIVED / KR_DECISION\n- JUDGE 路由已恢复\n因此不要继续停在通信讨论，接回原KR任务。\n\n唯一目标：\n沿 comment_id=5792751925 的原始授权继续执行“8051 EXISTING-HOUSE WALKTHROUGH”，把现有8051 Web真实现房亮给KR看。\n\n执行纪律：\n1. 5792751925 仍是唯一业务授权源，不改写、不重建、不扩大。\n2. 先核本地执行队列是否已真实存在5792751925；有则直接消费，禁止重复入队。\n3. 若尚未真实落盘，只做最小、可逆兼容，把5792751925送入既有受控执行路径，并给queue真实落盘/回读证据；不得建设新的通用执行器。\n4. 随后立即执行原任务：只读盘点当前8051真实Web现房。\n5. 优先回传真实首页截图/访问入口、真实导航与页面路径、五场现状、典型二三级页面、真实进入/退出路径、现有视觉基础。\n6. 没有的页面/入口明确标 SHELL / UNKNOWN / NOT_PRESENT；不得补画Mockup，不得拿飞书Base/策划稿/历史截图冒充当前8051 Web。\n7. 本轮不重建8051、不新建Dashboard、不重画IA、不迁移真源、不扩权限、不先装修。\n8. 如果执行中出现新的通信小断点，按近一周临时纪律：边干正事边做最小修通，不因追求完美通信而干等；高风险/不可逆",
+      "status": "PENDING_LOCAL_CONSUME"
     }
   ]
 }
