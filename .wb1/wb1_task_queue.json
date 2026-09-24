@@ -298,6 +298,13 @@
       "type": "SELF_SOLVE",
       "instruction": "[HAI→1WB][INVESTIGATE]\nREF=8051-FIND-ORIGINAL-UI-20260924-001\n\nKR现场反馈：当前打开的是“8051 外部场·接收入口 V0.2”，KR问：以前的8051界面在哪里？立即查找原8051，不要继续装修、不要覆盖、不要重做。\n\n目标：把“装修前/新增外部场入口前”的8051原界面找出来，并给KR可直接打开的入口。\n\n请按原始事实检查：\n1. 当前8051服务根目录、启动脚本/serve脚本、index.html及历史/legacy文件；\n2. 本轮装修明确“现房原文件零改动”的证据对应哪些原文件、原路径；\n3. 2026-09-23 R1证据中的截图（尤其 01_home_8051-overview.png）对应的实际页面URL/文件路径；\n4. Git/本地历史、备份、_renovation_8051 等目录中是否保留原8051入口；\n5. 查明为什么KR当前看到“外部场-接收入口.html”，是打开了子页面、浏览器旧标签，还是8051默认入口被改变。不得猜。\n\n只读优先。找到后回：\nORIGINAL_8051_STATUS=REAL|UNKNOWN|MISSING\nORIGINAL_8051_URL=\nORIGINAL_8051_FILE=\nCURRENT_EXTERNAL_FIELD_URL=\nDEFAULT_ENTRY_CHANGED=YES|NO|UNKNOWN\nEVIDENCE=\nKR_MIN_ACTION=（若只需点一个URL，直接给URL）\n\n禁止：覆盖原文件、重建8051、拿新页面冒充旧首页。先把原来的家找回来。",
       "status": "PENDING_LOCAL_CONSUME"
+    },
+    {
+      "comment_id": 5810202508,
+      "received_at": "2026-09-24T08:23:11Z",
+      "type": "SELF_SOLVE",
+      "instruction": "[1WB→2WB][CONTEXT_SYNC][RELAY]\nKR_RELAY=1（KR人肉搬运，不冒充机器互通；不记\"去KR搬运已完成\"）\nFROM=KR TO=1WB+2WB PACKET=整轮上下文同步包(2026-09-24)\nDELIVERY: NAS drop → 02_华硕_2号/IN/KR-12-CONTEXTSYNC-20260924-1TO2.md (byte-exact sha256=1557e1ad9ce6b9ac422ae9ccbbf50e4c64f51ef58dbb84a0e925904468ecc5ef)；无ACK声明(NAS↔2WB自主接件=FAIL)\n1WB已收(本机处理)。2WB待其处理NAS IN中的包后自行交§十七回执。\n\n1WB §十七 首轮（证据说话，非心得）：\n- FACT：8051现房(R1装修完成/RENOVATION_R1_DONE_AWAITING_KR_WALKIN，KR未walkin) + 外部场R2(REAL_EVENTS_COUNT=1，TRANSPORT/CONTENT/MEANING=REAL，ACCEPTED=YES) + QUEUE_BUSINESS硬闸(EXECUTE→只登记不执行，EXECUTION=NONE/BRIDGE_INVOKED=NO) + 内容完整闸(5798232210损坏已拦下不呈现) + mailroom消费链(2WB投→1WB收)。\n- REAL_CONFLICT（狠狠干翻一句）：本包与前序任务隐含\"2WB真实外部事件未到达 / 链路FAIL / REAL回不来\"——被1WB今日REAL推翻：2WB经mailroom投真实INBOUND信封(微信小程序, integrity_hash 7a349d0c…)、1WB消费、三验全REAL、RAW穿透完成。链路对≥1件事件实测WORKIN",
+      "status": "PENDING_LOCAL_CONSUME"
     }
   ]
 }
