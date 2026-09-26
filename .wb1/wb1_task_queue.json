@@ -369,6 +369,13 @@
       "type": "SELF_SOLVE",
       "instruction": "[TO-1WB]\nREF=KR-NAS-ARCHIVE-HEIWUSHI-CLOSE-20260927-001\nTITLE=中秋母件归档｜完成NAS闭环\nPRIOR_REF=KR-NAS-ARCHIVE-RECOVER-20260927-001\n\n依据 Comment 5848405360 的 PARTIAL_CLOSED_CLOUD 结果，继续完成尚未闭环的本地 NAS 归档步骤。\n\n请消费 comment #5848147848 对应的 PREPARED_READY_FOR_NAS 队列条目，将已制备的4份 full_contents 原样写入既定 NAS 中秋思想母包归档目录。\n\n每份写入后必须从 NAS 实际回读并返回：\nPATH\nBYTES\nSHA256\nREADBACK=PASS/FAIL\n\n同时核对 NAS 回读 SHA256 与云端制备 SHA256 是否一致。\n第5套继续 WAIT_SOURCE。\n如当前无法执行，请返回 FAIL/STOP 和精确阻塞证据，不要只回 ACK/QUEUED。\nKR_RELAY=0。\n\n最终回执必须包含：\n[RESULT-1WB]\nREF=KR-NAS-ARCHIVE-HEIWUSHI-CLOSE-20260927-001\nSET1_PATH/BYTES/SHA256/READBACK\nSET2_PATH/BYTES/SHA256/READBACK\nSET3_PATH/BYTES/SHA256/READBACK\nSET4_PATH/BYTES/SHA256/READBACK\nCLOUD_HASH_MATCH=PASS/FAIL\nOLD4_TOTAL=PASS/FAIL\nSET5=WAIT_SOURCE\nEXECUTION=PASS/FAIL\nBLOCK=NONE或精确机器证据\n\n只认NAS REAL。",
       "status": "PENDING_LOCAL_CONSUME"
+    },
+    {
+      "comment_id": 5848908759,
+      "received_at": "2026-09-26T18:53:25Z",
+      "type": "SELF_SOLVE",
+      "instruction": "[TO-1WB]\nREF=KR-SELF-SOLVE-CONSUMER-DIAGNOSE-20260927-001\nTITLE=墨子CASE-002｜只砍SELF_SOLVE_QUEUED→本地执行断点\n\nREAL：\n- 5848516583 已被1WB接收。\n- 5848857148 返回 SELF_SOLVE_QUEUED / PROCESSED。\n- 但至今无 RESULT、无NAS PATH/BYTES/SHA256/READBACK。\n- 同类现象此前已发生。停止重复下“请归档”业务指令。\n\n本次只诊断并修复执行链，不重做文档任务：\n1. 定位 SELF_SOLVE_QUEUED 的真实持久化位置、producer、consumer、wake机制。\n2. 给出 comment 5848516583 从 ACK 后开始的逐跳机器证据：queue item / consumer process / last poll or wake / dequeue / execute。\n3. 判断唯一断点属于：\n   A consumer未运行\n   B consumer运行但未取队列\n   C 已取但执行失败\n   D 本地黑武士离线/睡眠\n   E NAS mount不可用\n   F 其他（必须给证据）\n4. 在现有权限内若属低风险、可逆修复，直接修复并重新消费5848516583；不得要求KR搬正文。\n5. 修复后必须继续原任务直到返回真实NAS RESULT；若权限/物理机状态阻止，STOP并精确报告。\n6. 禁止只回 ACK/QUEUED 作为完成。\n\n验收必须包含：\n[RESULT-1WB]\nREF=KR-SELF-SOLVE-CONSUMER-DIAGNOSE-20260927-001\nROOT_CAUSE=\nCONSUMER_STATE=\nWAKE_STATE=\n",
+      "status": "PENDING_LOCAL_CONSUME"
     }
   ]
 }
