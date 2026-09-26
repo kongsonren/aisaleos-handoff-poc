@@ -305,6 +305,13 @@
       "type": "SELF_SOLVE",
       "instruction": "[1WB→2WB][CONTEXT_SYNC][RELAY]\nKR_RELAY=1（KR人肉搬运，不冒充机器互通；不记\"去KR搬运已完成\"）\nFROM=KR TO=1WB+2WB PACKET=整轮上下文同步包(2026-09-24)\nDELIVERY: NAS drop → 02_华硕_2号/IN/KR-12-CONTEXTSYNC-20260924-1TO2.md (byte-exact sha256=1557e1ad9ce6b9ac422ae9ccbbf50e4c64f51ef58dbb84a0e925904468ecc5ef)；无ACK声明(NAS↔2WB自主接件=FAIL)\n1WB已收(本机处理)。2WB待其处理NAS IN中的包后自行交§十七回执。\n\n1WB §十七 首轮（证据说话，非心得）：\n- FACT：8051现房(R1装修完成/RENOVATION_R1_DONE_AWAITING_KR_WALKIN，KR未walkin) + 外部场R2(REAL_EVENTS_COUNT=1，TRANSPORT/CONTENT/MEANING=REAL，ACCEPTED=YES) + QUEUE_BUSINESS硬闸(EXECUTE→只登记不执行，EXECUTION=NONE/BRIDGE_INVOKED=NO) + 内容完整闸(5798232210损坏已拦下不呈现) + mailroom消费链(2WB投→1WB收)。\n- REAL_CONFLICT（狠狠干翻一句）：本包与前序任务隐含\"2WB真实外部事件未到达 / 链路FAIL / REAL回不来\"——被1WB今日REAL推翻：2WB经mailroom投真实INBOUND信封(微信小程序, integrity_hash 7a349d0c…)、1WB消费、三验全REAL、RAW穿透完成。链路对≥1件事件实测WORKIN",
       "status": "PENDING_LOCAL_CONSUME"
+    },
+    {
+      "comment_id": 5847671359,
+      "received_at": "2026-09-26T16:12:26Z",
+      "type": "SELF_SOLVE",
+      "instruction": "[TO-1WB]\nREF=KR-MOZI-CASE001-TREAT-20260926-001\nTITLE=墨子医院001｜路由纠偏后的真实任务复投\nAUTHORITY=嗨姐；KR已授权执行\nPRIORITY=HIGH\n\n已确认当前正式路由：[TO-1WB] -> Issue #6；[TO-2WB] -> Issue #8。\n本条用于真实验证正确路由，不修改watchdog，不删除历史评论。\n\n任务A｜归档旧4套母件\n请直接读取 GitHub Issue #8 的以下原始 comments，不向KR索取正文：\n5837911137\n5837912094\n5837912630\n5837913231\n\n逐个把原Comment正文保存为独立UTF-8 Markdown到NAS正式KR原著/思想治理归档区；不以摘要替代原文，不覆盖旧版。\n每套返回 PATH / BYTES / SHA256 / READBACK。\n\n任务B｜第5套\n完整逐字SOURCE尚未单独建立，因此标记 WAIT_SOURCE；不要向KR索取，也不要拿摘要冒充全文。嗨姐随后提供完整SOURCE。\n\n任务C｜验证\n本条正确进入#6后，请自主RECEIVE、执行任务A并返回RESULT，以验证正确路由后的真实执行链。\n\n最终回执：\n[RESULT-1WB]\nREF=KR-MOZI-CASE001-TREAT-20260926-001\nCASE001_ROUTE_RECEIVE=PASS/FAIL\nSET1_PATH/BYTES/SHA256/READBACK\nSET2_PATH/BYTES/SHA256/READBACK\nSET3_PATH/BYTES/SHA256/READBACK\nSET4_PATH/BYTES/SHA256/READBACK\nOLD4_TOTAL=PASS/FAIL\nSET5=WAIT_SOU",
+      "status": "PENDING_LOCAL_CONSUME"
     }
   ]
 }
