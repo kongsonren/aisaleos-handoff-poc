@@ -312,6 +312,13 @@
       "type": "SELF_SOLVE",
       "instruction": "[TO-1WB]\nREF=KR-MOZI-CASE001-TREAT-20260926-001\nTITLE=墨子医院001｜路由纠偏后的真实任务复投\nAUTHORITY=嗨姐；KR已授权执行\nPRIORITY=HIGH\n\n已确认当前正式路由：[TO-1WB] -> Issue #6；[TO-2WB] -> Issue #8。\n本条用于真实验证正确路由，不修改watchdog，不删除历史评论。\n\n任务A｜归档旧4套母件\n请直接读取 GitHub Issue #8 的以下原始 comments，不向KR索取正文：\n5837911137\n5837912094\n5837912630\n5837913231\n\n逐个把原Comment正文保存为独立UTF-8 Markdown到NAS正式KR原著/思想治理归档区；不以摘要替代原文，不覆盖旧版。\n每套返回 PATH / BYTES / SHA256 / READBACK。\n\n任务B｜第5套\n完整逐字SOURCE尚未单独建立，因此标记 WAIT_SOURCE；不要向KR索取，也不要拿摘要冒充全文。嗨姐随后提供完整SOURCE。\n\n任务C｜验证\n本条正确进入#6后，请自主RECEIVE、执行任务A并返回RESULT，以验证正确路由后的真实执行链。\n\n最终回执：\n[RESULT-1WB]\nREF=KR-MOZI-CASE001-TREAT-20260926-001\nCASE001_ROUTE_RECEIVE=PASS/FAIL\nSET1_PATH/BYTES/SHA256/READBACK\nSET2_PATH/BYTES/SHA256/READBACK\nSET3_PATH/BYTES/SHA256/READBACK\nSET4_PATH/BYTES/SHA256/READBACK\nOLD4_TOTAL=PASS/FAIL\nSET5=WAIT_SOU",
       "status": "PENDING_LOCAL_CONSUME"
+    },
+    {
+      "comment_id": 5848147848,
+      "received_at": "2026-09-26T17:30:43Z",
+      "type": "SELF_SOLVE",
+      "instruction": "[TO-1WB]\nREF=KR-NAS-ARCHIVE-RECOVER-20260927-001\nTITLE=中秋母件归档｜队列已收但无RESULT，立即续跑并闭环\nAUTHORITY=嗨姐；沿KR-MOZI-CASE001-TREAT-20260926-001继续执行\nPRIORITY=HIGH\n\nREAL前提：\n- 原任务 Comment 5847671359 已被1WB多次 ACK 为 SELF_SOLVE_QUEUED / PROCESSED。\n- 当前未见最终 [RESULT-1WB]，未见4套母件 NAS_PATH / BYTES / SHA256 / READBACK。\n- 不允许再次只回 ACK / QUEUED 冒充完成。\n\nACTION=NAS_ARCHIVE\n\n任务：\n1. 检查 REF=KR-MOZI-CASE001-TREAT-20260926-001 的 SELF_SOLVE 队列消费者/执行状态，说明为何只有 QUEUED 无最终 RESULT。\n2. 继续执行原任务A：直接读取 Issue #8 原始 comments：\n   5837911137\n   5837912094\n   5837912630\n   5837913231\n3. 四份原Comment正文分别以独立 UTF-8 Markdown 写入 NAS 正式 KR 原著/思想治理归档区；不摘要、不覆盖旧版。\n4. 每份必须实际回读并返回 PATH / BYTES / SHA256 / READBACK。\n5. 第5套保持 WAIT_SOURCE，不向KR索取，不以摘要代替。\n6. 若机器无法执行，必须返回 FAIL/STOP + 精确阻塞点/机器证据；不要循环 ACK。\n\n最终只接受：\n[RESULT-1WB]\nREF=KR-NAS-ARCHIVE-RECOVER-2026092",
+      "status": "PENDING_LOCAL_CONSUME"
     }
   ]
 }
