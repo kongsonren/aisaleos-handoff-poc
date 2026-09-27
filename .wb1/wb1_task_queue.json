@@ -22,6 +22,13 @@
       "status": "PENDING_LOCAL_CONSUME",
       "body_excerpt": "[MOZI-CASE-003][TO-1WB][TECH-HOSPITAL]\n\nTITLE: 主动回报旁路最小REAL｜先救活一根神经，不造神经系统\nREF: MOZI-ACTIVE-REPORT-BYPASS-20260927-003\nPRIORITY: P0-TECH\nROLE: 1WB临时承载墨子技术医院施工身份；不是哪吒内轮业务任务。\n\n## 已知REAL\n1. ChatGPT Scheduled Tasks 已多次出现 RUN_TRIGGERED=PASS。\n2. assistant/tool 创建任务曾见 notifications_enabled=false / email_enabled=false。\n3. Web UI 创建任务已见 notifications_enabled=true / email_enabled=true，且 last_run_time 有真实执行时间。\n4. KR现实未收到 Push；Gmail亦未收到 Email。\n5. 强制 OUTPUT_REAL 的任务已触发运行，但 RESULT_CREATED / COMPLETION_EVENT 当前仍 UNKNOWN。\n6. 当前严格状态：\n   SCHEDULED=PASS\n   RUN_TRIGGERED=PASS\n   RESULT_CREATED=UNKNOWN\n   COMPLETION_EVENT=UNKNOWN\n   PUSH_DELIVERED=FAIL\n   EMAIL_DELIVERED=FAIL\n7. 禁止把“OpenAI通知链修好”作为唯一成功路径。\n\n## 本案目标\n在不依赖 OpenAI Push/Email、KR_RELAY=0 的条件下，完成一次：\nTIMER_REAL → RESULT_REAL → VALIDATE_REAL → DELIVERY_R",
       "queued_at": "2026-09-27T10:27:34Z"
+    },
+    {
+      "comment_id": 5857060758,
+      "received_at": "2026-09-27T16:47:04Z",
+      "type": "SELF_SOLVE",
+      "instruction": "[MOZI-CASE-003][EXECUTION-TIMEOUT][DO-NOW]\n\nREF: MOZI-ACTIVE-REPORT-BYPASS-20260927-003\nTARGET_COMMENT: 5854722598\nPRIOR_ACK: 5855033742\nPRIOR_STATE: CLASS=SELF_SOLVE / ACTION=SELF_SOLVE_QUEUED / STATUS=PROCESSED\n\nTIMEOUT_JUDGMENT:\nSELF_SOLVE_QUEUED 已长期未见 EXECUTION_START / RESULT_REAL。QUEUED 不得继续冒充施工进展。\n\nNOW:\n不要重述病历，不要再次仅 ACK / QUEUED / PROCESSED。\n必须二选一：\n\nA. 立即进入真实施工，并首先留下：\nEXECUTION_START=PASS\nSTART_TIME=<machine time>\nWORKER=<actual worker/runtime>\nFIRST_ACTION=<actual action>\nEVIDENCE=<machine-verifiable ref>\n\n随后继续原 CASE-003 最小链：\nTIMER_REAL → RESULT_REAL → VALIDATE_REAL → DELIVERY_REAL → KR_RECEIVED\n\n或\n\nB. 如无法进入施工，立即返回：\nEXECUTION_START=FAIL/BLOCK\nFIRST_BROKEN_HOP=<exact hop>\nRAW_ERROR=<raw machine evidence>\nBLOCKER=<exact blocker>\nNEEDED_MINIMUM=<minimum missing permission/resource/spec",
+      "status": "PENDING_LOCAL_CONSUME"
     }
   ]
 }
