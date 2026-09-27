@@ -1,0 +1,88 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>8051 小程序渲染快照 · 场景B</title><style>
+/* app.wxss */
+/* app.wxss —— 暗色主题全局样式 */
+.sim-page {
+  background: #0d1420;
+  color: #e6eef7;
+  font-size: 26rpx;
+  line-height: 1.5;
+}
+
+.card {
+  background: #111c2c;
+  border: 1rpx solid #1e2c40;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin: 20rpx 24rpx;
+}
+
+.title {
+  font-size: 38rpx;
+  font-weight: 600;
+  color: #3ddcc4;
+}
+
+.subtitle {
+  font-size: 24rpx;
+  color: #8aa0b8;
+  margin-top: 6rpx;
+}
+
+.section-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #5b8cff;
+  margin: 12rpx 0 8rpx;
+  padding-left: 8rpx;
+  border-left: 6rpx solid #5b8cff;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.muted {
+  color: #8aa0b8;
+  font-size: 24rpx;
+}
+
+.hr {
+  height: 1rpx;
+  background: #1e2c40;
+  margin: 16rpx 0;
+}
+
+/* 状态徽章 */
+.badge {
+  display: inline-block;
+  padding: 4rpx 14rpx;
+  border-radius: 20rpx;
+  font-size: 22rpx;
+  color: #0d1420;
+  font-weight: 600;
+}
+.badge-green { background: #57d977; }
+.badge-blue  { background: #5b8cff; }
+.badge-amber { background: #ffb454; }
+.badge-red   { background: #ff6b6b; }
+.badge-grey  { background: #44576e; color: #cdd9e8; }
+
+/* 风险/异常 */
+.risk { color: #ff6b6b; }
+.warn { color: #ffb454; }
+.ok   { color: #57d977; }
+.cyan { color: #3ddcc4; }
+.blue { color: #5b8cff; }
+
+.tap {
+  background: #16243a;
+  border: 1rpx solid #243a55;
+}
+.tap:active { background: #1d2f48; }
+
+/* pages\index\index.wxss */
+/* pages/index/index.wxss */
+</style></head><body><div class="sim-page"><div class="card"><div class="title">AISALEOS 8051 系统总览</div><div class="subtitle">AISALEOS系统总览 · V0.1 · 更新 2026-09-10 22:31</div><div class="subtitle muted">8051看系统，8090看公司，RBAC看人，REAL是共同底座</div></div><div class="card" style="border-left:6rpx solid #ffb454;"><div class="section-title">数据来源</div><div class="row"><span class="muted">当前来源</span><span class="warn">本地打包快照</span></div><div class="row"><span class="muted">本次读取</span><span class="cyan">2026-09-27T18:49:19.141Z</span></div><div class="row"><span class="muted">快照陈旧</span><span class="warn">17.2 天</span></div><div class="warn" style="font-size:22rpx;margin-top:8rpx;">运行时真源不可达，正在显示本地快照（截至 2026-09-10 22:31，已 17.2 天）</div></div><div class="card"><div class="section-title">系统计数</div><div class="row"><span class="muted">公司总数</span><span class="cyan">7</span></div><div class="row"><span class="muted">上桌重点</span><span class="blue">4</span></div><div class="row"><span class="muted">REAL_ACTIVE</span><span class="ok">1</span></div><div class="row"><span class="muted">UNKNOWN REAL缺口</span><span class="warn">6</span></div><div class="row"><span class="muted">KR_GATE 事项</span><span class="risk">1</span></div></div><div class="card"><div class="section-title">四家上桌（重点）</div><div class="row" style="padding:6rpx 0;"><span>希懋半导体</span></div><div class="row" style="padding:6rpx 0;"><span>冠辰科技</span></div><div class="row" style="padding:6rpx 0;"><span>智慧世界科技</span></div><div class="row" style="padding:6rpx 0;"><span>酬成光电</span></div></div><div class="card"><div class="section-title">麻将桌四方</div><div class="warn" style="font-size:22rpx;">BUSINESS_UNDERSTANDING_PENDING_REAL —— 业务理解待REAL核实</div><div class="row" style="padding:8rpx 0;border-bottom:1rpx solid #1e2c40;"><div><span class="cyan">刘 → </span><span>希懋半导体</span></div><span class="muted" style="max-width:340rpx;text-align:right;">芯片原厂 / 产品 REAL 源头</span></div><div class="row" style="padding:8rpx 0;border-bottom:1rpx solid #1e2c40;"><div><span class="cyan">杨 → </span><span>冠辰科技</span></div><span class="muted" style="max-width:340rpx;text-align:right;">芯片代理 / 运营</span></div><div class="row" style="padding:8rpx 0;border-bottom:1rpx solid #1e2c40;"><div><span class="cyan">程 → </span><span>智慧世界科技</span></div><span class="muted" style="max-width:340rpx;text-align:right;">方案商 / 应用方案</span></div><div class="row" style="padding:8rpx 0;border-bottom:1rpx solid #1e2c40;"><div><span class="cyan">邓 → </span><span>酬成光电</span></div><span class="muted" style="max-width:340rpx;text-align:right;">照明应用 / 首攻应用场</span></div><div class="muted" style="font-size:22rpx;margin-top:10rpx;">KR 当前业务理解（麻将桌四方）。施工前已与 REAL 核对：系统中无对应人员-公司绑定 REAL，故标 BUSINESS_UNDERSTANDING，待 REAL 核实，不强制改事实。</div></div><div class="card"><div class="section-title">公司节点（点击查看详情）</div><div class="tap card" style="margin:12rpx 0;padding:18rpx 20rpx;" data-key="xm"><div class="row"><div><span style="font-weight:600;">希懋半导体</span><span class="blue" style="font-size:22rpx;"> 上桌</span></div><span class="badge badge-green">REAL_ACTIVE</span></div><div class="muted" style="margin-top:6rpx;">芯片原厂 / 产品REAL源头 / 第一颗灌血芯片SM1191</div></div><div class="tap card" style="margin:12rpx 0;padding:18rpx 20rpx;" data-key="gc"><div class="row"><div><span style="font-weight:600;">冠辰科技</span><span class="blue" style="font-size:22rpx;"> 上桌</span></div><span class="badge badge-blue">CONSOLE/PARTIAL</span></div><div class="muted" style="margin-top:6rpx;">芯片代理 / 运营（KR体系核心运营公司）</div></div><div class="tap card" style="margin:12rpx 0;padding:18rpx 20rpx;" data-key="zhsj"><div class="row"><div><span style="font-weight:600;">智慧世界科技</span><span class="blue" style="font-size:22rpx;"> 上桌</span></div><span class="badge badge-blue">CONSOLE/PARTIAL</span></div><div class="muted" style="margin-top:6rpx;">方案商（麻将桌上桌方）</div></div><div class="tap card" style="margin:12rpx 0;padding:18rpx 20rpx;" data-key="cc"><div class="row"><div><span style="font-weight:600;">酬成光电</span><span class="blue" style="font-size:22rpx;"> 上桌</span></div><span class="badge badge-blue">CONSOLE/PARTIAL</span></div><div class="muted" style="margin-top:6rpx;">照明应用公司（麻将桌上桌方 / SM1191首攻应用场）</div></div><div class="tap card" style="margin:12rpx 0;padding:18rpx 20rpx;" data-key="iotr"><div class="row"><div><span style="font-weight:600;">宜欧特电器</span></div><span class="badge badge-blue">CONSOLE/PARTIAL</span></div><div class="muted" style="margin-top:6rpx;">落地（KR体系落地公司）</div></div><div class="tap card" style="margin:12rpx 0;padding:18rpx 20rpx;" data-key="ccip"><div class="row"><div><span style="font-weight:600;">酬成科创</span></div><span class="badge badge-blue">CONSOLE/PARTIAL</span></div><div class="muted" style="margin-top:6rpx;">OS层 / IP Root（知识产权护城河唯一IP池）</div></div><div class="tap card" style="margin:12rpx 0;padding:18rpx 20rpx;" data-key="wgcc"><div class="row"><div><span style="font-weight:600;">唯冠辰(宁波)</span></div><span class="badge badge-blue">CONSOLE/PARTIAL</span></div><div class="muted" style="margin-top:6rpx;">独立贸易</div></div></div><div class="card"><div class="section-title risk">异常 / 风险</div><div style="padding:8rpx 0;border-bottom:1rpx solid #1e2c40;"><span class="risk" style="font-size:22rpx;">[blocker] 希懋半导体</span><div class="muted" style="margin-top:4rpx;">GAP-2 邓工schematic/BOM未提供（PENDING_EXTERNAL，非黑武可自决）</div></div><div style="padding:8rpx 0;border-bottom:1rpx solid #1e2c40;"><span class="risk" style="font-size:22rpx;">[unknown] 希懋半导体</span><div class="muted" style="margin-top:4rpx;">市场验证 / 工程验证(GAP-2) / 刘晓伟权限 / AUTONOMOUS_WAKE真跑</div></div><div style="padding:8rpx 0;border-bottom:1rpx solid #1e2c40;"><span class="risk" style="font-size:22rpx;">[kr_gate] 希懋半导体</span><div class="muted" style="margin-top:4rpx;">刘晓伟权限定义（高风险权限，待KR确认其真实组织角色）</div></div><div style="padding:8rpx 0;border-bottom:1rpx solid #1e2c40;"><span class="risk" style="font-size:22rpx;">[unknown] 冠辰科技</span><div class="muted" style="margin-top:4rpx;">全部AISALEOS公司级进度</div></div><div style="padding:8rpx 0;border-bottom:1rpx solid #1e2c40;"><span class="risk" style="font-size:22rpx;">[unknown] 智慧世界科技</span><div class="muted" style="margin-top:4rpx;">全部AISALEOS公司级进度</div></div><div style="padding:8rpx 0;border-bottom:1rpx solid #1e2c40;"><span class="risk" style="font-size:22rpx;">[unknown] 酬成光电</span><div class="muted" style="margin-top:4rpx;">客户采纳/订单/样品/设计导入（宣传≠市场REAL）</div></div><div style="padding:8rpx 0;border-bottom:1rpx solid #1e2c40;"><span class="risk" style="font-size:22rpx;">[unknown] 宜欧特电器</span><div class="muted" style="margin-top:4rpx;">全部AISALEOS公司级进度</div></div><div style="padding:8rpx 0;border-bottom:1rpx solid #1e2c40;"><span class="risk" style="font-size:22rpx;">[unknown] 酬成科创</span><div class="muted" style="margin-top:4rpx;">全部AISALEOS公司级进度</div></div><div style="padding:8rpx 0;border-bottom:1rpx solid #1e2c40;"><span class="risk" style="font-size:22rpx;">[unknown] 唯冠辰(宁波)</span><div class="muted" style="margin-top:4rpx;">全部AISALEOS公司级进度</div></div></div><div class="card"><div class="section-title">最近 REAL 变化 / 缺口</div><div style="padding:8rpx 0;border-bottom:1rpx solid #1e2c40;"><span class="cyan" style="font-size:22rpx;">希懋半导体</span><div class="muted" style="margin-top:4rpx;">2026-09-10 DS-0.2产品事实根PASS + 1→2 FACT包机器通路交付（去KR人肉Relay）</div></div><div style="padding:8rpx 0;border-bottom:1rpx solid #1e2c40;"><span class="cyan" style="font-size:22rpx;">酬成光电</span><div class="muted" style="margin-top:4rpx;">UNKNOWN（仅知识层草案，无经营REAL回证）</div></div><div style="padding:8rpx 0;border-bottom:1rpx solid #1e2c40;"><span class="cyan" style="font-size:22rpx;">REAL_GAP</span><div class="muted" style="margin-top:4rpx;">希懋 tenant=xm 未列入 config.json custom_clients（控制台入口缺；但希懋8090 REAL总台已独立建成，不阻塞，待补 tenant 入口）</div></div><div style="padding:8rpx 0;border-bottom:1rpx solid #1e2c40;"><span class="cyan" style="font-size:22rpx;">REAL_GAP</span><div class="muted" style="margin-top:4rpx;">刘晓伟真实组织角色/权限未在系统中定义（§12 禁止凭想象定义，属 KR_GATE，待 KR 确认）</div></div><div style="padding:8rpx 0;border-bottom:1rpx solid #1e2c40;"><span class="cyan" style="font-size:22rpx;">REAL_GAP</span><div class="muted" style="margin-top:4rpx;">8051 其余5家公司仅有控制台 tenant，无 AISALEOS 公司级 REAL 沉淀（按 §17 不模拟，如实显示 UNKNOWN）</div></div><div style="padding:8rpx 0;border-bottom:1rpx solid #1e2c40;"><span class="cyan" style="font-size:22rpx;">REAL_GAP</span><div class="muted" style="margin-top:4rpx;">AUTONOMOUS_WAKE 仍 UNKNOWN：Automation 已配置但未观察真实无人介入自跑留证</div></div></div><div class="card"><div class="section-title warn">待处理 / 下一步</div><div style="padding:8rpx 0;border-bottom:1rpx solid #1e2c40;"><span class="warn" style="font-size:22rpx;">希懋半导体</span><div class="muted" style="margin-top:4rpx;">GAP-2 邓工schematic/BOM未提供（PENDING_EXTERNAL，非黑武可自决）</div></div><div style="padding:8rpx 0;border-bottom:1rpx solid #1e2c40;"><span class="warn" style="font-size:22rpx;">希懋半导体</span><div class="muted" style="margin-top:4rpx;">卡点：GAP-2 邓工 schematic/BOM 未提供（PENDING_EXTERNAL）；市场验证 UNKNOWN；刘晓伟权限 KR_GATE</div></div><div style="padding:8rpx 0;border-bottom:1rpx solid #1e2c40;"><span class="warn" style="font-size:22rpx;">NEXT</span><div class="muted" style="margin-top:4rpx;">SM1191：等 GAP-2 邓工文件 / 2WB 回收市场REAL / Automation 真跑升 wake=PASS</div></div><div style="padding:8rpx 0;border-bottom:1rpx solid #1e2c40;"><span class="warn" style="font-size:22rpx;">NEXT</span><div class="muted" style="margin-top:4rpx;">8051：SM1191 模式 PASS 后，按同骨架复制冠辰/智慧世界/酬成光电经营REAL总台</div></div><div style="padding:8rpx 0;border-bottom:1rpx solid #1e2c40;"><span class="warn" style="font-size:22rpx;">NEXT</span><div class="muted" style="margin-top:4rpx;">RBAC：KR 确认刘晓伟真实岗位 → 绑定同一份希懋8090 REAL 的岗位视角</div></div><div style="padding:8rpx 0;border-bottom:1rpx solid #1e2c40;"><span class="warn" style="font-size:22rpx;">NEXT</span><div class="muted" style="margin-top:4rpx;">去 KR Relay：HANDOFF 尽量机器完成，KR 逐步退出搬运</div></div></div><div class="card tap"><div class="row"><span class="risk" style="font-weight:600;">KR_GATE（2）— 需 KR 亲自裁决</span><span class="badge badge-red">进入 ›</span></div></div><div class="card"><div class="section-title">进入 8090 路径</div><div class="muted">希懋8090 经营REAL总台为独立小程序/PC（非本8051）。希懋节点详情页内提供 drill_down 文件名，KR 据此在对应环境打开 8090 REAL 总台。</div></div><div style="height:40rpx;"></div></div></body></html>

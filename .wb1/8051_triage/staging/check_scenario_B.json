@@ -1,0 +1,30 @@
+{
+  "scenario": "B",
+  "exec_mode": "SIMULATED_RUNTIME(Node)",
+  "real_device": "UNVERIFIED",
+  "origin": "LOCAL_SNAPSHOT",
+  "fetchedAt": "2026-09-27T18:49:19.141Z",
+  "runtime_live_truth_updated": "",
+  "runtime_bundle_stale_days": 17.2,
+  "staleWarn": "运行时真源不可达，正在显示本地快照（截至 2026-09-10 22:31，已 17.2 天）",
+  "staleDays_shown": true,
+  "companies_rendered": 7,
+  "anomalies": 9,
+  "pending": 6,
+  "krGates": 2,
+  "rendered_plain_text_len": 2130,
+  "white_screen": false,
+  "says_live_runtime": false,
+  "says_local_snapshot": true,
+  "has_source_label": true,
+  "unresolved_bindings": 0,
+  "unresolved_sample": [],
+  "render_errors": [],
+  "wx_calls": [
+    {
+      "url": "http://127.0.0.1:8052/api/8051",
+      "method": "GET"
+    }
+  ],
+  "elapsed_ms": 3009
+}
