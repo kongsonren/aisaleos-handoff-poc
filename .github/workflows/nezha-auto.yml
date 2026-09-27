@@ -1,26 +1,26 @@
-name: NEZHA-CLOUD-AUTO-TAKEOVER
+name: NEZHA-CLOUD-CONTINUOUS-LOOP
 
-# 云端自主接管：由 GitHub 自带调度器触发（**不依赖本地任何机器或会话**）。
-# 本地 12WB 关机后，本机会话一并消失，此时只有这条云端 cron 能继续工作 ——
-# 这才叫"云接管"，而不是"关机前预约的一次远程调用"。
+# 今晚唯一一条云起搏（原 NEZHA-CLOUD-AUTO-TAKEOVER 已改写为本循环）。
 #
-# 每 5 分钟：读 TASK STATE → 验 AUTH/OWNER/EPOCH → 判定本地失联 → 从 LOCAL 遗留
-# CHECKPOINT 的**下一步**继续 → STATE_FORWARD → RESULT。
-# 幂等与防双执行：concurrency 串行排队 + epoch fencing + result 只承认一次。
+# 目的：把本地 1WB 后腿的「自主工作循环」搬到云肉身 ——
+#   每一拍：读 STATE → 分类（RUNNING / LOCAL_HELD 不抢活 / TAKEOVER / IDLE 扫描 / GENUINE_IDLE）
+#          → 只做一个动作 → 写 heartbeat(round_seq+1)
+# 第五到十分钟的调度延迟是 GitHub 的常态，**准点不是 PASS 条件**；
+# PASS 条件是：黑武士关机以后，下一拍仍然由这里自己发生。
 on:
   workflow_dispatch:
   schedule:
     - cron: "*/5 * * * *"
 
 concurrency:
-  group: nezha-cloud-executor
-  cancel-in-progress: false   # 排队串行，绝不并发双跑
+  group: nezha-cloud-executor   # 与原 concurrent 组同名：保证同一时刻只有一个被执行，绝不双跑
+  cancel-in-progress: false
 
 permissions:
   contents: write
 
 jobs:
-  execute:
+  loop:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -31,12 +31,12 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Run NEZHA executor
+      - name: One beat of NEZHA continuous loop
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NEZHA_AUTH_ID: KR-TOKEN-20260928-NEZHA-TAKEOVER
-          NEZHA_STALE_SEC: "180"
+          NEZHA_STALE_SEC: "600"   # LOCAL heartbeat 90s；10 分钟无进展才判定失联（容忍 cron 延迟）
         run: |
-          echo "run_id=$GITHUB_RUN_ID started=$(date -u +%FT%TZ)"
-          python .wb1/nezha/cloud_executor.py
+          echo "run_id=$GITHUB_RUN_ID attempt=$GITHUB_RUN_ATTEMPT started=$(date -u +%FT%TZ)"
+          python .wb1/nezha/loop.py
           echo "exit=$?"
