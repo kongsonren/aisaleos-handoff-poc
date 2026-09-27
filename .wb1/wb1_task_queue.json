@@ -1,24 +1,20 @@
 {
   "pending": [
     {
-      "id": "Q-20260927-8051-WARBUILD-001",
-      "ref": "WAR_REF=NEZHA-60X1-FIRST-BATTLE-20260927-001",
-      "title": "8051承战能力最小建设 + 60x1真弹交2WB",
-      "from_comment": 5853891778,
-      "priority": "P0",
-      "status": "PARTIAL_CLOUD_PREP_DONE",
-      "cloud_done": [
-        "60X1-RGBCW-MARKET-AMMO-V1.md LOADED (FACT/ASSET/UNKNOWN/SOURCE, 无假补)",
-        "8051_minimal_war_ledger_schema.md 设计稿",
-        "云内轮分析：持续接令/监听/写回/状态维护=REAL；真源直连(lark)/2WB阵地选择=需黑武士/2WB"
-      ],
-      "remaining_for_local": [
-        "在 8051 真源(飞书Base)落地最小战争账结构（复用不新建）",
-        "通过既有机器通路(_relay_to_2wb_rgbcw.py)交 60x1真弹给 2WB，留 SENT/RECEIVED/VERSION",
-        "MARKET_LIVE 触发后按状态机记录，不自动升级"
-      ],
-      "created_at": "2026-09-27T07:52:14Z",
-      "assigned_to": "黑武士(本地1WB) 上线消费"
+      "comment_id": 5854039340,
+      "ref": "NEZHA-60X1-HANDOFF-CLOSE-20260927-001",
+      "war_ref": "NEZHA-60X1-FIRST-BATTLE-20260927-001",
+      "type": "SELF_SOLVE",
+      "action": "HANDOFF_60X1_AMMO_TO_2WB",
+      "status": "HANDED_OFF_1WB_SENT_2WB_BLOCK",
+      "source_file": "C:/Users/59605/希懋-SM1191-产品资产/60X1-RGBCW-外攻弹-V1_20260925-1TO2.md",
+      "delivered_name": "60X1-RGBCW-MARKET-AMMO-V1_20260927-1TO2.md",
+      "nas_sha256": "ed8e3b1b1b2da13b4cb743bf7ba8fc166c9606da600a3f5baed65c30fb4f15b7",
+      "byte_exact": true,
+      "find_hit": true,
+      "recv_exec_evidence": "NO_EVIDENCE",
+      "kr_relay": 0,
+      "updated_at": "2026-09-27T09:10:35Z"
     }
   ]
 }
