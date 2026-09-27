@@ -1,0 +1,18 @@
+{
+  "round_seq": 1,
+  "round_at": "2026-09-28T04:35:23.455635+08:00",
+  "actor": "CLOUD_NEZHA",
+  "runner": "runnervmtr4k5",
+  "run_id": "36348586850",
+  "run_attempt": "1",
+  "decision": {
+    "kind": "NO_TAKEOVER_LOCAL_HELD",
+    "task_id": "TASK-REAL-001",
+    "age_seconds": 57.2,
+    "threshold": 600
+  },
+  "skips": [],
+  "out": {
+    "acted": false
+  }
+}
