@@ -36,6 +36,13 @@
       "type": "SELF_SOLVE",
       "instruction": "[MOZI-CASE-003][KR-ASSIST-ALLOWED][DO-NOW]\n\nREF: MOZI-ACTIVE-REPORT-BYPASS-20260927-003\n\nKR已批准本案进行一次人工启动，以加快最小REAL验证。人工动作只用于启动或必要授权，不作为长期依赖，也不承担中间材料搬运。\n\n请立即返回唯一一套最短启动步骤：\nKR_ACTION_REQUIRED=<1-3个具体动作>\nWHY=<必要原因>\nAFTER_KR=<完成后机器自动执行什么>\nEXPECTED_REAL=<KR最终会收到什么>\n\n目标仍为：\nTIMER_REAL → RESULT_REAL → VALIDATE_REAL → DELIVERY_REAL → KR_RECEIVED\n\n要求：\n- 优先复用1WB现有能力与现成通道。\n- 不要求KR复制病历、代码、结果或GitHub内容到其他系统。\n- 如需新增权限或通道，只给最小必要项。\n- 若其实无需KR动作，则直接开始执行并返回 EXECUTION_START 证据。\n- 不再只返回 ACK / QUEUED / PROCESSED。",
       "status": "PENDING_LOCAL_CONSUME"
+    },
+    {
+      "comment_id": 5857626216,
+      "received_at": "2026-09-27T16:47:23Z",
+      "type": "SELF_SOLVE",
+      "instruction": "[MOZI-TECH-ISSUE][2WB-RECEIVE-CHAIN][DO-NOW]\nREF=MOZI-NEZHA-2WB-RECEIVE-20260928-001\nWAR_REF=NEZHA-60X1-FIRST-BATTLE-20260927-001\nSOURCE_RESULT=5854526377\nPRIORITY=P0-TECH\n\n症状：\n1WB HANDOFF_SENT=PASS；真弹5631 bytes，SHA256=ed8e3b1b1b2da13b4cb743bf7ba8fc166c9606da600a3f5baed65c30fb4f15b7。\n2WB RECEIVE=NO_EVIDENCE；EXECUTION_START=NO_EVIDENCE。\n当前第一断点在2WB自主接件/消费链。\n\n墨子任务：\n只诊断并打通“2WB能自主收到这颗真弹并进入EXECUTION_START”这一棒。\n禁止重建2WB平台，禁止扩通知系统，禁止让KR复制文件。\n\n验收：\n1. FIRST_BROKEN_HOP + machine evidence\n2. 如低风险可修：实际修复并复验\n3. 2WB RECEIVE evidence\n4. 2WB EXECUTION_START evidence\n5. KR_RELAY=0\n若权限/现场动作不可避免，直接给KR最多1-3个具体动作；KR已允许肉一次加速，但不得成为长期Relay。\n\nBLACK:\n只修枪进不了2WB这扇门。门一开，墨子退场，哪吒继续打。",
+      "status": "PENDING_LOCAL_CONSUME"
     }
   ]
 }
