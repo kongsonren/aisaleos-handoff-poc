@@ -1,36 +1,34 @@
 {
-  "round_seq": 6,
-  "round_at": "2026-09-28T05:55:30.093399+08:00",
+  "round_seq": 7,
+  "round_at": "2026-09-28T06:00:16.439079+08:00",
   "actor": "CLOUD_NEZHA",
   "runner": "runnervmtr4k5",
-  "run_id": "36353441869",
+  "run_id": "36353721560",
   "run_attempt": "1",
   "decision": {
-    "kind": "NEW_TASK",
-    "candidate": "REVERIFY_8051_EVIDENCE",
-    "task_id": "TASK-REAL-012",
-    "why": "READY: TASK-REAL-011 DONE by CLOUD_NEZHA, artifacts present, no prior reverify",
-    "auth_ref": "KR-TOKEN-20260928-POWEROFF-V2",
-    "capability": "CLOUD_READY",
-    "reach_evidence": {
-      "github_repo_file": "runner checkout + Contents API 读取（已验证：多次读取 .wb1/nezha/task_state.json）",
-      "git_data_write": "Git Data API 提交（已验证：blob→tree→commit→PATCH refs 多次成功）",
-      "task_state_beam": "状态梁读写（同一份 task_state.py，本地与云共用）",
-      "python_stdlib": "Python 标准库 hashlib/json/urllib（ubuntu-latest 原生）"
-    }
+    "kind": "GENUINE_IDLE",
+    "reason": "no CLOUD_READY+authorized+gated-clear candidate is actionable; refuse to fabricate busywork"
   },
   "skips": [
     {
       "id": "REVERIFY_8051_EVIDENCE",
-      "skip": "SELECTED",
-      "reason": "READY: TASK-REAL-011 DONE by CLOUD_NEZHA, artifacts present, no prior reverify"
+      "skip": "NOT_READY",
+      "reason": "SKIP: REVERIFY_REPORT.md already exists (already done)"
+    },
+    {
+      "id": "SYNC_FEISHU_8051",
+      "skip": "BLOCKED_LOCAL",
+      "reason": "needs=feishu_base_secret -> LOCAL_ONLY",
+      "value": "回填真源（真实必要），但依赖本地凭据；云侧未验证可达 → BLOCKED_LOCAL，不整腿停工。"
+    },
+    {
+      "id": "PUBLISH_8051_REMOTE",
+      "skip": "BLOCKED_GATE",
+      "reason": "needs=release_publish -> LOCAL_ONLY",
+      "value": "覆盖线上应用属重大生产动作 → BLOCKED_GATE，等 KR 裁决，云端不得自行发布。"
     }
   ],
   "out": {
-    "ok": true,
-    "task_id": "TASK-REAL-012",
-    "verdict": "MATCH",
-    "completion_id": "RV-a334b0a23e76",
-    "result_commit": "fd507abcfb766a85fadff56997998ad26e1f7c39"
+    "acted": false
   }
 }
