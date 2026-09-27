@@ -70,7 +70,7 @@ def step_4(store, state, manifest):
         json.dumps(manifest, sort_keys=True).encode()).hexdigest()[:12])
     L = []
     A = L.append
-    A("# TASK-REAL-001 · 8051 三场景证据封包 · 云端接管 RESULT")
+    A("# %s · 8051 三场景证据封包 · 云端接管 RESULT" % state["task_id"])
     A("")
     A("- task_id: `%s`" % state["task_id"])
     A("- completion_id: `%s`" % cid)

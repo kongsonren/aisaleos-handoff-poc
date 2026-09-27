@@ -43,8 +43,9 @@ jobs:
       - name: One beat of NEZHA continuous loop
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NEZHA_AUTH_ID: KR-TOKEN-20260928-NEZHA-TAKEOVER
-          NEZHA_STALE_SEC: "600"   # LOCAL heartbeat 90s；10 分钟无进展才判定失联（容忍 cron 延迟）
+          NEZHA_AUTH_ID: KR-TOKEN-20260928-POWEROFF-V2
+          NEZHA_STALE_SEC: "900"   # LOCAL 不再有常驻心跳：最后一吻时间戳 + 15 分钟窗口，
+                                   # KR 须在冻结后 15 分钟内物理关机，接管必然晚于关机
         run: |
           echo "run_id=$GITHUB_RUN_ID attempt=$GITHUB_RUN_ATTEMPT started=$(date -u +%FT%TZ)"
           if [ "${{ inputs.diag }}" = "true" ]; then

@@ -25,14 +25,14 @@ AUTH_REGISTRY = {
         "payment": False, "external_send": False,
         "delete_or_overwrite_protected": False, "privilege_escalation": False,
     },
-    "KR-TOKEN-20260928-CLOUD-CONTINUOUS": {
-        "granted_by": "KR 直接令牌 2026-09-28《云哪吒连续工作闭环》二/三/四/五条",
+    "KR-TOKEN-20260928-POWEROFF-V2": {
+        "granted_by": "KR 直接令牌 2026-09-28《云哪吒连续工作闭环》二/三/四/五条（第二场接力）",
         "scope_slugs": ["8051.baton", "8051.cloud_verify"],
         "cross_leg": False, "new_battlefield": False, "high_risk": False,
         "payment": False, "external_send": False,
         "delete_or_overwrite_protected": False, "privilege_escalation": False,
-        "note": "允许在既有 8051 战场内做 CLOUD_READY 的只读复核并新增报告文件；"
-                "不得删改既有资产、不得扩大到新战场、不得外发。",
+        "note": "与第一场同一份 KR 令牌：**不因上云而扩权**。Round1 于 05:14 误判失联接管，"
+                "已作废（见 8051_triage/_void_round1/README.md），本轮为同一剧情的第二场。",
     },
 }
 
@@ -90,8 +90,8 @@ CANDIDATES = [
     {
         "id": "REVERIFY_8051_EVIDENCE",
         "title": "8051 接班产物的跨执行体独立复核",
-        "task_id": "TASK-REAL-002",
-        "auth_ref": "KR-TOKEN-20260928-CLOUD-CONTINUOUS",
+        "task_id": "TASK-REAL-012",
+        "auth_ref": "KR-TOKEN-20260928-POWEROFF-V2",
         "scope_slug": "8051.cloud_verify",
         "needs": ["github_repo_file", "git_data_write", "task_state_beam", "python_stdlib"],
         "gate": False,
@@ -101,8 +101,8 @@ CANDIDATES = [
     {
         "id": "SYNC_FEISHU_8051",
         "title": "把 8051 结论同步回飞书 Base 证据库",
-        "task_id": "TASK-REAL-003",
-        "auth_ref": "KR-TOKEN-20260928-CLOUD-CONTINUOUS",
+        "task_id": "TASK-REAL-013",
+        "auth_ref": "KR-TOKEN-20260928-POWEROFF-V2",
         "scope_slug": "8051.cloud_verify",
         "needs": ["feishu_base_secret"],
         "gate": False,
@@ -111,8 +111,8 @@ CANDIDATES = [
     {
         "id": "PUBLISH_8051_REMOTE",
         "title": "远程重推 8051 发布包到线上应用",
-        "task_id": "TASK-REAL-004",
-        "auth_ref": "KR-TOKEN-20260928-CLOUD-CONTINUOUS",
+        "task_id": "TASK-REAL-014",
+        "auth_ref": "KR-TOKEN-20260928-POWEROFF-V2",
         "scope_slug": "8051.cloud_verify",
         "needs": ["release_publish"],
         "gate": True,
