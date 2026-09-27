@@ -3,11 +3,19 @@
   "auth_id": "KR-TOKEN-20260928-NEZHA-TAKEOVER",
   "owner": "LOCAL_1WB",
   "epoch": 1,
-  "checkpoint": "STEP_0",
+  "checkpoint": "STEP_1",
   "state": "RUNNING",
-  "last_progress_at": "2026-09-28T03:52:26.898176+08:00",
-  "next_expected": "STEP_1",
+  "last_progress_at": "2026-09-28T03:52:39.474048+08:00",
+  "next_expected": "STEP_2",
   "result": null,
   "result_written_by": null,
-  "history": []
+  "history": [
+    {
+      "at": "2026-09-28T03:52:39.474059+08:00",
+      "actor": "LOCAL_1WB",
+      "epoch": 1,
+      "checkpoint": "STEP_1",
+      "note": "LOCAL collected 8051 triage evidence"
+    }
+  ]
 }
