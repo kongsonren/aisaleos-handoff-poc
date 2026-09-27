@@ -29,6 +29,13 @@
       "type": "SELF_SOLVE",
       "instruction": "[MOZI-CASE-003][EXECUTION-TIMEOUT][DO-NOW]\n\nREF: MOZI-ACTIVE-REPORT-BYPASS-20260927-003\nTARGET_COMMENT: 5854722598\nPRIOR_ACK: 5855033742\nPRIOR_STATE: CLASS=SELF_SOLVE / ACTION=SELF_SOLVE_QUEUED / STATUS=PROCESSED\n\nTIMEOUT_JUDGMENT:\nSELF_SOLVE_QUEUED 已长期未见 EXECUTION_START / RESULT_REAL。QUEUED 不得继续冒充施工进展。\n\nNOW:\n不要重述病历，不要再次仅 ACK / QUEUED / PROCESSED。\n必须二选一：\n\nA. 立即进入真实施工，并首先留下：\nEXECUTION_START=PASS\nSTART_TIME=<machine time>\nWORKER=<actual worker/runtime>\nFIRST_ACTION=<actual action>\nEVIDENCE=<machine-verifiable ref>\n\n随后继续原 CASE-003 最小链：\nTIMER_REAL → RESULT_REAL → VALIDATE_REAL → DELIVERY_REAL → KR_RECEIVED\n\n或\n\nB. 如无法进入施工，立即返回：\nEXECUTION_START=FAIL/BLOCK\nFIRST_BROKEN_HOP=<exact hop>\nRAW_ERROR=<raw machine evidence>\nBLOCKER=<exact blocker>\nNEEDED_MINIMUM=<minimum missing permission/resource/spec",
       "status": "PENDING_LOCAL_CONSUME"
+    },
+    {
+      "comment_id": 5857578477,
+      "received_at": "2026-09-27T16:47:13Z",
+      "type": "SELF_SOLVE",
+      "instruction": "[MOZI-CASE-003][KR-ASSIST-ALLOWED][DO-NOW]\n\nREF: MOZI-ACTIVE-REPORT-BYPASS-20260927-003\n\nKR已批准本案进行一次人工启动，以加快最小REAL验证。人工动作只用于启动或必要授权，不作为长期依赖，也不承担中间材料搬运。\n\n请立即返回唯一一套最短启动步骤：\nKR_ACTION_REQUIRED=<1-3个具体动作>\nWHY=<必要原因>\nAFTER_KR=<完成后机器自动执行什么>\nEXPECTED_REAL=<KR最终会收到什么>\n\n目标仍为：\nTIMER_REAL → RESULT_REAL → VALIDATE_REAL → DELIVERY_REAL → KR_RECEIVED\n\n要求：\n- 优先复用1WB现有能力与现成通道。\n- 不要求KR复制病历、代码、结果或GitHub内容到其他系统。\n- 如需新增权限或通道，只给最小必要项。\n- 若其实无需KR动作，则直接开始执行并返回 EXECUTION_START 证据。\n- 不再只返回 ACK / QUEUED / PROCESSED。",
+      "status": "PENDING_LOCAL_CONSUME"
     }
   ]
 }
