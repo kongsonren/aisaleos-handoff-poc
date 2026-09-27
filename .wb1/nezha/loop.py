@@ -84,36 +84,40 @@ def cand_reverify_requires(store, ctx):
 
 
 CAND_REQUIRES = {"REVERIFY_8051_EVIDENCE": cand_reverify_requires}  # 其余候选恒被 capability/gate 挡住
+CAND_RUNNER_BY_TASK = {"TASK-REAL-002": None}   # 占位，run_reverify 定义后回填
 
 
 def run_reverify(store, task_id):
     """第二棒执行：产第二个独立 REAL —— 跨执行体复核报告 + 机器可读 MANIFEST。"""
     ts = TaskState(store, ".wb1/nezha/task_state_%s.json" % task_id)
     cur, _, _, _ = ts.load()
+    if cur and cur.get("state") == "DONE" and cur.get("result"):
+        log("task already DONE with result; refusing to produce a second RESULT")
+        return {"ok": True, "already_done": True, "task_id": task_id, "result": cur.get("result")}
     if not cur:
         r = ts.init(task_id=task_id, auth_id="KR-TOKEN-20260928-CLOUD-CONTINUOUS",
                     owner=ACTOR, epoch=1, checkpoint="RV_0", state="RUNNING", next_expected="RV_1")
         log("INIT new task:", json.dumps({k: r.get(k) for k in ("ok", "error", "commit")}, ensure_ascii=False))
         if not r.get("ok"):
-            return {"ok": False, "error": "INIT_FAILED", "detail": r.get("error")}
-        cur, _, _, _ = ts.load()
+            # 只有"别人抢先建好了"是可接受的；其余一律报错
+            cur, _, _, _ = ts.load()
+            if not cur or cur.get("owner") != ACTOR:
+                return {"ok": False, "error": "INIT_FAILED", "detail": r.get("error")}
+            log("  note: task already initialized by %s; continue from %s" % (
+                cur.get("owner"), cur.get("checkpoint")))
+        # 登记到 index，后续轮次才能看见它并走"续做"分支
+        idx = load_index(store)
+        if task_id not in idx["tasks"]:
+            idx["tasks"].append(task_id)
+            idx["updated_at"] = now_iso()
+            store.commit_files({INDEX_PATH: json.dumps(idx, ensure_ascii=False, indent=2).encode()},
+                               "[NEZHA] register %s into task index" % task_id)
 
     manifest_b = read_repo(store, "%s/EVIDENCE_MANIFEST.json" % OUT_DIR)
     result_md = read_repo(store, "%s/TRIAGE_RESULT.md" % OUT_DIR)
     if not manifest_b or not result_md:
         return {"ok": False, "error": "ARTIFACT_MISSING"}
     manifest = json.loads(manifest_b.decode("utf-8"))
-
-    # RV_1 读取 ≥ RV_2 重算 ≥ RV_3 比对 ≥ RV_4 出报告
-    rows, mismatch = [], []
-    for row in manifest.get("files", []):
-        b = read_repo(store, "%s/%s" % (STAGING_DIR, row["file"]))
-        got = hashlib.sha256(b).hexdigest() if b else None
-        ok = (got is not None and got == row.get("sha256") and len(b) == row.get("bytes"))
-        rows.append({"file": row["file"], "declared_sha256": row.get("sha256"), "declared_bytes": row.get("bytes"),
-                     "recomputed_sha256": got, "recomputed_bytes": len(b) if b else None, "match": bool(ok)})
-        if not ok:
-            mismatch.append(row["file"])
 
     def fw(checkpoint, nxt, note):
         nonlocal cur
@@ -125,17 +129,39 @@ def run_reverify(store, task_id):
         log("  ->", checkpoint, "ok")
         return True, None, None
 
-    ok, e, why = fw("RV_1", "RV_2", "read first-leg manifest (%d files) + result md" % len(rows))
-    if not ok:
-        return {"ok": False, "error": e, "reason": why}
-    ok, e, why = fw("RV_2", "RV_3", "recomputed sha256 on THIS runner (%s)" % os.uname().nodename[:12])
-    if not ok:
-        return {"ok": False, "error": e, "reason": why}
-    ok, e, why = fw("RV_3", "RV_4", "compare: %d/%d matched" % (len(rows) - len(mismatch), len(rows)))
-    if not ok:
-        return {"ok": False, "error": e, "reason": why}
+    # 计算本身是纯幂等的（读字节 + 哈希，无外部副作用）；
+    # 真正受 CHECKPOINT 约束的是**状态推进**：只从未完成的下一步继续，绝不回退。
+    ck = cur.get("checkpoint")
+    start_idx = 0 if ck in (None, "RV_0") else RV_STEPS.index(ck) + 1
+    log("resume: LOCAL/earlier stopped at %s -> this beat starts at %s" % (
+        ck, RV_STEPS[start_idx] if start_idx < len(RV_STEPS) else "RESULT"))
 
+    rows, mismatch = [], []
+    for row in manifest.get("files", []):
+        b = read_repo(store, "%s/%s" % (STAGING_DIR, row["file"]))
+        got = hashlib.sha256(b).hexdigest() if b else None
+        ok = (got is not None and got == row.get("sha256") and len(b) == row.get("bytes"))
+        rows.append({"file": row["file"], "declared_sha256": row.get("sha256"), "declared_bytes": row.get("bytes"),
+                     "recomputed_sha256": got, "recomputed_bytes": len(b) if b else None, "match": bool(ok)})
+        if not ok:
+            mismatch.append(row["file"])
     verdict = "MATCH" if not mismatch else "MISMATCH"
+
+    notes = {
+        "RV_1": "read first-leg manifest (%d files) + result md" % len(rows),
+        "RV_2": "recomputed sha256 on THIS runner (%s)" % os.uname().nodename[:12],
+        "RV_3": "compare: %d/%d matched -> %s" % (len(rows) - len(mismatch), len(rows), verdict),
+    }
+    for i, step in enumerate(RV_STEPS):
+        if i < start_idx:
+            log("  skip (already advanced):", step)
+            continue
+        if step == "RV_4":
+            break
+        ok, e, why = fw(step, RV_STEPS[i + 1], notes[step])
+        if not ok:
+            return {"ok": False, "error": e, "reason": why}
+
     rv_manifest = {
         "task_id": task_id, "reverify_of": "TASK-REAL-001",
         "executed_by": ACTOR, "executed_at": now_iso(),
@@ -184,6 +210,9 @@ def run_reverify(store, task_id):
     log("RESULT:", json.dumps({k: r.get(k) for k in ("ok", "error", "reason")}, ensure_ascii=False))
     return {"ok": bool(r.get("ok")), "task_id": task_id, "verdict": verdict,
             "completion_id": rv_manifest["completion_id"], "result_commit": r.get("commit")}
+
+
+CAND_RUNNER_BY_TASK["TASK-REAL-002"] = run_reverify
 
 
 def ctx_first_leg_cid(store):
@@ -290,6 +319,9 @@ def main():
             aok, areason = P.auth_check(c["auth_ref"], c["scope_slug"])
             if not aok:
                 skips.append({"id": c["id"], "skip": "BLOCKED_GATE", "reason": areason}); continue
+            if c["task_id"] not in CAND_RUNNER_BY_TASK:
+                skips.append({"id": c["id"], "skip": "NO_EXECUTOR",
+                              "reason": "no cloud executor implemented; not selectable"}); continue
             fn = CAND_REQUIRES.get(c["id"])
             ready, why = (fn(store, {"tasks": tasks}) if fn else (False, "no require fn"))
             skips.append({"id": c["id"], "skip": "NOT_READY" if not ready else "SELECTED", "reason": why})
@@ -325,14 +357,12 @@ def main():
                         "result": st.get("result")} if st else None
     elif decision["kind"] == "RUNNING_CLOUD":
         tid = decision["task_id"]
-        path = ".wb1/nezha/task_state_%s.json" % tid
-        st, _, _, _ = TaskState(store, path).load()
-        if tid == "TASK-REAL-002":
-            out = run_reverify(store, tid)          # 续做未完成的第二棒
-        else:
-            out = {"ok": False, "error": "NO_CONTINUE_HANDLER", "task_id": tid}
-    elif decision["kind"] == "NEW_TASK" and decision["task_id"] == "TASK-REAL-002":
-        out = run_reverify(store, "TASK-REAL-002")
+        fn = CAND_RUNNER_BY_TASK.get(tid)
+        out = fn(store, tid) if fn else {"ok": False, "error": "NO_CONTINUE_HANDLER", "task_id": tid}
+    elif decision["kind"] == "NEW_TASK":
+        fn = CAND_RUNNER_BY_TASK.get(decision["task_id"])
+        out = fn(store, decision["task_id"]) if fn else {"ok": False, "error": "NO_EXECUTOR",
+                                                         "task_id": decision["task_id"]}
     else:
         out = {"acted": False}
 
