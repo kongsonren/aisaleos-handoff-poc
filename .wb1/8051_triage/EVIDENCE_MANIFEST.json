@@ -1,0 +1,39 @@
+{
+  "task_id": "TASK-REAL-001",
+  "generated_by": "CLOUD_NEZHA",
+  "generated_at": "2026-09-28T05:14:10.174354+08:00",
+  "source": "8051 小程序三场景验证（LIVE / SNAPSHOT / RECOVER）",
+  "files": [
+    {
+      "file": "check_scenario_A.json",
+      "bytes": 854,
+      "sha256": "ed0f62a7331b3ba70b12f3ab2b90eb5bb80a8a502f0c0abd614f7c4331fa224f"
+    },
+    {
+      "file": "check_scenario_B.json",
+      "bytes": 809,
+      "sha256": "e55162871dcc26a603ed57b06e7738a097c06ea7705db567e70058e395238371"
+    },
+    {
+      "file": "check_scenario_C.json",
+      "bytes": 854,
+      "sha256": "3d3ae6cc18cf5c2f35018daf6930eeadc96767347f80a5419a86942712b3b0b7"
+    },
+    {
+      "file": "render_scenario_A.html",
+      "bytes": 13683,
+      "sha256": "b35b5b2dd2834b04c4a8b78016c5c038b9e08b946e334ea81e6c6420c6e825c5"
+    },
+    {
+      "file": "render_scenario_B.html",
+      "bytes": 13636,
+      "sha256": "2c4cf005cab3186e90ebae70d37dc4658f02f92c492a61f3b3f91176227a054d"
+    },
+    {
+      "file": "render_scenario_C.html",
+      "bytes": 13683,
+      "sha256": "1000793b9ded863d19ed271eee515f656b2e57578696fce3f385c9cc0a6655b3"
+    }
+  ],
+  "note": "本 MANIFEST 由云端哪吒在 LOCAL 遗留 STAGING 基础上生成，未重新执行场景。"
+}
