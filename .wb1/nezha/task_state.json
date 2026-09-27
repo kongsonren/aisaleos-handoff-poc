@@ -3,10 +3,10 @@
   "auth_id": "KR-TOKEN-20260928-POWEROFF-V2",
   "owner": "CLOUD_NEZHA",
   "epoch": 2,
-  "checkpoint": "STEP_2",
+  "checkpoint": "STEP_3",
   "state": "RUNNING",
-  "last_progress_at": "2026-09-28T05:50:17.314112+08:00",
-  "next_expected": "STEP_3",
+  "last_progress_at": "2026-09-28T05:50:19.640513+08:00",
+  "next_expected": "STEP_4",
   "result": null,
   "result_written_by": null,
   "alive_seq": 1,
@@ -33,6 +33,13 @@
       "epoch": 2,
       "checkpoint": "STEP_2",
       "note": "TAKEOVER from LOCAL_1WB"
+    },
+    {
+      "at": "2026-09-28T05:50:19.640528+08:00",
+      "actor": "CLOUD_NEZHA",
+      "epoch": 2,
+      "checkpoint": "STEP_3",
+      "note": "cloud executed STEP_3"
     }
   ]
 }
