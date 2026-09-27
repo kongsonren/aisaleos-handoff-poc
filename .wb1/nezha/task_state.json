@@ -1,11 +1,11 @@
 {
   "task_id": "TASK-REAL-011",
   "auth_id": "KR-TOKEN-20260928-POWEROFF-V2",
-  "owner": "LOCAL_1WB",
-  "epoch": 1,
+  "owner": "CLOUD_NEZHA",
+  "epoch": 2,
   "checkpoint": "STEP_2",
   "state": "RUNNING",
-  "last_progress_at": "2026-09-28T05:31:10.951813+08:00",
+  "last_progress_at": "2026-09-28T05:50:17.314112+08:00",
   "next_expected": "STEP_3",
   "result": null,
   "result_written_by": null,
@@ -26,6 +26,13 @@
       "epoch": 1,
       "checkpoint": "STEP_2",
       "note": "LOCAL uploaded staging; STOPs here by design (second run after Round1 invalidated)"
+    },
+    {
+      "at": "2026-09-28T05:50:17.314154+08:00",
+      "actor": "CLOUD_NEZHA",
+      "epoch": 2,
+      "checkpoint": "STEP_2",
+      "note": "TAKEOVER from LOCAL_1WB"
     }
   ]
 }
