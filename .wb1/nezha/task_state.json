@@ -4,11 +4,18 @@
   "owner": "CLOUD_NEZHA",
   "epoch": 2,
   "checkpoint": "STEP_5",
-  "state": "RUNNING",
-  "last_progress_at": "2026-09-28T05:50:23.816881+08:00",
+  "state": "DONE",
+  "last_progress_at": "2026-09-28T05:50:28.044003+08:00",
   "next_expected": "STEP_5",
-  "result": null,
-  "result_written_by": null,
+  "result": {
+    "status": "PASS",
+    "completion_id": "c166a94e675f",
+    "artifacts": [
+      ".wb1/8051_triage/EVIDENCE_MANIFEST.json",
+      ".wb1/8051_triage/TRIAGE_RESULT.md"
+    ]
+  },
+  "result_written_by": "CLOUD_NEZHA",
   "alive_seq": 1,
   "alive_at": "2026-09-28T05:31:10.951823+08:00",
   "alive_host": "KR",
@@ -54,6 +61,13 @@
       "epoch": 2,
       "checkpoint": "STEP_5",
       "note": "cloud executed STEP_5"
+    },
+    {
+      "at": "2026-09-28T05:50:28.044015+08:00",
+      "actor": "CLOUD_NEZHA",
+      "epoch": 2,
+      "checkpoint": "STEP_5",
+      "note": "RESULT written by cloud"
     }
   ]
 }
