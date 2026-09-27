@@ -3,10 +3,10 @@
   "auth_id": "KR-TOKEN-20260928-POWEROFF-V2",
   "owner": "CLOUD_NEZHA",
   "epoch": 1,
-  "checkpoint": "RV_1",
+  "checkpoint": "RV_2",
   "state": "RUNNING",
-  "last_progress_at": "2026-09-28T05:55:19.620832+08:00",
-  "next_expected": "RV_2",
+  "last_progress_at": "2026-09-28T05:55:21.342670+08:00",
+  "next_expected": "RV_3",
   "result": null,
   "result_written_by": null,
   "history": [
@@ -16,6 +16,13 @@
       "epoch": 1,
       "checkpoint": "RV_1",
       "note": "read first-leg manifest (6 files) + result md"
+    },
+    {
+      "at": "2026-09-28T05:55:21.342687+08:00",
+      "actor": "CLOUD_NEZHA",
+      "epoch": 1,
+      "checkpoint": "RV_2",
+      "note": "recomputed sha256 on THIS runner (runnervmtr4k)"
     }
   ]
 }
