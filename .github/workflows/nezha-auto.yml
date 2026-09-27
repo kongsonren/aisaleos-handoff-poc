@@ -1,0 +1,42 @@
+name: NEZHA-CLOUD-AUTO-TAKEOVER
+
+# 云端自主接管：由 GitHub 自带调度器触发（**不依赖本地任何机器或会话**）。
+# 本地 12WB 关机后，本机会话一并消失，此时只有这条云端 cron 能继续工作 ——
+# 这才叫"云接管"，而不是"关机前预约的一次远程调用"。
+#
+# 每 5 分钟：读 TASK STATE → 验 AUTH/OWNER/EPOCH → 判定本地失联 → 从 LOCAL 遗留
+# CHECKPOINT 的**下一步**继续 → STATE_FORWARD → RESULT。
+# 幂等与防双执行：concurrency 串行排队 + epoch fencing + result 只承认一次。
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/5 * * * *"
+
+concurrency:
+  group: nezha-cloud-executor
+  cancel-in-progress: false   # 排队串行，绝不并发双跑
+
+permissions:
+  contents: write
+
+jobs:
+  execute:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run NEZHA executor
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NEZHA_AUTH_ID: KR-TOKEN-20260928-NEZHA-TAKEOVER
+          NEZHA_STALE_SEC: "180"
+        run: |
+          echo "run_id=$GITHUB_RUN_ID started=$(date -u +%FT%TZ)"
+          python .wb1/nezha/cloud_executor.py
+          echo "exit=$?"
