@@ -9,6 +9,11 @@ name: NEZHA-CLOUD-CONTINUOUS-LOOP
 # PASS 条件是：黑武士关机以后，下一拍仍然由这里自己发生。
 on:
   workflow_dispatch:
+    inputs:
+      diag:
+        description: "true = diagnostic scan only (no task created, no state change)"
+        required: false
+        default: "false"
   schedule:
     - cron: "*/5 * * * *"
 
@@ -38,5 +43,10 @@ jobs:
           NEZHA_STALE_SEC: "600"   # LOCAL heartbeat 90s；10 分钟无进展才判定失联（容忍 cron 延迟）
         run: |
           echo "run_id=$GITHUB_RUN_ID attempt=$GITHUB_RUN_ATTEMPT started=$(date -u +%FT%TZ)"
-          python .wb1/nezha/loop.py
+          if [ "${{ inputs.diag }}" = "true" ]; then
+            echo "mode=diagnose"
+            python .wb1/nezha/loop.py --diagnose
+          else
+            python .wb1/nezha/loop.py
+          fi
           echo "exit=$?"

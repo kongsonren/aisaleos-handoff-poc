@@ -212,6 +212,32 @@ def load_tasks(store, index):
     return out
 
 
+def diagnose(store, tasks):
+    """诊断模式：**只看不干** —— 在真实 runner 上把候选池的 capability / gate / auth / 准入
+    判定全部跑一遍并写 diag 文件。不创建任务、不改 STATE、不推进 heartbeat_seq。"""
+    rows = []
+    for c in P.CANDIDATES:
+        cap, unknown, local = P.classify(c["needs"])
+        aok, areason = P.auth_check(c["auth_ref"], c["scope_slug"])
+        fn = CAND_REQUIRES.get(c["id"])
+        ready, why = (fn(store, {"tasks": tasks}) if fn else (False, "no require fn"))
+        rows.append({"id": c["id"], "title": c["title"], "needs": c["needs"],
+                     "capability": cap, "unknown_needs": unknown, "local_only_needs": local,
+                     "auth_ok": aok, "auth_reason": areason, "gate_flag": bool(c.get("gate")),
+                     "real_value": c["real_value"], "admission_ready": bool(ready), "admission_reason": why})
+    diag = {"diag_at": now_iso(), "host": os.uname().nodename[:24],
+            "run_id": os.environ.get("GITHUB_RUN_ID"), "note": "admission logic executed on runner, no side effect",
+            "rows": rows}
+    c = store.commit_files({".wb1/nezha/loop_diag.json": json.dumps(diag, ensure_ascii=False, indent=2).encode()},
+                           "[NEZHA] DIAG scan (no task created, no state change)")
+    diag["diag_commit"] = c.get("commit")
+    for r in rows:
+        log("DIAG|", json.dumps({k: r[k] for k in ("id", "capability", "auth_ok", "gate_flag",
+                                                   "admission_ready", "admission_reason")}, ensure_ascii=False)[:300])
+    print(json.dumps(diag, ensure_ascii=False, indent=2))
+    return 0
+
+
 def main():
     if not TOKEN:
         log("FATAL: no token"); return 2
@@ -222,6 +248,10 @@ def main():
                                   "ckpt": v.get("checkpoint"), "st": v.get("state"),
                                   "result": bool(v.get("result"))} for k, v in tasks.items()},
                              ensure_ascii=False))
+
+    if "--diagnose" in sys.argv or os.environ.get("NEZHA_DIAG") == "1":
+        log("DIAGNOSE MODE: admission logic only, zero side effect on tasks")
+        return diagnose(store, tasks)
 
     hb_prev, _, _, _ = store.read_json(HEARTBEAT_PATH, default={})
     seq = int((hb_prev or {}).get("round_seq", 0)) + 1
