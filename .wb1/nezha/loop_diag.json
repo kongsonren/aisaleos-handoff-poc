@@ -1,7 +1,7 @@
 {
-  "diag_at": "2026-09-28T04:37:43.240720+08:00",
+  "diag_at": "2026-09-28T04:47:30.322756+08:00",
   "host": "runnervmtr4k5",
-  "run_id": "36348728148",
+  "run_id": "36349321641",
   "note": "admission logic executed on runner, no side effect",
   "rows": [
     {
