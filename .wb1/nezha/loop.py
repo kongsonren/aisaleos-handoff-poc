@@ -33,7 +33,10 @@ CN = timezone(timedelta(hours=8))
 TOKEN = os.environ.get("GITHUB_TOKEN") or os.environ.get("MOZI_GH_TOKEN")
 REPO = os.environ.get("GITHUB_REPOSITORY", "kongsonren/aisaleos-handoff-poc")
 ACTOR = P.ACTOR
-STALE_SEC = int(os.environ.get("NEZHA_STALE_SEC", "180"))
+STALE_SEC = int(os.environ.get("NEZHA_STALE_SEC", "600"))
+THROTTLE_SEC = int(os.environ.get("NEZHA_THROTTLE_SEC", "240"))   # 多来源叠加时节拍去抖
+BEAT_MIN = int(os.environ.get("NEZHA_BEAT_MIN", "5"))             # 节拍粒度（分钟）
+MAX_BEATS = int(os.environ.get("NEZHA_MAX_BEATS", "240"))         # 自延续链上限，防止永远跑
 
 INDEX_PATH = ".wb1/nezha/task_index.json"
 HEARTBEAT_PATH = ".wb1/nezha/loop_heartbeat.json"
@@ -267,10 +270,57 @@ def diagnose(store, tasks):
     return 0
 
 
+def maybe_throttled(store):
+    """节拍节流：多来源（GitHub cron / 自延续链）叠加时防止空转。"""
+    hb, _, _, _ = store.read_json(HEARTBEAT_PATH, default={})
+    last = (hb or {}).get("round_at")
+    if not last:
+        return False
+    try:
+        sec = (datetime.now(CN) - datetime.fromisoformat(last)).total_seconds()
+    except Exception:
+        return False
+    if sec < THROTTLE_SEC:
+        log("THROTTLED: previous beat %.0fs ago (<%ds) -> no-op this beat" % (sec, THROTTLE_SEC))
+        return True
+    return False
+
+
+def wait_and_schedule():
+    """云自起拍：睡到下一个 5 分钟边界后，由**云端自己** dispatch 下一拍。
+
+    说明：GitHub 的 schedule cron 在本仓库实测长期不自行触发（历史 0 条 event=schedule）。
+    这条链是减损方案 —— 第一推动力仍在黑武士关机前由 LOCAL 搬到云端一次，
+    此后**每一拍的发起请求都由上一个云端 runner 自己发出**，LOCAL 零参与。
+    """
+    store = GitHubStore(TOKEN, REPO)
+    hb, _, _, _ = store.read_json(HEARTBEAT_PATH, default={})
+    seq = int((hb or {}).get("round_seq", 0))
+    if seq >= MAX_BEATS:
+        log("MAX_BEATS=%d reached; self-schedule chain stops here" % MAX_BEATS)
+        return 0
+    now = datetime.now(timezone.utc).replace(second=0, microsecond=0)
+    add = BEAT_MIN - (now.minute % BEAT_MIN)
+    nxt = now + timedelta(minutes=add)
+    sleep_s = (nxt - datetime.now(timezone.utc)).total_seconds() + 5
+    log("sleep %.0fs until next beat boundary %s" % (max(sleep_s, 0), nxt.isoformat()))
+    if sleep_s > 0:
+        time.sleep(sleep_s)
+    s, d = store._req("POST", "/repos/%s/actions/workflows/nezha-auto.yml/dispatches" % REPO, {"ref": "main"})
+    log("self-scheduled next beat -> HTTP %s (seq was %d)" % (s, seq))
+    print(json.dumps({"self_scheduled": s in (204, 201, 200), "http": s, "detail": str(d)[:160]},
+                     ensure_ascii=False))
+    return 0
+
+
 def main():
     if not TOKEN:
         log("FATAL: no token"); return 2
     store = GitHubStore(TOKEN, REPO)
+    if "--wait-and-schedule" in sys.argv:
+        if os.environ.get("NEZHA_SELF_SCHEDULE") != "1":
+            log("self-schedule disabled"); return 0
+        return wait_and_schedule()
     index = load_index(store)
     tasks = load_tasks(store, index)
     log("tasks:", json.dumps({k: {"owner": v.get("owner"), "epoch": v.get("epoch"),
@@ -281,6 +331,8 @@ def main():
     if "--diagnose" in sys.argv or os.environ.get("NEZHA_DIAG") == "1":
         log("DIAGNOSE MODE: admission logic only, zero side effect on tasks")
         return diagnose(store, tasks)
+    if maybe_throttled(store):
+        return 0
 
     hb_prev, _, _, _ = store.read_json(HEARTBEAT_PATH, default={})
     seq = int((hb_prev or {}).get("round_seq", 0)) + 1

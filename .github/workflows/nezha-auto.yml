@@ -23,6 +23,10 @@ concurrency:
 
 permissions:
   contents: write
+  actions: write        # 允许云端自己 dispatch 下一拍（自延续链）
+
+env:
+  NEZHA_SELF_SCHEDULE: "1"
 
 jobs:
   loop:
@@ -50,3 +54,17 @@ jobs:
             python .wb1/nezha/loop.py
           fi
           echo "exit=$?"
+
+      # 云自起拍：睡到下一个 5 分钟边界后由**本 runner 自己** dispatch 下一拍。
+      # 用途：GitHub 原生 schedule cron 在本仓库实测长期不自行触发（event=schedule 历史 0 条），
+      # 这是减损链。第一推动力在黑武士关机前搬一次，此后每一拍的发起都由云端自己完成。
+      - name: Cloud self-schedules next beat
+        if: always()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NEZHA_SELF_SCHEDULE: "1"
+          NEZHA_BEAT_MIN: "5"
+          NEZHA_MAX_BEATS: "240"
+        run: |
+          python .wb1/nezha/loop.py --wait-and-schedule
+          echo "nextexit=$?"
