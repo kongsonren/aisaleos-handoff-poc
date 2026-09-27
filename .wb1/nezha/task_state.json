@@ -5,12 +5,12 @@
   "epoch": 1,
   "checkpoint": "STEP_2",
   "state": "RUNNING",
-  "last_progress_at": "2026-09-28T05:21:18.882972+08:00",
+  "last_progress_at": "2026-09-28T05:31:10.951813+08:00",
   "next_expected": "STEP_3",
   "result": null,
   "result_written_by": null,
   "alive_seq": 1,
-  "alive_at": "2026-09-28T05:21:18.882988+08:00",
+  "alive_at": "2026-09-28T05:31:10.951823+08:00",
   "alive_host": "KR",
   "history": [
     {
