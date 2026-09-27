@@ -3,9 +3,9 @@
   "auth_id": "KR-TOKEN-20260928-POWEROFF-V2",
   "owner": "CLOUD_NEZHA",
   "epoch": 1,
-  "checkpoint": "RV_3",
+  "checkpoint": "RV_4",
   "state": "RUNNING",
-  "last_progress_at": "2026-09-28T05:55:23.172982+08:00",
+  "last_progress_at": "2026-09-28T05:55:27.061912+08:00",
   "next_expected": "RV_4",
   "result": null,
   "result_written_by": null,
@@ -30,6 +30,13 @@
       "epoch": 1,
       "checkpoint": "RV_3",
       "note": "compare: 6/6 matched -> MATCH"
+    },
+    {
+      "at": "2026-09-28T05:55:27.061929+08:00",
+      "actor": "CLOUD_NEZHA",
+      "epoch": 1,
+      "checkpoint": "RV_4",
+      "note": "second REAL written: RV-a334b0a23e76"
     }
   ]
 }
