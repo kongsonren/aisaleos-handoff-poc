@@ -1,0 +1,63 @@
+{
+  "task_id": "TASK-REAL-012",
+  "reverify_of": "TASK-REAL-011",
+  "executed_by": "CLOUD_NEZHA",
+  "executed_at": "2026-09-28T05:55:24.613071+08:00",
+  "host": "runnervmtr4k5",
+  "recomputed_reason": "second independent execution body (different runner job / machine image) recomputes bytes of first-leg evidence",
+  "source_manifest_sha256": "1baba6b10d1636b81778caae77e85c596eb0b6818812f26455ae25322aa95a35",
+  "result_md_sha256": "94bbb0318ed150176819a35a5f16185e5e102eb06ad52df6ba64025222239d39",
+  "result_md_bytes": 904,
+  "files": [
+    {
+      "file": "check_scenario_A.json",
+      "declared_sha256": "ed0f62a7331b3ba70b12f3ab2b90eb5bb80a8a502f0c0abd614f7c4331fa224f",
+      "declared_bytes": 854,
+      "recomputed_sha256": "ed0f62a7331b3ba70b12f3ab2b90eb5bb80a8a502f0c0abd614f7c4331fa224f",
+      "recomputed_bytes": 854,
+      "match": true
+    },
+    {
+      "file": "check_scenario_B.json",
+      "declared_sha256": "e55162871dcc26a603ed57b06e7738a097c06ea7705db567e70058e395238371",
+      "declared_bytes": 809,
+      "recomputed_sha256": "e55162871dcc26a603ed57b06e7738a097c06ea7705db567e70058e395238371",
+      "recomputed_bytes": 809,
+      "match": true
+    },
+    {
+      "file": "check_scenario_C.json",
+      "declared_sha256": "3d3ae6cc18cf5c2f35018daf6930eeadc96767347f80a5419a86942712b3b0b7",
+      "declared_bytes": 854,
+      "recomputed_sha256": "3d3ae6cc18cf5c2f35018daf6930eeadc96767347f80a5419a86942712b3b0b7",
+      "recomputed_bytes": 854,
+      "match": true
+    },
+    {
+      "file": "render_scenario_A.html",
+      "declared_sha256": "b35b5b2dd2834b04c4a8b78016c5c038b9e08b946e334ea81e6c6420c6e825c5",
+      "declared_bytes": 13683,
+      "recomputed_sha256": "b35b5b2dd2834b04c4a8b78016c5c038b9e08b946e334ea81e6c6420c6e825c5",
+      "recomputed_bytes": 13683,
+      "match": true
+    },
+    {
+      "file": "render_scenario_B.html",
+      "declared_sha256": "2c4cf005cab3186e90ebae70d37dc4658f02f92c492a61f3b3f91176227a054d",
+      "declared_bytes": 13636,
+      "recomputed_sha256": "2c4cf005cab3186e90ebae70d37dc4658f02f92c492a61f3b3f91176227a054d",
+      "recomputed_bytes": 13636,
+      "match": true
+    },
+    {
+      "file": "render_scenario_C.html",
+      "declared_sha256": "1000793b9ded863d19ed271eee515f656b2e57578696fce3f385c9cc0a6655b3",
+      "declared_bytes": 13683,
+      "recomputed_sha256": "1000793b9ded863d19ed271eee515f656b2e57578696fce3f385c9cc0a6655b3",
+      "recomputed_bytes": 13683,
+      "match": true
+    }
+  ],
+  "verdict": "MATCH",
+  "completion_id": "RV-a334b0a23e76"
+}
