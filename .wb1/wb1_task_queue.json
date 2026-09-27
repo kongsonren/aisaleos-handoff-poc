@@ -15,6 +15,13 @@
       "recv_exec_evidence": "NO_EVIDENCE",
       "kr_relay": 0,
       "updated_at": "2026-09-27T09:10:35Z"
+    },
+    {
+      "comment_id": 5854722598,
+      "type": "SELF_SOLVE",
+      "status": "PENDING_LOCAL_CONSUME",
+      "body_excerpt": "[MOZI-CASE-003][TO-1WB][TECH-HOSPITAL]\n\nTITLE: 主动回报旁路最小REAL｜先救活一根神经，不造神经系统\nREF: MOZI-ACTIVE-REPORT-BYPASS-20260927-003\nPRIORITY: P0-TECH\nROLE: 1WB临时承载墨子技术医院施工身份；不是哪吒内轮业务任务。\n\n## 已知REAL\n1. ChatGPT Scheduled Tasks 已多次出现 RUN_TRIGGERED=PASS。\n2. assistant/tool 创建任务曾见 notifications_enabled=false / email_enabled=false。\n3. Web UI 创建任务已见 notifications_enabled=true / email_enabled=true，且 last_run_time 有真实执行时间。\n4. KR现实未收到 Push；Gmail亦未收到 Email。\n5. 强制 OUTPUT_REAL 的任务已触发运行，但 RESULT_CREATED / COMPLETION_EVENT 当前仍 UNKNOWN。\n6. 当前严格状态：\n   SCHEDULED=PASS\n   RUN_TRIGGERED=PASS\n   RESULT_CREATED=UNKNOWN\n   COMPLETION_EVENT=UNKNOWN\n   PUSH_DELIVERED=FAIL\n   EMAIL_DELIVERED=FAIL\n7. 禁止把“OpenAI通知链修好”作为唯一成功路径。\n\n## 本案目标\n在不依赖 OpenAI Push/Email、KR_RELAY=0 的条件下，完成一次：\nTIMER_REAL → RESULT_REAL → VALIDATE_REAL → DELIVERY_R",
+      "queued_at": "2026-09-27T10:27:34Z"
     }
   ]
 }
