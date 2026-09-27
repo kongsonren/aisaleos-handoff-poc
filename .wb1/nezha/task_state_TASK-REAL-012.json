@@ -1,0 +1,13 @@
+{
+  "task_id": "TASK-REAL-012",
+  "auth_id": "KR-TOKEN-20260928-POWEROFF-V2",
+  "owner": "CLOUD_NEZHA",
+  "epoch": 1,
+  "checkpoint": "RV_0",
+  "state": "RUNNING",
+  "last_progress_at": "2026-09-28T05:55:15.785239+08:00",
+  "next_expected": "RV_1",
+  "result": null,
+  "result_written_by": null,
+  "history": []
+}
