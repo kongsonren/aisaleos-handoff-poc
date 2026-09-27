@@ -3,9 +3,9 @@
   "auth_id": "KR-TOKEN-20260928-NEZHA-TAKEOVER",
   "owner": "CLOUD_NEZHA",
   "epoch": 2,
-  "checkpoint": "STEP_4",
+  "checkpoint": "STEP_5",
   "state": "RUNNING",
-  "last_progress_at": "2026-09-28T05:14:13.158533+08:00",
+  "last_progress_at": "2026-09-28T05:14:15.301477+08:00",
   "next_expected": "STEP_5",
   "result": null,
   "result_written_by": null,
@@ -44,6 +44,13 @@
       "epoch": 2,
       "checkpoint": "STEP_4",
       "note": "cloud executed STEP_4"
+    },
+    {
+      "at": "2026-09-28T05:14:15.301491+08:00",
+      "actor": "CLOUD_NEZHA",
+      "epoch": 2,
+      "checkpoint": "STEP_5",
+      "note": "cloud executed STEP_5"
     }
   ],
   "alive_seq": 1,
