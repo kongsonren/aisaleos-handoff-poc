@@ -1,0 +1,35 @@
+name: NEZHA-CLOUD-EXECUTOR
+
+# 哪吒：云端最小 EXECUTOR。运行在 GitHub 托管 runner 上，
+# 脱离本地 12WB / 当前会话 / 当前 shell —— 本地关机不影响它。
+on:
+  workflow_dispatch:
+    inputs:
+      note:
+        description: "触发说明（仅记录，不作为参数）"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+jobs:
+  execute:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run NEZHA executor
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NEZHA_AUTH_ID: KR-TOKEN-20260928-NEZHA-TAKEOVER
+        run: |
+          echo "run_id=$GITHUB_RUN_ID started=$(date -u +%FT%TZ)"
+          python .wb1/nezha/cloud_executor.py
+          echo "exit=$?"

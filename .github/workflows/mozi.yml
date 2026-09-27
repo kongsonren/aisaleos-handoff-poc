@@ -1,0 +1,34 @@
+name: MOZI-CLOUD-WATCH
+
+# 墨子：云端 WATCH ONLY —— 只看、只记、只判。
+# 不创建任务、不改业务状态、不调度哪吒、不下达任何指令。
+#
+# 真实限制（不吹）：GitHub cron 最小粒度 5 分钟，做不到 60 秒级；
+# 60 秒级常驻观察需要真实云主机（腾讯云轻量），届时才上。
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "7 * * * *"   # 每小时一次（720 次/月，落在免费额度内）
+
+permissions:
+  contents: write
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run MOZI watch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "run_id=$GITHUB_RUN_ID started=$(date -u +%FT%TZ)"
+          python .wb1/nezha/mozi_watch.py
+          echo "exit=$?"
