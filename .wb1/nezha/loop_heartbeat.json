@@ -1,18 +1,31 @@
 {
-  "round_seq": 4,
-  "round_at": "2026-09-28T05:45:17.289995+08:00",
+  "round_seq": 5,
+  "round_at": "2026-09-28T05:50:30.159180+08:00",
   "actor": "CLOUD_NEZHA",
   "runner": "runnervmtr4k5",
-  "run_id": "36352862133",
+  "run_id": "36353158524",
   "run_attempt": "1",
   "decision": {
-    "kind": "NO_TAKEOVER_LOCAL_HELD",
+    "kind": "TAKEOVER",
     "task_id": "TASK-REAL-011",
-    "age_seconds": 846.3,
-    "threshold": 900
+    "age_seconds": 1145.6
   },
   "skips": [],
   "out": {
-    "acted": false
+    "cloud_executor_returncode": 0,
+    "after": {
+      "owner": "CLOUD_NEZHA",
+      "epoch": 2,
+      "checkpoint": "STEP_5",
+      "state": "DONE",
+      "result": {
+        "status": "PASS",
+        "completion_id": "c166a94e675f",
+        "artifacts": [
+          ".wb1/8051_triage/EVIDENCE_MANIFEST.json",
+          ".wb1/8051_triage/TRIAGE_RESULT.md"
+        ]
+      }
+    }
   }
 }
