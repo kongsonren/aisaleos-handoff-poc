@@ -4,11 +4,20 @@
   "owner": "CLOUD_NEZHA",
   "epoch": 1,
   "checkpoint": "RV_4",
-  "state": "RUNNING",
-  "last_progress_at": "2026-09-28T05:55:27.061912+08:00",
+  "state": "DONE",
+  "last_progress_at": "2026-09-28T05:55:28.759524+08:00",
   "next_expected": "RV_4",
-  "result": null,
-  "result_written_by": null,
+  "result": {
+    "status": "PASS",
+    "completion_id": "RV-a334b0a23e76",
+    "verdict": "MATCH",
+    "artifacts": [
+      ".wb1/8051_triage/REVERIFY_REPORT.md",
+      ".wb1/8051_triage/REVERIFY_MANIFEST.json"
+    ],
+    "note": "REAL produced independently by second cloud beat"
+  },
+  "result_written_by": "CLOUD_NEZHA",
   "history": [
     {
       "at": "2026-09-28T05:55:19.620849+08:00",
@@ -37,6 +46,13 @@
       "epoch": 1,
       "checkpoint": "RV_4",
       "note": "second REAL written: RV-a334b0a23e76"
+    },
+    {
+      "at": "2026-09-28T05:55:28.759541+08:00",
+      "actor": "CLOUD_NEZHA",
+      "epoch": 1,
+      "checkpoint": "RV_4",
+      "note": "RESULT written by cloud (second leg)"
     }
   ]
 }
