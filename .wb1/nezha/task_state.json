@@ -1,0 +1,13 @@
+{
+  "task_id": "TASK-REAL-001",
+  "auth_id": "KR-TOKEN-20260928-NEZHA-TAKEOVER",
+  "owner": "LOCAL_1WB",
+  "epoch": 1,
+  "checkpoint": "STEP_0",
+  "state": "RUNNING",
+  "last_progress_at": "2026-09-28T03:52:26.898176+08:00",
+  "next_expected": "STEP_1",
+  "result": null,
+  "result_written_by": null,
+  "history": []
+}
