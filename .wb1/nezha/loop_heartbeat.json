@@ -1,31 +1,36 @@
 {
-  "round_seq": 5,
-  "round_at": "2026-09-28T05:50:30.159180+08:00",
+  "round_seq": 6,
+  "round_at": "2026-09-28T05:55:30.093399+08:00",
   "actor": "CLOUD_NEZHA",
   "runner": "runnervmtr4k5",
-  "run_id": "36353158524",
+  "run_id": "36353441869",
   "run_attempt": "1",
   "decision": {
-    "kind": "TAKEOVER",
-    "task_id": "TASK-REAL-011",
-    "age_seconds": 1145.6
-  },
-  "skips": [],
-  "out": {
-    "cloud_executor_returncode": 0,
-    "after": {
-      "owner": "CLOUD_NEZHA",
-      "epoch": 2,
-      "checkpoint": "STEP_5",
-      "state": "DONE",
-      "result": {
-        "status": "PASS",
-        "completion_id": "c166a94e675f",
-        "artifacts": [
-          ".wb1/8051_triage/EVIDENCE_MANIFEST.json",
-          ".wb1/8051_triage/TRIAGE_RESULT.md"
-        ]
-      }
+    "kind": "NEW_TASK",
+    "candidate": "REVERIFY_8051_EVIDENCE",
+    "task_id": "TASK-REAL-012",
+    "why": "READY: TASK-REAL-011 DONE by CLOUD_NEZHA, artifacts present, no prior reverify",
+    "auth_ref": "KR-TOKEN-20260928-POWEROFF-V2",
+    "capability": "CLOUD_READY",
+    "reach_evidence": {
+      "github_repo_file": "runner checkout + Contents API 读取（已验证：多次读取 .wb1/nezha/task_state.json）",
+      "git_data_write": "Git Data API 提交（已验证：blob→tree→commit→PATCH refs 多次成功）",
+      "task_state_beam": "状态梁读写（同一份 task_state.py，本地与云共用）",
+      "python_stdlib": "Python 标准库 hashlib/json/urllib（ubuntu-latest 原生）"
     }
+  },
+  "skips": [
+    {
+      "id": "REVERIFY_8051_EVIDENCE",
+      "skip": "SELECTED",
+      "reason": "READY: TASK-REAL-011 DONE by CLOUD_NEZHA, artifacts present, no prior reverify"
+    }
+  ],
+  "out": {
+    "ok": true,
+    "task_id": "TASK-REAL-012",
+    "verdict": "MATCH",
+    "completion_id": "RV-a334b0a23e76",
+    "result_commit": "fd507abcfb766a85fadff56997998ad26e1f7c39"
   }
 }
