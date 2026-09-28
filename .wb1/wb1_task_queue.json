@@ -15,13 +15,6 @@
       "recv_exec_evidence": "NO_EVIDENCE",
       "kr_relay": 0,
       "updated_at": "2026-09-27T09:10:35Z"
-    },
-    {
-      "comment_id": 5869877842,
-      "received_at": "2026-09-28T12:47:27Z",
-      "type": "SELF_SOLVE",
-      "instruction": "【1WB SELF_SOLVE 消费器运行报告】2026-09-28T12:31:33Z\nworker=1WB-SELF_SOLVE-consumer-v1  dry=False\n\n- 5854039340: status=HANDED_OFF_1WB_SENT_2WB_BLOCK 跳过(非待消费 SELF_SOLVE)\n- 5854722598 […] EXEC_START=PASS -> RESULT_REAL=UNKNOWN  (未识别的可执行动作；不脑补)\n- 5857060758 [[MOZI-CASE-003][EXECUTIO…] EXEC_START=PASS -> RESULT_REAL=BLOCKED  (涉及 2WB 接件/消费链或墨子技术链，1WB 依纪律不跨 WB 代执行；需 2WB 自主或 KR 授权)\n- 5857578477 [[MOZI-CASE-003][KR-ASSIS…] EXEC_START=PASS -> RESULT_REAL=KR_GATE  (需 KR 人工启动/授权(1-3动作)；按纪律路由 KR，不代决策)\n- 5857626216 [[MOZI-TECH-ISSUE][2WB-RE…] EXEC_START=PASS -> RESULT_REAL=BLOCKED  (涉及 2WB 接件/消费链或墨子技术链，1WB 依纪律不跨 WB 代执行；需 2WB 自主或 KR 授权)\n- 5868378776 [【KR → 1WB｜IP旧案全电脑考古令｜202…] EXEC_START=PASS -> RESULT_REAL=PLANNED  (全电脑只读检索(发明专利/软著/商标/IP清单等)，需专门执行 pass；本轮不伪造完成，留作下一轮执行)\n- 5868761155 [【KR → 1WB｜总盘V1.0真实存档令｜20…]",
-      "status": "PENDING_LOCAL_CONSUME"
     }
   ],
   "processed": [
