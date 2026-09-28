@@ -1,0 +1,62 @@
+name: MOZI-INDEPENDENT-WATCH
+
+# ⑥ 墨子独立故障域（KR 验收口径：哪吒执行链死掉以后，墨子还能不能独立发现）
+#
+# 与哪吒链**完全解耦**：
+#   · 自己的 workflow 文件（mozi-auto.yml，不是 nezha-auto.yml）
+#   · 自己的 concurrency 组（mozi-independent-watch，不与哪吒抢）
+#   · 自己的自起拍链（mozi_watch.py --wait-and-schedule dispatch 自己）
+#   · 自己的节拍标记（.wb1/nezha/mozi_beat.json）
+# 因此：哪吒链断 ≠ 墨子停。哪吒链同拍里的 MOZI patrol 只是历史搭车，
+# 独立链跑稳后会从 nezha-auto.yml 摘除（不双跑、不冒充）。
+#
+# 墨子仍是 WATCH ONLY：只看、只记、只判。不创建任务、不抢活、不下指令。
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17,47 * * * *"   # 每 30 分钟（尽力；本仓库 cron 实测不自行触发 → 靠自起拍链）
+
+concurrency:
+  group: mozi-independent-watch
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  actions: write      # 允许墨子自己 dispatch 下一拍（独立自延续）
+
+env:
+  MOZI_SELF_SCHEDULE: "1"
+  MOZI_BEAT_MIN: "30"
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: MOZI watch (read-only)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "run_id=$GITHUB_RUN_ID started=$(date -u +%FT%TZ)"
+          python .wb1/nezha/mozi_watch.py
+          echo "watchexit=$?"
+
+      # 独立自起拍：睡到下一个 30 分钟边界后由**墨子自己** dispatch 下一拍。
+      # 这一拍的发起方是墨子，不是哪吒 —— 这是"独立故障域"成立的关键。
+      - name: MOZI self-schedules next beat
+        if: always()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MOZI_SELF_SCHEDULE: "1"
+          MOZI_BEAT_MIN: "30"
+          MOZI_MAX_BEATS: "120"
+        run: |
+          python .wb1/nezha/mozi_watch.py --wait-and-schedule
+          echo "nextexit=$?"
