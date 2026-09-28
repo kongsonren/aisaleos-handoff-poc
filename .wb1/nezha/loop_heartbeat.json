@@ -1,9 +1,9 @@
 {
-  "round_seq": 93,
-  "round_at": "2026-09-28T13:10:16.355861+08:00",
+  "round_seq": 94,
+  "round_at": "2026-09-28T13:15:14.876562+08:00",
   "actor": "CLOUD_NEZHA",
   "runner": "runnervmtr4k5",
-  "run_id": "36380718779",
+  "run_id": "36381089282",
   "run_attempt": "1",
   "decision": {
     "kind": "GENUINE_IDLE",
@@ -13,7 +13,7 @@
     {
       "id": "REVERIFY_8051_EVIDENCE",
       "skip": "NOT_READY",
-      "reason": "SKIP: REVERIFY_REPORT.md already exists (already done)"
+      "reason": "WAIT: TASK-REAL-011 not DONE yet (owner=None ckpt=None)"
     },
     {
       "id": "SYNC_FEISHU_8051",
