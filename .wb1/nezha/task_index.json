@@ -1,8 +1,7 @@
 {
   "tasks": [
-    "TASK-REAL-011",
-    "TASK-REAL-012"
+    "TASK-REAL-001"
   ],
-  "bootstrapped_at": "2026-09-28T05:55:17.764006+08:00",
-  "updated_at": "2026-09-28T05:55:17.764023+08:00"
+  "updated_at": "null",
+  "note": "task registry; second-leg task appended by cloud loop itself"
 }

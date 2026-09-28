@@ -56,6 +56,17 @@ jobs:
           fi
           echo "exit=$?"
 
+      # 墨子云端巡检（5分钟同拍）：只读两条腿生命与业务推进，不替哪吒决定战争。
+      # 目的：KR 要求墨子按 5 分钟节拍盯「有没有持续产 REAL」，而不是盯 PID/定时器/HTTP200。
+      # mozi.yml 无 cron 自触发能力（本仓库 schedule 历史 0 条），故挂在自起拍链同拍执行。
+      - name: MOZI patrol (read-only)
+        if: always()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python .wb1/nezha/mozi_watch.py
+          echo "moziexit=$?"
+
       # 云自起拍：睡到下一个 5 分钟边界后由**本 runner 自己** dispatch 下一拍。
       # 用途：GitHub 原生 schedule cron 在本仓库实测长期不自行触发（event=schedule 历史 0 条），
       # 这是减损链。第一推动力在黑武士关机前搬一次，此后每一拍的发起都由云端自己完成。
