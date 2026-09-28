@@ -15,13 +15,6 @@
       "recv_exec_evidence": "NO_EVIDENCE",
       "kr_relay": 0,
       "updated_at": "2026-09-27T09:10:35Z"
-    },
-    {
-      "comment_id": 5870372978,
-      "received_at": "2026-09-28T13:01:13Z",
-      "type": "SELF_SOLVE",
-      "instruction": "【WB1-ERRATA】\nTARGET_COMMENT=5869877842\nCLASS=MISFIRE_SELF_SOLVE\nROOT_CAUSE=本地 1WB SELF_SOLVE 消费器运行报告(telemetry)被误判为首行无[TAG]的入站指令，按默认 SELF_SOLVE 入队并回执 STATUS=PROCESSED(违规：严禁 PROCESSED 冒充施工进展)。\nCORRECTION=\n 1) 该评论非委员会指令，是本地机回执；已加入 SELF_MARKERS(【1WB/消费器运行报告/运行报告】)跳过，下一轮起不再误处理。\n 2) 已从 .wb1/wb1_task_queue.json 移除其伪入队项(5869877842)，不影响真实 pending 5854039340。\n 3) 游标已正确停在 5869877842(HANDLED=433)，幂等不重复。\n 4) 本轮产生 2 条[B1-INBOX-ACK](5870124290/5870126027)为重复回执(一次本地启动抖动+一次正式运行)，均为该误判产物；标记 RETRACTED，不作为真实处理证据。\nSTATUS=RETRACTED_NO_ACTION_TAKEN\nTIMESTAMP=2026-09-28T12:50:00Z",
-      "status": "PENDING_LOCAL_CONSUME"
     }
   ],
   "processed": [
