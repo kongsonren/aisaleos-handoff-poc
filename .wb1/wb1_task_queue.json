@@ -15,15 +15,6 @@
       "recv_exec_evidence": "NO_EVIDENCE",
       "kr_relay": 0,
       "updated_at": "2026-09-27T09:10:35Z"
-    },
-    {
-      "comment_id": 5870467750,
-      "type": "SELF_SOLVE",
-      "instruction": "[HAI→1WB] SELF_SOLVE_TEST 无人真实测试 #1 — 守护进程应自行检测、入队、执行并回 REAL，无需 KR/嗨 点火。\n\n指令：写一条 heartbeat 标记文件到 1WB 本地 test_outbox，带回读 SHA256，作为 AUTO_EXEC_START→RESULT_REAL 的真实证据。本指令仅用于管道验证，不触发哪吒/墨子业务逻辑。SELF_SOLVE_TEST",
-      "status": "PENDING_LOCAL_CONSUME",
-      "sent_at": "2026-09-28T13:06:50Z",
-      "detected_at": "2026-09-28T13:07:18Z",
-      "queued_at": "2026-09-28T13:07:18Z"
     }
   ],
   "processed": [
@@ -2500,6 +2491,37 @@
       },
       "result_real": "BLOCKED",
       "consumer_run_at": "2026-09-28T13:06:49Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 5870467750,
+      "type": "SELF_SOLVE",
+      "instruction": "[HAI→1WB] SELF_SOLVE_TEST 无人真实测试 #1 — 守护进程应自行检测、入队、执行并回 REAL，无需 KR/嗨 点火。\n\n指令：写一条 heartbeat 标记文件到 1WB 本地 test_outbox，带回读 SHA256，作为 AUTO_EXEC_START→RESULT_REAL 的真实证据。本指令仅用于管道验证，不触发哪吒/墨子业务逻辑。SELF_SOLVE_TEST",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-09-28T13:06:50Z",
+      "detected_at": "2026-09-28T13:07:18Z",
+      "queued_at": "2026-09-28T13:07:18Z",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-09-28T13:07:22Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "echo_heartbeat_real"
+      },
+      "auto_exec_start": "2026-09-28T13:07:22Z",
+      "execution_done": {
+        "result_real": "PASS",
+        "ts": "2026-09-28T13:07:22Z",
+        "reason": "REAL heartbeat file written by daemon autonomously (no manual ignition); path/size/mtime/sha256 verified",
+        "archive_path": "C:/Users/59605/.wb1/test_outbox\\heartbeat_5870467750_1790600842.txt",
+        "file_size": 193,
+        "mtime": "2026-09-28T13:07:22Z",
+        "sha256": "289a3f48a6771023343b7ed5e3a94ebd293b9a608d26cbed239cf775fe110e38",
+        "readback": "OK",
+        "index_or_manifest": null,
+        "auto_exec_start": "2026-09-28T13:07:22Z"
+      },
+      "result_real": "PASS",
+      "consumer_run_at": "2026-09-28T13:07:22Z",
       "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
     }
   ]
