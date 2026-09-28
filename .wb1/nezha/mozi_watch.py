@@ -9,7 +9,7 @@
 墨子重启后仍能恢复观察 —— 因为观察对象（TASK STATE）在仓库里，不在墨子内存里。
 """
 from __future__ import annotations
-import json, os, sys
+import json, os, sys, time
 from datetime import datetime, timezone, timedelta
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -26,9 +26,46 @@ def log(*a):
     print("[MOZI]", *a, flush=True)
 
 
+def wait_and_schedule():
+    """⑥ 独立故障域：墨子**自己**起拍下一拍（不依赖哪吒链）。
+
+    验收口径（KR）：哪吒执行链死掉以后，墨子还能不能独立发现。
+    所以墨子必须有**自己的**起搏链、自己的 concurrency 组、自己的 workflow 文件：
+    哪吒链断 ≠ 墨子停。节拍默认 30 分钟（成本约 48 拍/日 ≈ 34 分钟/日）。
+    """
+    beat = int(os.environ.get("MOZI_BEAT_MIN", "30"))
+    maxb = int(os.environ.get("MOZI_MAX_BEATS", "120"))
+    store = GitHubStore(TOKEN, REPO)
+    marker, _, _, _ = store.read_json(".wb1/nezha/mozi_beat.json", default={})
+    seq = int((marker or {}).get("seq", 0))
+    if seq >= maxb:
+        log("MOZI_MAX_BEATS=%d reached; independent chain stops here" % maxb)
+        return 0
+    now = datetime.now(timezone.utc).replace(second=0, microsecond=0)
+    add = beat - (now.minute % beat)
+    nxt = now + timedelta(minutes=add)
+    sleep_s = (nxt - datetime.now(timezone.utc)).total_seconds() + 5
+    log("sleep %.0fs until next mozi beat %s (seq=%d)" % (max(sleep_s, 0), nxt.isoformat(), seq))
+    if sleep_s > 0:
+        time.sleep(sleep_s)
+    store.commit_files({".wb1/nezha/mozi_beat.json": json.dumps(
+        {"seq": seq + 1, "last_dispatch_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+         "beat_min": beat, "note": "MOZI independent self-schedule marker"},
+        ensure_ascii=False, indent=2).encode()}, "[MOZI] beat marker seq=%d" % (seq + 1))
+    s, d = store._req("POST", "/repos/%s/actions/workflows/mozi-auto.yml/dispatches" % REPO, {"ref": "main"})
+    log("self-scheduled next mozi beat -> HTTP %s (seq was %d)" % (s, seq))
+    print(json.dumps({"mozi_self_scheduled": s in (204, 201, 200), "http": s, "detail": str(d)[:160]},
+                     ensure_ascii=False))
+    return 0
+
+
 def main():
     if not TOKEN:
         log("FATAL: no token"); return 2
+    if "--wait-and-schedule" in sys.argv:
+        if os.environ.get("MOZI_SELF_SCHEDULE") != "1":
+            log("mozi self-schedule disabled"); return 0
+        return wait_and_schedule()
     store = GitHubStore(TOKEN, REPO)
     ts = TaskState(store)
     st, sha, head, code = ts.load()
