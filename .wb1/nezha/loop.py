@@ -27,7 +27,8 @@ from datetime import datetime, timezone, timedelta
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from task_state import GitHubStore, TaskState, now_iso  # noqa: E402
-import loop_policy as P  # noqa: E402
+import loop_policy as P
+import run_budget as B          # 七日纪律③：TIMEOUT_BUDGET / RETRY_LIMIT / CHECKPOINT / SWITCH_WORK  # noqa: E402
 
 CN = timezone(timedelta(hours=8))
 TOKEN = os.environ.get("GITHUB_TOKEN") or os.environ.get("MOZI_GH_TOKEN")
@@ -338,6 +339,8 @@ def main():
     seq = int((hb_prev or {}).get("round_seq", 0)) + 1
 
     decision, skips, out = None, [], {}
+    t0 = time.time()                       # ③ TIMEOUT_BUDGET：本拍墙钟起点
+    budget = B.load(store)                 # ③ 预算账本（失败计数 / checkpoint / blocked）
 
     # ---- 1) 先看有没有"该我续/该我接管"的现存任务 ----
     for tid, st in tasks.items():
@@ -357,7 +360,14 @@ def main():
 
     # ---- 2) 没有现存任务 → IDLE：扫描候选动作池 ----
     if decision is None:
-        for c in P.CANDIDATES:
+        # ③ SWITCH_WORK：被 RETRY_LIMIT 判 BLOCKED 的任务本拍不再选中，直接换下一个
+        alive, blocked = B.switch_candidates(P.CANDIDATES, budget)
+        for c in blocked:
+            rec = (budget.get("tasks") or {}).get(c.get("task_id"), {})
+            skips.append({"id": c["id"], "skip": "BLOCKED_RETRY_LIMIT",
+                          "reason": "consecutive_fail=%s >= %s -> switch to other authorized work (checkpoint kept: %s)"
+                                    % (rec.get("consecutive_fail"), B.RETRY_LIMIT, rec.get("checkpoint"))})
+        for c in alive:
             cap, unknown, local = P.classify(c["needs"])
             if unknown:
                 skips.append({"id": c["id"], "skip": "BLOCKED_LOCAL_UNKNOWN",
@@ -391,7 +401,13 @@ def main():
     for s in skips:
         log("SKIP:", json.dumps(s, ensure_ascii=False)[:240])
 
-    # ---- 3) 执行：一轮只做一件事 ----
+    # ---- 3) 执行：一轮只做一件事（先过 TIMEOUT_BUDGET 闸） ----
+    if B.exceeded(t0):
+        # ③ TIMEOUT_BUDGET：本拍预算已耗尽 → 不开新动作，保留 CHECKPOINT，等下一拍
+        decision = {"kind": "BUDGET_EXHAUSTED", "budget_sec": B.BUDGET_SEC,
+                    "reason": "wall-clock budget exhausted before acting; no infinite wait"}
+        log("BUDGET_EXHAUSTED: %.1fs" % (time.time() - t0))
+
     if decision["kind"] == "TAKEOVER":
         log("taking over via verified cloud_executor.py (first leg) ...")
         p = subprocess.run([sys.executable, ".wb1/nezha/cloud_executor.py"],
@@ -417,6 +433,20 @@ def main():
                                                          "task_id": decision["task_id"]}
     else:
         out = {"acted": False}
+
+    # ---- 3b) ③ RETRY_LIMIT / CHECKPOINT 记账 ----
+    try:
+        act_tid = decision.get("task_id")
+        if act_tid and decision["kind"] in ("TAKEOVER", "RUNNING_CLOUD", "NEW_TASK"):
+            after = (out.get("after") or {}) if isinstance(out, dict) else {}
+            ckpt = after.get("checkpoint") or decision.get("checkpoint")
+            ok = not (out.get("error") or out.get("ok") is False or after.get("state") == "BLOCKED")
+            rec = B.note_result(store, act_tid, ok, checkpoint=ckpt,
+                                note="" if ok else str(out.get("error") or after.get("state") or "")[:160])
+            log("BUDGET| task=%s ok=%s consec_fail=%s blocked=%s ckpt=%s"
+                % (act_tid, ok, rec.get("consecutive_fail"), rec.get("blocked"), ckpt))
+    except Exception as e:
+        log("BUDGET-err| %s" % str(e)[:120])     # 记账失败绝不影响主循环
 
     # ---- 4) heartbeat：round_seq 单调递增 = "下一轮真的自己发生了"的证据 ----
     hb = {"round_seq": seq, "round_at": now_iso(), "actor": ACTOR,
