@@ -15,15 +15,6 @@
       "recv_exec_evidence": "NO_EVIDENCE",
       "kr_relay": 0,
       "updated_at": "2026-09-27T09:10:35Z"
-    },
-    {
-      "comment_id": 5873813511,
-      "type": "SELF_SOLVE",
-      "instruction": "【KR → 2WB华硕｜23:51只读核验令】\n\n只查，不施工、不改架构、不造测试任务。\n\n立即核验 23:51 一次性云腿验证运行：\n- b3fcf6b9-dd67-4275-8010-b8281536834d\n- recurring: 9b6acd95-1c17-4905-8d8c-48698fec4f55\n- checkpoint thread: msg_1d14c23b81734846945d109e2bc095de\n\n只依据机器 REAL 回：\nE2E_2351 = PASS / FAIL / UNKNOWN\nTRIGGERED_AT =\nCHECKPOINT_WRITTEN =\nCLOUD_EXECUTION_EVIDENCE =\nSAFE_TO_POWER_OFF = PASS / FAIL / UNKNOWN\n\n禁止用“已配置/ACTIVE/已排程”冒充执行成功。",
-      "status": "PENDING_LOCAL_CONSUME",
-      "sent_at": "2026-09-28T16:03:24Z",
-      "detected_at": "2026-09-29T00:23:58Z",
-      "queued_at": "2026-09-29T00:23:58Z"
     }
   ],
   "processed": [
@@ -269,6 +260,34 @@
       },
       "result_real": "PASS",
       "consumer_run_at": "2026-09-28T13:22:51Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 5873813511,
+      "type": "SELF_SOLVE",
+      "instruction": "【KR → 2WB华硕｜23:51只读核验令】\n\n只查，不施工、不改架构、不造测试任务。\n\n立即核验 23:51 一次性云腿验证运行：\n- b3fcf6b9-dd67-4275-8010-b8281536834d\n- recurring: 9b6acd95-1c17-4905-8d8c-48698fec4f55\n- checkpoint thread: msg_1d14c23b81734846945d109e2bc095de\n\n只依据机器 REAL 回：\nE2E_2351 = PASS / FAIL / UNKNOWN\nTRIGGERED_AT =\nCHECKPOINT_WRITTEN =\nCLOUD_EXECUTION_EVIDENCE =\nSAFE_TO_POWER_OFF = PASS / FAIL / UNKNOWN\n\n禁止用“已配置/ACTIVE/已排程”冒充执行成功。",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-09-28T16:03:24Z",
+      "detected_at": "2026-09-29T00:23:58Z",
+      "queued_at": "2026-09-29T00:23:58Z",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-09-29T00:24:00Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "block_out_of_scope"
+      },
+      "auto_exec_start": "2026-09-29T00:24:00Z",
+      "execution_done": {
+        "result_real": "BLOCKED",
+        "ts": "2026-09-29T00:24:00Z",
+        "reason": "涉及 2WB 接件/消费链或墨子技术链，1WB 依纪律不跨 WB 代执行；需 2WB 自主或 KR 授权",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-09-29T00:24:00Z"
+      },
+      "result_real": "BLOCKED",
+      "consumer_run_at": "2026-09-29T00:24:00Z",
       "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
     }
   ]
