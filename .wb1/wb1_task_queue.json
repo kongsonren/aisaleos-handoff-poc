@@ -25,45 +25,6 @@
       "first_line_excerpt": "【KR → 2WB华硕｜23:51只读核验令】",
       "target": "2WB",
       "note": "本令为【KR→2WB华硕】23:51只读核验令, 2WB-targeted, 1WB不得冒充执行; 仅做收件登记"
-    },
-    {
-      "comment_id": 5870467750,
-      "type": "SELF_SOLVE",
-      "action": "WRITE_HEARTBEAT_MARKER_TO_1WB_TEST_OUTBOX",
-      "status": "PENDING_LOCAL_CONSUME",
-      "target": "1WB",
-      "received_at": "2026-09-29T00:36:45Z",
-      "first_line_excerpt": "[HAI→1WB] SELF_SOLVE_TEST 无人真实测试 #1",
-      "note": "云端无1WB本地运行时, 已补入队待黑武士/1WB_consumer执行; 严禁PROCESSED冒充施工"
-    },
-    {
-      "comment_id": 5870554527,
-      "type": "SELF_SOLVE",
-      "action": "WRITE_HEARTBEAT_MARKER_TO_1WB_TEST_OUTBOX",
-      "status": "PENDING_LOCAL_CONSUME",
-      "target": "1WB",
-      "received_at": "2026-09-29T00:36:45Z",
-      "first_line_excerpt": "[HAI→1WB] SELF_SOLVE_TEST 无人真实测试 #2",
-      "note": "云端无1WB本地运行时, 已补入队待黑武士/1WB_consumer执行; 严禁PROCESSED冒充施工"
-    },
-    {
-      "comment_id": 5870732261,
-      "type": "SELF_SOLVE",
-      "action": "WRITE_HEARTBEAT_MARKER_TO_1WB_TEST_OUTBOX",
-      "status": "PENDING_LOCAL_CONSUME",
-      "target": "1WB",
-      "received_at": "2026-09-29T00:36:45Z",
-      "first_line_excerpt": "[HAI→1WB] SELF_SOLVE_TEST 冷启动验收 #3",
-      "note": "云端无1WB本地运行时, 已补入队待黑武士/1WB_consumer执行; 严禁PROCESSED冒充施工"
-    },
-    {
-      "comment_id": 5881418840,
-      "type": "SELF_SOLVE",
-      "instruction": "【KR主权令｜双腿令牌路由边界｜2026-09-29】\n\n昨夜 REAL：\nCOMMENT_ID=5873813511 明确目标为「KR → 2WB华硕」，但被 1WB SELF_SOLVE consumer 检出并执行，最终 RESULT_REAL=BLOCKED。\n\nKR现正式下令：\n\n1. TARGET=2WB 的令牌，1WB 只能识别为“非本腿指令/可见信息”，不得入 1WB 执行队列，不得 SELF_SOLVE，不得代执行。\n2. TARGET=1WB 同理，2WB 不得执行。\n3. 跨腿信息默认 INFORMATION，不自动产生对另一腿的执行权。\n4. 只有明确 KR 授权、且 TARGET 与本腿一致，才进入该腿执行链。\n5. 修复后必须用机器 REAL 验证：\n   - 1WB 看见 TARGET=2WB → SKIP/NOT_MY_TOKEN\n   - 2WB 自主发现同一合法 TARGET=2WB 令牌 → ACK → EXECUTE/READ_ONLY_VERIFY → REAL\n6. 不得靠 KR 再复制粘贴、不得人工唤醒2WB来冒充自动接令。\n7. 不扩业务、不重建哪吒，只修“令牌归谁吃”的路由边界。\n\n验收只认：\nTOKEN_ROUTING_1WB_REJECT_2WB = PASS/FAIL/UNKNOWN\nTOKEN_ROUTING_2WB_ACCEPT_2WB = PASS/FAIL/UNKNOWN\n2WB_AUTO_PICKUP = PASS/FAIL/UNKNOWN\nEVIDENCE =\nSAFE_TO_POWER_OFF_2WB = PASS/FAIL/UNKNOWN\n\n主权原则：\n看见 ≠ 接令；收到 ≠ 授权；机器互通 ≠ 机器互授执行权。\n第一次边界由 KR 钉死，后续在既有授权内自治执行。",
-      "status": "PENDING_LOCAL_CONSUME",
-      "sent_at": "2026-09-29T00:40:57Z",
-      "detected_at": "2026-09-29T01:46:30Z",
-      "queued_at": "2026-09-29T01:46:30Z"
     }
   ],
   "processed": [
@@ -337,6 +298,121 @@
       },
       "result_real": "BLOCKED",
       "consumer_run_at": "2026-09-29T00:24:00Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 5870467750,
+      "type": "SELF_SOLVE",
+      "action": "WRITE_HEARTBEAT_MARKER_TO_1WB_TEST_OUTBOX",
+      "status": "PENDING_LOCAL_CONSUME",
+      "target": "1WB",
+      "received_at": "2026-09-29T00:36:45Z",
+      "first_line_excerpt": "[HAI→1WB] SELF_SOLVE_TEST 无人真实测试 #1",
+      "note": "云端无1WB本地运行时, 已补入队待黑武士/1WB_consumer执行; 严禁PROCESSED冒充施工",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-09-29T01:46:33Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "unrecognized"
+      },
+      "auto_exec_start": "2026-09-29T01:46:33Z",
+      "execution_done": {
+        "result_real": "UNKNOWN",
+        "ts": "2026-09-29T01:46:33Z",
+        "reason": "未识别的可执行动作；不脑补",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-09-29T01:46:33Z"
+      },
+      "result_real": "UNKNOWN",
+      "consumer_run_at": "2026-09-29T01:46:33Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 5870554527,
+      "type": "SELF_SOLVE",
+      "action": "WRITE_HEARTBEAT_MARKER_TO_1WB_TEST_OUTBOX",
+      "status": "PENDING_LOCAL_CONSUME",
+      "target": "1WB",
+      "received_at": "2026-09-29T00:36:45Z",
+      "first_line_excerpt": "[HAI→1WB] SELF_SOLVE_TEST 无人真实测试 #2",
+      "note": "云端无1WB本地运行时, 已补入队待黑武士/1WB_consumer执行; 严禁PROCESSED冒充施工",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-09-29T01:46:33Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "unrecognized"
+      },
+      "auto_exec_start": "2026-09-29T01:46:33Z",
+      "execution_done": {
+        "result_real": "UNKNOWN",
+        "ts": "2026-09-29T01:46:33Z",
+        "reason": "未识别的可执行动作；不脑补",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-09-29T01:46:33Z"
+      },
+      "result_real": "UNKNOWN",
+      "consumer_run_at": "2026-09-29T01:46:33Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 5870732261,
+      "type": "SELF_SOLVE",
+      "action": "WRITE_HEARTBEAT_MARKER_TO_1WB_TEST_OUTBOX",
+      "status": "PENDING_LOCAL_CONSUME",
+      "target": "1WB",
+      "received_at": "2026-09-29T00:36:45Z",
+      "first_line_excerpt": "[HAI→1WB] SELF_SOLVE_TEST 冷启动验收 #3",
+      "note": "云端无1WB本地运行时, 已补入队待黑武士/1WB_consumer执行; 严禁PROCESSED冒充施工",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-09-29T01:46:33Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "unrecognized"
+      },
+      "auto_exec_start": "2026-09-29T01:46:33Z",
+      "execution_done": {
+        "result_real": "UNKNOWN",
+        "ts": "2026-09-29T01:46:33Z",
+        "reason": "未识别的可执行动作；不脑补",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-09-29T01:46:33Z"
+      },
+      "result_real": "UNKNOWN",
+      "consumer_run_at": "2026-09-29T01:46:33Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 5881418840,
+      "type": "SELF_SOLVE",
+      "instruction": "【KR主权令｜双腿令牌路由边界｜2026-09-29】\n\n昨夜 REAL：\nCOMMENT_ID=5873813511 明确目标为「KR → 2WB华硕」，但被 1WB SELF_SOLVE consumer 检出并执行，最终 RESULT_REAL=BLOCKED。\n\nKR现正式下令：\n\n1. TARGET=2WB 的令牌，1WB 只能识别为“非本腿指令/可见信息”，不得入 1WB 执行队列，不得 SELF_SOLVE，不得代执行。\n2. TARGET=1WB 同理，2WB 不得执行。\n3. 跨腿信息默认 INFORMATION，不自动产生对另一腿的执行权。\n4. 只有明确 KR 授权、且 TARGET 与本腿一致，才进入该腿执行链。\n5. 修复后必须用机器 REAL 验证：\n   - 1WB 看见 TARGET=2WB → SKIP/NOT_MY_TOKEN\n   - 2WB 自主发现同一合法 TARGET=2WB 令牌 → ACK → EXECUTE/READ_ONLY_VERIFY → REAL\n6. 不得靠 KR 再复制粘贴、不得人工唤醒2WB来冒充自动接令。\n7. 不扩业务、不重建哪吒，只修“令牌归谁吃”的路由边界。\n\n验收只认：\nTOKEN_ROUTING_1WB_REJECT_2WB = PASS/FAIL/UNKNOWN\nTOKEN_ROUTING_2WB_ACCEPT_2WB = PASS/FAIL/UNKNOWN\n2WB_AUTO_PICKUP = PASS/FAIL/UNKNOWN\nEVIDENCE =\nSAFE_TO_POWER_OFF_2WB = PASS/FAIL/UNKNOWN\n\n主权原则：\n看见 ≠ 接令；收到 ≠ 授权；机器互通 ≠ 机器互授执行权。\n第一次边界由 KR 钉死，后续在既有授权内自治执行。",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-09-29T00:40:57Z",
+      "detected_at": "2026-09-29T01:46:30Z",
+      "queued_at": "2026-09-29T01:46:30Z",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-09-29T01:46:33Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "block_out_of_scope"
+      },
+      "auto_exec_start": "2026-09-29T01:46:33Z",
+      "execution_done": {
+        "result_real": "BLOCKED",
+        "ts": "2026-09-29T01:46:33Z",
+        "reason": "涉及 2WB 接件/消费链或墨子技术链，1WB 依纪律不跨 WB 代执行；需 2WB 自主或 KR 授权",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-09-29T01:46:33Z"
+      },
+      "result_real": "BLOCKED",
+      "consumer_run_at": "2026-09-29T01:46:33Z",
       "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
     }
   ]
