@@ -64,6 +64,14 @@
       ],
       "gap": "云端1WB无NAS挂载且未持有源正文(仅会话侧证据); 不得脑补补写, 不得冒充ARCHIVE_REAL=PASS",
       "note": "等黑武士上线真实写入NAS/真源并回读, 由黑武士回传机器证据闭环"
+    },
+    {
+      "id": "TASK-5896570203",
+      "source_comment_id": 5896570203,
+      "action": "ARCHIVE_CONTINUE: AISALEOS_知产×真义×菩提七星阵_国庆前终盘.md (REF_ARCHIVE_COMMENT=5895947071)",
+      "blocked_on": "KR源文件肉送(目标Hash c0f7b4e304fdc2df0a5ce15cbe9c9d843a333c19c4dba1d6461c2ca93ae4f68c)",
+      "status": "pending_blocked_on_kr_source",
+      "created_at": "2026-09-29T20:01:39Z"
     }
   ],
   "processed": [
