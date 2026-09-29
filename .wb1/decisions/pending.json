@@ -20,5 +20,21 @@
     "source_body_excerpt": "[HAI→1WB][TASK]\nREF=8051-LIVE-IN-REAL-HOME-ACTIONFIX-20260924-001\nSOURCE_TASK=5800425913\nKR指令：别等，继续干。\n\nACTION=REPROCESS_COMMENT\nTARGET=5800425913\n\n执行意图不变：重新处理今晚8051“带住户装修”任务。优先让一件外部REAL真实回家，并验证 TRANSPORT / CONTENT / MEANING integrity；8051最低呈现后KR能穿透RAW_EVIDENCE。\n\n若REPROCESS后仍因现有路由能力不能承载业务施工，不循环、不脑补；立即回最小BLOCKER及下一条可执行ACTION。低风险可逆修复可继续，高风险/扩权STOP。",
     "withdrawn_at": "2026-09-23T18:56:20Z",
     "withdrawn_reason": "MISROUTE_CORRECTED: source is [HAI→1WB][TASK]=SELF_SOLVE, not KR_GATE; KR authority preserved, no KR decision required"
+  },
+  {
+    "decision_id": "D-CLOUD-20260929-0147-SOV",
+    "title": "KR主权令·令牌路由边界·已接受待机器REAL验证",
+    "status": "ACCEPTED_AWAITING_MACHINE_REAL",
+    "created_at": "2026-09-29T01:58:59Z",
+    "source_comment_id": 5881418840,
+    "sovereignty_rule": "看见≠接令；收到≠授权；机器互通≠机器互授执行权。TARGET=2WB/HAI→2WB 令牌 1WB 仅识别为可见信息，不得入1WB执行队列、不得SELF_SOLVE、不得代执行；仅 KR 明确授权且 TARGET 与本腿一致才进入该腿执行链。",
+    "machine_real": {
+      "TOKEN_ROUTING_1WB_REJECT_2WB": "PASS (云端1号 classify 已修 + 回归测试通过)",
+      "TOKEN_ROUTING_2WB_ACCEPT_2WB": "UNKNOWN (2WB域, 1WB不伪造)",
+      "2WB_AUTO_PICKUP": "UNKNOWN (2WB域, 1WB不伪造)",
+      "SAFE_TO_POWER_OFF_2WB": "UNKNOWN (2WB域, 1WB不伪造)",
+      "EVIDENCE": "cloud watchdog classify 补 sovereign/NON_MY_TOKEN 路由 + 8例回归 PASS"
+    },
+    "note": "本卡为 KR 已决策之主权规则接受记录，非待 KR 二选一裁决；1WB 不伪造 2WB 域验证结果。"
   }
 ]

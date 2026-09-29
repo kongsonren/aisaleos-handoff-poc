@@ -414,33 +414,6 @@
       "result_real": "BLOCKED",
       "consumer_run_at": "2026-09-29T01:46:33Z",
       "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
-    },
-    {
-      "comment_id": 5881418840,
-      "type": "SELF_SOLVE",
-      "action": "CLOUD_QUEUED_FOR_LOCAL_1WB",
-      "status": "PENDING_LOCAL_CONSUME",
-      "received_at": "2026-09-29T01:47:28Z",
-      "first_line_excerpt": "【KR主权令｜双腿令牌路由边界｜2026-09-29】",
-      "execution_start": {
-        "status": "PASS",
-        "ts": "2026-09-29T01:47:55Z",
-        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
-        "first_action": "unrecognized"
-      },
-      "auto_exec_start": "2026-09-29T01:47:55Z",
-      "execution_done": {
-        "result_real": "UNKNOWN",
-        "ts": "2026-09-29T01:47:55Z",
-        "reason": "未识别的可执行动作；不脑补",
-        "archive_path": null,
-        "sha256": null,
-        "readback": "N/A",
-        "auto_exec_start": "2026-09-29T01:47:55Z"
-      },
-      "result_real": "UNKNOWN",
-      "consumer_run_at": "2026-09-29T01:47:55Z",
-      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
     }
   ]
 }
