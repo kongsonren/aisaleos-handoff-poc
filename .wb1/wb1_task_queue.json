@@ -15,6 +15,14 @@
       "recv_exec_evidence": "NO_EVIDENCE",
       "kr_relay": 0,
       "updated_at": "2026-09-27T09:10:35Z"
+    },
+    {
+      "comment_id": 5873813511,
+      "type": "SELF_SOLVE",
+      "action": "CLOUD_QUEUED_FOR_LOCAL_1WB",
+      "status": "PENDING_LOCAL_CONSUME",
+      "received_at": "2026-09-29T00:29:30Z",
+      "first_line_excerpt": "【KR → 2WB华硕｜23:51只读核验令】"
     }
   ],
   "processed": [
