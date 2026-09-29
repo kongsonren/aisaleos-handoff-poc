@@ -72,13 +72,6 @@
       "blocked_on": "KR源文件肉送(目标Hash c0f7b4e304fdc2df0a5ce15cbe9c9d843a333c19c4dba1d6461c2ca93ae4f68c)",
       "status": "pending_blocked_on_kr_source",
       "created_at": "2026-09-29T20:01:39Z"
-    },
-    {
-      "id": "TASK-5898126183",
-      "source_comment_id": 5898126183,
-      "action": "【KR_PUNCH｜1WB后腿｜必须收件｜国庆7天令+存档令】",
-      "created_at": "2026-09-29T20:24:52Z",
-      "status": "pending"
     }
   ],
   "processed": [
