@@ -25,6 +25,45 @@
       "first_line_excerpt": "【KR → 2WB华硕｜23:51只读核验令】",
       "target": "2WB",
       "note": "本令为【KR→2WB华硕】23:51只读核验令, 2WB-targeted, 1WB不得冒充执行; 仅做收件登记"
+    },
+    {
+      "comment_id": 5895947071,
+      "type": "SELF_SOLVE",
+      "subtype": "ARCHIVE",
+      "action": "CLOUD_QUEUED_FOR_LOCAL_1WB",
+      "status": "PENDING_LOCAL_1WB",
+      "received_at": "2026-09-29T18:51:09Z",
+      "first_line_excerpt": "【HAI→1WB｜存档令｜AISALEOS国庆前终盘】",
+      "target": "1WB",
+      "kr_auth": "KR_EXPLICIT_ARCHIVE",
+      "source_title": "《AISALEOS｜知产 × 真义 × 菩提七星阵｜国庆前终盘》",
+      "source_evidence": {
+        "filename": "AISALEOS_知产×真义×菩提七星阵_国庆前终盘.md",
+        "size": 15525,
+        "sha256": "c0f7b4e304fdc2df0a5ce15cbe9c9d843a333c19c4dba1d6461c2ca93ae4f68c",
+        "source_readback": "PASS (session-side on 黑武士; NOT present in cloud)"
+      },
+      "content_anchors_to_verify": [
+        "一进｜五场｜一出",
+        "知己知彼，持盾执矛；以战得真，以真养企",
+        "REAL开疆，IP守土",
+        "生意账｜认知账｜资产账｜风险账",
+        "一进不乱信｜五场不乱干｜一出不乱吹",
+        "THOUGHT RED TEAM｜阶段穷尽",
+        "REAL RED TEAM｜尚未开枪",
+        "最高纪律：别信这张图，让REAL证明它"
+      ],
+      "required_return_evidence": [
+        "WRITE",
+        "READBACK",
+        "NAS_PATH",
+        "SIZE",
+        "MTIME",
+        "SHA256",
+        "CONTENT_ANCHORS"
+      ],
+      "gap": "云端1WB无NAS挂载且未持有源正文(仅会话侧证据); 不得脑补补写, 不得冒充ARCHIVE_REAL=PASS",
+      "note": "等黑武士上线真实写入NAS/真源并回读, 由黑武士回传机器证据闭环"
     }
   ],
   "processed": [
