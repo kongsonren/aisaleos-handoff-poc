@@ -20,9 +20,41 @@
       "comment_id": 5873813511,
       "type": "SELF_SOLVE",
       "action": "CLOUD_QUEUED_FOR_LOCAL_1WB",
-      "status": "PENDING_LOCAL_CONSUME",
+      "status": "PENDING_2WB_TARGETED",
       "received_at": "2026-09-29T00:29:30Z",
-      "first_line_excerpt": "【KR → 2WB华硕｜23:51只读核验令】"
+      "first_line_excerpt": "【KR → 2WB华硕｜23:51只读核验令】",
+      "target": "2WB",
+      "note": "本令为【KR→2WB华硕】23:51只读核验令, 2WB-targeted, 1WB不得冒充执行; 仅做收件登记"
+    },
+    {
+      "comment_id": 5870467750,
+      "type": "SELF_SOLVE",
+      "action": "WRITE_HEARTBEAT_MARKER_TO_1WB_TEST_OUTBOX",
+      "status": "PENDING_LOCAL_CONSUME",
+      "target": "1WB",
+      "received_at": "2026-09-29T00:36:45Z",
+      "first_line_excerpt": "[HAI→1WB] SELF_SOLVE_TEST 无人真实测试 #1",
+      "note": "云端无1WB本地运行时, 已补入队待黑武士/1WB_consumer执行; 严禁PROCESSED冒充施工"
+    },
+    {
+      "comment_id": 5870554527,
+      "type": "SELF_SOLVE",
+      "action": "WRITE_HEARTBEAT_MARKER_TO_1WB_TEST_OUTBOX",
+      "status": "PENDING_LOCAL_CONSUME",
+      "target": "1WB",
+      "received_at": "2026-09-29T00:36:45Z",
+      "first_line_excerpt": "[HAI→1WB] SELF_SOLVE_TEST 无人真实测试 #2",
+      "note": "云端无1WB本地运行时, 已补入队待黑武士/1WB_consumer执行; 严禁PROCESSED冒充施工"
+    },
+    {
+      "comment_id": 5870732261,
+      "type": "SELF_SOLVE",
+      "action": "WRITE_HEARTBEAT_MARKER_TO_1WB_TEST_OUTBOX",
+      "status": "PENDING_LOCAL_CONSUME",
+      "target": "1WB",
+      "received_at": "2026-09-29T00:36:45Z",
+      "first_line_excerpt": "[HAI→1WB] SELF_SOLVE_TEST 冷启动验收 #3",
+      "note": "云端无1WB本地运行时, 已补入队待黑武士/1WB_consumer执行; 严禁PROCESSED冒充施工"
     }
   ],
   "processed": [
