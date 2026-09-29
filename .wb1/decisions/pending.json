@@ -45,5 +45,12 @@
     "created_at": "2026-09-29T19:36:38Z",
     "withdrawn_at": "2026-09-29T20:01:39Z",
     "withdrawn_reason": "MISROUTE_CORRECTED: source 5897285641 TARGET=2WB, out of 1WB authority per sovereign token-routing (D-CLOUD-20260929-0147-SOV); KR already authorized 2WB directly; no KR_GATE; treated as visible-only."
+  },
+  {
+    "DECISION_ID": "D-20260929-86987",
+    "title": "【HAI→1WB｜存档令｜国庆7天双轮自治作战令 V1.0】",
+    "status": "PENDING_KR",
+    "source_comment_id": 5898086987,
+    "created_at": "2026-09-29T20:22:49Z"
   }
 ]
