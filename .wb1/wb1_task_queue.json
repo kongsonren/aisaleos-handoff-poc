@@ -25,6 +25,14 @@
       "first_line_excerpt": "【KR → 2WB华硕｜23:51只读核验令】",
       "target": "2WB",
       "note": "本令为【KR→2WB华硕】23:51只读核验令, 2WB-targeted, 1WB不得冒充执行; 仅做收件登记"
+    },
+    {
+      "comment_id": 5881418840,
+      "type": "SELF_SOLVE",
+      "action": "CLOUD_QUEUED_FOR_LOCAL_1WB",
+      "status": "PENDING_LOCAL_CONSUME",
+      "received_at": "2026-09-29T01:47:28Z",
+      "first_line_excerpt": "【KR主权令｜双腿令牌路由边界｜2026-09-29】"
     }
   ],
   "processed": [
