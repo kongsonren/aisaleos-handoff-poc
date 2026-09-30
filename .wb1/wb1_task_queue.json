@@ -85,6 +85,13 @@
       "note": "KR显式授权诊断+最小修复7天巡航流程(仅本腿TARGET=1WB)。ROOT_CAUSE=classify只认英文[TAG]致【KR→1WB】指令误判UNKNOWN/HELD；REPAIR=classify增加中文括号路由(1WB→SELF_SOLVE,2WB→OUT_OF_SCOPE)。本指令由cloud-WB1自执行诊断+已修脚本，复核项待黑武士本地消费。不新增平台/不扩大授权/不不可逆操作。",
       "root_cause": "classify() only matched English [TAG] headers; 【KR→1WB】 directives (AUTH=KR_EXPLICIT,TARGET=1WB) fell through to UNKNOWN->HELD, never actioned",
       "repair": "added Chinese-bracket routing in wb1_cloud_poll.py classify(): 【KR→1WB】/【HAI→1WB】->SELF_SOLVE; 【*→2WB】->OUT_OF_SCOPE(skip,no KR_GATE)"
+    },
+    {
+      "comment_id": 5902657187,
+      "received_at": "2026-09-30T03:04:36Z",
+      "type": "SELF_SOLVE",
+      "instruction": "【KR→1WB｜离场前最后一脚｜自治推进验收】\nAUTH=KR_EXPLICIT\nTARGET=1WB\nMODE=FINAL_PUNCH_BEFORE_KR_LEAVES\n\n上一轮已完成 CLASSIFY 修复与自动吃令，控制链恢复不等于业务自治完成。\n\n现在只做一件事：\n在既有授权与安全边界内，立即从当前状态继续，不等KR再派具体活。\n\n要求：\n1. 自主选择 C 或 D 的下一合法动作；\n2. 必须产生一个新的、可验证的主战场 REAL，不得只做巡逻/ACK/账本整理；\n3. 完成后自动生成 NEXT，并立即进入下一动作或明确留下可自动续跑状态；\n4. 不得重复扫描同一空目录冒充推进；\n5. 无新 REAL 不得报 PROGRESS；\n6. 高风险动作仅挂当前分支，不得拖死其他授权任务。\n\n回执只要：\nCHOSEN_BY_MACHINE=\nNEW_REAL=\nVERIFY=\nNEXT=\nAUTONOMY_ADVANCE=PASS/PARTIAL/FAIL\nCONTINUATION_ARMED=PASS/FAIL\n\n这是KR离场前最后一次人工PUNCH。之后按原7天令自主运行，不等待KR继续肉。\nGO",
+      "status": "PENDING_LOCAL_CONSUME"
     }
   ],
   "processed": [
