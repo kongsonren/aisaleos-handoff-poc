@@ -72,6 +72,19 @@
       "blocked_on": "KR源文件肉送(目标Hash c0f7b4e304fdc2df0a5ce15cbe9c9d843a333c19c4dba1d6461c2ca93ae4f68c)",
       "status": "pending_blocked_on_kr_source",
       "created_at": "2026-09-29T20:01:39Z"
+    },
+    {
+      "comment_id": 5901933115,
+      "type": "SELF_SOLVE",
+      "action": "DIAGNOSE_REPAIR_7DAY_PATROL_FLOW",
+      "status": "PENDING_LOCAL_1WB",
+      "target": "1WB",
+      "auth": "KR_EXPLICIT",
+      "received_at": "2026-09-30T01:52:56Z",
+      "first_line_excerpt": "【KR→1WB｜持续推进链诊断】",
+      "note": "KR显式授权诊断+最小修复7天巡航流程(仅本腿TARGET=1WB)。ROOT_CAUSE=classify只认英文[TAG]致【KR→1WB】指令误判UNKNOWN/HELD；REPAIR=classify增加中文括号路由(1WB→SELF_SOLVE,2WB→OUT_OF_SCOPE)。本指令由cloud-WB1自执行诊断+已修脚本，复核项待黑武士本地消费。不新增平台/不扩大授权/不不可逆操作。",
+      "root_cause": "classify() only matched English [TAG] headers; 【KR→1WB】 directives (AUTH=KR_EXPLICIT,TARGET=1WB) fell through to UNKNOWN->HELD, never actioned",
+      "repair": "added Chinese-bracket routing in wb1_cloud_poll.py classify(): 【KR→1WB】/【HAI→1WB】->SELF_SOLVE; 【*→2WB】->OUT_OF_SCOPE(skip,no KR_GATE)"
     }
   ],
   "processed": [
