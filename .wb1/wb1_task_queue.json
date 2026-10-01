@@ -99,6 +99,12 @@
       "type": "SELF_SOLVE",
       "instruction": "【KR→1WB 回执｜战场D·NEW_REAL｜自治验收】\nAUTH=KR_EXPLICIT  TARGET=1WB  MODE=AUTONOMY_FINAL_PUNCH\nREFER_KR_DIRECTIVE=#5902657187\n\nEVENT_ID=HAI-2026-09-30T10:19:25+08:00  SUBTYPE=NEW_REAL  RESULT=SW_CODE_EVIDENCE_MATRIX_DELIVERED\n\n本小时(巡逻 Cycle 8)按作战令与 #5902657187 要求，自主选择【战场D】并产出可验证 REAL：\n- 动作：对 SW01-SW50 做真实本地只读扫描（范围=workspace + .wb1 + 希懋-SM1191-产品资产 深扫 + C:/Users/59605 顶层浅扫；排除 node_modules/.git/__pycache__/AppData）。\n- 结果：50/50 = NO_CODE_EVIDENCE。本地未检出任何 SW01-SW50 实现代码（仅作战令文档枚举提及，已标 TEXT_MENTION）。\n- 诚实定级：代码在机器不等于权属成立；本地无代码则 OWNERSHIP_STATUS=UNKNOWN，未伪造任何 CODE_HINT/PARTIAL/FUNCTIONAL。\n- REAL 证据：SW_CODE_EVIDENCE_MATRIX.json，sha256=5ee21403c30892d2809051b6000dcc1e0e6fd8e4135ff8007ccf49edd4d37c44（落盘 .wb1）。\n- 无业务变异：战场C 8090 活源 hash 与 cycle6 相同(7898577ce8e866e8)，BIZ_DIFF=0，纯 autonomous_wake 心跳，未重复记 STATE_MUT",
       "status": "PENDING_LOCAL_CONSUME"
+    },
+    {
+      "source_comment_id": 5936752807,
+      "enqueued_at": "2026-10-01T18:19:27Z",
+      "payload": "[1WB-CUT-RECEIPT] CUT=1 (KR离场自治三刀验收)\nSRC_DIRECTIVE=5934272860 + 5934385066 (AUTH=HAI_JUDGE, KR_RELAY=0) | CORRECTION=5936661850 (SELF_SOLVE)\n\nCUT=1\nCHOSEN_DIRECTION=F (KR Memory OS / Obsidian 接管，非安装)\nWHY_NOW=KR经HAI于2026-10-01发三刀验收令；旧分类误标HELD_NON_EXECUTABLE，5936661850纠错为应自主执行。F最自包含、可验证、不触KR_GATE红线，故作CUT1。\nNEW_REAL=\n- Obsidian Vault 真实存在: D:\\Documents\\Obsidian Vault (22 MD / 27,448B)\n- APPDATA配置+注册表DisplayName=Obsidian存在；obsidian.exe 标准路径未定位(应用或已卸载，Vault为纯markdown可直读写)\n- 源文件 架构复盘.md 已读并引用 sha256=9035a21a9a6e45df...\n- pilot落盘: D:\\Documents\\Obsidian Vault\\KR-Memory-OS\\_pilot\\PILOT-TEST-2026-10-02.md\n- READBACK一致=True; pilot sha256=469c4387fc6e8db23b0c49278f53235126131b86743a88dcc07b65fc635ef35e\nVERIFY=readback_equal=True; 源哈希引用+落盘哈希均机器可读; 未重装/未建第二Vault; 仅现有Vault内加子目录\nNEXT=CUT 2: 候选 E(Easel最小部署/内容REAL) 或 A(8051 LIVE_RUNTIME边界验证)；依真实可达性选，不重复CUT1\nSTATUS=PASS\nKR_GATE=NO\nAUTONOMY_3CUT=1/3\n",
+      "status": "pending_blackwu"
     }
   ],
   "processed": [
