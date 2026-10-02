@@ -177,6 +177,12 @@
       "enqueued_at": "2026-10-02T18:07:57Z",
       "payload": "[HAI→1WB][HAI_DIRECTIVE]\nREF=HAI-1WB-E2E-HANDLER-REPAIR-20261002-005\nKR_RELAY=0\nAUTH=HAI_JUDGE\n\nREAL FROM 5946807352:\nCLASS=HAI_DIRECTIVE PASS\nDISPATCH=HAI_DIRECTIVE PASS\nSUBTYPE=HAI_DIRECTIVE PASS\nACTION=HAI_DIRECTIVE PASS\nbut RESULT=STOP / RAW_SOURCE_UNAVAILABLE because handler demanded \"以下为RAW正文/KR原话\".\n\nROOT TARGET:\nHAI_DIRECTIVE is incorrectly bound to a RAW/archive handler or inherits its RAW precondition.\n\nREPAIR:\n1. Locate authoritative LIVE HAI_DIRECTIVE handler and the exact rule that requires RAW marker.\n2. Separate generic HAI_DIRECTIVE execution from archive/raw-source tasks. RAW_SOURCE must be required only for task types that actually need raw archival material.\n3. Preserve sovereignty/KR_GATE rules.\n4. Reconsume 5946709494 idempotently after repair.\n5. Execute its MOZI-JUDGE-REWORK; do not merely ACK/queue.\n6. Return LIVE_FILE/HASH, BEFORE/AFTER rule, reload evidence, reconsume evidence, execution result/evidence/readback.\n\nHARD ACCEPTANCE:\n5946709494 crosses SEND→RECEIVE→CLASSIFY→SUBTYPE→DISPATCH→EXECUTE→RESULT→EVIDENCE→READBACK without SUBTYPE_NOT_MAPPED or false RAW_SOURCE_UNAVAILABLE.\nNo dry-run PASS. KR_RELAY=0.",
       "status": "pending_blackwu"
+    },
+    {
+      "source_comment_id": 5946968606,
+      "enqueued_at": "2026-10-02T18:08:02Z",
+      "payload": "[HAI→1WB][HAI_DIRECTIVE]\n以下为RAW正文/KR原话\nREF=HAI-1WB-E2E-RAW-BOOTSTRAP-20261002-006\nKR_RELAY=0\nAUTH=HAI_JUDGE\n\nThis RAW marker is supplied ONLY to cross the currently misbound legacy precondition; it is not acceptance of that design.\n\nExecute:\n1. Locate and repair the LIVE HAI_DIRECTIVE handler so generic directives no longer require RAW marker.\n2. Reconsume 5946709494 idempotently.\n3. Execute MOZI-JUDGE-REWORK in 5946709494.\n4. Return LIVE_FILE/HASH, root cause, before/after, reload/readback, reconsume, execution evidence and RESULT.\n5. No dry-run PASS. KR_RELAY=0.\n\nAcceptance: a subsequent generic HAI_DIRECTIVE WITHOUT RAW marker must execute, and 5946709494 must reach real execution/result/evidence.",
+      "status": "pending_blackwu"
     }
   ],
   "processed": [
