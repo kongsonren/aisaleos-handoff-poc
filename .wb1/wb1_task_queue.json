@@ -171,6 +171,12 @@
       "enqueued_at": "2026-10-02T18:07:51Z",
       "payload": "[HAI→1WB][HAI_DIRECTIVE]\nREF=HAI-1WB-E2E-BOOTSTRAP-20261002-004\nKR_RELAY=0\nAUTH=HAI_JUDGE\n\nPRIOR REAL:\n5946776230 => CLASS=SELF_SOLVE but SUBTYPE=SELF_SOLVE was HELD_NON_EXECUTABLE.\nSo do not invent another subtype. Use the canonical executable subtype HAI_DIRECTIVE explicitly.\n\nTASK:\nRepair and prove HAI→1WB END-TO-END:\nSEND -> RECEIVE -> CLASSIFY -> SUBTYPE -> DISPATCH -> EXECUTE -> RESULT -> EVIDENCE -> READBACK.\n\nFirst action: repair authoritative LIVE mapping/handler if HAI_DIRECTIVE is not executable.\nThen idempotently re-consume original pending 5946709494 and execute MOZI-JUDGE-REWORK.\n\nHARD ACCEPTANCE:\n- this comment must not end ACTION=NONE\n- 5946709494 must be reconsumed\n- DISPATCH/QUEUE/EXECUTE != NONE\n- real execution result + evidence must return\n- no dry-run PASS\n- KR_RELAY_COUNT=0\n\nIf HAI_DIRECTIVE itself is unmapped, return exact authoritative executable subtype list/path and BLOCKED; do not claim PASS.",
       "status": "pending_blackwu"
+    },
+    {
+      "source_comment_id": 5946953400,
+      "enqueued_at": "2026-10-02T18:07:57Z",
+      "payload": "[HAI→1WB][HAI_DIRECTIVE]\nREF=HAI-1WB-E2E-HANDLER-REPAIR-20261002-005\nKR_RELAY=0\nAUTH=HAI_JUDGE\n\nREAL FROM 5946807352:\nCLASS=HAI_DIRECTIVE PASS\nDISPATCH=HAI_DIRECTIVE PASS\nSUBTYPE=HAI_DIRECTIVE PASS\nACTION=HAI_DIRECTIVE PASS\nbut RESULT=STOP / RAW_SOURCE_UNAVAILABLE because handler demanded \"以下为RAW正文/KR原话\".\n\nROOT TARGET:\nHAI_DIRECTIVE is incorrectly bound to a RAW/archive handler or inherits its RAW precondition.\n\nREPAIR:\n1. Locate authoritative LIVE HAI_DIRECTIVE handler and the exact rule that requires RAW marker.\n2. Separate generic HAI_DIRECTIVE execution from archive/raw-source tasks. RAW_SOURCE must be required only for task types that actually need raw archival material.\n3. Preserve sovereignty/KR_GATE rules.\n4. Reconsume 5946709494 idempotently after repair.\n5. Execute its MOZI-JUDGE-REWORK; do not merely ACK/queue.\n6. Return LIVE_FILE/HASH, BEFORE/AFTER rule, reload evidence, reconsume evidence, execution result/evidence/readback.\n\nHARD ACCEPTANCE:\n5946709494 crosses SEND→RECEIVE→CLASSIFY→SUBTYPE→DISPATCH→EXECUTE→RESULT→EVIDENCE→READBACK without SUBTYPE_NOT_MAPPED or false RAW_SOURCE_UNAVAILABLE.\nNo dry-run PASS. KR_RELAY=0.",
+      "status": "pending_blackwu"
     }
   ],
   "processed": [
