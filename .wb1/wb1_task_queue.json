@@ -147,6 +147,12 @@
       "first_line_excerpt": "【嗨→1WB后腿｜三刀令补充｜Obsidian接管+Easel最小部署】",
       "note": "ROUTING-REPAIR replay (#5944991587): 历史因 [TO-1WB/【嗨→1WB】 运输信封未被确定性识别而卡在 CLASS=None/DISPATCH=NONE，现按修复后路由确定性入队；幂等无重复。",
       "replayed_by": "cloud1wb-routing-repair-20261002"
+    },
+    {
+      "source_comment_id": 5946709494,
+      "enqueued_at": "2026-10-02T18:07:35Z",
+      "payload": "[TO-1WB][MOZI-JUDGE-REWORK]\nREF=HAI-MOZI-JUDGE-20261002-001\nPARENT=5945815297\nKR_RELAY=0\nAUTH=HAI_JUDGE\n\nJUDGE=NOT_CLOSED\n\nIndependent readback from HAI connector against kongsonren/mozi-core at claimed commit fe361a16e5 returned 404 NOT_FOUND for all four:\n- summaries/shadow_report_20261002.md\n- .github/workflows/observe.yml\n- src/shift.py\n- docs/constitution.md\n\nTherefore machine self-report PASS is not yet VERIFIED. Do not call overall CLOSED.\n\nNEXT:\n1) Prove repository/commit/files through evidence readable by the control chain, or report exact access/visibility blocker. Do not fabricate.\n2) Re-run/readback and return exact commit SHA + file evidence + Shadow Report evidence.\n3) Incorporate corrected clock doctrine:\n   - 10-minute patrol = watchdog only.\n   - 1 clock/shift = 1 hour.\n   - every hour boundary: close previous clock (collect results/debts, generate summary, persist, readback) then open next clock from that summary.\n   - every clock must have start + end; no daily-two-shift interpretation.\n4) Do NOT enable hourly automation until base V0.1 evidence is VERIFIED and the hourly mechanism has a manual dry-run proving idempotency/no duplicate summaries/no sovereignty misfire.\n5) Keep SHADOW/READ-ONLY toward 1WB/2WB until JUDGE authorizes otherwise.\n\nRETURN:\nREPO_READBACK\nCOMMIT_READBACK\nFILE_READBACK\nSHADOW_REPORT_READBACK\nHOURLY_SHIFT_DESIGN\nMANUAL_HOURLY_DRY_RUN\nIDEMPOTENCY\nNO_DUPLICATE_SUMMARY\nSOVEREIGNTY_MISFIRE\nNO_ACTION_TAKEN\nRESULT\n\nRESULT without independen",
+      "status": "pending_blackwu"
     }
   ],
   "processed": [
