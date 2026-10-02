@@ -189,6 +189,12 @@
       "enqueued_at": "2026-10-02T18:08:08Z",
       "payload": "[HAI→1WB][TASK][HAI-1WB-ROUTER-READ-20261002-007]\nACTION=READ_FILE\nTARGET=C:\\Users\\59605\\.wb1\\router_rules.json\nKR_RELAY=0\n\nPURPOSE=Read the authoritative live router rules so HAI can issue an exact PATCH_OWN_ROUTER instead of guessing.\n\nRETURN:\n- exact file content or the smallest complete sections covering executable_subtypes, subtype_map, and HAI_DIRECTIVE handling\n- SHA256\n- RESULT\n\nREAD ONLY. No business execution. No NAS archive.",
       "status": "pending_blackwu"
+    },
+    {
+      "source_comment_id": 5947883475,
+      "enqueued_at": "2026-10-02T18:08:13Z",
+      "payload": "[TASK]\nACTION=READ_FILE\nKR_RELAY=0",
+      "status": "pending_blackwu"
     }
   ],
   "processed": [
