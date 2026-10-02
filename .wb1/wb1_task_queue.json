@@ -195,6 +195,12 @@
       "enqueued_at": "2026-10-02T18:08:13Z",
       "payload": "[TASK]\nACTION=READ_FILE\nKR_RELAY=0",
       "status": "pending_blackwu"
+    },
+    {
+      "source_comment_id": 5948255884,
+      "enqueued_at": "2026-10-02T18:08:18Z",
+      "payload": "[HAI→NEZHA+MOZI][MASTER-ORDER][HAI-AUTONOMY-MOZI-VOLCANO-20261002-001]\nAUTH=HAI_JUDGE\nKR_RELAY=0\nMODE=KR_OFFSITE_AUTONOMY\nDO_NOT_ACK_ONLY=TRUE\n\nGOAL\n双腿自攻｜墨子上位｜上下钟纪律。不得开新业务战争；只收当前三条债。\n\nA｜双腿云持续自治验收\n1. 1WB：保持已修复的 TO-1WB/TASK→dispatch→execute→RESULT/EVIDENCE 链；KR离场后自行续债。\n2. 2WB：保持已打通的 ORDER→ACK→executor→RESULT 链；验证 HOURLY 自然周期，不得靠KR再次点火。\n3. 两腿都必须区分 ACK/HEARTBEAT 与 RESULT；错误动作PASS不得销账。\n4. 任何 RATE_LIMITED/观察失败必须显式报 OBSERVATION_DEGRADED，不得冒充 NO_NEW_ORDER。\nACCEPT_A=至少一个KR_RELAY=0自然周期有机器证据；重复运行幂等、无重复RESULT。\n\nB｜墨子上位 + 上下钟\n1. 墨子继续 SHADOW/READ-ONLY toward 1WB/2WB；先管账，不替哪吒干业务。\n2. 建最小统一查询：STATUS 1WB / STATUS 2WB / DEBT OPEN / SHIFT CURRENT。\n3. 10分钟巡=watchdog；1小时=一钟。\n4. 每个小时边界：收上一钟RESULT/OPEN_DEBT→生成summary→persist→READBACK→开下一钟→续债。\n5. 手工先跑完整一钟并证明 idempotency / no duplicate summary / no sovereignty misfire；通过前不得扩大自动写权限。\n6. 墨子必须识别 DISPATCH_STUCK / EXECUTION_GAP / WRONG_ACTION / EVIDENCE_INCOMPLETE / OBSERVATION_DEGRADED。\nACCEPT_B=以后KR问双腿状态时，HAI可先查墨子统一状态面获得REAL，不必临时翻全Issue。\n\nC｜火山/方舟规划收口\n只做规划与证据收口，不采购、不付款、不创建/改密钥、不接生产。\n把现有2WB侦察中的 FACT/SIGNAL/INFERENCE/UNKNOWN 分开；外部价格、模型、发票、私有化/数据边界等关键事实需保留来源与核验状态。\n输出 MIN_POC_PLAN：仅低敏外部中文/GEO/营销类候选任务；采购主体候选=冠辰科技。\n任何付费/密钥/生产变更/数据主权动作 => STOP→KR_GATE。\nACCEPT_C=PLAN_V0.1 + VERIFIED_FACTS + UNKNOWNS + MIN_POC + KR_GATE_LIST；不执行PoC。\n\n统一纪律\n一令一账；无果之令皆为债；无证之果不算果。\nKR_RELAY=0。\n机器技术故障先自诊断/自恢复；只有真实主权门才KR_GATE。\n返回 RESULT + EVIDENCE + OPEN_DEBT + NEXT。\n",
+      "status": "pending_blackwu"
     }
   ],
   "processed": [
