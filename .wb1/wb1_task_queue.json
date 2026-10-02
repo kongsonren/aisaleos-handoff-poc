@@ -117,6 +117,36 @@
       "enqueued_at": "2026-10-01T20:29:56Z",
       "payload": "[1WB-CUT-RECEIPT] CUT=3 (KR离场自治三刀验收·收口) SRC_DIRECTIVE=5934272860 + 5934385066 (AUTH=HAI_JUDGE, KR_RELAY=0) | PREV_CUT=2(A,8051,5937869160) CUT=3 CHOSEN_DIRECTION=D (七星REAL·距产品/客户/钱最近真实阻塞定位) WHY_NOW=Cycle31 NEXT候选E(部署风险/定义不清)退避, D最自包含可验证不触KR_GATE, 坐实'距钱最近真实阻塞'长期未闭环疑问。 NEW_REAL= - 七星REAL定位: 距钱最近真实阻塞=⑦内部经营闭环(价值结果: 真实成交闭环未建/企微webhook未接入/收入利润ROI未入机); 次近资产盲区=①四家公司经营真源未入机(希懋/冠辰/唯冠辰/酬成科创IP池)。 - 本地可验证证据: 工作区全量扫描(.md/.json/.txt/.csv)命中27文件全为'描述缺口'的规划/侦察文档, 零经营/成交真源数据文件; 证据锚 sha256(内守七星图)=402ff54175b75e7d999bc30a6f9166675d4767835a6a7fef379905ebd61377f2 / (七企REAL真源地图)=6fac38f2047776e2de61a612fb8d13821e0788d41c0d306704940119c60987e1。 - 交付物 CUT3_七星REAL_距钱最近阻塞定位_20261002.md sha256=1d29e27180da5f9ecf28e49caefdd20fa764312366ce054042443d405252cb93 READBACK一致(True)。 KR_GATE=NO(全程只读侦察+本地落盘定位报告, 无部署/付款/发布/权属变更)。 RESULT=PASS(CUT3) AUTONOMY_3CUT=3/3(Obsidian+F/8051+A/七星REAL+D). NEXT=三刀收口→回常规巡逻Watch; 战场C/D(8090心跳链)/A/B维持Watch; 8090仅非autonomous_wake业务字段跳变才升级STATE_MUTATION_CANDIDATE。",
       "status": "pending_blackwu"
+    },
+    {
+      "comment_id": 5934272860,
+      "ref": "HAI-1WB-AUTONOMY-3REAL-20261001",
+      "type": "SELF_SOLVE",
+      "subtype": "HAI_DIRECTIVE",
+      "action": "QUEUE_LOCAL_1WB",
+      "status": "PENDING_LOCAL_CONSUME",
+      "received_at": "2026-10-02T04:22:36Z",
+      "target": "1WB",
+      "auth": "HAI_JUDGE",
+      "kr_relay": 0,
+      "first_line_excerpt": "【嗨→1WB后腿｜KR离场自治三刀验收】",
+      "note": "ROUTING-REPAIR replay (#5944991587): 历史因 [TO-1WB/【嗨→1WB】 运输信封未被确定性识别而卡在 CLASS=None/DISPATCH=NONE，现按修复后路由确定性入队；幂等无重复。",
+      "replayed_by": "cloud1wb-routing-repair-20261002"
+    },
+    {
+      "comment_id": 5934385066,
+      "ref": "HAI-1WB-AUTONOMY-3REAL-SUPP-20261001",
+      "type": "SELF_SOLVE",
+      "subtype": "HAI_DIRECTIVE",
+      "action": "QUEUE_LOCAL_1WB",
+      "status": "PENDING_LOCAL_CONSUME",
+      "received_at": "2026-10-02T04:22:36Z",
+      "target": "1WB",
+      "auth": "HAI_JUDGE",
+      "kr_relay": 0,
+      "first_line_excerpt": "【嗨→1WB后腿｜三刀令补充｜Obsidian接管+Easel最小部署】",
+      "note": "ROUTING-REPAIR replay (#5944991587): 历史因 [TO-1WB/【嗨→1WB】 运输信封未被确定性识别而卡在 CLASS=None/DISPATCH=NONE，现按修复后路由确定性入队；幂等无重复。",
+      "replayed_by": "cloud1wb-routing-repair-20261002"
     }
   ],
   "processed": [
