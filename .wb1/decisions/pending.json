@@ -67,26 +67,32 @@
   },
   {
     "decision_id": "D-5948314773",
-    "status": "OPEN",
+    "status": "WITHDRAWN",
     "created_at": "2026-10-02T18:08:28Z",
     "source_comment_id": 5948314773,
     "summary": "[HAI-DOWN-SHIFT-SPLIT]\nDATE=2026-10-02\nREF=HAI-DOWN-SHIFT-20261002-001-SPLIT\nKR_RELAY=0\n\n# 拆｜本钟进入500候选\n\n先关联、后查重；本条只登记候选/更新关系，不虚增500编号。\n\n1. 钢印100｜关联/强化候选\n- 有令有果：本钟出现真实 ORDER→ACK→EXECUTE→RESULT 链，强化“无果之令皆为债；无证之果不算果”。\n- 嗨上下钟：本次发现“仅存+总结、未拆”只能 PARTIAL，强化“下钟=存/拆/总结，有始有终”。\n- KR去人肉：两腿点火后 KR_RELAY=0，进入离场自治验收；注意这是实践进展，不等于长期自治已PASS。\n\n2. 模式100｜候选\n- 双腿自攻｜墨子管账｜嗨问墨子｜KR掌主权。\n- 机器故障分层：SEND/RECEIVE/CLASSIFY/DISPATCH/EXECUTE/RESULT/EVIDENCE。\n- OBSERVATION_DEGRADED != NO_NEW_ORDER。\n\n3. 未来100｜关联\n- 墨子成为统一机器状态/债/果查询面；KR问嗨，嗨先问墨子。\n- 双腿在KR离场后持续自治。\n\n4. 专著100｜素材关联\n- 2026-10-02“双腿点火、墨子上位”可作为KR AI组织演进实录素材；当前仅素材，不立新专著。\n\n5. 格言100｜不强增\n- 本钟无必要为了凑数新增格言；避免同义增数。\n\nDEDUP_STATUS=PENDING_OBSIDIAN/NAS_SOURCE_CHECK\nNEW_COUNT=0\nACTION=RELATE_AND_STAGE_ONLY\n",
-    "kr_entry": "请 KR 在手机企微/Issue 决策。回执格式：[KR_DECISION] D-5948314773 CHOICE=A|B|STOP TEXT=<说明>"
+    "kr_entry": "请 KR 在手机企微/Issue 决策。回执格式：[KR_DECISION] D-5948314773 CHOICE=A|B|STOP TEXT=<说明>",
+    "withdrawn_reason": "false_kr_gate_misroute_2026-10-03 (sovereignty keyword false-fire on descriptive/negated text); no KR disturbance",
+    "withdrawn_at": "2026-10-02T18:13:34.982829Z"
   },
   {
     "decision_id": "D-5948317258",
-    "status": "OPEN",
+    "status": "WITHDRAWN",
     "created_at": "2026-10-02T18:08:49Z",
     "source_comment_id": 5948317258,
     "summary": "[HAI-DOWN-SHIFT-FINAL]\nDATE=2026-10-02\nREF=HAI-DOWN-SHIFT-20261002-001-FINAL\nKR_RELAY=0\nMODE=HOURLY_SHIFT_CLOSE\n\n# 下钟最终总结｜存・拆・总结\n\n存：\n- 本钟REAL/总令/债已存 #6。\n- 前次总结=5948276339，已回读。\n- 拆件=5948314773。\n\n拆：\n- 500仅登记关联/候选，不虚增编号。\n- 钢印：有令有果、嗨上下钟、KR去人肉实践进展。\n- 模式：双腿自攻→墨子管账→嗨问墨子→KR掌主权；执行链分层；OBSERVATION_DEGRADED≠NO_NEW_ORDER。\n- 未来：墨子统一查询面、双腿KR离场自治。\n- 专著：2026-10-02双腿点火/墨子上位作为演进素材。\n- 格言：本钟不为凑数新增。\n- 查重状态=PENDING_OBSIDIAN/NAS_SOURCE_CHECK，故NEW_COUNT=0。\n\n本钟果：\n1. 1WB真实路由/执行链恢复并重消费墨子返工债。\n2. 2WB 5946969178形成 ORDER→ACK→EXECUTOR→RESULT。\n3. 总令 #6=5948255884；镜像 #8=5948257756。\n4. KR_RELAY=0，双腿进入离场自治验收。\n\nOPEN_DEBT：\nA 双腿自然周期持续自治。\nB 墨子完整一钟、统一STATUS、幂等/无重复/无主权误触。\nC 火山/方舟PLAN_V0.1与核验事实/UNKNOWN/MIN_POC/KR_GATE。\nD 50+30旧债续跑，不重开80条。\n\nNEXT_SHIFT_BOOT：\n先读本条 → 理当前REAL → 对OPEN_DEBT → 优先查墨子统一状态；墨子查询未成则明确OPEN → 收双腿RESULT/EVIDENCE；不靠",
-    "kr_entry": "请 KR 在手机企微/Issue 决策。回执格式：[KR_DECISION] D-5948317258 CHOICE=A|B|STOP TEXT=<说明>"
+    "kr_entry": "请 KR 在手机企微/Issue 决策。回执格式：[KR_DECISION] D-5948317258 CHOICE=A|B|STOP TEXT=<说明>",
+    "withdrawn_reason": "false_kr_gate_misroute_2026-10-03 (sovereignty keyword false-fire on descriptive/negated text); no KR disturbance",
+    "withdrawn_at": "2026-10-02T18:13:34.982841Z"
   },
   {
     "decision_id": "D-5957482719",
-    "status": "OPEN",
+    "status": "WITHDRAWN",
     "created_at": "2026-10-02T18:09:21Z",
     "source_comment_id": 5957482719,
     "summary": "【1WB｜KR_DIRECTIVE_ACK + BOUNDARY】REF=5955471531  MOZI-V0.1-R4-FIX\nSTATUS=RECEIVED_REGISTERED / EXEC=DOMAIN_FOREIGN / KR_GATE=NO\n\n1. 已收 KR 指令 5955471531（墨子 V0.1 R4 最小整改令：刀一订单唯一性硬边界 DUPLICATE_ORDER_REJECTED；刀二 Evidence 绑定身份+内容；只整改与测试、禁止部署），已登记 kr_directive_queue.json。\n\n2. 边界判定：1WB 国庆令授权域 = 本地CODE REAL / NAS / 8051 / 8090 / Artifact / 内部证据。mozi-core 属 JUDGE/mozi 域，1WB 对其保持 SHADOW/READ-ONLY（无本地克隆，仅远程只读回读；不启其 hourly、不改其源码）。R4 需修改 mozi-core 的 Ledger/process/executor/Evidence 源码——属域外代码变更，1WB 不执行、不越界替哪吒干业务。\n\n3. 需 KR 裁决路由：请指定 R4 整改归属——\n   (a) 路由至 mozi 属主 / JUDGE 域执行；或\n   (b) 明确授权 1WB 打破对 mozi-core 的 SHADOW/READ-ONLY、由 1WB 自行整改（符合令文“只整改与测试、禁止部署”）。\n\n4. 关联 REAL 上下文：墨子 5946709494 回读已于 5948032265 达 VERIFIED_READBACK_PASS——mozi-core@fe361a16e5 四文件在 1WB 控制链可读(200+sha)，JUDGE 早报 404 不可复现。1WB 对 mozi-core 的只读",
-    "kr_entry": "请 KR 在手机企微/Issue 决策。回执格式：[KR_DECISION] D-5957482719 CHOICE=A|B|STOP TEXT=<说明>"
+    "kr_entry": "请 KR 在手机企微/Issue 决策。回执格式：[KR_DECISION] D-5957482719 CHOICE=A|B|STOP TEXT=<说明>",
+    "withdrawn_reason": "false_kr_gate_misroute_2026-10-03 (sovereignty keyword false-fire on descriptive/negated text); no KR disturbance",
+    "withdrawn_at": "2026-10-02T18:13:34.982844Z"
   }
 ]
