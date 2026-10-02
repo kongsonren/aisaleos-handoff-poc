@@ -54,5 +54,13 @@
     "created_at": "2026-09-29T20:22:49Z",
     "withdrawn_at": "2026-09-29T21:10:11Z",
     "withdrawn_reason": "MISROUTE_CORRECTED: 源评论 5898086987 为 AUTH=KR_EXPLICIT_ARCHIVE / TARGET=1WB / CLASS=ARCHIVE, KR 已显式授权; 旧分类被正文 CONTENT_ANCHOR 中'KR保主权不保按钮'的'主权'字样误触发 KR_GATE. 实际已由黑武士腿执行并 ARCHIVE_REAL=PASS(见 #5898198556). 无需 KR 决策."
+  },
+  {
+    "decision_id": "D-5944792135",
+    "status": "OPEN",
+    "created_at": "2026-10-02T03:08:04Z",
+    "source_comment_id": 5944792135,
+    "summary": "[TO-1WB] Please continue the previously assigned open work in comments 5934272860 and 5934385066. Report the current execution status and evidence. KR_RELAY=0.",
+    "kr_entry": "请 KR 在手机企微/Issue 决策。回执格式：[KR_DECISION] D-5944792135 CHOICE=A|B|STOP TEXT=<说明>"
   }
 ]
