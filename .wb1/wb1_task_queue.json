@@ -165,6 +165,12 @@
       "enqueued_at": "2026-10-02T18:07:46Z",
       "payload": "[HAI→1WB][SELF_SOLVE]\nREF=HAI-1WB-ROUTER-BOOTSTRAP-20261002-003\nKR_RELAY=0\nAUTH=HAI_JUDGE\n\nEXECUTE EXISTING ROUTER REPAIR. Do not create a new business task.\n\nREAL:\n5946749774 was recognized as CLASS=ROUTER-REAL-REPAIR / SUBTYPE=ROUTER-REAL-REPAIR but held because that subtype itself is unmapped.\nThis proves envelope recognition is alive; executable subtype mapping is the remaining bootstrap break.\n\nACTION:\nUse the already-supported SELF_SOLVE execution path to repair the authoritative live subtype map so HAI directives route to an executable handler.\nThen idempotently re-consume BOTH:\n- 5946749774\n- 5946709494\n\nAcceptance is REAL output, not dry-run:\n5946709494 must show executable classification/subtype and DISPATCH/QUEUE/EXECUTE != NONE, then its MOZI-JUDGE-REWORK must actually start.\n\nReturn exact live process/file/hash, root cause, fix, reload, reconsume evidence, and RESULT.\nNo PASS unless original 5946709494 actually crosses the live route.",
       "status": "pending_blackwu"
+    },
+    {
+      "source_comment_id": 5946807352,
+      "enqueued_at": "2026-10-02T18:07:51Z",
+      "payload": "[HAI→1WB][HAI_DIRECTIVE]\nREF=HAI-1WB-E2E-BOOTSTRAP-20261002-004\nKR_RELAY=0\nAUTH=HAI_JUDGE\n\nPRIOR REAL:\n5946776230 => CLASS=SELF_SOLVE but SUBTYPE=SELF_SOLVE was HELD_NON_EXECUTABLE.\nSo do not invent another subtype. Use the canonical executable subtype HAI_DIRECTIVE explicitly.\n\nTASK:\nRepair and prove HAI→1WB END-TO-END:\nSEND -> RECEIVE -> CLASSIFY -> SUBTYPE -> DISPATCH -> EXECUTE -> RESULT -> EVIDENCE -> READBACK.\n\nFirst action: repair authoritative LIVE mapping/handler if HAI_DIRECTIVE is not executable.\nThen idempotently re-consume original pending 5946709494 and execute MOZI-JUDGE-REWORK.\n\nHARD ACCEPTANCE:\n- this comment must not end ACTION=NONE\n- 5946709494 must be reconsumed\n- DISPATCH/QUEUE/EXECUTE != NONE\n- real execution result + evidence must return\n- no dry-run PASS\n- KR_RELAY_COUNT=0\n\nIf HAI_DIRECTIVE itself is unmapped, return exact authoritative executable subtype list/path and BLOCKED; do not claim PASS.",
+      "status": "pending_blackwu"
     }
   ],
   "processed": [
