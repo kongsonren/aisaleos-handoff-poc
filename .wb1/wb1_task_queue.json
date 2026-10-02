@@ -183,6 +183,12 @@
       "enqueued_at": "2026-10-02T18:08:02Z",
       "payload": "[HAI→1WB][HAI_DIRECTIVE]\n以下为RAW正文/KR原话\nREF=HAI-1WB-E2E-RAW-BOOTSTRAP-20261002-006\nKR_RELAY=0\nAUTH=HAI_JUDGE\n\nThis RAW marker is supplied ONLY to cross the currently misbound legacy precondition; it is not acceptance of that design.\n\nExecute:\n1. Locate and repair the LIVE HAI_DIRECTIVE handler so generic directives no longer require RAW marker.\n2. Reconsume 5946709494 idempotently.\n3. Execute MOZI-JUDGE-REWORK in 5946709494.\n4. Return LIVE_FILE/HASH, root cause, before/after, reload/readback, reconsume, execution evidence and RESULT.\n5. No dry-run PASS. KR_RELAY=0.\n\nAcceptance: a subsequent generic HAI_DIRECTIVE WITHOUT RAW marker must execute, and 5946709494 must reach real execution/result/evidence.",
       "status": "pending_blackwu"
+    },
+    {
+      "source_comment_id": 5947556258,
+      "enqueued_at": "2026-10-02T18:08:08Z",
+      "payload": "[HAI→1WB][TASK][HAI-1WB-ROUTER-READ-20261002-007]\nACTION=READ_FILE\nTARGET=C:\\Users\\59605\\.wb1\\router_rules.json\nKR_RELAY=0\n\nPURPOSE=Read the authoritative live router rules so HAI can issue an exact PATCH_OWN_ROUTER instead of guessing.\n\nRETURN:\n- exact file content or the smallest complete sections covering executable_subtypes, subtype_map, and HAI_DIRECTIVE handling\n- SHA256\n- RESULT\n\nREAD ONLY. No business execution. No NAS archive.",
+      "status": "pending_blackwu"
     }
   ],
   "processed": [
