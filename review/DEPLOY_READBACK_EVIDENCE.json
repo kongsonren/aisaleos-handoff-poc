@@ -1,0 +1,139 @@
+{
+  "evidence_type": "DEPLOY_READBACK_EVIDENCE",
+  "release_id": "MOZI-V0.1-RC1",
+  "generated_at": "2026-10-03T17:33:55.133601+00:00",
+  "machine_card": {
+    "CLAIMED_ROLE": "1WB_BLACKWARRIOR",
+    "MACHINE_ID": "bfe9c1e476c1611c",
+    "HOSTNAME": "KR",
+    "MANUFACTURER": "THUNDEROBOT",
+    "MODEL": "B760M-HDV/M.2",
+    "USER": "59605",
+    "USERPROFILE": "C:\\Users\\59605",
+    "IDENTITY_MAPPING": "CONFIRMED_KR=KR/THUNDEROBOT ; 2WB=KONGSONREN/ASUS_Vivobook_S15",
+    "confirmed_by": "KR_APPROVAL_leg_identity"
+  },
+  "live_absolute_path": "C:\\Users\\59605\\.wb1\\mozi_v0.1",
+  "current_manifest_sha256": "25a4156cd3442c9edb59e1ac1f7543e92dd278b972364ab13698f949fac95025",
+  "approved_manifest_sha256": "25a4156cd3442c9edb59e1ac1f7543e92dd278b972364ab13698f949fac95025",
+  "manifest_sha_match_approved": true,
+  "live_components": {
+    "contract_v0.1.json": {
+      "sha256": "791754a7a582284e835b417f9ec164147dc24c78e21a131abd28dcdfc0fd11aa",
+      "size": 15236,
+      "mtime": "2026-10-04T00:49:57.331078",
+      "abs_path": "C:\\Users\\59605\\.wb1\\mozi_v0.1\\contract_v0.1.json"
+    },
+    "src/mozi.py": {
+      "sha256": "1e4bddf37476a347e5bbe3b38d45baf6ff264b5b9d57f73c1aa1257a61e8477f",
+      "size": 4464,
+      "mtime": "2026-10-04T00:49:57.332077",
+      "abs_path": "C:\\Users\\59605\\.wb1\\mozi_v0.1\\src\\mozi.py"
+    },
+    "src/compiler.py": {
+      "sha256": "2004c318ca316e32c5f7c9fc368b0861eaecfe152a803b50efa59a6ba0bef402",
+      "size": 10263,
+      "mtime": "2026-10-04T00:49:57.333579",
+      "abs_path": "C:\\Users\\59605\\.wb1\\mozi_v0.1\\src\\compiler.py"
+    },
+    "src/contract.py": {
+      "sha256": "f67b8bd79e5e6eafba58e85b0c92fcae95608a37eeca2491bbb2d1542a6c7d80",
+      "size": 1222,
+      "mtime": "2026-10-04T00:49:57.334581",
+      "abs_path": "C:\\Users\\59605\\.wb1\\mozi_v0.1\\src\\contract.py"
+    },
+    "src/executor.py": {
+      "sha256": "16d5a18d748d651dd1d7f9868de8f95db0291d4523195f1c2be297d30623a814",
+      "size": 3055,
+      "mtime": "2026-10-04T00:49:57.336083",
+      "abs_path": "C:\\Users\\59605\\.wb1\\mozi_v0.1\\src\\executor.py"
+    },
+    "src/result_gate.py": {
+      "sha256": "81c5b13acc6a9ebe41084ae992dd7d040e8ec3c3b79090d08a348ec9c9603ed0",
+      "size": 22578,
+      "mtime": "2026-10-04T00:49:57.338085",
+      "abs_path": "C:\\Users\\59605\\.wb1\\mozi_v0.1\\src\\result_gate.py"
+    },
+    "src/ledger.py": {
+      "sha256": "c05e6e812db24b0539b0af53f5c3ac45fa28bc3d2131457da1e44a80add2b8b9",
+      "size": 3859,
+      "mtime": "2026-10-04T00:49:57.338827",
+      "abs_path": "C:\\Users\\59605\\.wb1\\mozi_v0.1\\src\\ledger.py"
+    },
+    "wb1_local_exec_bridge.py": {
+      "sha256": "587eca1e543e8ed3a3466e259e2e4189199a2ff749531b16f1868500d46204fb",
+      "size": 25599,
+      "mtime": "2026-10-04T00:49:57.340830",
+      "abs_path": "C:\\Users\\59605\\.wb1\\mozi_v0.1\\wb1_local_exec_bridge.py"
+    },
+    "wb1_case002_nas.py": {
+      "sha256": "ab241239148b4f3af2bfba1e8155bae9d092d52503a5b442f39a3c96ebaf0be0",
+      "size": 6574,
+      "mtime": "2026-10-04T00:49:57.342830",
+      "abs_path": "C:\\Users\\59605\\.wb1\\mozi_v0.1\\wb1_case002_nas.py"
+    },
+    "wb1_case002_trace.py": {
+      "sha256": "2d13faefbc9964aa4959fe786f8fdf14ce7760aa2ba2fabaa66c62c403065814",
+      "size": 3577,
+      "mtime": "2026-10-04T00:49:57.343830",
+      "abs_path": "C:\\Users\\59605\\.wb1\\mozi_v0.1\\wb1_case002_trace.py"
+    }
+  },
+  "component_sha_vs_manifest": {
+    "contract_v0.1.json": true,
+    "src/mozi.py": true,
+    "src/compiler.py": true,
+    "src/contract.py": true,
+    "src/executor.py": true,
+    "src/result_gate.py": true,
+    "src/ledger.py": true,
+    "wb1_local_exec_bridge.py": true,
+    "wb1_case002_nas.py": true,
+    "wb1_case002_trace.py": true
+  },
+  "live_component_sha_eq_rc1_manifest": true,
+  "import_resolved_bridge_nas_trace": {
+    "wb1_local_exec_bridge.py": {
+      "executing_abs_path": "C:\\Users\\59605\\.wb1\\wb1_local_exec_bridge.py",
+      "executing_sha256": "587eca1e543e8ed3a3466e259e2e4189199a2ff749531b16f1868500d46204fb",
+      "executing_size": 25599,
+      "deployed_copy_abs_path": "C:\\Users\\59605\\.wb1\\mozi_v0.1\\wb1_local_exec_bridge.py",
+      "deployed_copy_sha256": "587eca1e543e8ed3a3466e259e2e4189199a2ff749531b16f1868500d46204fb",
+      "import_resolution_match": true
+    },
+    "wb1_case002_nas.py": {
+      "executing_abs_path": "C:\\Users\\59605\\.wb1\\wb1_case002_nas.py",
+      "executing_sha256": "ab241239148b4f3af2bfba1e8155bae9d092d52503a5b442f39a3c96ebaf0be0",
+      "executing_size": 6574,
+      "deployed_copy_abs_path": "C:\\Users\\59605\\.wb1\\mozi_v0.1\\wb1_case002_nas.py",
+      "deployed_copy_sha256": "ab241239148b4f3af2bfba1e8155bae9d092d52503a5b442f39a3c96ebaf0be0",
+      "import_resolution_match": true
+    },
+    "wb1_case002_trace.py": {
+      "executing_abs_path": "C:\\Users\\59605\\.wb1\\wb1_case002_trace.py",
+      "executing_sha256": "2d13faefbc9964aa4959fe786f8fdf14ce7760aa2ba2fabaa66c62c403065814",
+      "executing_size": 3577,
+      "deployed_copy_abs_path": "C:\\Users\\59605\\.wb1\\mozi_v0.1\\wb1_case002_trace.py",
+      "deployed_copy_sha256": "2d13faefbc9964aa4959fe786f8fdf14ce7760aa2ba2fabaa66c62c403065814",
+      "import_resolution_match": true
+    }
+  },
+  "import_resolution_pass": true,
+  "router_rules": {
+    "path": "C:\\Users\\59605\\.wb1\\router_rules.json",
+    "sha256": "c2e3e5b24bf7050ac5444a0bbabfec10889acbbf05055d429249e7b281b9909b",
+    "size": 4145,
+    "build_baseline_sha256": "c2e3e5b24bf7050ac5444a0bbabfec10889acbbf05055d429249e7b281b9909b",
+    "config_drift": false
+  },
+  "running": true,
+  "mode": "READ_ONLY",
+  "runtime_config_drift": false,
+  "wb1_side_summary": {
+    "LIVE_COMPONENT_SHA_EQ_RC1_MANIFEST": true,
+    "IMPORT_RESOLUTION": "PASS",
+    "UNDECLARED_CODE_DRIFT": 0,
+    "RUNTIME_CONFIG_DRIFT": 0
+  },
+  "verification_note": "本证据由 1WB 在 host KR 现场实算生成；2WB 须在 host KONGSONREN 独立取回归档并复核。"
+}
