@@ -1,0 +1,28 @@
+{
+  "release_id": "MOZI-V0.1-RC1",
+  "builder_version": "rc1-artifact-builder-v4-hardened",
+  "review_artifact_filename": "MOZI-V0.1-RC1__25a4156c.review.zip",
+  "review_artifact_sha256": "58abcf9246a1e4dc8993f36e9a90e97ddab3920b7c54867e8c0ef66ab49bdb1a",
+  "review_artifact_size": 40504,
+  "entry_count": 14,
+  "manifest_sha256": "25a4156cd3442c9edb59e1ac1f7543e92dd278b972364ab13698f949fac95025",
+  "allowlist": [
+    "RELEASE_MANIFEST.json",
+    "contract_v0.1.json",
+    "src/mozi.py",
+    "src/compiler.py",
+    "src/contract.py",
+    "src/executor.py",
+    "src/result_gate.py",
+    "src/ledger.py",
+    "wb1_local_exec_bridge.py",
+    "wb1_case002_nas.py",
+    "wb1_case002_trace.py",
+    "config/router_rules.json",
+    "CLOSURE_CHECK.txt",
+    "audit/dependency_closure_report.md"
+  ],
+  "component_sha_vs_v3": "IDENTICAL",
+  "build_timestamp": "2026-10-03T15:56:22Z",
+  "note": "Transport Receipt 在包外，不与 ZIP 自引用；2WB 增量复核以本 receipt 的 zip_sha/manifest_sha 为预期值。"
+}
