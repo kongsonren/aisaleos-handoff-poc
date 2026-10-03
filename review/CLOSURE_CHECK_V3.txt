@@ -1,0 +1,12 @@
+[PASS] C1 contract_anchor==bridge_sha(587)
+[PASS] C1b bridge action source_hash==587
+[PASS] C2 NAS_ARCHIVE code dep (wb1_case002_nas) registered
+[PASS] C2b transitive code dep (wb1_case002_trace) registered
+[PASS] C3 10 code components present
+[PASS] C4 config dep declared + snapshotted
+[PASS] C5 all runtime deps have verification_rule
+[PASS] C6 history UNKNOWN preserved
+[PASS] C7 contract size corrected 14397->15236
+[PASS] C8 runtime dependency closure declared (>=6)
+MANIFEST_CLOSURE=PASS
+RUNTIME_DEPENDENCY_CLOSURE=PASS
