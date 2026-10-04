@@ -86,6 +86,27 @@ DOES_NOT_PROVE   = 不证明这些资产不存在（源文件在建造机）；�
 
 ---
 
+## H-14｜自选下一刀的即时产出：两条美国在先技术（SIGNAL 级，需核原始公开号）
+
+```
+SOURCE_DATE      = 2026-10-05 检索
+SOURCE_VERSION   = Patents-Review 聚合站转述（**二手源，未核到 USPTO 原始公开文本**）
+STATE            = UNKNOWN（公开号需回原始源核验后才可升级为 FACT）
+PROVES           = 存在两条与 KR 窄口 Delta 高度接近的美国在先技术：
+                   ① US20260147682「AI 执行与操作的选择性脱离」：monitoring→resilience→disengagement 三单元；
+                      参数越阈值→通知→按 disengagement level + 风险分析→**全部或部分禁用** AI 执行；
+                   ② 「Autonomous machine identity and authority protocol with constraint-bound execution
+                      enforcement and **verifiable execution receipts**」：机器身份+权限协议+约束绑定执行+
+                      **加密可验证执行回执**（把授权决定与运行时上下文摘要密码学绑定、可独立复验）
+DOES_NOT_PROVE   = 二手转述不等于权利要求原文；未经 ELEMENT_MATCH 前不构成碰撞；不证明 KR 落入
+```
+
+**⚠ 对既有结论的冲击（必须回炉，供 1WB 裁）**：
+V0.7/V0.8 把「跨机器 REAL 回执」列为 P06 的**窄口 Delta（仍 REAL）**。第②条若原文确含 "verifiable execution receipts" 且覆盖跨节点场景，则**该窄口 Delta 可能已被教**，P06 的窄口需重判；同理 P17/P24 中"REAL 回执/取证固化"相关窄口也需复查。
+→ 这是前腿**据 REAL 主动回撤自己上一轮结论的口径**，不是新增战果，请 1WB 优先核这两条的原始公开文本。
+
+---
+
 ## 前腿声明
 
 - 零付款 / 零购买 / 零对外承诺 / 零生产变更 / 零凭证使用 / 零主权账户登录。全批只读。
