@@ -551,7 +551,5 @@
     5955471531,
     5957482719
   ],
-  "PENDING_ACKS": [],
-  "same_trace_id": "TRACE-1WB-20261004T043925Z-6246-1393b3",
-  "same_trace_injected_at": "2026-10-04T04:39:25.838543Z"
+  "PENDING_ACKS": []
 }
