@@ -1,0 +1,112 @@
+{
+  "object_id": "MOZI_V1",
+  "build_id": "MOZI_V1_BUILD_003",
+  "supersedes": "MOZI_V1_BUILD_002",
+  "supersede_reason": "V3 §二/§三/§四 代码改动：六维健康模型、八字段诊断门、自检六项指标",
+  "state": "CURRENT",
+  "root_path": "E:\\AISALEOS-Vault\\80-Code\\mozi-v1",
+  "source_version": "internal v1 package (no external source dependency)",
+  "created_at": "2026-10-05T13:06:55.262283+08:00",
+  "file_count": 9,
+  "sealed_files": [
+    {
+      "rel": "mozi_v1/__init__.py",
+      "sha256": "b98897426e37daa5494b51b288f3d39e2460e6dbe0e83a72c54b60aef8a19c2b",
+      "size": 1120
+    },
+    {
+      "rel": "mozi_v1/core.py",
+      "sha256": "a746ef91d6a3c7930c5b85d9c0b6df0e2c969381db204dda93eb083b7cce71b2",
+      "size": 14549
+    },
+    {
+      "rel": "mozi_v1/models.py",
+      "sha256": "de48eeb245146b30a92999e87a908931322b9fa187d75015362acec751b0d1c2",
+      "size": 6604
+    },
+    {
+      "rel": "mozi_v1/permissions.py",
+      "sha256": "6ce8c4e580008a027e969f9df4872dc742520ea81feff02f6bc16ab150898047",
+      "size": 3737
+    },
+    {
+      "rel": "mozi_v1/recovery.py",
+      "sha256": "0bfda2067f1b6281912805544beab6e0149de713b712dee9385da12d430cf6da",
+      "size": 7546
+    },
+    {
+      "rel": "mozi_v1/runtime.py",
+      "sha256": "bd1dd0a58af2844b8fff168ee1d66ccbd9d4d1a15d44b7f966f71061a40f3337",
+      "size": 8756
+    },
+    {
+      "rel": "tests/test_v1.py",
+      "sha256": "3945a32c14a78d4138a39a68dd1bce778537bcf4190ba9f48e2675589eda759f",
+      "size": 12732
+    },
+    {
+      "rel": "PERMISSIONS.md",
+      "sha256": "5eab39bd354f516aa557a08ef47bc5d693becf01cadefdbf4d61ecc8925776f9",
+      "size": 1929
+    },
+    {
+      "rel": "BUILD_REPORT.md",
+      "sha256": "0a20183b0ac8848bc2f02374ffadbb47d138b0505f2468fe46811bf074379194",
+      "size": 5631
+    }
+  ],
+  "modules": [
+    "HEART",
+    "WATCH_REGISTRY",
+    "HEALTH_MODEL",
+    "PRE_DIAGNOSIS_SNAPSHOT",
+    "DIAGNOSIS",
+    "INCIDENT_LEDGER",
+    "DEDUP",
+    "RECOVERY_POLICY",
+    "VERIFY",
+    "ROLLBACK",
+    "BACKOFF",
+    "CIRCUIT_BREAKER",
+    "ESCALATION"
+  ],
+  "modules_present": 13,
+  "test_total": 21,
+  "test_pass": 21,
+  "test_fail": 0,
+  "six_dimensional_health": [
+    "TASK_STATE",
+    "AGENT_STATE",
+    "RUNTIME_STATE",
+    "DEPENDENCY_STATE",
+    "DATA_FRESHNESS",
+    "SERVICE_REACHABILITY"
+  ],
+  "diagnosis_gate": "8 fields + NO_RECOVERY when confidence<0.6 or no evidence",
+  "self_inspection": [
+    "MOZI_HEARTBEAT",
+    "LAST_GOOD",
+    "LAST_LOOP",
+    "LOOP_LAG",
+    "ERROR_COUNT",
+    "RESTART_COUNT"
+  ],
+  "external_observation_only": "observe_mozi_heart() not wired into any recovery path",
+  "legacy_defect": "CONFIRMED (old mozi_watch.py age-only; TASK_STATE==AGENT_STATE; DONE->OFFLINE; no ROOT_CAUSE)",
+  "permission_state": {
+    "L0": "ENABLED",
+    "L1": "ENABLED",
+    "L2": "ENABLED",
+    "L3": "DISABLED whitelist=[]",
+    "L4": "KR_GATE",
+    "L5": "KR_ONLY"
+  },
+  "recovery_authorized": false,
+  "current_heart_touched": false,
+  "known_limitations": [
+    "BUILD_COMPLETE != RECOVERY_AUTHORIZED (L3/L4/L5 默认关，白名单空)",
+    "LEGACY_DEFECT 隔离确认，不影响 V1",
+    "六维中 RUNTIME/DEPENDENCY/SERVICE 维度依赖外部上下文输入，缺省 UNKNOWN"
+  ],
+  "final_result": "COMPLETE"
+}

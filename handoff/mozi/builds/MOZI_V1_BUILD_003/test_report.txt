@@ -1,0 +1,23 @@
+[T1] 13 模块齐全                                    PASS | modules=13 missing=[]
+[T2] L3 默认关闭 + 白名单为空                            PASS | L3.enabled=False L3.whitelist=[]
+[T3] L3 动作只开票不执行                                PASS | health=DEGRADED l3=['tighten_poll_interval'] tickets=1 executed=[]
+[T4] 无数据 → UNKNOWN（不臆造）                         PASS | health=UNKNOWN evidence={'beats': 0, 'note': '无心跳样本：不臆造健康度、不臆造下线'}
+[T5] DEDUP 窗口内抑制重复                              PASS | rows 1→1 suppressed=1
+[T6] 事件账本哈希链可验                                  PASS | rows=2 chain_ok=True rules=['R_LATE', 'R_SILENCE']
+[T7] 冻结快照 → 诊断确定性                               PASS | fp=d5169e24cd0b4361
+[T8] 回滚计划生成但执行被拦                                PASS | steps=['restore_previous_interval'] executed=False result=BLOCKED_NOT_AUTHORIZED
+[T9] BACKOFF 单调退避                               PASS | delays=[1.032, 2.03, 4.26, 8.058, 16.857]
+[T10] CIRCUIT_BREAKER 达阈值跳闸                      PASS | state=open allows=False
+[T11] 升级目标 L4→KR_GATE / L5→KR_ONLY               PASS | L4→KR_GATE L5→KR_ONLY
+[T12] L2 动作确实可执行                                 PASS | executed=['mark_watch_unknown'] breaker=closed
+[T13] BUILD_COMPLETE ≠ RECOVERY_AUTHORIZED       PASS | L3_closed=True(期望True) tickets=1 executed=[]
+[T14] 静默→UNHEALTHY→R_SILENCE 走 L2                PASS | health=UNHEALTHY findings=['R_SILENCE'] executed=['probe_and_report']
+[T15] 六维健康模型齐全                                   PASS | dims=['DONE', 'UNKNOWN', 'UNKNOWN', 'UNKNOWN', 'NO_DATA', 'UNKNOWN']
+[T16] 禁 TASK_STATE→AGENT_STATE；无证据=UNKNOWN       PASS | no_data_agent=UNKNOWN stale_agent=STALE task=DONE
+[T17] GENUINE_IDLE 独立（≠FAILURE/STALE/OFFLINE）    PASS | agent=GENUINE_IDLE
+[T18] 诊断门八字段 + 无证据 UNKNOWN/NO_RECOVERY           PASS | likely=UNKNOWN dec=NO_RECOVERY_NEXT_TEST_ONLY
+[T19] 静默有证据→RECOVERY_OK 建议仍被权限拦                  PASS | likely=HEARTBEAT_GAP_EXCEEDS_THRESHOLD dec=RECOVERY_OK l3_unexec=True
+[T20] 自检六项 + 重启内部不自增 + 外部观察                      PASS | si={'MOZI_HEARTBEAT': True, 'LAST_GOOD': 1000.0, 'LAST_LOOP': 1000.0, 'LOOP_LAG': 0.0, 'ERROR_COUNT': 0, 'RESTART_COUNT': 0, 'LOOP_COUNT': 2} obs={'MOZI_HEART_STALE': True, 'reason': 'LAG=1000.0/TH=100.0'}
+[T21] 多轮 loop/lag 正确，restart 仍 0                 PASS | si={'MOZI_HEARTBEAT': True, 'LAST_GOOD': 1005.0, 'LAST_LOOP': 1005.0, 'LOOP_LAG': 1.0, 'ERROR_COUNT': 0, 'RESTART_COUNT': 0, 'LOOP_COUNT': 5}
+
+TOTAL=21 PASS=21 FAIL=0
