@@ -1,0 +1,19 @@
+{
+  "object_id": "MOZI_V1",
+  "build_id": "MOZI_V1_BUILD_003",
+  "repo": "kongsonren/aisaleos-handoff-poc",
+  "branch": "handoff-state",
+  "pointer_ref": "handoff-state",
+  "artifact_root_sha": "e63fce615957d91bd0ab74ca1e08b77895bb7e97",
+  "commit_sha": "448a0dcfedc41a4908e3ac2ba79b6e535ef27d52",
+  "manifest_sha": "19dab0eed896f831df8d56d8f03fc22ac8d56d1832fd7151b247f9ec7e9c5806",
+  "seal_sha": "00cbb9198b6f0204424f70938ae4d30b325c0f813742f762ccc253b7488ffd5b",
+  "file_count": 9,
+  "artifact_uri": "https://github.com/kongsonren/aisaleos-handoff-poc/tree/448a0dcfedc41a4908e3ac2ba79b6e535ef27d52/handoff/mozi/builds/MOZI_V1_BUILD_003",
+  "raw_base": "https://raw.githubusercontent.com/kongsonren/aisaleos-handoff-poc/448a0dcfedc41a4908e3ac2ba79b6e535ef27d52/handoff/mozi/builds/MOZI_V1_BUILD_003",
+  "published_at": "2026-10-05T17:35:08.295762+08:00",
+  "immutable": true,
+  "anchor_tag": "mozi-v1-build-003",
+  "discovery_note": "2WB 读取本 Pointer 后，按 commit_sha 取 builds 子树 → 校验 SEAL.sha256 与 MANIFEST.json → 攻击。勿依赖本地 E:\\ 路径或旧 GitHub main。",
+  "local_pointer_only_for_1wb": "E:\\AISALEOS-Vault\\handoff\\mozi\\CURRENT_MANIFEST_POINTER.json"
+}
