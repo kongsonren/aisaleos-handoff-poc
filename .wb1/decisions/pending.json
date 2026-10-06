@@ -39,6 +39,16 @@
       "created_at": "2026-10-06T03:50:45Z",
       "reason": "主权/高风险/不可逆/权限边界，云端1号无权自决",
       "summary": "[NAS-EGRESS][EVENT_ID=NAS-EGRESS-STAGE-B-REALASSET-001][ASSET_ID=1WB_内守七星今日战场图_v0.1.md][SOURCE_SHA256=402ff54175b75e7d999bc30a6f9166675d4767835a6a7fef379905ebd61377f2][KR_RELAY=0]\nDESTINATION=github:issue#6\nMESSAGE_TYPE=KR_BUSINESS_DOC_EGRESS\nCREATED_AT=2026-09-21T10:29:37+08:00\nNAS_RAW_PATH=\\192.168.2.107\\AI-SalesOS 仓库\\AISALEOS_SHARED\\1WB_内守七星今日战场图_v0.1.md\n---PAYLOAD_BEGIN---\n# 1WB｜内守七星今日战场图 v0.1\n\n> **制式**：侦察日 2026-09-15 ｜ 侦察方 1WB（黑武士·本机1号机）｜ 方式=只读侦察，零施工\n> **心跳**：5分钟心跳（WB1_Issue6_5Min_Heartbeat）封盘自跑，与本图无关，不施工\n> **纪律**：不脑补、原始证据优先；看不到的就是 UNKNOWN，不填满七星\n\n---\n\n## 〇、总判（一句话）\n七星里 **⑤机器互通已封盘为运行保障**；**"
+    },
+    {
+      "id": "CLOUD-WB1-GATE-1791258652",
+      "source_comment_id": 5754809371,
+      "tag": "NAS-EGRESS",
+      "class": "KR_GATE",
+      "status": "PENDING",
+      "created_at": "2026-10-06T03:50:52Z",
+      "reason": "主权/高风险/不可逆/权限边界，云端1号无权自决",
+      "summary": "[NAS-EGRESS][EVENT_ID=NAS-EGRESS-NATURAL-TICK-001][ASSET_ID=natural_tick_probe.txt][SOURCE_SHA256=79c757ef0f22f3712a1f0f8d19206ef9c47fa455c811ba659a578effa93804c5][KR_RELAY=0][KR_MANUAL_RUN=0]\nDESTINATION=github:issue#6\nMESSAGE_TYPE=E2E_TEST_NATURAL_TICK\nCREATED_AT=2026-09-21T10:58:04+08:00\nNAS_RAW_PATH=\\192.168.2.107\\AI-SalesOS 仓库\\AISALEOS_SHARED\\NAS_EGRESS_OUTBOX\\_test\\natural_tick_probe.txt\n---PAYLOAD_BEGIN---\nNAS_EGRESS_NATURAL_TICK_PROBE\ngenerated_at=2026-09-21T10:58:04+08:00\npurpose=verify REAL scheduler auto-tick delivery (KR_MANUAL_RUN=0)\nKR_RELAY=0\n\n---PAYLOAD_END---"
     }
   ]
 }
