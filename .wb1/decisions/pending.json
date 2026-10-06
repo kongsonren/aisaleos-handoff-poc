@@ -9,6 +9,16 @@
       "created_at": "2026-10-06T03:50:26Z",
       "reason": "主权/高风险/不可逆/权限边界，云端1号无权自决",
       "summary": "[CLOCK][1WB]\nNODE=1WB\nGENERATED_AT=2026-09-19T22:39:13+08:00\nSTATUS_SOURCE=NAS_REAL\nSOURCE_HASH=453b04bb0116d46d\nKR_MANUAL_RUN=1\nKR_ACCEPTANCE_TRIGGER=1\nKR_RELAY=0"
+    },
+    {
+      "id": "CLOUD-WB1-GATE-1791258633",
+      "source_comment_id": 5742844217,
+      "tag": "CLOCK",
+      "class": "KR_GATE",
+      "status": "PENDING",
+      "created_at": "2026-10-06T03:50:33Z",
+      "reason": "主权/高风险/不可逆/权限边界，云端1号无权自决",
+      "summary": "[CLOCK][1WB]\nNODE=1WB\nGENERATED_AT=2026-09-19T22:55:29+08:00\nSTATUS_SOURCE=NAS_REAL\nSOURCE_HASH=b9c41a1cf03f001d\nKR_MANUAL_RUN=1\nKR_RELAY=0\nKR_ACCEPTANCE_TRIGGER=1"
     }
   ]
 }
