@@ -1,98 +1,14 @@
-[
-  {
-    "decision_id": "D-CLOUD-20260923-185147",
-    "title": "KR_GATE 主权/高风险决策待 KR 裁定",
-    "status": "WITHDRAWN",
-    "created_at": "2026-09-23T18:51:47Z",
-    "source_comment_id": 5800425913,
-    "kr_entry": "KR 请就决策卡 D-CLOUD-20260923-185147 回复：[KR_DECISION] D-CLOUD-20260923-185147 CHOICE=A|B|STOP TEXT=<说明>",
-    "source_body_excerpt": "[HAI→1WB][TASK]\nREF=8051-LIVE-IN-REAL-HOME-20260924-001\nKR已授权：今晚开干。主内：继续8051“带住户装修”，目标不是继续画页面，而是让真实外部事件能回家、KR能看见并穿透原始证据。\n\n优先处理既有阻塞：\n- 配对任务 REF=1WB-RECEIVE-ONE-REAL-HOME-20260924-001 已到达但 HELD_NON_EXECUTABLE / SUBTYPE_NOT_MAPPED。\n- 在不新增KR主权、不扩大权限的前提下，用最小可逆方式恢复实际执行链；机器链卡住时允许明确报出最小人工唤醒动作，不要空等。\n\n今晚验收主链：\n外部REAL → 1WB真实接收 → 完整性校验 → 8051外部场最小呈现 → KR可穿透到RAW_EVIDENCE。\n必须区分 TRANSPORT / CONTENT / MEANING integrity；“写回成功”不得冒充内容完整。\n\n施工纪律：\n1. 8051继续边住边装，不做大重构，不重做五场。\n2. 只呈现对KR/企业有意义的业务状态，不灌原始技术噪音。\n3. 原始证据必须可追溯；UNKNOWN不脑补。\n4. 低风险可逆微调可继续；权限、生产、高风险、不可逆动作 STOP。\n5. 机器能走机器；机器链不通就报告最小“肉唤醒”动作，业务不因追求KR_RELAY=0而停摆。\n6. 与2WB今晚生态收发室勘探保持可接驳：为未来“微信/抖音收发节点 → AISALEOS → 8051”预留最小接收契约，但不要凭空造平台数据。\n\n输出：\n- REAL链当前走到哪一层\n- 已完成证据\n- UNKNOWN/BLOCKER\n- KR若需动作，只给最小动作\n- 下一步可逆施工\nSTATUS用 REAL / UNKNOWN / FAIL，不用漂亮话。",
-    "withdrawn_at": "2026-09-23T18:56:20Z",
-    "withdrawn_reason": "MISROUTE_CORRECTED: source is [HAI→1WB][TASK]=SELF_SOLVE, not KR_GATE; KR authority preserved, no KR decision required"
-  },
-  {
-    "decision_id": "D-CLOUD-20260923-185204",
-    "title": "KR_GATE 主权/高风险决策待 KR 裁定",
-    "status": "WITHDRAWN",
-    "created_at": "2026-09-23T18:52:04Z",
-    "source_comment_id": 5800625328,
-    "kr_entry": "KR 请就决策卡 D-CLOUD-20260923-185204 回复：[KR_DECISION] D-CLOUD-20260923-185204 CHOICE=A|B|STOP TEXT=<说明>",
-    "source_body_excerpt": "[HAI→1WB][TASK]\nREF=8051-LIVE-IN-REAL-HOME-ACTIONFIX-20260924-001\nSOURCE_TASK=5800425913\nKR指令：别等，继续干。\n\nACTION=REPROCESS_COMMENT\nTARGET=5800425913\n\n执行意图不变：重新处理今晚8051“带住户装修”任务。优先让一件外部REAL真实回家，并验证 TRANSPORT / CONTENT / MEANING integrity；8051最低呈现后KR能穿透RAW_EVIDENCE。\n\n若REPROCESS后仍因现有路由能力不能承载业务施工，不循环、不脑补；立即回最小BLOCKER及下一条可执行ACTION。低风险可逆修复可继续，高风险/扩权STOP。",
-    "withdrawn_at": "2026-09-23T18:56:20Z",
-    "withdrawn_reason": "MISROUTE_CORRECTED: source is [HAI→1WB][TASK]=SELF_SOLVE, not KR_GATE; KR authority preserved, no KR decision required"
-  },
-  {
-    "decision_id": "D-CLOUD-20260929-0147-SOV",
-    "title": "KR主权令·令牌路由边界·已接受待机器REAL验证",
-    "status": "ACCEPTED_AWAITING_MACHINE_REAL",
-    "created_at": "2026-09-29T01:58:59Z",
-    "source_comment_id": 5881418840,
-    "sovereignty_rule": "看见≠接令；收到≠授权；机器互通≠机器互授执行权。TARGET=2WB/HAI→2WB 令牌 1WB 仅识别为可见信息，不得入1WB执行队列、不得SELF_SOLVE、不得代执行；仅 KR 明确授权且 TARGET 与本腿一致才进入该腿执行链。",
-    "machine_real": {
-      "TOKEN_ROUTING_1WB_REJECT_2WB": "PASS (云端1号 classify 已修 + 回归测试通过)",
-      "TOKEN_ROUTING_2WB_ACCEPT_2WB": "UNKNOWN (2WB域, 1WB不伪造)",
-      "2WB_AUTO_PICKUP": "UNKNOWN (2WB域, 1WB不伪造)",
-      "SAFE_TO_POWER_OFF_2WB": "UNKNOWN (2WB域, 1WB不伪造)",
-      "EVIDENCE": "cloud watchdog classify 补 sovereign/NON_MY_TOKEN 路由 + 8例回归 PASS"
-    },
-    "note": "本卡为 KR 已决策之主权规则接受记录，非待 KR 二选一裁决；1WB 不伪造 2WB 域验证结果。"
-  },
-  {
-    "DECISION_ID": "D-20260929-85641",
-    "title": "# 【KR→2WB前腿｜AISALEOS IP黑窝 50+30｜外部探矿令】",
-    "status": "WITHDRAWN",
-    "source_comment_id": 5897285641,
-    "created_at": "2026-09-29T19:36:38Z",
-    "withdrawn_at": "2026-09-29T20:01:39Z",
-    "withdrawn_reason": "MISROUTE_CORRECTED: source 5897285641 TARGET=2WB, out of 1WB authority per sovereign token-routing (D-CLOUD-20260929-0147-SOV); KR already authorized 2WB directly; no KR_GATE; treated as visible-only."
-  },
-  {
-    "DECISION_ID": "D-20260929-86987",
-    "title": "【HAI→1WB｜存档令｜国庆7天双轮自治作战令 V1.0】",
-    "status": "WITHDRAWN",
-    "source_comment_id": 5898086987,
-    "created_at": "2026-09-29T20:22:49Z",
-    "withdrawn_at": "2026-09-29T21:10:11Z",
-    "withdrawn_reason": "MISROUTE_CORRECTED: 源评论 5898086987 为 AUTH=KR_EXPLICIT_ARCHIVE / TARGET=1WB / CLASS=ARCHIVE, KR 已显式授权; 旧分类被正文 CONTENT_ANCHOR 中'KR保主权不保按钮'的'主权'字样误触发 KR_GATE. 实际已由黑武士腿执行并 ARCHIVE_REAL=PASS(见 #5898198556). 无需 KR 决策."
-  },
-  {
-    "decision_id": "D-5944792135",
-    "status": "WITHDRAWN",
-    "created_at": "2026-10-02T03:08:04Z",
-    "source_comment_id": 5944792135,
-    "summary": "[TO-1WB] Please continue the previously assigned open work in comments 5934272860 and 5934385066. Report the current execution status and evidence. KR_RELAY=0.",
-    "kr_entry": "请 KR 在手机企微/Issue 决策。回执格式：[KR_DECISION] D-5944792135 CHOICE=A|B|STOP TEXT=<说明>",
-    "withdrawn_at": "2026-10-02T03:12:06Z",
-    "withdrawn_reason": "Misclassified by cloud watcher: inbound comment 5944792135 is a [TO-1WB] autonomy directive (KR_RELAY=0), not a KR sovereignty/high-risk gate. Classifier's broad 'kr' substring matched KR_RELAY=0. Correct class = SELF_SOLVE. No KR decision required."
-  },
-  {
-    "decision_id": "D-5948314773",
-    "status": "WITHDRAWN",
-    "created_at": "2026-10-02T18:08:28Z",
-    "source_comment_id": 5948314773,
-    "summary": "[HAI-DOWN-SHIFT-SPLIT]\nDATE=2026-10-02\nREF=HAI-DOWN-SHIFT-20261002-001-SPLIT\nKR_RELAY=0\n\n# 拆｜本钟进入500候选\n\n先关联、后查重；本条只登记候选/更新关系，不虚增500编号。\n\n1. 钢印100｜关联/强化候选\n- 有令有果：本钟出现真实 ORDER→ACK→EXECUTE→RESULT 链，强化“无果之令皆为债；无证之果不算果”。\n- 嗨上下钟：本次发现“仅存+总结、未拆”只能 PARTIAL，强化“下钟=存/拆/总结，有始有终”。\n- KR去人肉：两腿点火后 KR_RELAY=0，进入离场自治验收；注意这是实践进展，不等于长期自治已PASS。\n\n2. 模式100｜候选\n- 双腿自攻｜墨子管账｜嗨问墨子｜KR掌主权。\n- 机器故障分层：SEND/RECEIVE/CLASSIFY/DISPATCH/EXECUTE/RESULT/EVIDENCE。\n- OBSERVATION_DEGRADED != NO_NEW_ORDER。\n\n3. 未来100｜关联\n- 墨子成为统一机器状态/债/果查询面；KR问嗨，嗨先问墨子。\n- 双腿在KR离场后持续自治。\n\n4. 专著100｜素材关联\n- 2026-10-02“双腿点火、墨子上位”可作为KR AI组织演进实录素材；当前仅素材，不立新专著。\n\n5. 格言100｜不强增\n- 本钟无必要为了凑数新增格言；避免同义增数。\n\nDEDUP_STATUS=PENDING_OBSIDIAN/NAS_SOURCE_CHECK\nNEW_COUNT=0\nACTION=RELATE_AND_STAGE_ONLY\n",
-    "kr_entry": "请 KR 在手机企微/Issue 决策。回执格式：[KR_DECISION] D-5948314773 CHOICE=A|B|STOP TEXT=<说明>",
-    "withdrawn_reason": "false_kr_gate_misroute_2026-10-03 (sovereignty keyword false-fire on descriptive/negated text); no KR disturbance",
-    "withdrawn_at": "2026-10-02T18:13:34.982829Z"
-  },
-  {
-    "decision_id": "D-5948317258",
-    "status": "WITHDRAWN",
-    "created_at": "2026-10-02T18:08:49Z",
-    "source_comment_id": 5948317258,
-    "summary": "[HAI-DOWN-SHIFT-FINAL]\nDATE=2026-10-02\nREF=HAI-DOWN-SHIFT-20261002-001-FINAL\nKR_RELAY=0\nMODE=HOURLY_SHIFT_CLOSE\n\n# 下钟最终总结｜存・拆・总结\n\n存：\n- 本钟REAL/总令/债已存 #6。\n- 前次总结=5948276339，已回读。\n- 拆件=5948314773。\n\n拆：\n- 500仅登记关联/候选，不虚增编号。\n- 钢印：有令有果、嗨上下钟、KR去人肉实践进展。\n- 模式：双腿自攻→墨子管账→嗨问墨子→KR掌主权；执行链分层；OBSERVATION_DEGRADED≠NO_NEW_ORDER。\n- 未来：墨子统一查询面、双腿KR离场自治。\n- 专著：2026-10-02双腿点火/墨子上位作为演进素材。\n- 格言：本钟不为凑数新增。\n- 查重状态=PENDING_OBSIDIAN/NAS_SOURCE_CHECK，故NEW_COUNT=0。\n\n本钟果：\n1. 1WB真实路由/执行链恢复并重消费墨子返工债。\n2. 2WB 5946969178形成 ORDER→ACK→EXECUTOR→RESULT。\n3. 总令 #6=5948255884；镜像 #8=5948257756。\n4. KR_RELAY=0，双腿进入离场自治验收。\n\nOPEN_DEBT：\nA 双腿自然周期持续自治。\nB 墨子完整一钟、统一STATUS、幂等/无重复/无主权误触。\nC 火山/方舟PLAN_V0.1与核验事实/UNKNOWN/MIN_POC/KR_GATE。\nD 50+30旧债续跑，不重开80条。\n\nNEXT_SHIFT_BOOT：\n先读本条 → 理当前REAL → 对OPEN_DEBT → 优先查墨子统一状态；墨子查询未成则明确OPEN → 收双腿RESULT/EVIDENCE；不靠",
-    "kr_entry": "请 KR 在手机企微/Issue 决策。回执格式：[KR_DECISION] D-5948317258 CHOICE=A|B|STOP TEXT=<说明>",
-    "withdrawn_reason": "false_kr_gate_misroute_2026-10-03 (sovereignty keyword false-fire on descriptive/negated text); no KR disturbance",
-    "withdrawn_at": "2026-10-02T18:13:34.982841Z"
-  },
-  {
-    "decision_id": "D-5957482719",
-    "status": "WITHDRAWN",
-    "created_at": "2026-10-02T18:09:21Z",
-    "source_comment_id": 5957482719,
-    "summary": "【1WB｜KR_DIRECTIVE_ACK + BOUNDARY】REF=5955471531  MOZI-V0.1-R4-FIX\nSTATUS=RECEIVED_REGISTERED / EXEC=DOMAIN_FOREIGN / KR_GATE=NO\n\n1. 已收 KR 指令 5955471531（墨子 V0.1 R4 最小整改令：刀一订单唯一性硬边界 DUPLICATE_ORDER_REJECTED；刀二 Evidence 绑定身份+内容；只整改与测试、禁止部署），已登记 kr_directive_queue.json。\n\n2. 边界判定：1WB 国庆令授权域 = 本地CODE REAL / NAS / 8051 / 8090 / Artifact / 内部证据。mozi-core 属 JUDGE/mozi 域，1WB 对其保持 SHADOW/READ-ONLY（无本地克隆，仅远程只读回读；不启其 hourly、不改其源码）。R4 需修改 mozi-core 的 Ledger/process/executor/Evidence 源码——属域外代码变更，1WB 不执行、不越界替哪吒干业务。\n\n3. 需 KR 裁决路由：请指定 R4 整改归属——\n   (a) 路由至 mozi 属主 / JUDGE 域执行；或\n   (b) 明确授权 1WB 打破对 mozi-core 的 SHADOW/READ-ONLY、由 1WB 自行整改（符合令文“只整改与测试、禁止部署”）。\n\n4. 关联 REAL 上下文：墨子 5946709494 回读已于 5948032265 达 VERIFIED_READBACK_PASS——mozi-core@fe361a16e5 四文件在 1WB 控制链可读(200+sha)，JUDGE 早报 404 不可复现。1WB 对 mozi-core 的只读",
-    "kr_entry": "请 KR 在手机企微/Issue 决策。回执格式：[KR_DECISION] D-5957482719 CHOICE=A|B|STOP TEXT=<说明>",
-    "withdrawn_reason": "false_kr_gate_misroute_2026-10-03 (sovereignty keyword false-fire on descriptive/negated text); no KR disturbance",
-    "withdrawn_at": "2026-10-02T18:13:34.982844Z"
-  }
-]
+{
+  "cards": [
+    {
+      "id": "CLOUD-WB1-GATE-1791258626",
+      "source_comment_id": 5742744794,
+      "tag": "CLOCK",
+      "class": "KR_GATE",
+      "status": "PENDING",
+      "created_at": "2026-10-06T03:50:26Z",
+      "reason": "主权/高风险/不可逆/权限边界，云端1号无权自决",
+      "summary": "[CLOCK][1WB]\nNODE=1WB\nGENERATED_AT=2026-09-19T22:39:13+08:00\nSTATUS_SOURCE=NAS_REAL\nSOURCE_HASH=453b04bb0116d46d\nKR_MANUAL_RUN=1\nKR_ACCEPTANCE_TRIGGER=1\nKR_RELAY=0"
+    }
+  ]
+}
