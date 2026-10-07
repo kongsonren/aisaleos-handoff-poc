@@ -1,0 +1,26 @@
+{
+  "campaign": "CROSS_BUS_CLOSE_001",
+  "object_id": "ZIYA-REAL-001",
+  "selected_object": "MOZI_V1",
+  "version_build_id": "MOZI_V1_BUILD_003",
+  "version_state": "CURRENT",
+  "source_date": "2026-10-05",
+  "package_sha256": "8920c92e3c9792a92db01169a272ce2d522294ebeefb414b40970cf53837b7b4",
+  "published_at": "2026-10-07T17:11:02.353959+00:00",
+  "discovery_hint": "scan handoff/ subtree under handoff-state branch; discover ziya_real_001/",
+  "files": [
+    {
+      "name": "ZIYA-REAL-001_EVIDENCE_PACKAGE.json",
+      "sha256": "8920c92e3c9792a92db01169a272ce2d522294ebeefb414b40970cf53837b7b4"
+    },
+    {
+      "name": "ZIYA_001.result.json",
+      "sha256": "62b303d4bf4798ef126e44df5eab9e50a3c448a9fb8bc3c21a0a9a77f85f9532"
+    },
+    {
+      "name": "evidence_log.jsonl",
+      "sha256": "9116852c1da81e8866febc18e0c0baa31736b5a957ca0ca62282c48dd03795c5"
+    }
+  ],
+  "note": "declared values for 2WB independent recompute; ZIYA evidence published unmodified"
+}

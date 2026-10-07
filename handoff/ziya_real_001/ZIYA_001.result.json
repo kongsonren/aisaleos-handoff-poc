@@ -1,0 +1,12 @@
+{
+  "event_id": "ZIYA_001",
+  "type": "ZIYA_VERIFY",
+  "status": "PASS",
+  "started": "2026-10-07T16:50:44.545715+00:00",
+  "target": "E:\\AISALEOS-Vault\\20-Projects\\哪吒后轮\\ZIYA-REAL-001\\ZIYA-REAL-001_EVIDENCE_PACKAGE.json",
+  "expected_sha256": "8920c92e3c9792a92db01169a272ce2d522294ebeefb414b40970cf53837b7b4",
+  "actual_sha256": "8920c92e3c9792a92db01169a272ce2d522294ebeefb414b40970cf53837b7b4",
+  "match": true,
+  "note": "ZIYA-REAL-001 business payload verified through same exec chain",
+  "finished": "2026-10-07T16:50:44.546194+00:00"
+}

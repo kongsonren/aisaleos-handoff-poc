@@ -1,0 +1,101 @@
+{
+  "CAMPAIGN": "ZIYA-REAL-001",
+  "ROLE": "1WB_LOCAL_EXECUTOR",
+  "PACKAGE_KIND": "SOFTWARE_COPYRIGHT_EVIDENCE_PACKAGE",
+  "GENERATED_AT": "2026-10-07T17:49:00+08:00",
+  "SELECTED_OBJECT": "MOZI_V1",
+  "SELECTED_NAME_ZH": "墨子V1 健康观测与诊断系统",
+  "SELECTED_NAME_SUGGESTED_FILING": "墨子V1健康观测诊断软件V1.0（建议名，待KR核定）",
+
+  "object_id": "MOZI_V1",
+  "name_zh": "墨子V1 健康观测与诊断系统",
+  "code_location": "E:\\AISALEOS-Vault\\80-Code\\mozi-v1",
+  "version": {
+    "build_id": "MOZI_V1_BUILD_003",
+    "supersedes": "MOZI_V1_BUILD_002",
+    "source_version": "internal v1 package (no external source dependency)",
+    "state": "CURRENT"
+  },
+  "source": {
+    "type": "internal_v1_package",
+    "external_dependency": "none",
+    "source_date": "2026-10-05",
+    "created_at": "2026-10-05T13:06:55.262283+08:00",
+    "root_path_documented": "E:\\AISALEOS-Vault\\80-Code\\mozi-v1"
+  },
+  "code_sha256": {
+    "verification_method": "independent_recompute_by_1WB_on_2026-10-07; cross_checked_against_package_SEAL.sha256_and_MANIFEST.json (all match)",
+    "files": [
+      {"rel": "mozi_v1/__init__.py",        "size": 1120,  "sha256": "b98897426e37daa5494b51b288f3d39e2460e6dbe0e83a72c54b60aef8a19c2b"},
+      {"rel": "mozi_v1/core.py",            "size": 14549, "sha256": "a746ef91d6a3c7930c5b85d9c0b6df0e2c969381db204dda93eb083b7cce71b2"},
+      {"rel": "mozi_v1/models.py",          "size": 6604,  "sha256": "de48eeb245146b30a92999e87a908931322b9fa187d75015362acec751b0d1c2"},
+      {"rel": "mozi_v1/permissions.py",     "size": 3737,  "sha256": "6ce8c4e580008a027e969f9df4872dc742520ea81feff02f6bc16ab150898047"},
+      {"rel": "mozi_v1/recovery.py",        "size": 7546,  "sha256": "0bfda2067f1b6281912805544beab6e0149de713b712dee9385da12d430cf6da"},
+      {"rel": "mozi_v1/runtime.py",         "size": 8756,  "sha256": "bd1dd0a58af2844b8fff168ee1d66ccbd9d4d1a15d44b7f966f71061a40f3337"},
+      {"rel": "tests/test_v1.py",           "size": 12732, "sha256": "3945a32c14a78d4138a39a68dd1bce778537bcf4190ba9f48e2675589eda759f"},
+      {"rel": "PERMISSIONS.md",             "size": 1929,  "sha256": "5eab39bd354f516aa557a08ef47bc5d693becf01cadefdbf4d61ecc8925776f9"},
+      {"rel": "BUILD_REPORT.md",            "size": 5631,  "sha256": "0a20183b0ac8848bc2f02374ffadbb47d138b0505f2468fe46811bf074379194"},
+      {"rel": "MANIFEST.json",              "size": 3390,  "sha256": "2baf23f8fd89fce0f20281866a6814c2f6968cb325a55db765eaefe4fe077a2d"},
+      {"rel": "MOZI_V1_IDENTITY.md",        "size": 1665,  "sha256": "3d816d4b39588e968a35fc51e46309f3341ca7a9eb68f0c8b2528007fd49e26c"},
+      {"rel": "SEAL.sha256",                "size": 823,   "sha256": "01f3808aeb02fe9450984fa4158a511582f5f10197d9d235f6bfbae0aa4c3740"},
+      {"rel": "test_report.txt",            "size": 2790,  "sha256": "f53899f8e5295f539fac36472ef989aa8c6463eb9a8e2d7dbb0b7892d45a90a2"}
+    ],
+    "sealed_count_documented": 9,
+    "sealed_count_verified": 9,
+    "integrity": "VERIFIED (recomputed hashes == MANIFEST.json + SEAL.sha256)"
+  },
+  "function_description": "13 模块健康观测与诊断系统：HEART 独立心跳采集；WATCH_REGISTRY 被观测对象登记；HEALTH_MODEL 六维健康度（TASK_STATE/AGENT_STATE/RUNTIME_STATE/DEPENDENCY_STATE/DATA_FRESHNESS/SERVICE_REACHABILITY，互相独立，无证据一律 UNKNOWN）；PRE_DIAGNOSIS_SNAPSHOT 诊断前冻结保证判定可复现；DIAGNOSIS 八字段诊断门（SYMPTOM/EVIDENCE/LAST_GOOD/FIRST_BAD/AFFECTED_COMPONENT/LIKELY_CAUSE/CONFIDENCE/NEXT_TEST + recovery_decision，confidence<0.6 强制 NO_RECOVERY）；INCIDENT_LEDGER 只增哈希链防篡改；DEDUP 窗口去重；RECOVERY_POLICY Finding→ActionSpec 策略表；VERIFY PRE/POST 校验；ROLLBACK 计划生成（执行需 L3+）；BACKOFF 指数退避；CIRCUIT_BREAKER 熔断；ESCALATION 仅开票不执行。权限分层 L0-L5，默认 L3+ 全关、白名单空（BUILD_COMPLETE ≠ RECOVERY_AUTHORIZED）。",
+  "formation_time_and_evidence": {
+    "created_at": "2026-10-05T13:06:55.262283+08:00",
+    "source_date": "2026-10-05",
+    "evidence_sources": [
+      "MOZI_V1_IDENTITY.md (BUILD_ID/CREATED_AT/STATE)",
+      "BUILD_REPORT.md (13 模块施工 + 21/21 测试 PASS)",
+      "MANIFEST.json (9 sealed files + 21/21 test result)",
+      "test_report.txt (21/21 PASS 实测)",
+      "SEAL.sha256 (完整性印章)"
+    ]
+  },
+  "developer_ownership_evidence": {
+    "status": "PARTIAL",
+    "current_evidence": "代码位于 KR 项目仓库 AISALEOS-Vault（酬成科创 IP Root 域，集团唯一 IP 池）；BUILD_IDENTITY 记录 BUILD_ID/STATE，但未含开发者姓名或公司主体证书。",
+    "missing": "开发者身份证明 / 职务开发说明 / 公司主体（酬成科创或智慧世界科技）权属声明 —— 须从 IP 确权（2WB 域）回填，1WB 不越权确权。",
+    "note": "IP 确权归 2WB；本包仅做本地证据归集，不查官方登记状态、不替代 2WB 确权。"
+  },
+  "running_ui_evidence": {
+    "status": "UNKNOWN",
+    "reason": "mozi-v1 为只读观测库，未部署运行（RECOVERY_AUTHORIZED=false，不在任何恢复/自救路径）。无运行截图或界面证据。按令诚实标注 UNKNOWN，未洗绿。"
+  },
+  "missing_materials": [
+    "正式软著名称核定（建议『墨子V1健康观测诊断软件V1.0』，待 KR 核定）",
+    "开发者/权属主体证书（公司营业执照副本、职务开发说明、权属声明）",
+    "运行/界面证据（当前 UNKNOWN）",
+    "用户手册/软件说明书（现有 BUILD_REPORT.md 为技术施工报告，非用户文档）",
+    "版权中心申请表 + 源程序前30后30页格式化（待按模板生成）"
+  ],
+  "current_readiness": {
+    "verdict": "CLOSE_TO_FILING",
+    "meaning": "源代码 + 文档 + 完整性印章 + 21/21 测试齐备，达到『可起草申报』状态；但缺权属主体证书与正式命名，未达『可正式提交』。",
+    "evidence_complete": "HIGH (static)",
+    "filing_blocker": "权属主体证书 + 正式命名"
+  },
+  "next_machine_action": [
+    "从 IP 确权（2WB 域）回填开发者/主体证书 → 落入 developer_ownership_evidence.missing",
+    "核定正式软著名称",
+    "按版权中心模板生成申请表 + 源程序页（不自行申报，需 KR 授权）",
+    "（可选）补用户手册"
+  ],
+  "maturity_comparison_basis": {
+    "scanned_dirs": ["ai","baserow","deploy","mozi-v1","n8n","nezha-loop","obsidian","streamlit"],
+    "criteria": ["MANIFEST","SEAL","TESTS","BUILD_REPORT","IDENTITY"],
+    "only_full_match": "mozi-v1",
+    "note": "8 个候选目录中仅 mozi-v1 五项正式证据件全齐，故为最接近申报态、证据最完整项。"
+  },
+  "red_line_compliance": {
+    "mozi_core_shadow": "未修改/未重启/未调阈值/未扩功能/未人工 wake mozi-core；mozi-v1 为独立封装只读证据归集",
+    "ip_rights_2wb": "不查官方登记状态；权属回填归 2WB 域",
+    "no_2wb_redteam": "未对 2WB 做红队判断；mozi-v1 为 1WB 本地代码",
+    "no_new_framework": "本包为最小真实落盘，未新增大 BUS/状态机/恢复框架",
+    "kr_relay_inside_execution": 0
+  }
+}
