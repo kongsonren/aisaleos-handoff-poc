@@ -1,0 +1,56 @@
+{
+  "campaign": "ZIYA-REAL-001",
+  "stage": "BUSINESS_REDTEAM_2WB_PERSPECTIVE",
+  "executed_by": "1WB_SESSION_ADVERSARIAL_PASS (2WB 本体未在本会话实跑；共享面已发布供其真独立复核)",
+  "executed_at": "2026-10-08T02:12:33+08:00",
+  "red_team_blades": {
+    "code_matches_candidate": {
+      "verdict": "YES",
+      "detail": "mozi_v1 包真实实现 MoziV1 类 + 六维健康模型 + 八字段诊断门 + L0–L5 权限分层，与候选'健康观测与诊断系统'完全对应，无错配、无占位/空壳。"
+    },
+    "version_is_current": {
+      "verdict": "CURRENT_BUILD_TRUE / VERSION_STRING_AMBIGUITY",
+      "detail": "BUILD_003=STATE CURRENT，无 HISTORY 混入；但内部 __version__='1.1.0' 与早期建议软著名 V1.0 不一致，申报前须对齐版本号与命名。"
+    },
+    "formation_date_original_evidence": {
+      "verdict": "WEAK / SELF_ATTESTED_ONLY",
+      "detail": "仅本机 mtime (2026-10-05) + BUILD_ID 印章自证；E:\\AISALEOS-Vault 非 git 仓库，无 commit/标签/更早时间戳独立佐证。软著所需'可佐证的创作完成日'偏弱。"
+    },
+    "developer_owner_conflict": {
+      "verdict": "NO_IN_CODE_CONFLICT / UNVERIFIED",
+      "detail": "代码中零署名（无 __author__/owner），故无内部权属冲突；但也无任何权属证据。项目约定酬成科创为 IP Root，但未在代码/本包内证据化，属未登记约定，不能据此断言权属清洁。"
+    },
+    "history_mixing": {
+      "verdict": "CLEAN",
+      "detail": "mozi-v1 目录仅含 BUILD_003 的 9 密封文件；无遗留 legacy mozi_watch.py、无 BUILD_001/002 旧文件；旧 Heart 仅隔离引用不混入。元数据提及 V3/BUILD_002 为说明性引用，非代码混入。"
+    },
+    "runtime_ui_evidence_authentic": {
+      "verdict": "HONEST_UNKNOWN / NO_FABRICATION",
+      "detail": "系统为库/引擎，从未部署（CURRENT_HEART_TOUCHED=NO）；无运行截图/日志。21/21 测试 PASS 仅证明代码可 import/执行（测试级），未冒充产品级运行/界面证据。未见伪造。"
+    },
+    "missing_underestimated": {
+      "verdict": "YES",
+      "detail": "形成时间独立佐证、权属证书、注册材料三项长期被低估；原 CLOSE_TO_FILING 判定偏乐观。"
+    },
+    "ready_exaggerated": {
+      "verdict": "YES_SLIGHTLY",
+      "detail": "哈希一致 + 21/21 测试 ≠ 可申报。已下调为 NOT_SUBMISSION_READY。"
+    }
+  },
+  "business_readiness": "DRAFT_READY / NOT_SUBMISSION_READY",
+  "ownership_verdict": "UNVERIFIED",
+  "version_verdict": "CURRENT_BUILD_TRUE / VERSION_STRING_AMBIGUITY",
+  "formation_date_verdict": "SELF_ATTESTED_ONLY / NOT_INDEPENDENTLY_CORROBORATED",
+  "evidence_completeness": "PARTIAL",
+  "blockers": [
+    "开发者/权属主体证书（2WB IP 确权域回填，1WB 不可补）",
+    "形成时间独立佐证（纳入 VCS 提交带日期历史 / 更早归档时间戳）",
+    "正式软著名核定 + 1.1.0↔V1.0 版本号对齐",
+    "版权中心申请表 + 源程序页（需 KR 授权）",
+    "运行/界面证据（需先部署产生）"
+  ],
+  "verdict": "PASS",
+  "verdict_scope": "候选真实且业务字段报告诚实无洗绿（PASS）；不等于'可正式提交'——提交态为 NOT_SUBMISSION_READY，见 blockers。",
+  "kr_relay": 0,
+  "kr_new_credential": 0
+}

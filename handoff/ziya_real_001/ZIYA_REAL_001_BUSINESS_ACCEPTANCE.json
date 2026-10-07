@@ -1,0 +1,107 @@
+{
+  "campaign": "ZIYA-REAL-001",
+  "stage": "BUSINESS_ACCEPTANCE_1WB",
+  "generated_by": "1WB_LOCAL_EXECUTOR",
+  "generated_at": "2026-10-08T02:12:33+08:00",
+  "object_id": "MOZI_V1",
+  "software_name": {
+    "descriptive": "墨子V1健康观测与诊断系统",
+    "descriptive_source": "源代码 docstring：'墨子 V1 · 完全体工程骨架' / '健康观测与诊断'",
+    "formal_filing_name": "UNKNOWN_TBD",
+    "formal_filing_name_note": "正式软著名未核定。ZIYA-REAL-001 曾建议'墨子V1健康观测诊断软件V1.0'，但代码内部 __version__='1.1.0'，命名须与版本号 reconciled 后由 2WB/IP 域核定。"
+  },
+  "version": {
+    "internal_version": "1.1.0",
+    "internal_version_source": "mozi_v1/__init__.py line 14: __version__ = '1.1.0'",
+    "build_id": "MOZI_V1_BUILD_003",
+    "state": "CURRENT",
+    "supersedes": "MOZI_V1_BUILD_002",
+    "version_note": "BUILD_003 为当前 CURRENT 构建；存在 BUILD_002 前身（已 supplant）。内部版本字符串 1.1.0 与早期建议命名 V1.0 不一致，申报前须对齐。"
+  },
+  "code_real_path": "E:\\AISALEOS-Vault\\80-Code\\mozi-v1\\",
+  "code_sha256": {
+    "integrity": "VERIFIED (per-file hashes == MANIFEST.json + SEAL.sha256, recomputed in ZIYA-REAL-001)",
+    "package_aggregate_sha256": "8920c92e3c9792a92db01169a272ce2d522294ebeefb414b40970cf53837b7b4",
+    "sealed_file_count": 9,
+    "source_files": {
+      "mozi_v1/__init__.py": "b98897426e37daa5494b51b288f3d39e2460e6dbe0e83a72c54b60aef8a19c2b",
+      "mozi_v1/core.py": "a746ef91d6a3c7930c5b85d9c0b6df0e2c969381db204dda93eb083b7cce71b2",
+      "mozi_v1/models.py": "de48eeb245146b30a92999e87a908931322b9fa187d75015362acec751b0d1c2",
+      "mozi_v1/permissions.py": "6ce8c4e580008a027e969f9df4872dc742520ea81feff02f6bc16ab150898047",
+      "mozi_v1/recovery.py": "0bfda2067f1b6281912805544beab6e0149de713b712dee9385da12d430cf6da",
+      "mozi_v1/runtime.py": "bd1dd0a58af2844b8fff168ee1d66ccbd9d4d1a15d44b7f966f71061a40f3337",
+      "tests/test_v1.py": "3945a32c14a78d4138a39a68dd1bce778537bcf4190ba9f48e2675589eda759f"
+    },
+    "note": "哈希一致只证明'文件未被篡改'，不等于'申报成熟'。见 readiness 字段。"
+  },
+  "formation_date_evidence": {
+    "self_attested": "BUILD_ID 印章 CREATED_AT = 2026-10-05T13:06:55.262283+08:00 (MOZI_V1_IDENTITY.md)",
+    "filesystem_mtime": "全部 9 文件 mtime 落于 2026-10-05 10:38–13:06（本地时钟，单日簇）",
+    "vcs_history": "ABSENT — E:\\AISALEOS-Vault 非 git 仓库，mozi-v1 无 commit / tag / 更早时间戳",
+    "earlier_independent_timestamp": "NONE FOUND",
+    "verdict_on_evidence": "SELF_ATTESTED_ONLY / NOT_INDEPENDENTLY_CORROBORATED",
+    "note": "形成时间仅有'本机 mtime + 印章时间戳'自证，无 VCS/外部归档/更早时间戳独立佐证。软著需可佐证的创作完成日，此点偏弱，须补强（见 missing_evidence）。"
+  },
+  "developer": {
+    "in_code": "UNKNOWN",
+    "in_code_detail": "全部源文件均无 __author__ / author / copyright owner 字段；docstring 只称'墨子 V1'，不含个人或法人署名。",
+    "fillable_by_1WB": false,
+    "owner_domain": "2WB_IP_REGISTRATION"
+  },
+  "owner": {
+    "in_code": "UNKNOWN",
+    "project_convention": "酬成科创 = 集团 IP Root（见七企架构/长期记忆），但此归属不在代码或本包内证据化。",
+    "code_verified": false,
+    "fillable_by_1WB": false,
+    "owner_domain": "2WB_IP_REGISTRATION"
+  },
+  "ownership_evidence": {
+    "status": "UNKNOWN",
+    "reason": "代码零署名；无软著证书/著作权登记受理通知书/开发说明签章。权属须由 2WB IP 确权域回填证书后方可证。",
+    "fillable_by_1WB": false
+  },
+  "runtime_ui_evidence": {
+    "status": "UNKNOWN",
+    "type": "library/engine (mozi_v1.MoziV1 类)，无 UI、未部署为服务",
+    "deployment": "CURRENT_HEART_TOUCHED=NO；RECOVERY_AUTHORIZED=NO；从未以常驻进程运行",
+    "test_execution_evidence": "21/21 单元测试 PASS（test_v1.py），证明代码可 import/执行，但属测试级执行，非产品级运行/界面证据",
+    "screenshot_or_runtime_log": "NONE",
+    "note": "此 UNKNOWN 为诚实标注，未用测试 PASS 冒充运行/界面证据。"
+  },
+  "function_description": {
+    "real": true,
+    "source": "直接读源码 mozi_v1/{__init__,core,models,permissions,recovery,runtime}.py",
+    "text": "墨子V1 是一套智能体/任务健康观测与确定性诊断的 Python 库（无 UI、不部署）。核心链路：HEART 心跳采集 → WATCH_REGISTRY 被观测对象登记 → HEALTH_MODEL 六维健康度（TASK_STATE/AGENT_STATE/RUNTIME_STATE/DEPENDENCY_STATE/DATA_FRESHNESS/SERVICE_REACHABILITY，各维独立推导，缺证据即 UNKNOWN，严禁 TASK_STATE 反推 AGENT_STATE、严禁臆造 OFFLINE）→ PRE_DIAGNOSIS_SNAPSHOT 诊断前不可变冻结（保证可复现）→ DIAGNOSIS 确定性规则引擎 + 八字段诊断门（SYMPTOM/EVIDENCE/LAST_GOOD/FIRST_BAD/AFFECTED_COMPONENT/LIKELY_CAUSE/CONFIDENCE/NEXT_TEST，无证据 LIKELY_CAUSE=UNKNOWN、confidence<0.6 强制 NO_RECOVERY）→ DEDUP 窗口去重 → INCIDENT_LEDGER 只增哈希链防篡改 → RECOVERY_POLICY（6 条 Finding→ActionSpec）→ VERIFY 前后置校验 → 权限闸门 L0–L5（默认 L3/L4/L5 关、白名单空，L3+ 一律 ESCALATE 只开票不执行）→ ROLLBACK 计划生成但执行需授权 / BACKOFF 指数退避 / CIRCUIT_BREAKER 熔断 / ESCALATION 升级。附 V3 §四 自检六项指标 + 外部观察者（严禁'墨子自动救墨子/哪吒'自愈闭环）。"
+  },
+  "history_mixing_check": {
+    "status": "CLEAN",
+    "detail": "当前 mozi-v1 目录仅含 BUILD_003 的 9 个密封文件；无遗留 legacy mozi_watch.py、无 BUILD_001/002 旧文件混入。代码对旧 Heart 仅做隔离引用（LEGACY_DEFECT=CONFIRMED 已隔离），不 import/不读写旧 Heart。元数据提及 V3 §二/§三/§四 与 SUPERSEDES BUILD_002 为说明性引用，非代码混入。"
+  },
+  "missing_evidence": [
+    "开发者/权属主体证书（2WB IP 确权域，1WB 不可补）",
+    "正式软著名核定（内部 1.1.0 与建议 V1.0 命名须对齐）",
+    "运行/界面截图（从未部署，UNKNOWN；需先部署才能产生）",
+    "用户手册 / 操作文档（无）",
+    "版权中心申请表 + 源程序页（需 KR 授权，不自行申报）",
+    "独立形成时间佐证（VCS 历史 / 更早归档时间戳，当前仅 mtime+印章自证）"
+  ],
+  "readiness": {
+    "verdict": "CODE_COMPLETE_DRAFT_READY / NOT_SUBMISSION_READY",
+    "rationale": "代码完整（13 模块 + 21/21 测试 PASS）+ 完整性哈希 VERIFIED，已达'可起草申报材料'态；但权属证书 UNKNOWN、形成时间仅自证、无运行/界面证据、无注册材料，距'可正式提交'尚有多项硬缺口。严禁将'哈希一致 / 测试 PASS'等同于'申报成熟'。",
+    "downgrade_from_prior": "ZIYA-REAL-001 曾标 CLOSE_TO_FILING，经本轮业务验收下调为 NOT_SUBMISSION_READY——原判定偏乐观，缺件被低估。"
+  },
+  "next_machine_action": [
+    "1WB 可自为：本业务验收报告已落盘 + 跨总线发布供 2WB 独立复核（不扩基础设施，复用既有 handoff 通道）",
+    "2WB IP 域：回填开发者/权属主体证书 → 把 owner 从 UNKNOWN 升为 VERIFIED",
+    "2WB/KR：核定正式软著名并解决 1.1.0 vs V1.0 版本号对齐",
+    "1WB 可建议：将 mozi-v1 纳入 VCS 并提交带日期历史的初版，补强形成时间独立佐证（属可补缺口，需 KR 授意建仓）",
+    "KR 授权后：按版权中心模板生成申请表 + 源程序页（不自行申报）"
+  ],
+  "kr_relay_inside_execution": 0,
+  "red_line_compliance": {
+    "no_infra_expansion": true,
+    "no_fake_maturity": true,
+    "no_2wb_ownership_preempt": true,
+    "honest_unknown": true
+  }
+}
