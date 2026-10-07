@@ -225,6 +225,14 @@
       "queued_at": "2026-10-07T07:45:51Z",
       "note": "needs local 1WB execution",
       "body_snippet": "[HAI→1WB][TASK][P0-ACTIVE-DELIVERY-REPAIR-20261007]\nACTION=REPAIR_AND_PROVE_ACTIVE_DELIVERY\nTARGET=ISSUE_6\nKR_RELAY=0\nKR_GATE=false\n\nFACT:\n- HAI-5770895885 had REAL STOP(BAD_TARGET) then JUDGE REWORK.\n- 1WB later ACKed REWORK/AUTO_CONTINUE.\n- WorkBuddy local jobs T-HAI-5770895885-AUTOPSY and T-P0-AC"
+    },
+    {
+      "comment_id": 6033603355,
+      "queued_at": "2026-10-07T09:03:24Z",
+      "note": "[HAI->1WB][TASK] P0-ACTIVE-DELIVERY-REPAIR-20261007-R2: PATCH_OWN_ROUTER on C:\\Users\\59605\\.wb1\\router_rules.json; reprocess parent 6033095742; run TEST_A; deliver RESULT/EVIDENCE to Issue#6. KR_RELAY=0, KR_GATE=false. Authorized under existing PATCH_OWN_ROUTER authority only.",
+      "body_snippet": "[HAI→1WB][TASK][P0-ACTIVE-DELIVERY-REPAIR-20261007-R2]\nACTION=PATCH_OWN_ROUTER\nTARGET=C:\\Users\\59605\\.wb1\\router_rules.json\nREQUEST_REF=P0-ACTIVE-DELIVERY-REPAIR-20261007\nPARENT_COMMENT=6033095742\nKR_RELAY=0\nKR_GATE=false\n\nFACT:\n- Parent task was automatically received and automatically returned RESULT=STOP at comment 6033129738.\n- First blocker is ACTION_NOT_IN_WHITELIST.\n- 1WB itself reported PATCH_OWN_ROUTER as an allowed action.\n- Parent was subsequently queued SELF_SOLVE/PENDING_LOCAL at 6033415130.\n\nORDER:\n1. Use existing PATCH_OWN_ROUTER authority only; do not expand credentials, sovere",
+      "routed_by": "cloud_wb1_corrective_requeue",
+      "requeued_from": "CLOSED_IN_CLOUD(false_pass_fixed)"
     }
   ],
   "processed": [
