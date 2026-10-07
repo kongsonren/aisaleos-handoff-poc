@@ -219,6 +219,12 @@
       "enqueued_at": "2026-10-02T18:09:16Z",
       "payload": "# [KR→1WB][TASK] 墨子 V0.1｜R4 最小整改令\n\n**REF**：MOZI-V0.1-R4-FIX  \n**来源**：R3 独立复审  \n**状态**：ACTIVE｜只整改与测试｜**禁止部署**\n\nR3 结论为 `FAIL / STOP`。不是重谈架构，只补以下两刀。\n\n## 刀一｜订单唯一性必须成为执行入口硬边界\n\n### 发现\n同一 `ORDER_ID` 的首单已 `CLOSED` 后，再以**同一订单号、不同 target**发起一条完整有效命令，当前 `process()` 仍可执行并再次 `CLOSED`。\n\n### 必须修复\n- `Ledger.create(order_id)` 返回 `False` 时，`process()` 必须立即停止并返回明确拒绝：`DUPLICATE_ORDER_REJECTED`（或同等不可混淆代码）。\n- 第二次不得编令、签令、调用 executor、写入/覆盖旧订单状态或结果。\n- 既有订单的历史与 CLOSED 状态必须保持不变。\n\n### 必补攻击测试\n首单有效 CLOSED；第二单使用**相同 ORDER_ID、不同 target、不同有效 Evidence/结果**。\n- 预期：第二单 `DUPLICATE_ORDER_REJECTED`\n- 证明 executor 调用次数仍为 1\n- 证明 ledger 中首单状态和事件数未被第二单改变\n\n## 刀二｜Evidence 必须同时绑定“身份 + 内容”\n\n### 发现\n当前仅有 `ORDER_ID / ACTION / TARGET` 的 Evidence JSON，即使缺少 `RESULT / AFTER_SHA256 / SIZE / KR_RELAY`，仍可 `CLOSED`。这只是身份证，不是证据。\n\n### 必须修复\nResult Gate 读取 `EVIDENCE_PATH` 后，除 R3 身份三件套外，必须强制要求并逐项比对：\n\n- `RESULT` == `exec_result.RESULT`\n- `AFTER_SHA256` == `exec_result.AFTER_SHA256`\n- `SIZE` == `exec_result.SIZE`\n- `KR_RELAY` == `exec_result.KR_RELAY`\n\n对 `READ_FILE / READBACK_HASH`，Evidence 中的 `AFTER_SHA256` 还必须等于 Result Gate 独立重算的目标 SHA256。\n\n任一字段缺失、不可解析或不一致：一律 `OPEN`，给出稳定、可审计的原因码；不得以“身份已匹配”降级放行。\n\n### 必补攻击测试\n- 身份三件套正确，但缺 `AFTER_SHA256` → OPEN\n- 身份三件套正确，但 Evidence SHA 与目标重算 SHA 不同 → OPEN\n- Evidence 的 `RESULT / SIZE / KR_RELAY` 任一与 exec_result 不同 → OPEN\n- 身份与内容全部一致、SHA 与 Gate 重算一致 → CLOSED\n\n## 回包与边界\n1. 回 R4 ZIP：代码、变更说明、完整测试输出、红队报告。  \n2. 静态测试与黑武士真实 bridge 验收**分开报告**。  \n3. 黑武士专项必须真实跑出：`墨子 → bridge → Evidence → Result Gate → CLOSED`；拿不到就如实 `UNKNO",
       "status": "pending_blackwu"
+    },
+    {
+      "comment_id": 6033095742,
+      "queued_at": "2026-10-07T07:45:51Z",
+      "note": "needs local 1WB execution",
+      "body_snippet": "[HAI→1WB][TASK][P0-ACTIVE-DELIVERY-REPAIR-20261007]\nACTION=REPAIR_AND_PROVE_ACTIVE_DELIVERY\nTARGET=ISSUE_6\nKR_RELAY=0\nKR_GATE=false\n\nFACT:\n- HAI-5770895885 had REAL STOP(BAD_TARGET) then JUDGE REWORK.\n- 1WB later ACKed REWORK/AUTO_CONTINUE.\n- WorkBuddy local jobs T-HAI-5770895885-AUTOPSY and T-P0-AC"
     }
   ],
   "processed": [
