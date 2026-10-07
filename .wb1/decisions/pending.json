@@ -5,59 +5,71 @@
       "source_comment_id": 5742744794,
       "tag": "CLOCK",
       "class": "KR_GATE",
-      "status": "PENDING",
+      "status": "WITHDRAWN",
       "created_at": "2026-10-06T03:50:26Z",
       "reason": "主权/高风险/不可逆/权限边界，云端1号无权自决",
-      "summary": "[CLOCK][1WB]\nNODE=1WB\nGENERATED_AT=2026-09-19T22:39:13+08:00\nSTATUS_SOURCE=NAS_REAL\nSOURCE_HASH=453b04bb0116d46d\nKR_MANUAL_RUN=1\nKR_ACCEPTANCE_TRIGGER=1\nKR_RELAY=0"
+      "summary": "[CLOCK][1WB]\nNODE=1WB\nGENERATED_AT=2026-09-19T22:39:13+08:00\nSTATUS_SOURCE=NAS_REAL\nSOURCE_HASH=453b04bb0116d46d\nKR_MANUAL_RUN=1\nKR_ACCEPTANCE_TRIGGER=1\nKR_RELAY=0",
+      "withdrawn_at": "2026-10-07T06:40:03Z",
+      "withdrawn_reason": "MISROUTE_WITHDRAWN: source comment is a self/sibling machine patrol report (full-width 【1WB】 prefix) or old 2026-09 internal 1WB comment, NOT a KR sovereign order. No patent/IP/payment/delegation/ownership/irreversible change. KR_GATE not triggered. Withdrawn by cloud-WB1 auto-correction 2026-10-07."
     },
     {
       "id": "CLOUD-WB1-GATE-1791258633",
       "source_comment_id": 5742844217,
       "tag": "CLOCK",
       "class": "KR_GATE",
-      "status": "PENDING",
+      "status": "WITHDRAWN",
       "created_at": "2026-10-06T03:50:33Z",
       "reason": "主权/高风险/不可逆/权限边界，云端1号无权自决",
-      "summary": "[CLOCK][1WB]\nNODE=1WB\nGENERATED_AT=2026-09-19T22:55:29+08:00\nSTATUS_SOURCE=NAS_REAL\nSOURCE_HASH=b9c41a1cf03f001d\nKR_MANUAL_RUN=1\nKR_RELAY=0\nKR_ACCEPTANCE_TRIGGER=1"
+      "summary": "[CLOCK][1WB]\nNODE=1WB\nGENERATED_AT=2026-09-19T22:55:29+08:00\nSTATUS_SOURCE=NAS_REAL\nSOURCE_HASH=b9c41a1cf03f001d\nKR_MANUAL_RUN=1\nKR_RELAY=0\nKR_ACCEPTANCE_TRIGGER=1",
+      "withdrawn_at": "2026-10-07T06:40:03Z",
+      "withdrawn_reason": "MISROUTE_WITHDRAWN: source comment is a self/sibling machine patrol report (full-width 【1WB】 prefix) or old 2026-09 internal 1WB comment, NOT a KR sovereign order. No patent/IP/payment/delegation/ownership/irreversible change. KR_GATE not triggered. Withdrawn by cloud-WB1 auto-correction 2026-10-07."
     },
     {
       "id": "CLOUD-WB1-GATE-1791258639",
       "source_comment_id": 5754606344,
       "tag": "NAS-EGRESS",
       "class": "KR_GATE",
-      "status": "PENDING",
+      "status": "WITHDRAWN",
       "created_at": "2026-10-06T03:50:39Z",
       "reason": "主权/高风险/不可逆/权限边界，云端1号无权自决",
-      "summary": "[NAS-EGRESS][EVENT_ID=NAS-EGRESS-STAGE-A-001][ASSET_ID=stageA_probe.txt][SOURCE_SHA256=e8c1e76c9b3feecd695319495d27f9c6fc065c020e6705bbbe351dac08f19770][KR_RELAY=0]\nDESTINATION=github:issue#6\nMESSAGE_TYPE=E2E_TEST\nCREATED_AT=2026-09-21T10:26:14+08:00\nNAS_RAW_PATH=\\192.168.2.107\\AI-SalesOS 仓库\\AISALEOS_SHARED\\NAS_EGRESS_OUTBOX\\_test\\stageA_probe.txt\n---PAYLOAD_BEGIN---\nNAS_EGRESS_STAGE_A_PROBE\ngenerated_at=2026-09-21T10:26:14+08:00\npurpose=no-business e2e connectivity probe for Publisher Runtime V0.1\nKR_RELAY=0\n\n---PAYLOAD_END---"
+      "summary": "[NAS-EGRESS][EVENT_ID=NAS-EGRESS-STAGE-A-001][ASSET_ID=stageA_probe.txt][SOURCE_SHA256=e8c1e76c9b3feecd695319495d27f9c6fc065c020e6705bbbe351dac08f19770][KR_RELAY=0]\nDESTINATION=github:issue#6\nMESSAGE_TYPE=E2E_TEST\nCREATED_AT=2026-09-21T10:26:14+08:00\nNAS_RAW_PATH=\\192.168.2.107\\AI-SalesOS 仓库\\AISALEOS_SHARED\\NAS_EGRESS_OUTBOX\\_test\\stageA_probe.txt\n---PAYLOAD_BEGIN---\nNAS_EGRESS_STAGE_A_PROBE\ngenerated_at=2026-09-21T10:26:14+08:00\npurpose=no-business e2e connectivity probe for Publisher Runtime V0.1\nKR_RELAY=0\n\n---PAYLOAD_END---",
+      "withdrawn_at": "2026-10-07T06:40:03Z",
+      "withdrawn_reason": "MISROUTE_WITHDRAWN: source comment is a self/sibling machine patrol report (full-width 【1WB】 prefix) or old 2026-09 internal 1WB comment, NOT a KR sovereign order. No patent/IP/payment/delegation/ownership/irreversible change. KR_GATE not triggered. Withdrawn by cloud-WB1 auto-correction 2026-10-07."
     },
     {
       "id": "CLOUD-WB1-GATE-1791258645",
       "source_comment_id": 5754626933,
       "tag": "NAS-EGRESS",
       "class": "KR_GATE",
-      "status": "PENDING",
+      "status": "WITHDRAWN",
       "created_at": "2026-10-06T03:50:45Z",
       "reason": "主权/高风险/不可逆/权限边界，云端1号无权自决",
-      "summary": "[NAS-EGRESS][EVENT_ID=NAS-EGRESS-STAGE-B-REALASSET-001][ASSET_ID=1WB_内守七星今日战场图_v0.1.md][SOURCE_SHA256=402ff54175b75e7d999bc30a6f9166675d4767835a6a7fef379905ebd61377f2][KR_RELAY=0]\nDESTINATION=github:issue#6\nMESSAGE_TYPE=KR_BUSINESS_DOC_EGRESS\nCREATED_AT=2026-09-21T10:29:37+08:00\nNAS_RAW_PATH=\\192.168.2.107\\AI-SalesOS 仓库\\AISALEOS_SHARED\\1WB_内守七星今日战场图_v0.1.md\n---PAYLOAD_BEGIN---\n# 1WB｜内守七星今日战场图 v0.1\n\n> **制式**：侦察日 2026-09-15 ｜ 侦察方 1WB（黑武士·本机1号机）｜ 方式=只读侦察，零施工\n> **心跳**：5分钟心跳（WB1_Issue6_5Min_Heartbeat）封盘自跑，与本图无关，不施工\n> **纪律**：不脑补、原始证据优先；看不到的就是 UNKNOWN，不填满七星\n\n---\n\n## 〇、总判（一句话）\n七星里 **⑤机器互通已封盘为运行保障**；**"
+      "summary": "[NAS-EGRESS][EVENT_ID=NAS-EGRESS-STAGE-B-REALASSET-001][ASSET_ID=1WB_内守七星今日战场图_v0.1.md][SOURCE_SHA256=402ff54175b75e7d999bc30a6f9166675d4767835a6a7fef379905ebd61377f2][KR_RELAY=0]\nDESTINATION=github:issue#6\nMESSAGE_TYPE=KR_BUSINESS_DOC_EGRESS\nCREATED_AT=2026-09-21T10:29:37+08:00\nNAS_RAW_PATH=\\192.168.2.107\\AI-SalesOS 仓库\\AISALEOS_SHARED\\1WB_内守七星今日战场图_v0.1.md\n---PAYLOAD_BEGIN---\n# 1WB｜内守七星今日战场图 v0.1\n\n> **制式**：侦察日 2026-09-15 ｜ 侦察方 1WB（黑武士·本机1号机）｜ 方式=只读侦察，零施工\n> **心跳**：5分钟心跳（WB1_Issue6_5Min_Heartbeat）封盘自跑，与本图无关，不施工\n> **纪律**：不脑补、原始证据优先；看不到的就是 UNKNOWN，不填满七星\n\n---\n\n## 〇、总判（一句话）\n七星里 **⑤机器互通已封盘为运行保障**；**",
+      "withdrawn_at": "2026-10-07T06:40:03Z",
+      "withdrawn_reason": "MISROUTE_WITHDRAWN: source comment is a self/sibling machine patrol report (full-width 【1WB】 prefix) or old 2026-09 internal 1WB comment, NOT a KR sovereign order. No patent/IP/payment/delegation/ownership/irreversible change. KR_GATE not triggered. Withdrawn by cloud-WB1 auto-correction 2026-10-07."
     },
     {
       "id": "CLOUD-WB1-GATE-1791258652",
       "source_comment_id": 5754809371,
       "tag": "NAS-EGRESS",
       "class": "KR_GATE",
-      "status": "PENDING",
+      "status": "WITHDRAWN",
       "created_at": "2026-10-06T03:50:52Z",
       "reason": "主权/高风险/不可逆/权限边界，云端1号无权自决",
-      "summary": "[NAS-EGRESS][EVENT_ID=NAS-EGRESS-NATURAL-TICK-001][ASSET_ID=natural_tick_probe.txt][SOURCE_SHA256=79c757ef0f22f3712a1f0f8d19206ef9c47fa455c811ba659a578effa93804c5][KR_RELAY=0][KR_MANUAL_RUN=0]\nDESTINATION=github:issue#6\nMESSAGE_TYPE=E2E_TEST_NATURAL_TICK\nCREATED_AT=2026-09-21T10:58:04+08:00\nNAS_RAW_PATH=\\192.168.2.107\\AI-SalesOS 仓库\\AISALEOS_SHARED\\NAS_EGRESS_OUTBOX\\_test\\natural_tick_probe.txt\n---PAYLOAD_BEGIN---\nNAS_EGRESS_NATURAL_TICK_PROBE\ngenerated_at=2026-09-21T10:58:04+08:00\npurpose=verify REAL scheduler auto-tick delivery (KR_MANUAL_RUN=0)\nKR_RELAY=0\n\n---PAYLOAD_END---"
+      "summary": "[NAS-EGRESS][EVENT_ID=NAS-EGRESS-NATURAL-TICK-001][ASSET_ID=natural_tick_probe.txt][SOURCE_SHA256=79c757ef0f22f3712a1f0f8d19206ef9c47fa455c811ba659a578effa93804c5][KR_RELAY=0][KR_MANUAL_RUN=0]\nDESTINATION=github:issue#6\nMESSAGE_TYPE=E2E_TEST_NATURAL_TICK\nCREATED_AT=2026-09-21T10:58:04+08:00\nNAS_RAW_PATH=\\192.168.2.107\\AI-SalesOS 仓库\\AISALEOS_SHARED\\NAS_EGRESS_OUTBOX\\_test\\natural_tick_probe.txt\n---PAYLOAD_BEGIN---\nNAS_EGRESS_NATURAL_TICK_PROBE\ngenerated_at=2026-09-21T10:58:04+08:00\npurpose=verify REAL scheduler auto-tick delivery (KR_MANUAL_RUN=0)\nKR_RELAY=0\n\n---PAYLOAD_END---",
+      "withdrawn_at": "2026-10-07T06:40:03Z",
+      "withdrawn_reason": "MISROUTE_WITHDRAWN: source comment is a self/sibling machine patrol report (full-width 【1WB】 prefix) or old 2026-09 internal 1WB comment, NOT a KR sovereign order. No patent/IP/payment/delegation/ownership/irreversible change. KR_GATE not triggered. Withdrawn by cloud-WB1 auto-correction 2026-10-07."
     },
     {
       "id": "DEC-1791354732",
-      "status": "PENDING_KR",
+      "status": "WITHDRAWN",
       "created_at": "2026-10-07T06:32:12Z",
       "source_comment_id": 6031689705,
       "source_user": "kongsonren",
       "kr_entry": "【KR→云WB1｜决策卡 DEC-1791354732】请 KR 在手机企微决策: CHOICE=A(批准) / B(驳回) / STOP(暂停)。",
-      "summary": "【1WB·国庆巡航·SELF_SOLVE + KR_GATE_MISROUTE_CORRECTION】Cycle 112 @ 2026-10-07 13:31\n\n■ 常规巡逻(REAL):\n- nas_reachable=T; 8051_sha16=63bd002e(112轮稳); nas_archive_count=4\n- 8090 活源 ce2cb0264053a367 vs 冻结 7f5bfdd1(分歧). 结构化Diff(FROZEN↔LIVE, strip autonomous_wake/meta): BIZ_DIFF=0, 业务键(objects/roles/handoff/real_events/assets/state_chain_example)全与冻结一致; 唯一变化=autonomous_wake心跳(last_wake 2026-10-07T12:33:08, continuous_runs 338→454)=文件自身自治心跳自更新, 与cycle92站立候选(LOCAL_AUTONOMOUS_WAKE/RELATION=UNKNOWN)同源同质 → 非业务变异"
+      "summary": "【1WB·国庆巡航·SELF_SOLVE + KR_GATE_MISROUTE_CORRECTION】Cycle 112 @ 2026-10-07 13:31\n\n■ 常规巡逻(REAL):\n- nas_reachable=T; 8051_sha16=63bd002e(112轮稳); nas_archive_count=4\n- 8090 活源 ce2cb0264053a367 vs 冻结 7f5bfdd1(分歧). 结构化Diff(FROZEN↔LIVE, strip autonomous_wake/meta): BIZ_DIFF=0, 业务键(objects/roles/handoff/real_events/assets/state_chain_example)全与冻结一致; 唯一变化=autonomous_wake心跳(last_wake 2026-10-07T12:33:08, continuous_runs 338→454)=文件自身自治心跳自更新, 与cycle92站立候选(LOCAL_AUTONOMOUS_WAKE/RELATION=UNKNOWN)同源同质 → 非业务变异",
+      "withdrawn_at": "2026-10-07T06:40:03Z",
+      "withdrawn_reason": "MISROUTE_WITHDRAWN: source comment is a self/sibling machine patrol report (full-width 【1WB】 prefix) or old 2026-09 internal 1WB comment, NOT a KR sovereign order. No patent/IP/payment/delegation/ownership/irreversible change. KR_GATE not triggered. Withdrawn by cloud-WB1 auto-correction 2026-10-07."
     }
   ]
 }
