@@ -1,0 +1,100 @@
+{
+  "campaign": "EVIDENCE-HUNT-001",
+  "object_id": "MOZI_V1",
+  "scope": "只补现有历史证据，不制造历史。禁止：今天新建Git历史、修改mtime、补作者字段冒充历史、拿项目约定冒充权属事实。",
+  "generated_at": "2026-10-08T02:27:00+08:00",
+  "red_lines_honored": {
+    "no_new_git_history_manufactured": true,
+    "no_mtime_modified": true,
+    "no_author_field_backfilled": true,
+    "no_project_convention_passed_as_ownership_fact": true,
+    "evidence_is_read_only_findings": true
+  },
+
+  "part_1wb_local_archaeology": {
+    "EARLIEST_REAL_ARTIFACT": {
+      "value": "mozi_watch.py (V0.1 云端 WATCH-ONLY)",
+      "path": "C:/Users/59605/.wb1/nezha/mozi_watch.py",
+      "mtime": "2026-09-28T15:44:54+08:00",
+      "note": "墨子品牌下最早真实文件，但其为「观察-only」前身心（看/记/判，不含健康诊断），与 MOZI_V1 健康观测诊断系统不是同一程序。另有远程副本 .wb1/nezha/mozi_watch.py 同存于 handoff-state。"
+    },
+    "EARLIEST_PROVABLE_DATE_FOR_MOZI_V1": {
+      "value": "2026-10-05T09:34:45Z",
+      "basis": "GitHub handoff-state 不可变锚点 commit 448a0dcf（外部时间戳，强于本地 mtime）",
+      "local_self_attest": "MOZI_V1_IDENTITY.md CREATED_AT=2026-10-05T13:06:55+08:00",
+      "note": "MOZI_V1（健康诊断系统）本身最早可证日期为 2026-10-05；2026-09-28 前身是不同程序，不可算作 MOZI_V1 的形成日。"
+    },
+    "DEVELOPER_EVIDENCE": {
+      "value": "NONE_FOUND / UNKNOWN",
+      "detail": "mozi-v1 全部源码 0 个 __author__ / 署名；mozi_watch.py 头部亦无作者。.github/workflows/mozi.yml、mozi-auto.yml 仅为 CI 构建自动化，不含人力开发者身份。"
+    },
+    "OWNER_EVIDENCE": {
+      "value": "NONE_FOUND / UNKNOWN",
+      "detail": "代码级零权属字符串（酬成科创/冠辰/智慧世界 在 mozi-v1 内 grep=No matches）；无软著证书/登记受理/签章文件。项目约定「酬成科创=IP Root」属内存共识，未在任一 artifact 中证据化，不得冒充权属事实。"
+    },
+    "RUNTIME_EVIDENCE": {
+      "MOZI_V1_BUILD_003": "UNKNOWN — 库/引擎，从未部署，CURRENT_HEART_TOUCHED=NO，无截图/运行日志；21/21 测试 PASS 仅证可 import，非产品级运行证据。",
+      "predecessor_mozi_watch_py_V0_1": "EXISTS — 远程 handoff-state 含 [MOZI] observation 提交（至少 2026-10-02 起），证明其曾运行并产出 observation JSON。注意：此运行证据属于 V0.1 前身心，非 MOZI_V1。"
+    },
+    "VERSION_LINEAGE": {
+      "chain": [
+        "mozi_watch.py V0.1 (legacy WATCH-ONLY, 2026-09-28) — 前身心，SUPERSEDED_BY=MOZI_V1_BUILD_003",
+        "MOZI_V1_BUILD_001 (80-Code/mozi-v1 初封) — SUPERSEDED_BY=BUILD_002",
+        "MOZI_V1_BUILD_002 (80-Code/mozi-v1, 漏 BUILD_REPORT) — SUPERSEDED_BY=BUILD_003",
+        "MOZI_V1_BUILD_003 (CURRENT, 内部 __version__='1.1.0', BUILD_ID=MOZI_V1_BUILD_003) — 不可变锚 448a0dcf"
+      ],
+      "build_001_002_independent_timestamps": "UNKNOWN — 无独立快照、无远程锚点，仅由 BODHI_GOVERNANCE_V3.md 治理表断言存在，日期不可独立证明。",
+      "version_string_ambiguity": "内部 __version__='1.1.0' 与候选命名「V1.0」不一致，须对齐（非阻断但须纠正）。"
+    },
+    "nas_probe": "UNREACHABLE_IN_SANDBOX — SMB 单/双反斜杠路径均 No such file；本沙箱不可达 NAS，故 NAS 考古 NONE_FOUND via this path。"
+  },
+
+  "part_2wb_external_shared_surface": {
+    "surface": "kongsonren/aisaleos-handoff-poc @ handoff-state (434 files)",
+    "EARLIER_TIME_ANCHORS": {
+      "MOZI_V1_BUILD_003": "EXISTS — commit 448a0dcf @ 2026-10-05T09:34:45Z (immutable anchor) + pointer 5f135022 @ 2026-10-05T09:35:13Z",
+      "MOZI_V1_BUILD_001_002": "NONE_FOUND — 远程无 BUILD_001/002 锚点提交，仅 BUILD_003 被独立发布锚定。",
+      "predecessor_runtime": "[MOZI] observation 提交自 2026-10-02 起（V0.1 watcher 运行证据）"
+    },
+    "OWNERSHIP_MATERIALS_FOUND": "NONE_FOUND — 远程树中无 酬成/冠辰/智慧世界/版权/软著/ownership/登记/受理 相关文件（434 文件全树扫描）。",
+    "SOFTWARE_COPYRIGHT_REGISTRATION_CHECK": {
+      "controlled_surfaces": "NONE_FOUND — 本地 Vault 与远程 handoff 均无软著登记/申请/受理记录（仅 ZIYA 业务验收 JSON 提到「无证书」）。",
+      "official_registry": "UNKNOWN — 中国版权保护中心官方登记库超出本机可达范围，本 hunt 不伪造「无登记」结论；仅确认我们可控面内 NONE_FOUND。"
+    }
+  },
+
+  "merge_gap_analysis": {
+    "GAPS_FILLED_BY_MACHINE_THIS_HUNT": [
+      "VERSION_LINEAGE 已厘清：V0.1 watcher → BUILD_001 → BUILD_002 → BUILD_003（治理表+MANIFEST supersedes+远程锚 互证）。",
+      "获得 MOZI_V1 独立外部时间锚：GitHub commit 448a0dcf @ 2026-10-05T09:34:45Z（不可变，强于本地 mtime）。",
+      "定位最早墨子品牌 artifact：mozi_watch.py V0.1 (2026-09-28)，并明确其为「不同前身心」而非 MOZI_V1 形成日。",
+      "前身心运行证据：远程 [MOZI] observation 提交 2026-10-02 起（属 V0.1，非 MOZI_V1）。",
+      "双向确认：本地 Vault 与远程 handoff 均无所有权/版权/软著登记文件。",
+      "确认 mozi-v1 源码零作者/零权属字符串（grep 实证）。"
+    ],
+    "STILL_UNKNOWN_HONEST": [
+      "DEVELOPER 身份：源码无 __author__，UNKNOWN。",
+      "OWNER（MOZI_V1）：无证书/登记/签章，UNKNOWN（项目约定≠证据事实）。",
+      "MOZI_V1 BUILD_003 运行/界面证据：从未部署，UNKNOWN。",
+      "BUILD_001/002 独立时间戳：无快照/无远程锚，仅治理表断言，UNKNOWN。",
+      "MOZI_V1 最早可证日=2026-10-05（外部锚），不可往前推到 2026-09-28 前身。",
+      "官方软著登记状态：超出本机可达面，UNKNOWN（可控面 NONE_FOUND）。"
+    ],
+    "NEEDS_KR_TRUTH_ENTITY_SIGNATURE_SUBMISSION": [
+      "KR/2WB 提供并确认 OWNER 主体（酬成科创？智慧世界？冠辰？）并供给软著证书或登记受理 — 机器不可自证权属。",
+      "KR 确认开发者身份或签署开发归属（须为真实事实，不得为凑历史补作者字段）。",
+      "KR 授权正式提交软著申请（申请表+源程序页）— 提交属主权动作，不自行申报。",
+      "KR 确认官方登记库状态（或授权一次登记库查询）— 当前外部 UNKNOWN。"
+    ]
+  },
+
+  "verdict": {
+    "EVIDENCE_HUNT": "PASS（在「只补现有证据、不制造历史」红线内完成考古；未发现可前推形成日的新证据，亦未伪造任何历史）",
+    "formation_date_strength": "PARTIAL_STRENGTHENED — MOZI_V1 已有外部不可变锚(2026-10-05T09:34:45Z)；但 BUILD_001/002 无独立锚、前身(2026-09-28)为不同程序。",
+    "ownership_status": "UNVERIFIED / UNKNOWN",
+    "copyright_registration": "NONE_FOUND_IN_CONTROLLED_SURFACES / OFFICIAL_UNKNOWN",
+    "KR_GATE": false,
+    "KR_RELAY_INSIDE_EXECUTION": 0,
+    "KR_NEW_CREDENTIAL": 0
+  }
+}
