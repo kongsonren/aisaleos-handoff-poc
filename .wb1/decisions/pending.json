@@ -49,6 +49,15 @@
       "created_at": "2026-10-06T03:50:52Z",
       "reason": "主权/高风险/不可逆/权限边界，云端1号无权自决",
       "summary": "[NAS-EGRESS][EVENT_ID=NAS-EGRESS-NATURAL-TICK-001][ASSET_ID=natural_tick_probe.txt][SOURCE_SHA256=79c757ef0f22f3712a1f0f8d19206ef9c47fa455c811ba659a578effa93804c5][KR_RELAY=0][KR_MANUAL_RUN=0]\nDESTINATION=github:issue#6\nMESSAGE_TYPE=E2E_TEST_NATURAL_TICK\nCREATED_AT=2026-09-21T10:58:04+08:00\nNAS_RAW_PATH=\\192.168.2.107\\AI-SalesOS 仓库\\AISALEOS_SHARED\\NAS_EGRESS_OUTBOX\\_test\\natural_tick_probe.txt\n---PAYLOAD_BEGIN---\nNAS_EGRESS_NATURAL_TICK_PROBE\ngenerated_at=2026-09-21T10:58:04+08:00\npurpose=verify REAL scheduler auto-tick delivery (KR_MANUAL_RUN=0)\nKR_RELAY=0\n\n---PAYLOAD_END---"
+    },
+    {
+      "id": "DEC-1791354732",
+      "status": "PENDING_KR",
+      "created_at": "2026-10-07T06:32:12Z",
+      "source_comment_id": 6031689705,
+      "source_user": "kongsonren",
+      "kr_entry": "【KR→云WB1｜决策卡 DEC-1791354732】请 KR 在手机企微决策: CHOICE=A(批准) / B(驳回) / STOP(暂停)。",
+      "summary": "【1WB·国庆巡航·SELF_SOLVE + KR_GATE_MISROUTE_CORRECTION】Cycle 112 @ 2026-10-07 13:31\n\n■ 常规巡逻(REAL):\n- nas_reachable=T; 8051_sha16=63bd002e(112轮稳); nas_archive_count=4\n- 8090 活源 ce2cb0264053a367 vs 冻结 7f5bfdd1(分歧). 结构化Diff(FROZEN↔LIVE, strip autonomous_wake/meta): BIZ_DIFF=0, 业务键(objects/roles/handoff/real_events/assets/state_chain_example)全与冻结一致; 唯一变化=autonomous_wake心跳(last_wake 2026-10-07T12:33:08, continuous_runs 338→454)=文件自身自治心跳自更新, 与cycle92站立候选(LOCAL_AUTONOMOUS_WAKE/RELATION=UNKNOWN)同源同质 → 非业务变异"
     }
   ]
 }
