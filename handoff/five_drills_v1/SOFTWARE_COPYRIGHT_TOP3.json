@@ -1,0 +1,39 @@
+{
+  "campaign": "FIVE_DRILLS_V1 / D1",
+  "generated_at": "2026-10-08",
+  "candidate_pool": "E:\\AISALEOS-Vault\\80-Code\\ (8 真实代码实体)",
+  "maturity_method": "MANIFEST/MANIFEST_SEAL/TESTS/BUILD_REPORT/IDENTITY 五指标扫描 + 代码体量",
+  "TOP3": [
+    {
+      "rank": 1,
+      "object_id": "MOZI_V1",
+      "code_path": "E:\\AISALEOS-Vault\\80-Code\\mozi-v1\\",
+      "build_id": "MOZI_V1_BUILD_003",
+      "maturity": "MSTBI 全齐（9 密封文件 + 21/21 测试 PASS + BUILD_REPORT + IDENTITY）",
+      "src_lines": 1387,
+      "readiness": "DRAFT_READY / NOT_SUBMISSION_READY",
+      "gap": "权属证书(2WB) / 形成时间独立佐证(VCS) / 运行证据(未部署) / 注册材料(KR授权) / 正式命名+版本对齐",
+      "verdict": "最接近申报态，第一候选"
+    },
+    {
+      "rank": 2,
+      "object_id": "NEZHA_LOOP",
+      "code_path": "E:\\AISALEOS-Vault\\80-Code\\nezha-loop\\",
+      "maturity": "仅代码体量（111 文件），五指标全缺（无 MANIFEST/SEAL/TESTS/BUILD_REPORT/IDENTITY）",
+      "readiness": "CODE_PRESENT / UNSEALED / FAR_FROM_FILING",
+      "gap": "无完整性印章 / 无测试 / 无版本身份 / 无构建报告 / 权属未证据化",
+      "verdict": "体量最大但离申报最远，须先补密封+测试+身份"
+    },
+    {
+      "rank": 3,
+      "object_id": "BASEROW_INTEGRATION",
+      "code_path": "E:\\AISALEOS-Vault\\80-Code\\baserow\\",
+      "maturity": "10 文件，有结构但五指标全缺",
+      "readiness": "CODE_PRESENT / UNSEALED / FAR_FROM_FILING",
+      "gap": "同 #2，且体量较小、边界模糊（集成脚本非独立软件产品）",
+      "verdict": "第三候选，成熟度最低"
+    }
+  ],
+  "honest_note": "8 实体中仅 mozi-v1 具备申报级完整度；#2/#3 仅为代码体量候选，距正式申报有多项硬缺口，不夸大。",
+  "next": "以 MOZI_V1 为第一候选进入申报草案（见 MOZI_V1_FILING_DRAFT.json）；#2/#3 暂缓，待补密封件再评估。"
+}

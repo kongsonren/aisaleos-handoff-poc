@@ -1,0 +1,45 @@
+{
+  "drill": "D5 / 2WB 前腿视角（本会话以 2WB 独立对抗视角执行，待 2WB 节点真独立复核）",
+  "campaign": "FIVE_DRILLS_V1",
+  "generated_at": "2026-10-08",
+  "RGBCW_60x1cm_tech_market": {
+    "verdict": "REAL",
+    "evidence": "公开产品页 2026-10-08 WebSearch 命中（topledvision / siled.cn / ledownia.pl / shop4electrical / coovee）",
+    "spec": "5050 RGBCW, 60LEDs/m, PCB 12mm(≈1cm), DC24V(或12V), 15-19W/m, RGB+3000K/6000K, CRI80Ra, IP20/65/67/68, 裁剪50/100mm, >50k-80kh, CE/FCC/RoHS",
+    "note": "60×1cm RGBCW 软灯带是真实市场产品类，可作 8051 产品场真实条目素材"
+  },
+  "SM1191_tech_market": {
+    "verdict": "CONFLICT / UNKNOWN",
+    "finding": "公开检索 'SM1191' = NPC(Seiko) FM/AM 收音机集成电路 SOP28，与 LED 驱动/照明无关",
+    "our_context": "我方 8051 语境 SM1191（8090-REAL源.json MARKET_REAL=SM1191 经营主落点）真实定义 1WB 无法确证",
+    "action_required": "KR 须确认我方 SM1191 真实型号/厂商/功能；若指照明产品则与市场公开 SM1191 命名冲突，不得作为照明 REAL 证据"
+  },
+  "SEO_GEO_check": {
+    "target": "https://kr-8051-assets.app.workbuddy.host/ (国内站点，国外可访问性同址)",
+    "accessibility": "HTTP200 可达（国内/国外同源）",
+    "crawl_index": {
+      "robots_txt": "404（无 robots → 爬虫不受限但无引导）",
+      "meta_description": "ABSENT（搜索引擎无摘要依据）",
+      "canonical": "ABSENT",
+      "structured_data": "ABSENT（无 schema.org/ld+json，GEO/富媒体零）",
+      "lang": "en 但内容中文（lang 不匹配，损害语义/索引）",
+      "title": "存在（8051 装修入住·现房入口 V0.1）"
+    },
+    "待修项": [
+      "补 meta description / keywords",
+      "补 lang=zh-CN",
+      "补 canonical + 结构化数据(Product/SoftwareApplication)",
+      "补 robots.txt + sitemap（或主动提交索引）",
+      "从入口桩升级为含真实产品展示的页面（否则无索引价值内容）"
+    ],
+    "verdict": "可访问但 SEO/GEO 基础件全缺，当前几乎无可索引有价值内容"
+  },
+  "independent_verify_1WB_defects": [
+    {"id": "DEF-1", "drill": "D1/D3", "defect": "MOZI_V1 版本歧义：内部 __version__='1.1.0' vs 申报名 V1.0，须对齐", "severity": "中", "owner": "1WB+KR"},
+    {"id": "DEF-2", "drill": "D2", "defect": "SM1191 命名冲突：市场 SM1191=收音机IC，我方定义未确认", "severity": "高", "owner": "KR"},
+    {"id": "DEF-3", "drill": "D3", "defect": "火山视频生成不在授权 scope（仅图像模型），视频 REAL 未产出", "severity": "中", "owner": "KR_GATE(加视频授权)"},
+    {"id": "DEF-4", "drill": "D4", "defect": "8051 页为 V0.1 入口桩，无产品展示内容，页面功能仅 PARTIAL", "severity": "中", "owner": "KR/建设"},
+    {"id": "DEF-5", "drill": "D1", "defect": "软著 TOP3 中 #2/#3 仅代码体量，无完整性印章/测试/身份，距申报甚远（已诚实标注，未夸大）", "severity": "低", "owner": "1WB"}
+  ],
+  "verdict": "2WB 视角：RGBCW 技术市场 REAL；SM1191 命名冲突须 KR 澄清；SEO/GEO 基础件全缺待修；1WB 产物诚实无洗绿，发现 5 项缺陷已回传。D5 = PASS（研究/核查 REAL，缺陷已回传不替1WB自证）"
+}

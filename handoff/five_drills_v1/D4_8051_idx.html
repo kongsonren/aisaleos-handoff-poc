@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>8051 装修入住 · 现房入口 V0.1</title>
+<style>
+  :root{
+    --bg:#0d1420; --card:#111c2c; --line:#1c2b42; --ink:#e6edf7; --mut:#7c8ba3;
+    --teal:#3ddcc4; --blue:#5b8cff; --grn:#57d977; --amb:#ffb454; --red:#ff6b6b;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:15px/1.75 -apple-system,"Microsoft YaHei","PingFang SC",sans-serif;}
+  .wrap{max-width:1120px;margin:0 auto;padding:34px 22px 60px;}
+  .reno{display:inline-block;font-size:12px;color:var(--amb);border:1px solid #4a3a1c;
+        background:#2a2110;border-radius:20px;padding:2px 12px;margin-bottom:14px;letter-spacing:.3px}
+  h1{font-size:26px;margin:0 0 6px;letter-spacing:.5px}
+  .sub{color:var(--mut);font-size:13.5px;margin-bottom:20px}
+  .sub b{color:var(--teal)}
+  .strip{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px}
+  .chip{font-size:12.5px;border-radius:6px;padding:4px 11px;border:1px solid var(--line);background:var(--card)}
+  .chip.k{color:var(--teal);border-color:#1f4a44}
+  .chip.u{color:var(--amb);border-color:#4a3a1c}
+  .chip.r{color:var(--grn);border-color:#1f4a2c}
+  .chip.g{color:var(--mut)}
+  .section-title{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:700;
+                 margin:34px 0 14px;padding-left:12px;border-left:3px solid var(--teal)}
+  .section-title small{font-weight:400;color:var(--mut);font-size:12.5px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px}
+  .box{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 17px}
+  .box h3{margin:0 0 8px;font-size:15.5px;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+  .box .st{font-size:11.5px;font-weight:600;border-radius:5px;padding:2px 8px;letter-spacing:.3px}
+  .st.real{color:var(--grn);background:#10251a;border:1px solid #1f4a2c}
+  .st.part{color:var(--teal);background:#0e2624;border:1px solid #1f4a44}
+  .st.shell{color:var(--blue);background:#131f3a;border:1px solid #24365e}
+  .st.unk{color:var(--amb);background:#2a2110;border:1px solid #4a3a1c}
+  .st.np{color:var(--red);background:#2a1414;border:1px solid #4a2020}
+  .box p{margin:6px 0;font-size:13.5px;color:#c6d2e4}
+  .box .ent{margin-top:10px;font-size:13px}
+  .a{color:var(--teal);text-decoration:none;border-bottom:1px dashed #2c5a54;margin-right:14px}
+  .a:hover{color:#7ff0dd}
+  .a.x{color:var(--blue);border-bottom-color:#2a3f6b}
+  .a.shell{color:var(--mut);border-bottom-color:#2a3646;cursor:not-allowed}
+  ul.nav{list-style:none;margin:0;padding:0}
+  ul.nav li{padding:9px 2px;border-bottom:1px dashed var(--line);font-size:14px;
+            display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
+  ul.nav li:last-child{border-bottom:none}
+  .tag{font-size:11.5px;color:var(--mut)}
+  ol.todo{margin:0;padding-left:20px;font-size:14px}
+  ol.todo li{margin:7px 0}
+  ol.todo b{color:var(--amb)}
+  .note{background:#101a12;border:1px solid #1f4a2c;border-radius:10px;padding:15px 17px;font-size:13.5px;color:#c6d2e4}
+  .note.warn{background:#241a10;border-color:#4a3a1c}
+  .note ul{margin:6px 0 0;padding-left:20px}
+  .foot{margin-top:38px;color:var(--mut);font-size:12.5px;border-top:1px solid var(--line);padding-top:14px;line-height:1.9}
+  .foot code{color:#9fb2cc;background:#0a1018;padding:1px 6px;border-radius:4px;font-size:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="reno">装修入住层 · 新增入口页（现房原文件零改动）</div>
+  <h1>8051 装修入住 · 现房入口 V0.1</h1>
+  <div class="sub">
+    沿原 KR 决定 <b>#5792751925</b> ／ 装修执行令 <b>#5798165000</b> 继续执行 · 保留 8051 现有骨架，不重建 · 真源不迁移
+  </div>
+
+  <div class="strip">
+    <span class="chip r">现房骨架 = REAL（本地服务）</span>
+    <span class="chip k">本次 = 装修层（可逆新增）</span>
+    <span class="chip u">KR_RELAY = 0</span>
+    <span class="chip u">WAKE_UP = KR_MANUAL</span>
+    <span class="chip g">真源：飞书Base（产品场） / GitHub#6（内部场）</span>
+  </div>
+
+  <div class="section-title">一 ｜ 五场门户 <small>外部场 / 内部场 / 经营场 / 产品场 / 设置用户场 · 真实状态照实标</small></div>
+  <div class="grid">
+
+    <div class="box">
+      <h3>外部场 <span class="st unk">接收入口 READY · 尚无真实回件</span></h3>
+      <p><b>接收入口已建（READY）</b>：接收契约 + 完整性三验（TRANSPORT / CONTENT / MEANING）+ RAW 穿透入口。</p>
+      <p>2WB 回件槽 = <b>NOT_REACHED</b>（#6 无 2WB 回件、NAS 无 2WB drop）；历史 NAS↔2WB=FAIL。真实外部事件 <b>0 件</b>，等 2WB 按契约投递。</p>
+      <p class="ent">
+        <a class="a" href="外部场-接收入口.html">外部场 · 接收入口 ↗</a>
+        <a class="a x" href="外部场-接收状态.json">状态 JSON</a>
+      </p>
+    </div>
+
+    <div class="box">
+      <h3>内部场 <span class="st part">REAL（部分）</span></h3>
+      <p>1WB 执行桥在线：心跳 V0.2 每 5 分钟轮询 #6；本机 <code>~/.wb1</code> 路由/桥/分类测试在位。最后一次 tick 已连 GitHub、状态 no_new_comments。</p>
+      <p class="ent">
+        <a class="a x" href="https://github.com/kongsonren/aisaleos-handoff-poc/issues/6" target="_blank" rel="noopener">GitHub #6 执行桥 ↗</a>
+        <span class="a shell">本机终端（~/.wb1）</span>
+      </p>
+    </div>
+
+    <div class="box">
+      <h3>经营场 <span class="st real">REAL（骨架）</span></h3>
+      <p>希懋 8090 经营 REAL 总台 V0.1 已建（单公司经营视角：最小经营对象 / HANDOFF / AUTONOMOUS_WAKE / REAL_EVENT / ASSET）。仅希懋 1 家；冠辰/智慧世界/酬成光电 = UNKNOWN 待复制。</p>
+      <p class="ent">
+        <a class="a" href="希懋8090经营REAL总台_V0.1.html">希懋 8090 总台</a>
+        <a class="a" href="希懋8090经营REAL总台_V0.1_RBAC.html">RBAC 视角</a>
+      </p>
+    </div>
+
+    <div class="box">
+      <h3>产品场 <span class="st part">REAL（真源在外部）</span></h3>
+      <p>真源 = <b>飞书 Base「8051（RGBCW 动态真源候选）」</b>：6 表（核心器件 / 实体产品 / 组合方案 / 客户REAL需求 / REAL证据库 / 任务阻塞BLOCK）。<b>8051 Web 内的产品页 = NOT_PRESENT</b>（不在此处冒充）。</p>
+      <p class="ent">
+        <a class="a x" href="https://zqpqiztaac.feishu.cn/base/S4V3biW4saCrRCsmG42cvaPSnod" target="_blank" rel="noopener">飞书 Base 产品真源 ↗</a>
+      </p>
+    </div>
+
+    <div class="box">
+      <h3>设置用户场 <span class="st shell">SHELL</span></h3>
+      <p>KR 身份 = 任光成（user owner）真实可用；<b>无权限 UI</b>；「四位权限」未释放；<code>PERMISSION-RISK-001</code> 权限超集待收窄（真实 BLOCK）。RBAC 变体是当前最接近的「人视角」。</p>
+      <p class="ent"><a class="a" href="希懋8090经营REAL总台_V0.1_RBAC.html">RBAC（人视角近似）</a></p>
+    </div>
+
+  </div>
+
+  <div class="section-title">二 ｜ 现有现房资产导航 <small>均为 LEGACY 静态件，原样保留、只读引用</small></div>
+  <div class="box">
+    <ul class="nav">
+      <li><span><a class="a" href="8051-AISALEOS系统总览-V0.1.html">8051-AISALEOS 系统总览 V0.1</a> <span class="tag">系统视角 · 总览首页</span></span><span class="tag">REAL · 19,999B</span></li>
+      <li><span><a class="a" href="希懋8090经营REAL总台_V0.1.html">希懋 8090 经营REAL总台 V0.1</a> <span class="tag">经营场 · 单公司视角</span></span><span class="tag">REAL · 13,631B</span></li>
+      <li><span><a class="a" href="希懋8090经营REAL总台_V0.1_RBAC.html">…总台 V0.1 · RBAC（KR / 刘晓伟）</a> <span class="tag">人视角 / 权限视角</span></span><span class="tag">REAL · 19,855B</span></li>
+      <li><span><a class="a" href="希懋8090经营REAL总台_V0.1_刘晓伟.html">…总台 V0.1 · 刘晓伟 视角</a> <span class="tag">按角色过滤</span></span><span class="tag">REAL · 10,165B</span></li>
+      <li><span><a class="a" href="8051-恢复交付/8051原界面恢复图册.html">8051 原界面恢复图册</a> <span class="tag">二级 · 历史 UI 真身索引</span></span><span class="tag">REAL · 6,464B</span></li>
+      <li><span><a class="a" href="8051-恢复交付/8051出生与演化时间线.html">8051 出生与演化时间线</a> <span class="tag">二级 · 演化史</span></span><span class="tag">REAL · 6,260B</span></li>
+      <li><span><a class="a" href="miniprogram/kr-8051/">miniprogram/kr-8051</a> <span class="tag">小程序工程（未真机部署 · 游客模式）</span></span><span class="tag">SHELL</span></li>
+      <li><span><a class="a" href="8051-REAL源.json">8051-REAL源.json</a> <span class="tag">数据层 · 7公司/4上桌/4 GAP</span></span><span class="tag">REAL · 10,189B</span></li>
+    </ul>
+  </div>
+
+  <div class="section-title">三 ｜ 需要 KR <small>真实待裁决项，非自动可推</small></div>
+  <div class="box">
+    <ol class="todo">
+      <li><b>刘晓伟权限定义</b>（高风·KR_GATE）：其真实组织角色/权限未在系统中定义，§12 禁凭想象。</li>
+      <li><b>10 条历史身份标签评论是否回填</b>：ROUTING-FIX 全量差分另发现 10 条早于本轮、曾被 NON_HAI/IGNORE 丢弃的 KR_DECISION/JUDGE 评论 —— 是否回填入队待裁决。</li>
+      <li><b>GAP-2 邓工 schematic/BOM</b>：PENDING_EXTERNAL，非 1WB 可自决，阻塞希懋工程验证。</li>
+      <li><b>内部身份队列消费者</b>：<code>inbox_identity_queue.json</code> 已登记（含 JUDGE #5798193166），consume 侧未启动 —— 是否启动待裁决。</li>
+    </ol>
+  </div>
+
+  <div class="section-title">四 ｜ 装修说明 · 边界与可逆</div>
+  <div class="note">
+    <b>R1 做了什么：</b>只新增 2 个文件 —— 入口页 <code>index.html</code> + 本地启动器 <code>_8051_serve.py</code>。
+    <b>R2（LIVE-IN 2026-09-24）新增：</b>外部场接收入口 <code>外部场-接收入口.html</code> + <code>外部场-接收状态.json</code> + <code>_external_raw/</code>（RAW 穿透）。
+    <b>现房原文件（6 张 HTML + JSON + 小程序 + 恢复交付）一个字节未改</b>（SHA 见回执）。
+    <ul>
+      <li><b>进得去</b>：本地服务 <code>http://127.0.0.1:8051/</code> → 本页即门厅。</li>
+      <li><b>看得懂</b>：五场 + 现有资产导航 + KR 事项一屏可览，真实/壳/未知照实标。</li>
+      <li><b>干得了</b>：内部场 → GitHub #6；产品场 → 飞书 Base；经营场 → 8090 总台；<b>外部场 → 接收入口（READY）</b>。</li>
+      <li><b>退得回</b>：每个现房页面顶部有「← 8051 入口」返回条（<b>运行期注入，磁盘文件未动</b>）；删新增件即完全复原。</li>
+    </ul>
+  </div>
+  <div class="note warn" style="margin-top:12px">
+    <b>未做 / 明确不做：</b>不迁移真源 · 不做大而全 Dashboard · 不重画现有 IA · 不扩权限 · 不碰高风险/不可逆动作 · 不重建 8051 · 不伪造任何 UI · 不伪造外部事件。
+    产品场 / 内部场的 8051 侧页面为 <b>NOT_PRESENT</b>（真源在外部系统，不在此冒充）；外部场已有<b>接收入口（READY）</b>，但<b>尚无真实外部事件到达</b>（2WB 回件槽 = NOT_REACHED）。
+  </div>
+
+  <div class="foot">
+    生成：2026-09-24（+0800） · 装修层 V0.1 · <code>WAKE_UP=KR_MANUAL</code> · <code>KR_RELAY=0</code><br>
+    本页为「在现房上的最低可入住装修」，非端到端自动产物；不冒充 8051 原有界面。
+  </div>
+
+</div>
+</body>
+</html>

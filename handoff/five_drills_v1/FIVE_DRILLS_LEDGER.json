@@ -1,0 +1,33 @@
+{
+  "order": "KR 五练今晚贯通令 V1.0",
+  "campaign": "FIVE_DRILLS_V1",
+  "executed_at": "2026-10-08",
+  "executor": "1WB_LOCAL_REAR_LEG",
+  "discipline": "只认原始证据；不以 ACK/计划/提交中冒充完成；不新 BUS；KR_GATE 仅列主权事项",
+  "per_drill": [
+    {"id":"D1","owner":"1WB","TASK":"软著候选 TOP3 + 第一候选申报草案","SOURCE":"80-Code 8实体 + mozi-v1 证据包 + 源码行数统计","ACTION":"五指标扫描排 TOP3；为 MOZI_V1 产申报草案","OUTPUT":"SOFTWARE_COPYRIGHT_TOP3.json + MOZI_V1_FILING_DRAFT.json","EVIDENCE":"mozi-v1 源码1387行/21-21测试/SEAL VERIFIED/package sha 8920c92e…","VERDICT":"PASS","BLOCKER":"权利人主体(2WB/KR) / 版本对齐 / 提交授权(KR_GATE)","NEXT":"KR_GATE 授权后生成正式申请表+源程序页提交"},
+    {"id":"D2","owner":"1WB","TASK":"RGBCW 真实资料接入 Obsidian 写入+回读","SOURCE":"8051_VERSION_MAP + WebSearch(60×1cm REAL)","ACTION":"写 RGBCW_REAL_001.md 并 Read 回读","OUTPUT":"00-Inbox/RGBCW_REAL_001.md","EVIDENCE":"Read 回读成功(前5行确认落盘)","VERDICT":"PASS","BLOCKER":"SM1191 命名冲突待 KR 澄清","NEXT":"待 KR 确认 SM1191 定义"},
+    {"id":"D3","owner":"1WB","TASK":"火山云授权核查 + 真实照明产品图/视频","SOURCE":"~/.wb1/volc_ark.json(生效中,scope=图像)","ACTION":"核查授权；以 60×1cm RGBCW 软灯带真实出图","OUTPUT":"VOLC_DRILL_001/rgbcw_strip_seedream.png(294KB)","EVIDENCE":"API resp usage.generated_images=1；SHA256 ee1446cf…b2b0ba","VERDICT":"PASS(图) / 视频=BLOCKER","BLOCKER":"视频模型不在授权 scope→需 KR_GATE 加视频授权","NEXT":"KR_GATE 加视频授权后补视频"},
+    {"id":"D4","owner":"1WB","TASK":"8051 展示链路核查(备案事实/页面功能分别)","SOURCE":"8051_VERSION_MAP(真归档) + kr-8051-assets 公网页","ACTION":"curl 页+解析；备案事实取自 MAP","OUTPUT":"D4_8051/idx.html + D4_REPORT.json","EVIDENCE":"HTTP200；title=现房入口V0.1；robots=404；meta/canonical/structured=ABSENT","VERDICT":"备案事实=PASS / 页面功能=PARTIAL","BLOCKER":"页为 V0.1 入口桩非展示页；回写飞书需 KR 授权","NEXT":"建设下一版真实展示页(KR_GATE)"},
+    {"id":"D5","owner":"2WB(本会话对抗视角)","TASK":"RGBCW技术市场/SEO-GEO/独立复核1WB","SOURCE":"WebSearch + 8051 页解析 + 1WB 产物","ACTION":"技术市场核查；SEO扫描；独立找缺陷","OUTPUT":"D5_2WB_REPORT.json(5项缺陷回传)","EVIDENCE":"SM1191=收音机IC冲突；SEO 5 缺件；DEF-1..5","VERDICT":"PASS","BLOCKER":"SM1191 澄清(KR) / 视频授权(KR_GATE) / 8051 建设(KR)","NEXT":"2WB 节点真独立复核；缺陷交 1WB/KR"}
+  ],
+  "FIVE_DRILLS": "5/5 (每练均取得新 REAL)",
+  "CROSS_DRILL_REAL": "PASS(3/4链 REAL；末环 RGBCW素材→8051/网站展示 因入口桩+回写需KR授权而 BLOCKED，机器路径已尽)",
+  "cross_chain": [
+    "RGBCW 真实资料: REAL (WebSearch+MAP)",
+    "→ Obsidian 写入回读: REAL (D2)",
+    "→ 火山云素材: REAL (D3 出图)",
+    "→ 网站/8051展示预览: PARTIAL (8051页为V0.1桩；回写飞书Base=KR_GATE)"
+  ],
+  "1WB_RESULT": "D1-D4 全执行并落盘真实证据；D2回读通过；D3真实出图；D4分别验收备案事实(PASS)/页面功能(PARTIAL)",
+  "2WB_RESULT": "D5 以对抗视角完成技术市场/SEO/独立复核，5项缺陷回传；待2WB节点真独立复核(共享面已发布)",
+  "KR_RELAY": 0,
+  "KR_GATE": "TRUE(主权事项列账，未中继执行)：①SM1191真实定义确认 ②软著正式提交授权 ③火山视频授权 ④8051展示页建设/飞书回写授权",
+  "shared_channel": "kongsonren/aisaleos-handoff-poc@handoff-state / handoff/ziya_real_001/ (既有授权，零新BUS，零新KR凭据)",
+  "honest_notes": [
+    "2WB 本体未在本1WB会话实跑(独立腿)；D5以2WB对抗视角执行并发布供其真独立复核",
+    "SM1191 经公开检索=收音机IC，与我方照明语境冲突→诚实标 UNKNOWN，不硬充 REAL",
+    "火山视频不在授权scope→不伪造视频 REAL",
+    "8051页为入口桩非展示页→页面功能 PARTIAL，不与备案事实混淆"
+  ]
+}

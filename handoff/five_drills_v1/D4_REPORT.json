@@ -1,0 +1,37 @@
+{
+  "drill": "D4 / 8051 展示链路核查",
+  "campaign": "FIVE_DRILLS_V1",
+  "generated_at": "2026-10-08",
+  "method": "备案事实与页面功能分别验收，不混淆",
+  "备案事实_FILING_FACTS": {
+    "source": "E:\\AISALEOS-Vault\\20-Projects\\哪吒后轮\\8051_VERSION_MAP.md (REAL 治理归档)",
+    "architecture_truth": "Embedded_8051(MCU/LED固件) ≠ LEGACY_8051(企业经营祖宗)；系统总览看板 vs 产品场 两概念须分开 — VERIFIED",
+    "live_assets": ["8090 REAL源(192.168.2.107:8090,runs=410)", "kr-8051-assets 公网镜像", "飞书Base 8051产品场(6表,1WB不可达)", "Gemini 会话链"],
+    "closed": ["8052 本地服务", "8053 V2 视觉母件 MOCK", "8051/8052/8053/8054 端口全 CLOSED"],
+    "unknown": ["豆包V1.1", "新专修界面", "8053 V2 源文件", "飞书Base内容(不可达)"],
+    "verdict": "备案事实 VERIFIED（来自真归档，非页面渲染）"
+  },
+  "页面功能_PAGE_FUNCTIONS": {
+    "url": "https://kr-8051-assets.app.workbuddy.host/",
+    "http_status": 200,
+    "title": "8051 装修入住 · 现房入口 V0.1",
+    "nav_links": ["GitHub issue #6 (收件箱)", "飞书Base 8051产品场真源"],
+    "meta_description": "ABSENT",
+    "canonical": "ABSENT",
+    "structured_data": "ABSENT (no schema.org/ld+json)",
+    "robots_txt": "404 (无 robots 文件)",
+    "lang": "en (但内容为中文 → lang 不匹配缺陷)",
+    "verdict": "页面功能 = PARTIAL。入口桩 WORKS（HTTP200 + 路由到收件箱/飞书Base），但无真实产品展示内容/无SEO元数据/非产品展示页。"
+  },
+  "separate_verdict": {
+    "备案事实": "PASS (REAL 归档可溯)",
+    "页面功能": "PARTIAL (桩页可访问但非展示页，缺 SEO 基础件)",
+    "conflated": false
+  },
+  "blockers": [
+    "8051 展示页为 V0.1 入口桩，无产品展示位（须建设下一版，PARK裁定已从考古转建设）",
+    "飞书Base 真源回写需 KR 授权（主权动作）",
+    "页面 SEO 基础件缺失（meta/canonical/structured data/robots），属待修项非阻断"
+  ],
+  "next": "建设下一版真实展示页（KR_GATE 或 KR 授权后）；SEO 待修项入台账"
+}
