@@ -1,0 +1,16 @@
+{
+  "artifact": "RGBCW volcanic-image original share manifest",
+  "purpose": "供 2WB 独立验图（非敏感原件共享，不上传密钥/敏感响应）",
+  "shared_via": "GitHub kongsonren/aisaleos-handoff-poc @ handoff-state / handoff/five_drills_r2_1wb/rgbcw_strip_seedream.png",
+  "image_file": "rgbcw_strip_seedream.png",
+  "image_bytes": 294402,
+  "image_sha256": "ee1446cfa7241b43000a30d441b763a3a3f881157221ce254197d1d133b2b0ba",
+  "model": "doubao-seedream-5-0-260128",
+  "generated_at": "2026-10-08T19:06:03Z",
+  "verify_method": "2WB 下载原件后本地 sha256sum，须等于 image_sha256 字段",
+  "excludes": {
+    "volc_image_response.json": "故意不包含——该文件曾被 GitHub 密钥扫描拦截（含疑似密钥串），属敏感响应，不上传、不重传",
+    "api_key": "任何火山方舟 AK/SK 均不上传"
+  },
+  "note": "本清单由 1WB 后腿生成于 2026-10-09；仅为验图凭证，不构成产品实拍或最终 SKU 规格。"
+}

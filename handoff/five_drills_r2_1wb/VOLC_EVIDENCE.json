@@ -1,0 +1,11 @@
+{
+  "campaign": "VOLC_DRILL_001",
+  "model": "doubao-seedream-5-0-260128",
+  "size": "2048x2048",
+  "status": "GENERATED",
+  "image_file": "VOLC_DRILL_001\\rgbcw_strip_seedream.png",
+  "image_bytes": 294402,
+  "image_sha256": "ee1446cfa7241b43000a30d441b763a3a3f881157221ce254197d1d133b2b0ba",
+  "response_file": "volc_image_response.json",
+  "ts": "2026-10-08T19:06:03.266396"
+}

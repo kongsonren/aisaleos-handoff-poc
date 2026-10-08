@@ -1,0 +1,42 @@
+{
+  "report": "1WB 接缺陷逐条修复（以 R1 D5 DEF-1..5 为输入）",
+  "scanned_at": "2026-10-08",
+  "defects": [
+    {
+      "id":"DEF-1","issue":"MOZI 版本歧义（内部1.1.0 vs 申报V1.0）",
+      "before":"申报草案未说明版本分歧",
+      "after":"MOZI_V1_FILING_DRAFT_R2.json 增加 version_note，标注分歧并给对齐建议；待 KR_GATE 确认",
+      "fix_evidence":"R2_FIVE_DRILLS/MOZI_V1_FILING_DRAFT_R2.json::version_note",
+      "status":"FIXED_IN_DRAFT (KR confirm needed)"
+    },
+    {
+      "id":"DEF-2","issue":"SM1191 命名冲突（公开检索=收音机IC）",
+      "before":"UNKNOWN",
+      "after":"保持 UNKNOWN；机器无法解决，须 KR 澄清真实定义",
+      "fix_evidence":"无机器可解动作；列为 KR_GATE 事项①",
+      "status":"KR_GATE (not machine-fixable)"
+    },
+    {
+      "id":"DEF-3","issue":"火山视频未授权",
+      "before":"BLOCKER",
+      "after":"保持 BLOCKED；未调用任何付费视频模型，仅保留已生成图片原件+安全证据摘要",
+      "fix_evidence":"VOLC_DRILL_001/rgbcw_strip_seedream.png + EVIDENCE.json 保留；无视频调用记录",
+      "status":"KR_GATE (not machine-fixable)"
+    },
+    {
+      "id":"DEF-4","issue":"8051 入口桩（无真实展示）",
+      "before":"生产页为 V0.1 入口桩，无产品展示位",
+      "after":"本地开发真实 RGBCW 展示预览 R2_RGBCW_SHOWCASE/index.html（引用已核实事实+标注AI生成），未触碰生产环境",
+      "fix_evidence":"R2_FIVE_DRILLS/R2_RGBCW_SHOWCASE/index.html + rgbcw_strip_seedream.png",
+      "status":"PARTIAL_FIXED (local showcase ready; prod deploy = KR_GATE)"
+    },
+    {
+      "id":"DEF-5","issue":"TOP3 #2/#3 仅代码体量，须诚实标注",
+      "before":"TOP3 已标注体量，但候选池覆盖不透明",
+      "after":"产出全候选池 8 实体五指标矩阵（SOFTWARE_COPYRIGHT_FULLPOOL.json），透明列出 5 个非候选，确认 TOP3 不冒充全池",
+      "fix_evidence":"R2_FIVE_DRILLS/SOFTWARE_COPYRIGHT_FULLPOOL.json",
+      "status":"FIXED"
+    }
+  ],
+  "summary": "机器可解项 DEF-1/DEF-4/DEF-5 已修复并附前后证据；DEF-2/DEF-3 为主权事项，机器不伪修，交 KR_GATE。"
+}

@@ -1,0 +1,22 @@
+{
+  "scan": "80-Code top-level entities = full software-copyright candidate pool",
+  "scanned_at": "2026-10-08",
+  "scanner": "1WB (R2)",
+  "five_indicators": {"M":"MANIFEST","S":"SEAL","T":"TESTS","B":"BUILD_REPORT","I":"IDENTITY"},
+  "pool_size": 8,
+  "entities": [
+    {"name":"mozi-v1","code_files":7,"M":true,"S":true,"T":true,"B":true,"I":true,"mstbi":true,"verdict":"DRAFT_READY (TOP1)"},
+    {"name":"baserow","code_files":6,"M":true,"S":false,"T":false,"B":false,"I":false,"mstbi":false,"verdict":"NOT_READY (manifest only)"},
+    {"name":"ai","code_files":3,"M":false,"S":false,"T":true,"B":false,"I":false,"mstbi":false,"verdict":"NOT_READY (tests only)"},
+    {"name":"nezha-loop","code_files":2,"M":false,"S":false,"T":true,"B":false,"I":false,"mstbi":false,"verdict":"NOT_READY (tests only; R1 TOP3 #2 by volume)"},
+    {"name":"deploy","code_files":0,"M":false,"S":false,"T":false,"B":false,"I":true,"mstbi":false,"verdict":"NOT_READY (no code, deploy config)"},
+    {"name":"n8n","code_files":0,"M":false,"S":false,"T":false,"B":false,"I":false,"mstbi":false,"verdict":"NOT_READY (empty)"},
+    {"name":"obsidian","code_files":3,"M":false,"S":false,"T":false,"B":false,"I":false,"mstbi":false,"verdict":"NOT_READY"},
+    {"name":"streamlit","code_files":3,"M":false,"S":false,"T":false,"B":false,"I":false,"mstbi":false,"verdict":"NOT_READY"}
+  ],
+  "candidates": ["mozi-v1"],
+  "r1_top3": ["mozi-v1","nezha-loop","baserow"],
+  "honesty_note": "R1 TOP3 covers 3 of 8 entities; the other 5 are explicitly listed as NON-candidates (not hidden). TOP3 does NOT 冒充 full pool. #2/#3 ranked by code volume only, not maturity — correctly de-prioritized.",
+  "scan_scope_limitation": "Pool limited to 80-Code vault. Other code repos outside 80-Code (if any) not included; should be scanned before final filing decision.",
+  "def_fixed": "DEF-5 (R1) addressed: full 8-entity matrix now transparent; non-candidates visible."
+}

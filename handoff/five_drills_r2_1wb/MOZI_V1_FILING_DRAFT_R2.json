@@ -1,0 +1,25 @@
+{
+  "software_name_full": "墨子V1健康观测与诊断软件",
+  "version_declared": "V1.0",
+  "version_internal_actual": "1.1.0",
+  "version_note": "DEF-1 FIXED(in-draft): internal repo tag is 1.1.0 but declared filing version is V1.0. Must align before submission — recommendation: submit as V1.0 with explanatory note, or retag release to V1.0. Requires KR_GATE confirm.",
+  "dev_complete_date": "2026-10-05",
+  "rights_holder": "UNKNOWN_TBD",
+  "rights_holder_note": "KR_GATE: confirm legal entity (酬成科创 / 智慧世界科技 / other).",
+  "source_lines": 1387,
+  "core_functions": [
+    "六维诊断门：可用性/性能/依赖/安全/数据/链路 实时观测",
+    "异常自动分级与告警路由",
+    "历史快照与回放",
+    "跨域联邦健康聚合"
+  ],
+  "gaps": {
+    "rights_holder": "BLOCKER / KR_GATE",
+    "version_alignment": "FIXED-in-draft, needs KR confirm",
+    "user_manual": "MISSING — must produce operation manual before filing",
+    "submission_auth": "KR_GATE"
+  },
+  "status": "DRAFT_ONLY_R2",
+  "r2_fixed": ["DEF-1 version ambiguity documented"],
+  "next": "KR_GATE authorize → generate formal申请表 + 源程序页 + 用户手册"
+}

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>RGBCW 60×1cm 软灯带 · 本地展示预览 (DEV)</title>
+<style>
+  body{font-family:"Microsoft YaHei",system-ui,sans-serif;margin:0;background:#0f1115;color:#e8eaed;line-height:1.6}
+  .banner{background:#7a1f1f;color:#ffd9d9;padding:8px 16px;font-size:13px;font-weight:bold;text-align:center}
+  .wrap{max-width:960px;margin:0 auto;padding:24px}
+  h1{font-size:22px;margin-bottom:4px}
+  .sub{color:#9aa0a6;font-size:13px;margin-bottom:20px}
+  .facts{background:#1a1d23;border:1px solid #2a2e36;border-radius:8px;padding:16px;margin-bottom:20px}
+  .facts table{width:100%;border-collapse:collapse;font-size:14px}
+  .facts th,.facts td{border:1px solid #2a2e36;padding:8px 10px;text-align:left}
+  .facts th{background:#22262e;color:#cdd2d8}
+  .tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:bold}
+  .tag.real{background:#143d1f;color:#7dffa6}
+  .tag.ai{background:#3a2f00;color:#ffe27a}
+  .imgbox{border:1px solid #2a2e36;border-radius:8px;padding:16px;background:#15181d;text-align:center}
+  .imgbox img{max-width:100%;height:auto;border-radius:6px}
+  .note{font-size:12px;color:#9aa0a6;margin-top:8px}
+  .gate{margin-top:20px;background:#1f1300;border:1px solid #4a3500;border-radius:8px;padding:12px;font-size:13px;color:#ffd98a}
+  footer{color:#6b7077;font-size:12px;text-align:center;padding:16px}
+</style>
+</head>
+<body>
+<div class="banner">⚠ 本地开发预览（DEV）· 非生产环境 · 生产部署与飞书回写须 KR_GATE 授权</div>
+<div class="wrap">
+  <h1>RGBCW 60×1cm 软灯带 · 产品展示预览</h1>
+  <div class="sub">来源链路：RGBCW 真实资料（Obsidian 00-Inbox/RGBCW_REAL_001.md）→ 火山方舟 Seedream 出图 → 本地展示预览（R2 五练）</div>
+
+  <div class="facts">
+    <h3 style="margin-top:0">已核实产品事实 <span class="tag real">REAL</span></h3>
+    <p class="note">下列为市场同型 RGBCW 软灯带已核实规格（来自 R1 WebSearch + 8051 真归档），用作展示基线；非我方最终 SKU 规格，最终以 KR 确认之产品定义为准。</p>
+    <table>
+      <tr><th>项目</th><th>规格（已核实）</th></tr>
+      <tr><td>灯珠类型</td><td>5050 RGB + 白光（3000K–6000K 可调）</td></tr>
+      <tr><td>宽度</td><td>约 12 mm（1cm 级窄边）</td></tr>
+      <tr><td>电压</td><td>DC 24V</td></tr>
+      <tr><td>功率</td><td>约 15–19 W/m</td></tr>
+      <tr><td>显色指数</td><td>CRI ≥ 80</td></tr>
+      <tr><td>防护等级</td><td>IP20（室内）– IP68（可定制）</td></tr>
+      <tr><td>安装</td><td>3M 背胶 / 铝槽</td></tr>
+    </table>
+  </div>
+
+  <div class="imgbox">
+    <img src="rgbcw_strip_seedream.png" alt="RGBCW 软灯带 AI 生成预览图" />
+    <div class="note">
+      此图由 <b>火山方舟 Seedream（doubao-seedream-5-0-260128）</b> 生成
+      <span class="tag ai">AI 生成</span><br/>
+      生成时间 2026-10-08 · 原始件 SHA256：ee1446cfa7241b43000a30d441b763a3a3f881157221ce254197d1d133b2b0ba<br/>
+      图片为概念预览，非产品实拍；实际产品外观以量产为准。
+    </div>
+  </div>
+
+  <div class="gate">
+    🔒 <b>KR_GATE 待决事项</b>：① 我方 RGBCW 最终产品定义（含 SM1191 冲突澄清）② 生产展示页部署授权 ③ 飞书 Base 真源回写授权 ④ 火山视频生成授权（当前未授权，未调用付费视频模型）。
+    未经 KR 授权，本预览不推送至生产环境（kr-8051-assets）。
+  </div>
+
+  <div class="facts" style="background:#10241a;border-color:#1d4a32">
+    <h3 style="margin-top:0">本地打开验证 <span class="tag real">OPEN_VERIFIED</span></h3>
+    <p class="note">2026-10-09 由 1WB 后腿启动本地 HTTP 服务（端口 8099）实测：HTML 返回 HTTP 200、<code>rgbcw_strip_seedream.png</code> 资源返回 HTTP 200、HTML 解析结构完整。验证仅限本地开发态，未触碰生产环境（kr-8051-assets）。</p>
+  </div>
+
+  <footer>本地预览生成于 2026-10-09 · 1WB 后腿 R2 · 仅开发态，不作为对外发布物</footer>
+</div>
+</body>
+</html>
