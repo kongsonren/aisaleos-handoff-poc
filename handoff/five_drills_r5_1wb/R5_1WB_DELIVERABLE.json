@@ -1,0 +1,105 @@
+{
+  "command": "FIVE-DRILLS-R5 | 同一缺陷、同一证据、同一裁决",
+  "generated_by": "1WB 后腿 (LOCAL_REAR_LEG) — 本件为 1WB 侧已执行部分；2WB 前腿由其自有通道执行，不在此件伪造",
+  "discipline": "不重跑五练 / 不新建BUS / 不新增缺陷编号 / 只允许原始证据证明PASS / 两腿结论不同须列文件版本时间不互相覆盖",
+  "R1_RECEIVED": {
+    "value": true,
+    "evidence": "handoff/five_drills_v1/D5_2WB_REPORT.json",
+    "sha256": "395ae737057a06868053012b60e57373562febe286e55494292ae45d54196741",
+    "bytes": 3335,
+    "defect_ids": [
+      "DEF-1",
+      "DEF-2",
+      "DEF-3",
+      "DEF-4",
+      "DEF-5"
+    ],
+    "local_preserved": "R5_R1_D5_2WB_REPORT.json",
+    "verdict_in_file": "D5 = PASS（研究/核查 REAL，缺陷已回传不替1WB自证）"
+  },
+  "R2_RECEIVED": {
+    "value": false,
+    "status": "UNKNOWN",
+    "reason": "1WB 从未收到 R2 DEF-A~F 权威原件；本地 2WB_DEFECT_LIST_R2.json 显式 generated_by=1WB-side stand-in (NOT canonical 2WB node)，已排除，不得替代",
+    "tdrive": "H4_RELAY_POC (ZNLrUcryedmwUyimUZHE) 返回 error_code 40730 / code 12607 / access denied, role is invalid；项目根 VoIzhALatQAiOzGBeg 空列成功 -> 真实角色边界，非会话/账号/路径错误",
+    "reprobe": "按 R5 纪律已停止对 40730 通道的重复探针"
+  },
+  "DEFECT_MAPPING": [
+    {
+      "r1_defect": "DEF-1",
+      "title": "MOZI 版本歧义(__version__=1.1.0 vs 申报 V1.0)",
+      "fix_evidence": "handoff/five_drills_r2_1wb/MOZI_V1_FILING_DRAFT_R2.json (sha 41d4c520…079909)",
+      "local_evidence": "MOZI_V1_FILING_DRAFT_R2.json",
+      "status": "FIX_DOCUMENTED",
+      "note": "version_declared=V1.0 / internal_actual=1.1.0 / status=DRAFT_ONLY_R2 / r2_fixed=[DEF-1 version ambiguity documented]；提交前对齐须 KR_GATE 确认，非 1WB 缺口"
+    },
+    {
+      "r1_defect": "DEF-2",
+      "title": "SM1191 命名冲突=收音机IC(SOP28)",
+      "fix_evidence": "无（非 1WB 可修）",
+      "status": "KR_GATE",
+      "note": "须 KR 澄清 SM1191 真实定义；属主权门，非 1WB 能力缺口"
+    },
+    {
+      "r1_defect": "DEF-3",
+      "title": "火山视频不在授权 scope",
+      "fix_evidence": "handoff/five_drills_r2_1wb/VOLC_EVIDENCE.json (sha 见 repo)",
+      "status": "COMPLIANT",
+      "note": "未调用任何付费视频模型，正确 BLOCKED；范围边界非缺陷"
+    },
+    {
+      "r1_defect": "DEF-4",
+      "title": "8051 页 V0.1 桩 PARTIAL",
+      "fix_evidence": "handoff/five_drills_r2_1wb/R2_RGBCW_SHOWCASE/index.html (sha dfefff99…d7aa1) + rgbcw_strip_seedream.png (sha ee1446cf…b2b0ba)",
+      "status": "LOCAL_READY",
+      "note": "DEV 预览 OPEN_VERIFIED(8099 HTTP200)；生产部署待 KR_GATE"
+    },
+    {
+      "r1_defect": "DEF-5",
+      "title": "软著 TOP3 仅代码体量",
+      "fix_evidence": "handoff/five_drills_r2_1wb/SOFTWARE_COPYRIGHT_FULLPOOL.json (sha 01f89a53…82d4f7)",
+      "status": "RESOLVED",
+      "note": "全 8 实体矩阵透明，非候选可见，未冒充全池"
+    }
+  ],
+  "FIXES_VERIFIED": {
+    "method": "仅原始证据(远端blob SHA + 本地 SHA)证明",
+    "verified": [
+      "DEF-1(documented)",
+      "DEF-3(compliant)",
+      "DEF-4(local preview ready)",
+      "DEF-5(resolved)"
+    ],
+    "kr_gate": [
+      "DEF-2(SM1191 澄清)",
+      "DEF-4(生产部署)",
+      "DEF-1(版本提交前对齐)"
+    ],
+    "remote_eq_local": {
+      "MOZI_V1_FILING_DRAFT_R2.json": "MATCH",
+      "SOFTWARE_COPYRIGHT_FULLPOOL.json": "MATCH",
+      "R2_RGBCW_SHOWCASE\\index.html": "MATCH",
+      "R2_RGBCW_SHOWCASE\\rgbcw_strip_seedream.png": "MATCH"
+    }
+  },
+  "R2_ONLY_BLOCKERS": {
+    "value": "BLOCKED/UNKNOWN",
+    "detail": "R2 DEF-A~F 为 2WB 持有之权威原件，1WB 未收到（H4 40730 + 无其它已授权读取面）；本地 stand-in 已排除。无法枚举具体 R2 独有项，标记 UNKNOWN，待 2WB 经授权通道交付后由 1WB 比对",
+    "stand_in_excluded": "2WB_DEFECT_LIST_R2.json (D-R2-1~6) 仅 1WB 替身，禁止作为 R2 权威原件"
+  },
+  "MINIMUM_PERMISSION_NEEDED": {
+    "proposal": "2WB 将 R2 DEF-A~F 两份权威原件发布至既有 GitHub handoff-state 中 1WB 已可读路径（建议 handoff/five_drills_r5_2wb/），实现文件级、限时、非长期 PAT 的读取",
+    "no_new_tdrive_grant": true,
+    "no_long_term_pat": true,
+    "channel": "现有 GitHub handoff-state（已验证 1WB 可读 five_drills_v1/ 与 five_drills_r2_1wb/）",
+    "rationale": "避免重复攻击 tdrive H4(40730)；复用已授权通道即满足两腿共同收果点5"
+  },
+  "CROSS_LEG_VERDICT": {
+    "type": "ASYMMETRIC_NON_OVERRIDING",
+    "r1_common": "R1(D5_2WB_REPORT.json, DEF-1~5) 为两腿共同已收件 -> 同一缺陷/同一证据/同一裁决：1WB 修复证据经 GitHub 发布且远端==本地 SHA，2WB 可直读复验",
+    "r2_divergence": "R2 DEF-A~F 仅 2WB 持有，1WB=UNKNOWN；两腿证据基不同，须列文件/版本/时间不互相覆盖",
+    "shared_verdict_on_R1": "VERIFIED (original-evidence backed)",
+    "r2_status": "PENDING_2WB_SUPPLY",
+    "no_overwrite": "1WB 不覆盖 2WB 历史结果；2WB 不覆盖 1WB 历史结果"
+  }
+}
