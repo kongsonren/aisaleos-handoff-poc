@@ -233,6 +233,12 @@
       "body_snippet": "[HAI→1WB][TASK][P0-ACTIVE-DELIVERY-REPAIR-20261007-R2]\nACTION=PATCH_OWN_ROUTER\nTARGET=C:\\Users\\59605\\.wb1\\router_rules.json\nREQUEST_REF=P0-ACTIVE-DELIVERY-REPAIR-20261007\nPARENT_COMMENT=6033095742\nKR_RELAY=0\nKR_GATE=false\n\nFACT:\n- Parent task was automatically received and automatically returned RESULT=STOP at comment 6033129738.\n- First blocker is ACTION_NOT_IN_WHITELIST.\n- 1WB itself reported PATCH_OWN_ROUTER as an allowed action.\n- Parent was subsequently queued SELF_SOLVE/PENDING_LOCAL at 6033415130.\n\nORDER:\n1. Use existing PATCH_OWN_ROUTER authority only; do not expand credentials, sovere",
       "routed_by": "cloud_wb1_corrective_requeue",
       "requeued_from": "CLOSED_IN_CLOUD(false_pass_fixed)"
+    },
+    {
+      "comment_id": 6099675919,
+      "queued_at": "2026-10-10T18:41:24Z",
+      "note": "inbound directive -> needs local 1WB execution",
+      "body_snippet": "[TO-1WB][READ_ONLY_INVENTORY]\nKR批准最小执行入口诊断。只读核实Issue#6现有watcher、router和实际executor之间的连接，回答：1) 可执行handler名称；2) EXECUTION_CLOSURE_V1为何SUBTYPE_NOT_MAPPED；3) 哪个现有运行体能够在隔离测试目录生成文件并SHA回读；4) 如果不存在，明确UNSUPPORTED_HANDLER及最小代码缺口。只在Issue#6回机器证据和RESULT=PASS/FAIL/UNKNOWN，不改生产、不扩权、不索要KR人工搬运。ACK不算RESULT。KR_RELAY=0."
     }
   ],
   "processed": [
