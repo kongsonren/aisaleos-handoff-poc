@@ -17,6 +17,7 @@ from task_state import GitHubStore, TaskState, now_iso  # noqa: E402
 
 TOKEN = os.environ.get("GITHUB_TOKEN") or os.environ.get("MOZI_GH_TOKEN")
 REPO = os.environ.get("GITHUB_REPOSITORY", "kongsonren/aisaleos-handoff-poc")
+STATE_BRANCH = os.environ.get("NEZHA_STATE_BRANCH", "main")
 ALIVE_SEC = int(os.environ.get("MOZI_ALIVE_SEC", "120"))
 STALLED_SEC = int(os.environ.get("MOZI_STALLED_SEC", "300"))
 OBS_DIR = ".wb1/nezha/observations"
@@ -35,7 +36,7 @@ def wait_and_schedule():
     """
     beat = int(os.environ.get("MOZI_BEAT_MIN", "30"))
     maxb = int(os.environ.get("MOZI_MAX_BEATS", "120"))
-    store = GitHubStore(TOKEN, REPO)
+    store = GitHubStore(TOKEN, REPO, branch=STATE_BRANCH)
     marker, _, _, read_code = store.read_json(".wb1/nezha/mozi_beat.json", default={})
     # Never treat a failed read or a missing counter as a new generation.
     if read_code != 200 or not isinstance(marker, dict) or "seq" not in marker:
@@ -65,7 +66,7 @@ def wait_and_schedule():
     if not committed.get("ok"):
         log("FATAL: marker write failed; no dispatch: %s" % committed.get("error"))
         return 7
-    s, d = store._req("POST", "/repos/%s/actions/workflows/mozi-auto.yml/dispatches" % REPO, {"ref": "main"})
+    s, d = store._req("POST", "/repos/%s/actions/workflows/mozi-auto.yml/dispatches" % REPO, {"ref": STATE_BRANCH})
     log("self-scheduled next mozi beat -> HTTP %s (seq was %d)" % (s, seq))
     print(json.dumps({"mozi_self_scheduled": s in (204, 201, 200), "http": s, "detail": str(d)[:160]},
                      ensure_ascii=False))
@@ -79,7 +80,7 @@ def main():
         if os.environ.get("MOZI_SELF_SCHEDULE") != "1":
             log("mozi self-schedule disabled"); return 0
         return wait_and_schedule()
-    store = GitHubStore(TOKEN, REPO)
+    store = GitHubStore(TOKEN, REPO, branch=STATE_BRANCH)
     ts = TaskState(store)
     st, sha, head, code = ts.load()
     if st is None:
