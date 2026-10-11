@@ -295,11 +295,14 @@ def wait_and_schedule():
     此后**每一拍的发起请求都由上一个云端 runner 自己发出**，LOCAL 零参与。
     """
     store = GitHubStore(TOKEN, REPO)
-    hb, _, _, _ = store.read_json(HEARTBEAT_PATH, default={})
-    seq = int((hb or {}).get("round_seq", 0))
+    hb, _, _, code = store.read_json(HEARTBEAT_PATH, default={})
+    if code != 200 or not isinstance(hb, dict) or "round_seq" not in hb:
+        log("FATAL: heartbeat read failed; HTTP %s" % code)
+        return 5
+    seq = int(hb["round_seq"])
     if seq >= MAX_BEATS:
         log("MAX_BEATS=%d reached; self-schedule chain stops here" % MAX_BEATS)
-        return 0
+        return 6
     now = datetime.now(timezone.utc).replace(second=0, microsecond=0)
     add = BEAT_MIN - (now.minute % BEAT_MIN)
     nxt = now + timedelta(minutes=add)
@@ -311,7 +314,7 @@ def wait_and_schedule():
     log("self-scheduled next beat -> HTTP %s (seq was %d)" % (s, seq))
     print(json.dumps({"self_scheduled": s in (204, 201, 200), "http": s, "detail": str(d)[:160]},
                      ensure_ascii=False))
-    return 0
+    return 0 if s in (204, 201, 200) else 8
 
 
 def main():
