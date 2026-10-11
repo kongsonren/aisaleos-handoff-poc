@@ -344,8 +344,17 @@ def main():
     if maybe_throttled(store):
         return 0
 
-    hb_prev, _, _, _ = store.read_json(HEARTBEAT_PATH, default={})
-    seq = int((hb_prev or {}).get("round_seq", 0)) + 1
+    hb_prev, _, _, status = store.read_json(HEARTBEAT_PATH, default={})
+    if status != 200 or not isinstance(hb_prev, dict) or "round_seq" not in hb_prev:
+        log("FATAL: heartbeat unavailable")
+        return 5
+    try:
+        seq = int(hb_prev["round_seq"]) + 1
+        if seq <= 0:
+            raise ValueError("invalid counter")
+    except (TypeError, ValueError):
+        log("FATAL: invalid heartbeat counter")
+        return 5
 
     decision, skips, out = None, [], {}
     t0 = time.time()                       # ③ TIMEOUT_BUDGET：本拍墙钟起点
