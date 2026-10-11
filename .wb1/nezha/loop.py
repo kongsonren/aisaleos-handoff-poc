@@ -240,9 +240,10 @@ def load_tasks(store, index):
     out = {}
     for tid in index["tasks"]:
         path = ".wb1/nezha/task_state_%s.json" % tid if tid != "TASK-REAL-011" else ".wb1/nezha/task_state.json"
-        st, _, _, _ = TaskState(store, path).load()
-        if st:
-            out[tid] = st
+        st, _, _, code = TaskState(store, path).load()
+        if code != 200 or not isinstance(st, dict):
+            raise RuntimeError("task state unavailable for %s (HTTP %s)" % (tid, code))
+        out[tid] = st
     return out
 
 
