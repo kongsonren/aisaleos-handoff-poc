@@ -96,7 +96,7 @@ def step_4(store, state, manifest):
 def main():
     if not TOKEN:
         log("FATAL: no token"); return 2
-    store = GitHubStore(TOKEN, REPO)
+    store = GitHubStore(TOKEN, REPO, branch=os.environ.get("NEZHA_STATE_BRANCH", "main"))
     ts = TaskState(store)
     state, sha, head, code = ts.load()
     if state is None:
