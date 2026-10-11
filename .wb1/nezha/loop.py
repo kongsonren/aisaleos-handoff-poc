@@ -262,9 +262,7 @@ def diagnose(store, tasks):
     diag = {"diag_at": now_iso(), "host": os.uname().nodename[:24],
             "run_id": os.environ.get("GITHUB_RUN_ID"), "note": "admission logic executed on runner, no side effect",
             "rows": rows}
-    c = store.commit_files({".wb1/nezha/loop_diag.json": json.dumps(diag, ensure_ascii=False, indent=2).encode()},
-                           "[NEZHA] DIAG scan (no task created, no state change)")
-    diag["diag_commit"] = c.get("commit")
+    diag["diag_commit"] = None  # Diagnostic output only; no repository write
     for r in rows:
         log("DIAG|", json.dumps({k: r[k] for k in ("id", "capability", "auth_ok", "gate_flag",
                                                    "admission_ready", "admission_reason")}, ensure_ascii=False)[:300])
