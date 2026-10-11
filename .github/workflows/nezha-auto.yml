@@ -18,7 +18,7 @@ on:
     - cron: "*/5 * * * *"
 
 concurrency:
-  group: nezha-cloud-executor   # 与原 concurrent 组同名：保证同一时刻只有一个被执行，绝不双跑
+  group: nezha-cloud-executor-${{ github.ref_name }}   # 与原 concurrent 组同名：保证同一时刻只有一个被执行，绝不双跑
   cancel-in-progress: false
 
 permissions:
@@ -72,7 +72,7 @@ jobs:
       # 用途：GitHub 原生 schedule cron 在本仓库实测长期不自行触发（event=schedule 历史 0 条），
       # 这是减损链。第一推动力在黑武士关机前搬一次，此后每一拍的发起都由云端自己完成。
       - name: Cloud self-schedules next beat
-        if: always()
+        if: ${{ always() && inputs.diag != 'true' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NEZHA_SELF_SCHEDULE: "1"
