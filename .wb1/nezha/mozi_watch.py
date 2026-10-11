@@ -36,11 +36,21 @@ def wait_and_schedule():
     beat = int(os.environ.get("MOZI_BEAT_MIN", "30"))
     maxb = int(os.environ.get("MOZI_MAX_BEATS", "120"))
     store = GitHubStore(TOKEN, REPO)
-    marker, _, _, _ = store.read_json(".wb1/nezha/mozi_beat.json", default={})
-    seq = int((marker or {}).get("seq", 0))
+    marker, _, _, read_code = store.read_json(".wb1/nezha/mozi_beat.json", default={})
+    # Never treat a failed read or a missing counter as a new generation.
+    if read_code != 200 or not isinstance(marker, dict) or "seq" not in marker:
+        log("FATAL: beat marker unreadable/incomplete (HTTP %s); refusing counter reset" % read_code)
+        return 5
+    try:
+        seq = int(marker["seq"])
+        if seq < 0:
+            raise ValueError("negative seq")
+    except (TypeError, ValueError) as exc:
+        log("FATAL: invalid beat marker: %s" % exc)
+        return 5
     if seq >= maxb:
         log("MOZI_MAX_BEATS=%d reached; independent chain stops here" % maxb)
-        return 0
+        return 6
     now = datetime.now(timezone.utc).replace(second=0, microsecond=0)
     add = beat - (now.minute % beat)
     nxt = now + timedelta(minutes=add)
@@ -48,15 +58,18 @@ def wait_and_schedule():
     log("sleep %.0fs until next mozi beat %s (seq=%d)" % (max(sleep_s, 0), nxt.isoformat(), seq))
     if sleep_s > 0:
         time.sleep(sleep_s)
-    store.commit_files({".wb1/nezha/mozi_beat.json": json.dumps(
+    committed = store.commit_files({".wb1/nezha/mozi_beat.json": json.dumps(
         {"seq": seq + 1, "last_dispatch_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
          "beat_min": beat, "note": "MOZI independent self-schedule marker"},
         ensure_ascii=False, indent=2).encode()}, "[MOZI] beat marker seq=%d" % (seq + 1))
+    if not committed.get("ok"):
+        log("FATAL: marker write failed; no dispatch: %s" % committed.get("error"))
+        return 7
     s, d = store._req("POST", "/repos/%s/actions/workflows/mozi-auto.yml/dispatches" % REPO, {"ref": "main"})
     log("self-scheduled next mozi beat -> HTTP %s (seq was %d)" % (s, seq))
     print(json.dumps({"mozi_self_scheduled": s in (204, 201, 200), "http": s, "detail": str(d)[:160]},
                      ensure_ascii=False))
-    return 0
+    return 0 if s in (204, 201, 200) else 8
 
 
 def main():
