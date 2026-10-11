@@ -230,9 +230,9 @@ def ctx_first_leg_cid(store):
 
 # ================================================== 主循环（一轮一个动作）
 def load_index(store):
-    d, _, _, _ = store.read_json(INDEX_PATH, default={})
-    if not d or "tasks" not in d:
-        d = {"tasks": list(BOOTSTRAP_TASKS), "bootstrapped_at": now_iso()}
+    d, _, _, code = store.read_json(INDEX_PATH, default={})
+    if code != 200 or not isinstance(d, dict) or not isinstance(d.get("tasks"), list):
+        raise RuntimeError("task index read failed or invalid: HTTP %s" % code)
     return d
 
 
