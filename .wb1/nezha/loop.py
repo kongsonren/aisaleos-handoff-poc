@@ -33,6 +33,7 @@ import run_budget as B          # 七日纪律③：TIMEOUT_BUDGET / RETRY_LIMIT
 CN = timezone(timedelta(hours=8))
 TOKEN = os.environ.get("GITHUB_TOKEN") or os.environ.get("MOZI_GH_TOKEN")
 REPO = os.environ.get("GITHUB_REPOSITORY", "kongsonren/aisaleos-handoff-poc")
+STATE_BRANCH = os.environ.get("NEZHA_STATE_BRANCH", "main")
 ACTOR = P.ACTOR
 STALE_SEC = int(os.environ.get("NEZHA_STALE_SEC", "600"))
 THROTTLE_SEC = int(os.environ.get("NEZHA_THROTTLE_SEC", "240"))   # 多来源叠加时节拍去抖
@@ -294,7 +295,7 @@ def wait_and_schedule():
     这条链是减损方案 —— 第一推动力仍在黑武士关机前由 LOCAL 搬到云端一次，
     此后**每一拍的发起请求都由上一个云端 runner 自己发出**，LOCAL 零参与。
     """
-    store = GitHubStore(TOKEN, REPO)
+    store = GitHubStore(TOKEN, REPO, branch=STATE_BRANCH)
     hb, _, _, code = store.read_json(HEARTBEAT_PATH, default={})
     if code != 200 or not isinstance(hb, dict) or "round_seq" not in hb:
         log("FATAL: heartbeat read failed; HTTP %s" % code)
@@ -316,7 +317,7 @@ def wait_and_schedule():
     log("sleep %.0fs until next beat boundary %s" % (max(sleep_s, 0), nxt.isoformat()))
     if sleep_s > 0:
         time.sleep(sleep_s)
-    s, d = store._req("POST", "/repos/%s/actions/workflows/nezha-auto.yml/dispatches" % REPO, {"ref": "main"})
+    s, d = store._req("POST", "/repos/%s/actions/workflows/nezha-auto.yml/dispatches" % REPO, {"ref": STATE_BRANCH})
     log("self-scheduled next beat -> HTTP %s (seq was %d)" % (s, seq))
     print(json.dumps({"self_scheduled": s in (204, 201, 200), "http": s, "detail": str(d)[:160]},
                      ensure_ascii=False))
@@ -326,7 +327,7 @@ def wait_and_schedule():
 def main():
     if not TOKEN:
         log("FATAL: no token"); return 2
-    store = GitHubStore(TOKEN, REPO)
+    store = GitHubStore(TOKEN, REPO, branch=STATE_BRANCH)
     if "--wait-and-schedule" in sys.argv:
         if os.environ.get("NEZHA_SELF_SCHEDULE") != "1":
             log("self-schedule disabled"); return 0
