@@ -48,6 +48,7 @@ jobs:
           NEZHA_STALE_SEC: "900"   # LOCAL 不再有常驻心跳：最后一吻时间戳 + 15 分钟窗口，
                                    # KR 须在冻结后 15 分钟内物理关机，接管必然晚于关机
         run: |
+          set -e
           echo "run_id=$GITHUB_RUN_ID attempt=$GITHUB_RUN_ATTEMPT started=$(date -u +%FT%TZ)"
           if [ "${{ inputs.diag }}" = "true" ]; then
             echo "mode=diagnose"
@@ -65,6 +66,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          set -e
           python .wb1/nezha/mozi_watch.py
           echo "moziexit=$?"
 
@@ -79,5 +81,6 @@ jobs:
           NEZHA_BEAT_MIN: "5"
           NEZHA_MAX_BEATS: "240"
         run: |
+          set -e
           python .wb1/nezha/loop.py --wait-and-schedule
           echo "nextexit=$?"
