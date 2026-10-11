@@ -26,6 +26,7 @@ permissions:
 
 env:
   MOZI_SELF_SCHEDULE: "1"
+  NEZHA_STATE_BRANCH: ${{ github.ref_name }}
   MOZI_BEAT_MIN: "30"
 
 jobs:
