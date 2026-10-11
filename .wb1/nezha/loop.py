@@ -299,7 +299,13 @@ def wait_and_schedule():
     if code != 200 or not isinstance(hb, dict) or "round_seq" not in hb:
         log("FATAL: heartbeat read failed; HTTP %s" % code)
         return 5
-    seq = int(hb["round_seq"])
+    try:
+        seq = int(hb["round_seq"])
+        if seq < 0:
+            raise ValueError("negative round_seq")
+    except (TypeError, ValueError) as exc:
+        log("FATAL: invalid heartbeat counter: %s" % exc)
+        return 5
     if seq >= MAX_BEATS:
         log("MAX_BEATS=%d reached; self-schedule chain stops here" % MAX_BEATS)
         return 6
