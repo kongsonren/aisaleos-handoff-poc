@@ -274,8 +274,10 @@ def diagnose(store, tasks):
 
 def maybe_throttled(store):
     """节拍节流：多来源（GitHub cron / 自延续链）叠加时防止空转。"""
-    hb, _, _, _ = store.read_json(HEARTBEAT_PATH, default={})
-    last = (hb or {}).get("round_at")
+    hb, _, _, status = store.read_json(HEARTBEAT_PATH, default={})
+    if status != 200 or not isinstance(hb, dict):
+        raise RuntimeError("heartbeat read failed during throttle check: HTTP %s" % status)
+    last = hb.get("round_at")
     if not last:
         return False
     try:
