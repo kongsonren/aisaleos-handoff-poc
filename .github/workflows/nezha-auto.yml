@@ -27,6 +27,7 @@ permissions:
 
 env:
   NEZHA_SELF_SCHEDULE: "1"
+  NEZHA_STATE_BRANCH: ${{ github.ref_name }}
 
 jobs:
   loop:
