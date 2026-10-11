@@ -464,6 +464,9 @@ def main():
           "decision": decision, "skips": skips, "out": out}
     c = store.commit_files({HEARTBEAT_PATH: json.dumps(hb, ensure_ascii=False, indent=2).encode()},
                            "[NEZHA] loop beat #%d %s" % (seq, decision["kind"]))
+    if not c.get("ok"):
+        log("FATAL: heartbeat persistence failed")
+        return 9
     hb["heartbeat_commit"] = c.get("commit")
     log("HEARTBEAT seq=%s commit=%s" % (seq, c.get("commit")))
     print(json.dumps(hb, ensure_ascii=False, indent=2))
