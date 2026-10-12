@@ -62,7 +62,7 @@ jobs:
       # 目的：KR 要求墨子按 5 分钟节拍盯「有没有持续产 REAL」，而不是盯 PID/定时器/HTTP200。
       # mozi.yml 无 cron 自触发能力（本仓库 schedule 历史 0 条），故挂在自起拍链同拍执行。
       - name: MOZI patrol (read-only)
-        if: always()
+        if: ${{ always() && inputs.diag != 'true' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
