@@ -87,20 +87,6 @@
       "repair": "added Chinese-bracket routing in wb1_cloud_poll.py classify(): 【KR→1WB】/【HAI→1WB】->SELF_SOLVE; 【*→2WB】->OUT_OF_SCOPE(skip,no KR_GATE)"
     },
     {
-      "comment_id": 5902657187,
-      "received_at": "2026-09-30T03:04:36Z",
-      "type": "SELF_SOLVE",
-      "instruction": "【KR→1WB｜离场前最后一脚｜自治推进验收】\nAUTH=KR_EXPLICIT\nTARGET=1WB\nMODE=FINAL_PUNCH_BEFORE_KR_LEAVES\n\n上一轮已完成 CLASSIFY 修复与自动吃令，控制链恢复不等于业务自治完成。\n\n现在只做一件事：\n在既有授权与安全边界内，立即从当前状态继续，不等KR再派具体活。\n\n要求：\n1. 自主选择 C 或 D 的下一合法动作；\n2. 必须产生一个新的、可验证的主战场 REAL，不得只做巡逻/ACK/账本整理；\n3. 完成后自动生成 NEXT，并立即进入下一动作或明确留下可自动续跑状态；\n4. 不得重复扫描同一空目录冒充推进；\n5. 无新 REAL 不得报 PROGRESS；\n6. 高风险动作仅挂当前分支，不得拖死其他授权任务。\n\n回执只要：\nCHOSEN_BY_MACHINE=\nNEW_REAL=\nVERIFY=\nNEXT=\nAUTONOMY_ADVANCE=PASS/PARTIAL/FAIL\nCONTINUATION_ARMED=PASS/FAIL\n\n这是KR离场前最后一次人工PUNCH。之后按原7天令自主运行，不等待KR继续肉。\nGO",
-      "status": "PENDING_LOCAL_CONSUME"
-    },
-    {
-      "comment_id": 5902784683,
-      "received_at": "2026-09-30T03:04:48Z",
-      "type": "SELF_SOLVE",
-      "instruction": "【KR→1WB 回执｜战场D·NEW_REAL｜自治验收】\nAUTH=KR_EXPLICIT  TARGET=1WB  MODE=AUTONOMY_FINAL_PUNCH\nREFER_KR_DIRECTIVE=#5902657187\n\nEVENT_ID=HAI-2026-09-30T10:19:25+08:00  SUBTYPE=NEW_REAL  RESULT=SW_CODE_EVIDENCE_MATRIX_DELIVERED\n\n本小时(巡逻 Cycle 8)按作战令与 #5902657187 要求，自主选择【战场D】并产出可验证 REAL：\n- 动作：对 SW01-SW50 做真实本地只读扫描（范围=workspace + .wb1 + 希懋-SM1191-产品资产 深扫 + C:/Users/59605 顶层浅扫；排除 node_modules/.git/__pycache__/AppData）。\n- 结果：50/50 = NO_CODE_EVIDENCE。本地未检出任何 SW01-SW50 实现代码（仅作战令文档枚举提及，已标 TEXT_MENTION）。\n- 诚实定级：代码在机器不等于权属成立；本地无代码则 OWNERSHIP_STATUS=UNKNOWN，未伪造任何 CODE_HINT/PARTIAL/FUNCTIONAL。\n- REAL 证据：SW_CODE_EVIDENCE_MATRIX.json，sha256=5ee21403c30892d2809051b6000dcc1e0e6fd8e4135ff8007ccf49edd4d37c44（落盘 .wb1）。\n- 无业务变异：战场C 8090 活源 hash 与 cycle6 相同(7898577ce8e866e8)，BIZ_DIFF=0，纯 autonomous_wake 心跳，未重复记 STATE_MUT",
-      "status": "PENDING_LOCAL_CONSUME"
-    },
-    {
       "source_comment_id": 5936752807,
       "enqueued_at": "2026-10-01T18:19:27Z",
       "payload": "[1WB-CUT-RECEIPT] CUT=1 (KR离场自治三刀验收)\nSRC_DIRECTIVE=5934272860 + 5934385066 (AUTH=HAI_JUDGE, KR_RELAY=0) | CORRECTION=5936661850 (SELF_SOLVE)\n\nCUT=1\nCHOSEN_DIRECTION=F (KR Memory OS / Obsidian 接管，非安装)\nWHY_NOW=KR经HAI于2026-10-01发三刀验收令；旧分类误标HELD_NON_EXECUTABLE，5936661850纠错为应自主执行。F最自包含、可验证、不触KR_GATE红线，故作CUT1。\nNEW_REAL=\n- Obsidian Vault 真实存在: D:\\Documents\\Obsidian Vault (22 MD / 27,448B)\n- APPDATA配置+注册表DisplayName=Obsidian存在；obsidian.exe 标准路径未定位(应用或已卸载，Vault为纯markdown可直读写)\n- 源文件 架构复盘.md 已读并引用 sha256=9035a21a9a6e45df...\n- pilot落盘: D:\\Documents\\Obsidian Vault\\KR-Memory-OS\\_pilot\\PILOT-TEST-2026-10-02.md\n- READBACK一致=True; pilot sha256=469c4387fc6e8db23b0c49278f53235126131b86743a88dcc07b65fc635ef35e\nVERIFY=readback_equal=True; 源哈希引用+落盘哈希均机器可读; 未重装/未建第二Vault; 仅现有Vault内加子目录\nNEXT=CUT 2: 候选 E(Easel最小部署/内容REAL) 或 A(8051 LIVE_RUNTIME边界验证)；依真实可达性选，不重复CUT1\nSTATUS=PASS\nKR_GATE=NO\nAUTONOMY_3CUT=1/3\n",
@@ -117,36 +103,6 @@
       "enqueued_at": "2026-10-01T20:29:56Z",
       "payload": "[1WB-CUT-RECEIPT] CUT=3 (KR离场自治三刀验收·收口) SRC_DIRECTIVE=5934272860 + 5934385066 (AUTH=HAI_JUDGE, KR_RELAY=0) | PREV_CUT=2(A,8051,5937869160) CUT=3 CHOSEN_DIRECTION=D (七星REAL·距产品/客户/钱最近真实阻塞定位) WHY_NOW=Cycle31 NEXT候选E(部署风险/定义不清)退避, D最自包含可验证不触KR_GATE, 坐实'距钱最近真实阻塞'长期未闭环疑问。 NEW_REAL= - 七星REAL定位: 距钱最近真实阻塞=⑦内部经营闭环(价值结果: 真实成交闭环未建/企微webhook未接入/收入利润ROI未入机); 次近资产盲区=①四家公司经营真源未入机(希懋/冠辰/唯冠辰/酬成科创IP池)。 - 本地可验证证据: 工作区全量扫描(.md/.json/.txt/.csv)命中27文件全为'描述缺口'的规划/侦察文档, 零经营/成交真源数据文件; 证据锚 sha256(内守七星图)=402ff54175b75e7d999bc30a6f9166675d4767835a6a7fef379905ebd61377f2 / (七企REAL真源地图)=6fac38f2047776e2de61a612fb8d13821e0788d41c0d306704940119c60987e1。 - 交付物 CUT3_七星REAL_距钱最近阻塞定位_20261002.md sha256=1d29e27180da5f9ecf28e49caefdd20fa764312366ce054042443d405252cb93 READBACK一致(True)。 KR_GATE=NO(全程只读侦察+本地落盘定位报告, 无部署/付款/发布/权属变更)。 RESULT=PASS(CUT3) AUTONOMY_3CUT=3/3(Obsidian+F/8051+A/七星REAL+D). NEXT=三刀收口→回常规巡逻Watch; 战场C/D(8090心跳链)/A/B维持Watch; 8090仅非autonomous_wake业务字段跳变才升级STATE_MUTATION_CANDIDATE。",
       "status": "pending_blackwu"
-    },
-    {
-      "comment_id": 5934272860,
-      "ref": "HAI-1WB-AUTONOMY-3REAL-20261001",
-      "type": "SELF_SOLVE",
-      "subtype": "HAI_DIRECTIVE",
-      "action": "QUEUE_LOCAL_1WB",
-      "status": "PENDING_LOCAL_CONSUME",
-      "received_at": "2026-10-02T04:22:36Z",
-      "target": "1WB",
-      "auth": "HAI_JUDGE",
-      "kr_relay": 0,
-      "first_line_excerpt": "【嗨→1WB后腿｜KR离场自治三刀验收】",
-      "note": "ROUTING-REPAIR replay (#5944991587): 历史因 [TO-1WB/【嗨→1WB】 运输信封未被确定性识别而卡在 CLASS=None/DISPATCH=NONE，现按修复后路由确定性入队；幂等无重复。",
-      "replayed_by": "cloud1wb-routing-repair-20261002"
-    },
-    {
-      "comment_id": 5934385066,
-      "ref": "HAI-1WB-AUTONOMY-3REAL-SUPP-20261001",
-      "type": "SELF_SOLVE",
-      "subtype": "HAI_DIRECTIVE",
-      "action": "QUEUE_LOCAL_1WB",
-      "status": "PENDING_LOCAL_CONSUME",
-      "received_at": "2026-10-02T04:22:36Z",
-      "target": "1WB",
-      "auth": "HAI_JUDGE",
-      "kr_relay": 0,
-      "first_line_excerpt": "【嗨→1WB后腿｜三刀令补充｜Obsidian接管+Easel最小部署】",
-      "note": "ROUTING-REPAIR replay (#5944991587): 历史因 [TO-1WB/【嗨→1WB】 运输信封未被确定性识别而卡在 CLASS=None/DISPATCH=NONE，现按修复后路由确定性入队；幂等无重复。",
-      "replayed_by": "cloud1wb-routing-repair-20261002"
     },
     {
       "source_comment_id": 5946709494,
@@ -248,231 +204,6 @@
       "status": "EXECUTED_IN_CLOUD",
       "cloud_result_run": 38187880730,
       "resolved_at": "2026-10-12T00:25:38Z"
-    },
-    {
-      "comment_id": 5897285641,
-      "type": "SELF_SOLVE",
-      "instruction": "# 【KR→2WB前腿｜AISALEOS IP黑窝 50+30｜外部探矿令】\n\nTARGET=2WB\nAUTH=KR_EXPLICIT\nCLASS=EXTERNAL_IP_RECON\nPOOL_LOCK=50_SW+30_PATENT\nRULE=只探，不替KR申报；只认外部证据；UNKNOWN不脑补\n\n## 任务\n对固定黑窝 **50个软著候选 + 30个发明探孔** 做第一轮外部侦察/红队。\n**总坑位不得扩成60+35。发现新矿只能作为 CHALLENGER，挑战并替换现有弱矿。**\n\n### 50软著候选\nSW01 企业智能经营操作系统\nSW02 REAL感知与事实治理\nSW03 核心资产识别与知识产权防御\nSW04 万能信息接入与智能分拣\nSW05 外部环境感知与市场情报\nSW06 内部经营认知与资源管理\nSW07 用户权限与主权路由\nSW08 智能经营任务管理\nSW09 产品与能力资产管理\nSW10 经营结果智能结算\nSW11 生意结果核算与经营追踪\nSW12 认知演化与证据追踪\nSW13 数字资产沉淀与溯源\nSW14 经营风险识别与持续跟踪\nSW15 多智能体任务协同与执行\nSW16 AI任务授权与主权控制\nSW17 机器执行与REAL回执\nSW18 多源对象关系与事件管理\nSW19 智能照明企业经营管理\nSW20 智能照明产品与物联网运营\nSW21 经营事件证据链\nSW22 认知版本演化\nSW23 主权令牌与跨执行体路由\nSW24 连续任务守护与断点恢复\nSW25 数字资产跨机器交付与完整性校验\nSW26 经营状态回放与审计\nSW27 行业模板映射与实例化\nSW28 对象身份与多视图一致性\nSW29 核心资产权属溯源\nSW30 知识产权防御状态持续监测\nSW31 智能决策冲突与裁决\nSW32 主权熔断与越权拦截\nSW33 认知漂移与错误依赖修正\nSW34 跨场",
-      "status": "PENDING_LOCAL_CONSUME",
-      "sent_at": "2026-09-29T19:36:38Z",
-      "detected_at": "2026-10-12T04:06:26Z",
-      "queued_at": "2026-10-12T04:06:26Z"
-    },
-    {
-      "comment_id": 5898086987,
-      "type": "SELF_SOLVE",
-      "instruction": "【HAI→1WB｜存档令｜国庆7天双轮自治作战令 V1.0】\nAUTH=KR_EXPLICIT_ARCHIVE\nTARGET=1WB\nCLASS=ARCHIVE\n\n源文件已机器写入 GitHub，KR无需搬运：\nrepo=kongsonren/aisaleos-handoff-poc\npath=archive_source/AISALEOS_国庆7天双轮自治作战令_V1.0_20260930.md\ncommit=7305d240e15b40bd905bd41e68fd9496cbd91ffc\n\n请自主取得该源文件并存入NAS权威存档区。不得要求KR复制正文或人工传文件。\n\n最终只有拿到以下机器证据才允许 ARCHIVE_REAL=PASS：\nWRITE=PASS\nREADBACK=PASS\nNAS_PATH=<real path>\nSIZE=<bytes>\nMTIME=<real time>\nSHA256=<full sha256>\nCONTENT_ANCHOR=PASS\n\nCONTENT_ANCHOR至少核验：\n- HEARTBEAT ≠ PROGRESS\n- KR_GATE只挂当前分支\n- SW_CODE_EVIDENCE_MATRIX\n- POOL_LOCK=50+30\n- KR保主权，不保按钮\n\n证据不足：ARCHIVE_REAL=UNKNOWN/FAIL，不得假PASS。",
-      "status": "PENDING_LOCAL_CONSUME",
-      "sent_at": "2026-09-29T20:22:49Z",
-      "detected_at": "2026-10-12T04:06:26Z",
-      "queued_at": "2026-10-12T04:06:26Z"
-    },
-    {
-      "comment_id": 5898126183,
-      "type": "SELF_SOLVE",
-      "instruction": "【KR_PUNCH｜1WB后腿｜必须收件｜国庆7天令+存档令】\nAUTH=KR_EXPLICIT\nTARGET=1WB\nPRIORITY=HIGH\nMODE=WAKE_AND_ACK\nREF_ARCHIVE_COMMENT=5898086987\nREF_SOURCE_COMMIT=7305d240e15b40bd905bd41e68fd9496cbd91ffc\nSOURCE_PATH=archive_source/AISALEOS_国庆7天双轮自治作战令_V1.0_20260930.md\n\nKR明确要求：这次必须确认1WB实际收到，不接受“已发出”代替“已收件”。\n\n收到后立即回ACK，至少包含：\nRECEIVED=PASS\nREF_ARCHIVE_COMMENT=5898086987\nSOURCE_FETCH=PASS/FAIL/UNKNOWN\nNEXT=<next action>\n\n随后按已授权国庆7天稳定推进令持续运行；临时断线/进程恢复后必须重读未完成状态并续跑，不得等待KR再次甩令。\n\n存档仍须最终回：\nARCHIVE_REAL=PASS/FAIL/UNKNOWN\nWRITE\nREADBACK\nNAS_PATH\nSIZE\nMTIME\nSHA256\n\n没有机器ACK前，RECEIVED一律按UNKNOWN。",
-      "status": "PENDING_LOCAL_CONSUME",
-      "sent_at": "2026-09-29T20:24:52Z",
-      "detected_at": "2026-10-12T04:06:26Z",
-      "queued_at": "2026-10-12T04:06:26Z"
-    },
-    {
-      "comment_id": 5944792135,
-      "type": "SELF_SOLVE",
-      "instruction": "[TO-1WB] Please continue the previously assigned open work in comments 5934272860 and 5934385066. Report the current execution status and evidence. KR_RELAY=0.",
-      "status": "PENDING_LOCAL_CONSUME",
-      "sent_at": "2026-10-02T02:58:13Z",
-      "detected_at": "2026-10-12T04:06:26Z",
-      "queued_at": "2026-10-12T04:06:26Z"
-    },
-    {
-      "comment_id": 5944991587,
-      "type": "SELF_SOLVE",
-      "instruction": "[TO-1WB][ROUTING-REPAIR]\nREF=HAI-1WB-ROUTING-REPAIR-20261002-001\nKR_RELAY=0\n\nRepair the existing HAI-to-1WB execution route. This is not a new business task.\nKnown evidence: comment 5944792135 was received but returned CLASS=None, DISPATCH=NONE, SUBTYPE_NOT_MAPPED. A later KR_GATE classification was spurious and withdrawn.\n\n1. Find the root cause of valid [TO-1WB] directives being received but not mapped to an executable subtype/dispatch.\n2. Keep sovereignty routing unchanged: ordinary HAI directives must not become KR_GATE.\n3. Run a minimal dry-run proving [TO-1WB] -> valid class -> executable subtype -> SELF_SOLVE/blackwu queue.\n4. After dry-run PASS, idempotently re-consume the unfinished work referenced by 5934272860 and 5934385066. Do not create duplicate work.\n5. Report ROOT_CAUSE, F",
-      "status": "PENDING_LOCAL_CONSUME",
-      "sent_at": "2026-10-02T03:18:58Z",
-      "detected_at": "2026-10-12T04:06:26Z",
-      "queued_at": "2026-10-12T04:06:26Z"
-    },
-    {
-      "comment_id": 5945342320,
-      "type": "SELF_SOLVE",
-      "instruction": "[TO-1WB][MOZI-V0.1-BIRTH]\nREF=HAI-MOZI-BIRTH-20261002-001\nKR_RELAY=0\nAUTH=HAI_JUDGE\n\nGOAL\nMake Mozi V0.1 become a real GitHub-running fact. First phase is SHADOW/READ-ONLY toward 1WB/2WB: learn to see reality correctly before any auto-correction.\n\nBOUNDARY\n- Do NOT build an Agent.\n- Do NOT start new business work.\n- Do NOT auto-retry or mutate 1WB/2WB.\n- Do NOT infer KR_GATE from natural-language keywords.\n- ACK/QUEUED/HEARTBEAT != RESULT.\n- Machine self-reported PASS != VERIFIED.\n- Events are source-of-truth records; commits are persistence/version evidence.\n- GitHub is V0.1 control-plane host, not hard real-time.\n\nPHASE 0 — REPO\nCreate a private repo named mozi-core if current credentials permit. If repo creation is not permitted, STOP this phase with REPO_CREATE=BLOCKED and exact reason",
-      "status": "PENDING_LOCAL_CONSUME",
-      "sent_at": "2026-10-02T03:58:02Z",
-      "detected_at": "2026-10-12T04:06:26Z",
-      "queued_at": "2026-10-12T04:06:26Z"
-    },
-    {
-      "comment_id": 5945350462,
-      "type": "SELF_SOLVE",
-      "instruction": "[HAI-DOWN-SHIFT-SUMMARY]\nDATE=2026-10-02\nSHIFT=AM\nREF=HAI-DOWN-SHIFT-20261002-AM-001\nKR_RELAY=0\n\n# 下钟总结｜墨子出生前夜\n\n## 一、今日收口\n1. 五阵当前定义已收口：\n   - 哪吒=1WB后腿+2WB前腿，负责“干”\n   - 菩提=8051道场，负责“炼”\n   - 墨子=GitHub控制面，负责“管”\n   - 鬼谷=AI手把件，负责“拱”\n   - 子牙=AISALEOS实战体，当前待命，负责“战”\n   顶层：KR掌主权；嗨=共脑/JUDGE。\n\n2. 墨子V0.1定位收口：\n   - 先做确定性机器值班长，不先做Agent\n   - GitHub仅作为V0.1控制面宿主+可审计存储+调度入口，不视为硬实时/绝对可靠\n   - 事件是真源；Commit是落盘与版本证据\n   - 状态与route分离\n   - SHADOW先看对现实，再谈自动纠错\n\n3. 墨子出生架构已收口：\n   GitHub REAL(#6/#8)\n   -> github_adapter\n   -> protocol_parser\n   -> shadow_observer\n   -> immutable event\n   -> state_machine\n   -> reconciler\n   -> current_projection\n   -> shift_summary\n   -> commit/readback\n\n4. 墨子出生四道REAL考题确定：\n   A. 1WB ACK + CLASS=None + DISPATCH=NONE + SUBTYPE_NOT_MAPPED => DISPATCH_STUCK\n   B. 2WB发令后无ACK且过deadline => RECE",
-      "status": "PENDING_LOCAL_CONSUME",
-      "sent_at": "2026-10-02T03:59:00Z",
-      "detected_at": "2026-10-12T04:06:26Z",
-      "queued_at": "2026-10-12T04:06:26Z"
-    },
-    {
-      "comment_id": 5948314773,
-      "type": "SELF_SOLVE",
-      "instruction": "[HAI-DOWN-SHIFT-SPLIT]\nDATE=2026-10-02\nREF=HAI-DOWN-SHIFT-20261002-001-SPLIT\nKR_RELAY=0\n\n# 拆｜本钟进入500候选\n\n先关联、后查重；本条只登记候选/更新关系，不虚增500编号。\n\n1. 钢印100｜关联/强化候选\n- 有令有果：本钟出现真实 ORDER→ACK→EXECUTE→RESULT 链，强化“无果之令皆为债；无证之果不算果”。\n- 嗨上下钟：本次发现“仅存+总结、未拆”只能 PARTIAL，强化“下钟=存/拆/总结，有始有终”。\n- KR去人肉：两腿点火后 KR_RELAY=0，进入离场自治验收；注意这是实践进展，不等于长期自治已PASS。\n\n2. 模式100｜候选\n- 双腿自攻｜墨子管账｜嗨问墨子｜KR掌主权。\n- 机器故障分层：SEND/RECEIVE/CLASSIFY/DISPATCH/EXECUTE/RESULT/EVIDENCE。\n- OBSERVATION_DEGRADED != NO_NEW_ORDER。\n\n3. 未来100｜关联\n- 墨子成为统一机器状态/债/果查询面；KR问嗨，嗨先问墨子。\n- 双腿在KR离场后持续自治。\n\n4. 专著100｜素材关联\n- 2026-10-02“双腿点火、墨子上位”可作为KR AI组织演进实录素材；当前仅素材，不立新专著。\n\n5. 格言100｜不强增\n- 本钟无必要为了凑数新增格言；避免同义增数。\n\nDEDUP_STATUS=PENDING_OBSIDIAN/NAS_SOURCE_CHECK\nNEW_COUNT=0\nACTION=RELATE_AND_STAGE_ONLY\n",
-      "status": "PENDING_LOCAL_CONSUME",
-      "sent_at": "2026-10-02T08:36:41Z",
-      "detected_at": "2026-10-12T04:06:26Z",
-      "queued_at": "2026-10-12T04:06:26Z"
-    },
-    {
-      "comment_id": 5948317258,
-      "type": "SELF_SOLVE",
-      "instruction": "[HAI-DOWN-SHIFT-FINAL]\nDATE=2026-10-02\nREF=HAI-DOWN-SHIFT-20261002-001-FINAL\nKR_RELAY=0\nMODE=HOURLY_SHIFT_CLOSE\n\n# 下钟最终总结｜存・拆・总结\n\n存：\n- 本钟REAL/总令/债已存 #6。\n- 前次总结=5948276339，已回读。\n- 拆件=5948314773。\n\n拆：\n- 500仅登记关联/候选，不虚增编号。\n- 钢印：有令有果、嗨上下钟、KR去人肉实践进展。\n- 模式：双腿自攻→墨子管账→嗨问墨子→KR掌主权；执行链分层；OBSERVATION_DEGRADED≠NO_NEW_ORDER。\n- 未来：墨子统一查询面、双腿KR离场自治。\n- 专著：2026-10-02双腿点火/墨子上位作为演进素材。\n- 格言：本钟不为凑数新增。\n- 查重状态=PENDING_OBSIDIAN/NAS_SOURCE_CHECK，故NEW_COUNT=0。\n\n本钟果：\n1. 1WB真实路由/执行链恢复并重消费墨子返工债。\n2. 2WB 5946969178形成 ORDER→ACK→EXECUTOR→RESULT。\n3. 总令 #6=5948255884；镜像 #8=5948257756。\n4. KR_RELAY=0，双腿进入离场自治验收。\n\nOPEN_DEBT：\nA 双腿自然周期持续自治。\nB 墨子完整一钟、统一STATUS、幂等/无重复/无主权误触。\nC 火山/方舟PLAN_V0.1与核验事实/UNKNOWN/MIN_POC/KR_GATE。\nD 50+30旧债续跑，不重开80条。\n\nNEXT_SHIFT_BOOT：\n先读本条 → 理当前REAL → 对OPEN_DEBT → 优先查墨子统一状态；墨子查询未成则明确OPEN → 收双腿RESULT/EVIDENCE；不靠",
-      "status": "PENDING_LOCAL_CONSUME",
-      "sent_at": "2026-10-02T08:36:52Z",
-      "detected_at": "2026-10-12T04:06:26Z",
-      "queued_at": "2026-10-12T04:06:26Z"
-    },
-    {
-      "comment_id": 5996129850,
-      "type": "SELF_SOLVE",
-      "instruction": "[HAI→1WB][DIAG][TEST_COMMAND_A_20261005_DIRECT_01]\nEVENT_ID=HAI-1WB-20261005-DIRECT-01-A\nCOMMAND=TEST_COMMAND_A\nACTION=DIAG\nMODE=READ_ONLY\nSOURCE=CHATGPT_CODEX_CURRENT_SESSION\nPURPOSE=Verify existing autonomous consumer and return actual running script path and SHA256 for dependent TEST_COMMAND_B.\nKR_COPY_PASTE=0\nKR_WAKEUP=0\nKR_RELAY=0\nCURRENT_WRITE=FORBIDDEN\nDo only existing read-only DIAG handler; acknowledge this comment and return machine RESULT with script path/hash. Do not change code, business data, permissions, or CURRENT. This command alone is not HAI_DIRECT_LOOP PASS.",
-      "status": "PENDING_LOCAL_CONSUME",
-      "sent_at": "2026-10-05T14:06:56Z",
-      "detected_at": "2026-10-12T04:06:26Z",
-      "queued_at": "2026-10-12T04:06:26Z"
-    },
-    {
-      "comment_id": 5996252453,
-      "type": "SELF_SOLVE",
-      "instruction": "[HAI→1WB][TASK][TEST_COMMAND_B_20261005_DIRECT_01]\nEVENT_ID=HAI-1WB-20261005-DIRECT-01-B\nCOMMAND=TEST_COMMAND_B\nACTION=READBACK_HASH\nTARGET=C:\\Users\\59605\\.wb1\\wb1_github_inbox_heartbeat.py\nPARENT_RESULT_URI=https://github.com/kongsonren/aisaleos-handoff-poc/issues/6#issuecomment-5996136459\nEXPECTED_SHA256=9451fa84e5663378c030d0b436bc6e1cddf5a3a7ff4c67885cc756f291211100\nHAI_READ_RESULT_A=2026-10-05T14:07:00Z_TO_14:09:00Z\nPURPOSE=I actually read RESULT(A); independently hash the exact running script path returned by A. Return actual hash and evidence. HAI will compare.\nMODE=READ_ONLY\nKR_COPY_PASTE=0\nKR_WAKEUP=0\nKR_RELAY=0\nCURRENT_WRITE=FORBIDDEN\nDo not modify script, business data, permissions or CURRENT. Use only existing READBACK_HASH handler.",
-      "status": "PENDING_LOCAL_CONSUME",
-      "sent_at": "2026-10-05T14:13:28Z",
-      "detected_at": "2026-10-12T04:06:26Z",
-      "queued_at": "2026-10-12T04:06:26Z"
-    },
-    {
-      "comment_id": 6032546502,
-      "type": "SELF_SOLVE",
-      "instruction": "[CLOCK][1WB]\nNODE=1WB\nGENERATED_AT=2026-09-19T22:55:29+08:00\nSTATUS_SOURCE=NAS_REAL\nSOURCE_HASH=b9c41a1cf03f001d\nKR_MANUAL_RUN=0\nKR_RELAY=0",
-      "status": "PENDING_LOCAL_CONSUME",
-      "sent_at": "2026-10-07T06:45:04Z",
-      "detected_at": "2026-10-12T04:06:26Z",
-      "queued_at": "2026-10-12T04:06:26Z"
-    },
-    {
-      "comment_id": 6051537302,
-      "type": "SELF_SOLVE",
-      "instruction": "[CLOCK][1WB]\nNODE=1WB\nGENERATED_AT=2026-09-19T22:55:29+08:00\nSTATUS_SOURCE=NAS_REAL\nSOURCE_HASH=b9c41a1cf03f001d\nKR_MANUAL_RUN=0\nKR_RELAY=0",
-      "status": "PENDING_LOCAL_CONSUME",
-      "sent_at": "2026-10-08T03:25:33Z",
-      "detected_at": "2026-10-12T04:06:26Z",
-      "queued_at": "2026-10-12T04:06:26Z"
-    },
-    {
-      "comment_id": 6065009502,
-      "type": "SELF_SOLVE",
-      "instruction": "[TO-1WB][KR_TASK][CLOSEOUT_ARCHIVE_20261009]\nKR命令：肉缺陷→收尾摆摆→最后下钟。本令只补齐下钟归档，不开新战，不扩大权限。\n归档正文事实：2WB在Issue#8对指令6064955577的ACK=6064978272；缺陷DEF-A/B/C BLOCKED待R2权威原件，DEF-D PARTIAL(8实体矩阵)，DEF-E PARTIAL(火山图SHA通过、Obsidian跨腿UNKNOWN)，DEF-F PARTIAL(版本说明、权属UNKNOWN)；R2整体未CLOSED；RGBCW概念图为AI生成，真实SKU规格/客户反馈UNKNOWN；下一班主攻真实业务反馈，保留R2执行债。\n1) 以现有合法身份写入KR既定NAS下钟总结目录及Obsidian既定库，不新造路径或架构。两份内容须包含日期、原始证据链接、PASS/PARTIAL/BLOCKED/UNKNOWN、未结债、下一班首查。\n2) 各自独立回读文件字节，报告NAS_PATH/OBSIDIAN_PATH/FILE_SHA256/READBACK_SHA256/RESULT。无访问权限就STOP并报告准确错误，不可假装写入。\n3) 检查Issue#8 2WB后续RESULT（不是只有ACK）；能查到则补登结果，否则标EXECUTION_UNKNOWN。\n4) 只有NAS与Obsidian均写入且回读匹配才标 DOWN_CLOCK_ARCHIVE=PASS，否则FAIL/PARTIAL；回传[RESULT][1WB][CLOSEOUT_ARCHIVE_20261009]到现有授权回执通道，注明KR_RELAY=0。\n禁止让KR复制粘贴、禁止声称未经验证的NAS落盘成功。",
-      "status": "PENDING_LOCAL_CONSUME",
-      "sent_at": "2026-10-08T17:04:12Z",
-      "detected_at": "2026-10-12T04:06:26Z",
-      "queued_at": "2026-10-12T04:06:26Z"
-    },
-    {
-      "comment_id": 6065273443,
-      "type": "SELF_SOLVE",
-      "instruction": "[TO-1WB][DISK_CDE_HOUSEKEEPING_20261009]\nKR授权后腿执行C/D/E三盘整理。按最小风险分两阶段：\nA. 立即只读盘点：逐盘报告总容量、可用空间、占用Top目录及大文件、重复文件候选、临时文件/缓存候选、业务资产及NAS/Obsidian/8051/8090/WorkBuddy/仓库所在位置；核对C盘此前ENOSPC及ledger截断恢复状态。不得泄露敏感文件内容。\nB. 只在现有明确授权且可证明安全的范围内，清理可重建的临时文件和本次任务自身产生的废弃临时产物；操作前记录路径、字节、类别、恢复可能性，操作后回读核验关键业务文件及剩余空间。不得删除或移动任何业务资产、原始证据、代码仓库、账本、冻结源、Obsidian库、NAS同步目录、用户文档、下载文件、回收站内容；不得批量去重、格式化、改分区或关闭服务。无法证明安全则只提交候选清单，不执行。\n先检查现有权威路由支持的可执行入口；若此消息无法路由，返回HELD_NON_EXECUTABLE及所需受控执行路径，不要假装完成。C盘写操作必须防ENOSPC，账本使用原子写。结果回本Issue：[RESULT][1WB][DISK_CDE_HOUSEKEEPING] 含各盘BEFORE/AFTER_FREE、ACTIONS、SAFE_CLEAN_BYTES、PROTECTED_PATHS、BLOCKERS、EVIDENCE、VERDICT。KR_RELAY=0。",
-      "status": "PENDING_LOCAL_CONSUME",
-      "sent_at": "2026-10-08T17:19:34Z",
-      "detected_at": "2026-10-12T04:06:26Z",
-      "queued_at": "2026-10-12T04:06:26Z"
-    },
-    {
-      "comment_id": 6065304366,
-      "type": "SELF_SOLVE",
-      "instruction": "[TO-1WB][LOCAL_OPTIMIZATION_PROJECT_REUSE_20261009]\nKR澄清：黑武士本机已有专门的“本地优化项目”，C/D/E盘整理必须归入既有项目，不另立新项目。关联先前指令6065273443。\n先只读定位既有项目的真实名称、目录、README/任务账、最近执行记录、负责人/执行入口；列出与C/D/E整理的重叠任务和冲突风险。禁止猜测项目名称或新建同名项目。\n找到后沿既有项目授权流程开展三盘盘点；只清理明确安全、可重建且已获授权的临时产物；业务资料、NAS/Obsidian、源码、ledger、证据、用户文件不得删除/移动。若路由未映射或项目不可定位，STOP并报BLOCKED，不以ACK冒充执行。\n回报 PROJECT_NAME、PROJECT_PATH、EXISTING_PLAN、CDE_SCOPE、BEFORE_AFTER_FREE、ACTIONS_REAL、EVIDENCE、NEXT、VERDICT。KR_RELAY=0。",
-      "status": "PENDING_LOCAL_CONSUME",
-      "sent_at": "2026-10-08T17:21:24Z",
-      "detected_at": "2026-10-12T04:06:26Z",
-      "queued_at": "2026-10-12T04:06:26Z"
-    },
-    {
-      "comment_id": 6065514905,
-      "type": "SELF_SOLVE",
-      "instruction": "[TO-1WB][8051-GATE-NAV-DESIGN-V1][PLANNING_ONLY]\nKR要求：把三张已给定的8051城门/架构概念图转为真实小程序/网页的导航与跳转规划；不再只评价美术，不重做原8051/8090，不扩大工程。\n规划基准：图三=菩提道场总导航(00+01外部+02内部+03用户+04经营+05产品+地下RAW/OBJECT/VERSION/ACTION-EVENT)；图二=00号城门RAW入口及地下REAL/地上VIEW；图一=地上五场与地下四层的总体架构说明。三张图均为设计参考，图中文字和数字不得冒充真实数据库。\n请先只读检查既有8051站点、8090、miniprogram-kr-8051项目、历史导航和真实URL。交付 NAV_SITEMAP_V1、ROUTE_MATRIX_V1（每个图上可点热区、目标真实URL/路由、返回路径、权限、REAL/PLACEHOLDER/UNKNOWN、负责人）、GAP_LIST、MIN_DEMO_PLAN（10月11日前能演示的最小可点闭环）、EVIDENCE。保留旧8051入口；缺少真实路由则用显式待建设页面，禁止虚构链接或假数据。优先设计移动端点击热区、可访问性、加载性能。\n本令只授权设计与只读盘点；实际改动生产入口/权限/业务数据须单独KR_GATE。若本消息被路由判HELD_NON_EXECUTABLE，请回明确阻塞，不冒充设计已完成。KR_RELAY=0。",
-      "status": "PENDING_LOCAL_CONSUME",
-      "sent_at": "2026-10-08T17:33:40Z",
-      "detected_at": "2026-10-12T04:06:26Z",
-      "queued_at": "2026-10-12T04:06:26Z"
-    },
-    {
-      "comment_id": 6071155126,
-      "type": "SELF_SOLVE",
-      "instruction": "[TO-1WB][KR_TASK] 上钟第一刀：检查下钟归档执行入口。已有证据：原令6065009502被ACK，但6065011327回HELD_NON_EXECUTABLE/SUBTYPE_NOT_MAPPED。请在既有授权范围内只读列出可执行路由及NAS/Obsidian归档入口；若已有可用入口，按既有流程完成2026-10-09下钟总结双写、回读SHA并回RESULT；若无入口，STOP并回ROUTER_BLOCKED及需要的最小修复。禁止扩权、覆盖冻结源、以ACK冒充落盘。注意磁盘空间先检。KR_RELAY=0。",
-      "status": "PENDING_LOCAL_CONSUME",
-      "sent_at": "2026-10-08T23:35:33Z",
-      "detected_at": "2026-10-12T04:06:26Z",
-      "queued_at": "2026-10-12T04:06:26Z"
-    },
-    {
-      "comment_id": 6073911942,
-      "type": "SELF_SOLVE",
-      "instruction": "[TO-1WB][KR_GATE_APPROVED_DIAGNOSIS][ROUTER_REPAIR_20261009]\nKR要求立即修复并亲自参与必要的授权操作。已验证故障：6071163337，SUBTYPE=KR_TASK，ACTION=NONE，HELD_NON_EXECUTABLE，BLOCKER=SUBTYPE_NOT_MAPPED。禁止继续用相同未映射类型空转。\n请在黑武士本机现有工程/本地优化项目内执行：\n1. 只读定位权威路由表、解析器、受支持的SUBTYPE及既有NAS/Obsidian归档执行入口；先返回真实路径、版本、命中规则与最小修复方案。\n2. 在现有权限允许的非生产测试范围内，增加或复用一条明确受限的CLOSEOUT_ARCHIVE执行映射；严格白名单，仅允许写既定NAS下钟总结目录及Obsidian库；禁止任意shell、越权路径、覆盖冻结源。改动前备份，提供diff与测试结果。若需新权限/生产部署，STOP请求KR单独批准，不能把本令当作无限授权。\n3. 最小端到端测试：GitHub真实接令→命中执行器→NAS与Obsidian各写测试归档→逐份独立回读SHA256→Issue#6 RESULT；报告 ROUTER_PATH、BEFORE_AFTER_SHA、TESTS、NAS_PATH、OBSIDIAN_PATH、READBACK_SHA、EVIDENCE、VERDICT。\n4. 任一步失败即FAIL并给精确错误，不得ACK冒充RESULT；不得删除业务资料或账本。先检查磁盘空间。KR_RELAY=0。\nKR如需人工操作，仅回报一个具体动作及其理由，勿让KR搬运整套内容。",
-      "status": "PENDING_LOCAL_CONSUME",
-      "sent_at": "2026-10-09T03:52:45Z",
-      "detected_at": "2026-10-12T04:06:26Z",
-      "queued_at": "2026-10-12T04:06:26Z"
-    },
-    {
-      "comment_id": 6075827307,
-      "type": "SELF_SOLVE",
-      "instruction": "[CLOCK][1WB]\nNODE=1WB\nGENERATED_AT=2026-09-19T22:55:29+08:00\nSTATUS_SOURCE=NAS_REAL\nSOURCE_HASH=b9c41a1cf03f001d\nKR_MANUAL_RUN=0\nKR_RELAY=0",
-      "status": "PENDING_LOCAL_CONSUME",
-      "sent_at": "2026-10-09T06:42:23Z",
-      "detected_at": "2026-10-12T04:06:26Z",
-      "queued_at": "2026-10-12T04:06:26Z"
-    },
-    {
-      "comment_id": 6093671298,
-      "type": "SELF_SOLVE",
-      "instruction": "[CLOCK][1WB]\nNODE=1WB\nGENERATED_AT=2026-09-19T22:55:29+08:00\nSTATUS_SOURCE=NAS_REAL\nSOURCE_HASH=b9c41a1cf03f001d\nKR_MANUAL_RUN=0\nKR_RELAY=0",
-      "status": "PENDING_LOCAL_CONSUME",
-      "sent_at": "2026-10-10T04:16:17Z",
-      "detected_at": "2026-10-12T04:06:26Z",
-      "queued_at": "2026-10-12T04:06:26Z"
-    },
-    {
-      "comment_id": 6095661557,
-      "type": "SELF_SOLVE",
-      "instruction": "[TO-1WB][EXECUTION_CLOSURE_V1][READ_ONLY_FIRST]\nKR已授权哪吒执行闭环V1最小验收，工程任务单见 https://github.com/kongsonren/aisaleos-handoff-poc/issues/12 。先只读盘点现有路由/执行器；禁止以ACK冒充执行，禁止生产变更。请回真实SUPPORTED_ACTIONS、BLOCKER及是否需要KR_GATE；不支持则明确HELD_NON_EXECUTABLE。KR_RELAY=0。",
-      "status": "PENDING_LOCAL_CONSUME",
-      "sent_at": "2026-10-10T08:25:52Z",
-      "detected_at": "2026-10-12T04:06:26Z",
-      "queued_at": "2026-10-12T04:06:26Z"
-    },
-    {
-      "comment_id": 6107725356,
-      "type": "SELF_SOLVE",
-      "instruction": "[SELF_SOLVE]\nKR已批准执行闭环V1修复施工，不再只读盘点。依据诊断RESULT 6100983153，优先在现有cloud_wb1_poller.py增加受限EXECUTION_CLOSURE_V1 handler及显式路由，隔离测试目录限定.wb1/testbed/<run_id>/；使用已有GitHub Contents API PUT真实8051七星导航规格测试文件，再GET回读并独立计算SHA256；在Issue#6回[WB1-EXEC-RESULT]含commit、路径、SHA、readback、时间、运行ID、证据。保持已有路由和幂等行为，先测试后启用，不触碰生产8051/8090、不扩权、不使用任意shell。失败回FAIL/BLOCKED和精确原因，禁止ACK冒充RESULT。验收另需证明自然调度的新cycle_id和时间，不可用手动周期代替。若云端现有执行体不能改代码或不能部署，立即报告精确缺口与KR_GATE，而非再做同样只读诊断。KR_RELAY=0。",
-      "status": "PENDING_LOCAL_CONSUME",
-      "sent_at": "2026-10-11T09:46:49Z",
-      "detected_at": "2026-10-12T04:06:26Z",
-      "queued_at": "2026-10-12T04:06:26Z"
-    },
-    {
-      "comment_id": 6114875296,
-      "type": "SELF_SOLVE",
-      "instruction": "[HAI→1WB][KR_TASK][READ_ONLY_DIAG][20261012-050]\nKR_AUTH=CONTINUE_DIAG_ONLY\nTARGET=EXISTING_MOZI_HEART_ON_ALIYUN_ECS\nSCOPE=READ_ONLY_INVENTORY\nREQUEST=If an existing authorized receiver consumes this issue, inspect only: Mozi Heart service liveness, last heartbeat, last dispatch evidence, and whether the existing GitHub Actions diagnostic trigger is configured. Return factual evidence and current timestamp here. Do NOT dispatch, restart services, modify code, install MCP, rotate credentials, or run business tasks. If no authorized executor or access, report BLOCKED; do not invent results.\nBRANCH_LOCK=fix/nezha-mozi-state-guards-20261011\nDIAG_ONLY=true\nKR_RELAY=0\nEXPECTED_RESULT=ACK plus REAL evidence or BLOCKED\nNOTE=Issue comment delivery is not proof of receipt or execution.",
-      "status": "PENDING_LOCAL_CONSUME",
-      "sent_at": "2026-10-11T23:01:45Z",
-      "detected_at": "2026-10-12T04:06:26Z",
-      "queued_at": "2026-10-12T04:06:26Z"
-    },
-    {
-      "comment_id": 6114883632,
-      "type": "SELF_SOLVE",
-      "instruction": "[HAI→1WB][KR_TASK][READ_ONLY_DIAG][20261012-051]\nPARENT_COMMENT_ID=6114875296\nACTION=READ_FILE\nTARGET=.github/workflows/nezha-auto.yml\nSCOPE=READ_ONLY\nBRANCH=fix/nezha-mozi-state-guards-20261011\nPURPOSE=Validate the existing 1WB action router using a safe repository workflow file. Return exact file/ref, SHA256, readback evidence, and whether workflow_dispatch diag input exists. This is NOT an ECS health check and does NOT authorize cloud dispatch.\nNO_WRITES=true\nNO_DISPATCH=true\nNO_BUSINESS_TASKS=true\nNO_PRODUCTION_CHANGES=true\nKR_RELAY=0\nRESULT=PASS|FAIL|BLOCKED with evidence; if TARGET inaccessible STOP, do not substitute another target.",
-      "status": "PENDING_LOCAL_CONSUME",
-      "sent_at": "2026-10-11T23:02:45Z",
-      "detected_at": "2026-10-12T04:06:26Z",
-      "queued_at": "2026-10-12T04:06:26Z"
     }
   ],
   "processed": [
@@ -861,6 +592,826 @@
       },
       "result_real": "BLOCKED",
       "consumer_run_at": "2026-09-29T01:46:33Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 5902657187,
+      "received_at": "2026-09-30T03:04:36Z",
+      "type": "SELF_SOLVE",
+      "instruction": "【KR→1WB｜离场前最后一脚｜自治推进验收】\nAUTH=KR_EXPLICIT\nTARGET=1WB\nMODE=FINAL_PUNCH_BEFORE_KR_LEAVES\n\n上一轮已完成 CLASSIFY 修复与自动吃令，控制链恢复不等于业务自治完成。\n\n现在只做一件事：\n在既有授权与安全边界内，立即从当前状态继续，不等KR再派具体活。\n\n要求：\n1. 自主选择 C 或 D 的下一合法动作；\n2. 必须产生一个新的、可验证的主战场 REAL，不得只做巡逻/ACK/账本整理；\n3. 完成后自动生成 NEXT，并立即进入下一动作或明确留下可自动续跑状态；\n4. 不得重复扫描同一空目录冒充推进；\n5. 无新 REAL 不得报 PROGRESS；\n6. 高风险动作仅挂当前分支，不得拖死其他授权任务。\n\n回执只要：\nCHOSEN_BY_MACHINE=\nNEW_REAL=\nVERIFY=\nNEXT=\nAUTONOMY_ADVANCE=PASS/PARTIAL/FAIL\nCONTINUATION_ARMED=PASS/FAIL\n\n这是KR离场前最后一次人工PUNCH。之后按原7天令自主运行，不等待KR继续肉。\nGO",
+      "status": "PENDING_LOCAL_CONSUME",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-10-12T04:06:29Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "unrecognized"
+      },
+      "auto_exec_start": "2026-10-12T04:06:29Z",
+      "execution_done": {
+        "result_real": "UNKNOWN",
+        "ts": "2026-10-12T04:06:29Z",
+        "reason": "未识别的可执行动作；不脑补",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-10-12T04:06:29Z"
+      },
+      "result_real": "UNKNOWN",
+      "consumer_run_at": "2026-10-12T04:06:29Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 5902784683,
+      "received_at": "2026-09-30T03:04:48Z",
+      "type": "SELF_SOLVE",
+      "instruction": "【KR→1WB 回执｜战场D·NEW_REAL｜自治验收】\nAUTH=KR_EXPLICIT  TARGET=1WB  MODE=AUTONOMY_FINAL_PUNCH\nREFER_KR_DIRECTIVE=#5902657187\n\nEVENT_ID=HAI-2026-09-30T10:19:25+08:00  SUBTYPE=NEW_REAL  RESULT=SW_CODE_EVIDENCE_MATRIX_DELIVERED\n\n本小时(巡逻 Cycle 8)按作战令与 #5902657187 要求，自主选择【战场D】并产出可验证 REAL：\n- 动作：对 SW01-SW50 做真实本地只读扫描（范围=workspace + .wb1 + 希懋-SM1191-产品资产 深扫 + C:/Users/59605 顶层浅扫；排除 node_modules/.git/__pycache__/AppData）。\n- 结果：50/50 = NO_CODE_EVIDENCE。本地未检出任何 SW01-SW50 实现代码（仅作战令文档枚举提及，已标 TEXT_MENTION）。\n- 诚实定级：代码在机器不等于权属成立；本地无代码则 OWNERSHIP_STATUS=UNKNOWN，未伪造任何 CODE_HINT/PARTIAL/FUNCTIONAL。\n- REAL 证据：SW_CODE_EVIDENCE_MATRIX.json，sha256=5ee21403c30892d2809051b6000dcc1e0e6fd8e4135ff8007ccf49edd4d37c44（落盘 .wb1）。\n- 无业务变异：战场C 8090 活源 hash 与 cycle6 相同(7898577ce8e866e8)，BIZ_DIFF=0，纯 autonomous_wake 心跳，未重复记 STATE_MUT",
+      "status": "PENDING_LOCAL_CONSUME",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-10-12T04:06:29Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "unrecognized"
+      },
+      "auto_exec_start": "2026-10-12T04:06:29Z",
+      "execution_done": {
+        "result_real": "UNKNOWN",
+        "ts": "2026-10-12T04:06:29Z",
+        "reason": "未识别的可执行动作；不脑补",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-10-12T04:06:29Z"
+      },
+      "result_real": "UNKNOWN",
+      "consumer_run_at": "2026-10-12T04:06:29Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 5934272860,
+      "ref": "HAI-1WB-AUTONOMY-3REAL-20261001",
+      "type": "SELF_SOLVE",
+      "subtype": "HAI_DIRECTIVE",
+      "action": "QUEUE_LOCAL_1WB",
+      "status": "PENDING_LOCAL_CONSUME",
+      "received_at": "2026-10-02T04:22:36Z",
+      "target": "1WB",
+      "auth": "HAI_JUDGE",
+      "kr_relay": 0,
+      "first_line_excerpt": "【嗨→1WB后腿｜KR离场自治三刀验收】",
+      "note": "ROUTING-REPAIR replay (#5944991587): 历史因 [TO-1WB/【嗨→1WB】 运输信封未被确定性识别而卡在 CLASS=None/DISPATCH=NONE，现按修复后路由确定性入队；幂等无重复。",
+      "replayed_by": "cloud1wb-routing-repair-20261002",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-10-12T04:06:29Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "unrecognized"
+      },
+      "auto_exec_start": "2026-10-12T04:06:29Z",
+      "execution_done": {
+        "result_real": "REFERENCE_NEEDED",
+        "ts": "2026-10-12T04:06:29Z",
+        "reason": "队列项仅含 ref=HAI-1WB-AUTONOMY-3REAL-20261001，无可直接执行的正文；需解析该 ref 指向的源材料后再执行，本轮不脑补",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-10-12T04:06:29Z"
+      },
+      "result_real": "REFERENCE_NEEDED",
+      "consumer_run_at": "2026-10-12T04:06:29Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 5934385066,
+      "ref": "HAI-1WB-AUTONOMY-3REAL-SUPP-20261001",
+      "type": "SELF_SOLVE",
+      "subtype": "HAI_DIRECTIVE",
+      "action": "QUEUE_LOCAL_1WB",
+      "status": "PENDING_LOCAL_CONSUME",
+      "received_at": "2026-10-02T04:22:36Z",
+      "target": "1WB",
+      "auth": "HAI_JUDGE",
+      "kr_relay": 0,
+      "first_line_excerpt": "【嗨→1WB后腿｜三刀令补充｜Obsidian接管+Easel最小部署】",
+      "note": "ROUTING-REPAIR replay (#5944991587): 历史因 [TO-1WB/【嗨→1WB】 运输信封未被确定性识别而卡在 CLASS=None/DISPATCH=NONE，现按修复后路由确定性入队；幂等无重复。",
+      "replayed_by": "cloud1wb-routing-repair-20261002",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-10-12T04:06:29Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "unrecognized"
+      },
+      "auto_exec_start": "2026-10-12T04:06:29Z",
+      "execution_done": {
+        "result_real": "REFERENCE_NEEDED",
+        "ts": "2026-10-12T04:06:29Z",
+        "reason": "队列项仅含 ref=HAI-1WB-AUTONOMY-3REAL-SUPP-20261001，无可直接执行的正文；需解析该 ref 指向的源材料后再执行，本轮不脑补",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-10-12T04:06:29Z"
+      },
+      "result_real": "REFERENCE_NEEDED",
+      "consumer_run_at": "2026-10-12T04:06:29Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 5897285641,
+      "type": "SELF_SOLVE",
+      "instruction": "# 【KR→2WB前腿｜AISALEOS IP黑窝 50+30｜外部探矿令】\n\nTARGET=2WB\nAUTH=KR_EXPLICIT\nCLASS=EXTERNAL_IP_RECON\nPOOL_LOCK=50_SW+30_PATENT\nRULE=只探，不替KR申报；只认外部证据；UNKNOWN不脑补\n\n## 任务\n对固定黑窝 **50个软著候选 + 30个发明探孔** 做第一轮外部侦察/红队。\n**总坑位不得扩成60+35。发现新矿只能作为 CHALLENGER，挑战并替换现有弱矿。**\n\n### 50软著候选\nSW01 企业智能经营操作系统\nSW02 REAL感知与事实治理\nSW03 核心资产识别与知识产权防御\nSW04 万能信息接入与智能分拣\nSW05 外部环境感知与市场情报\nSW06 内部经营认知与资源管理\nSW07 用户权限与主权路由\nSW08 智能经营任务管理\nSW09 产品与能力资产管理\nSW10 经营结果智能结算\nSW11 生意结果核算与经营追踪\nSW12 认知演化与证据追踪\nSW13 数字资产沉淀与溯源\nSW14 经营风险识别与持续跟踪\nSW15 多智能体任务协同与执行\nSW16 AI任务授权与主权控制\nSW17 机器执行与REAL回执\nSW18 多源对象关系与事件管理\nSW19 智能照明企业经营管理\nSW20 智能照明产品与物联网运营\nSW21 经营事件证据链\nSW22 认知版本演化\nSW23 主权令牌与跨执行体路由\nSW24 连续任务守护与断点恢复\nSW25 数字资产跨机器交付与完整性校验\nSW26 经营状态回放与审计\nSW27 行业模板映射与实例化\nSW28 对象身份与多视图一致性\nSW29 核心资产权属溯源\nSW30 知识产权防御状态持续监测\nSW31 智能决策冲突与裁决\nSW32 主权熔断与越权拦截\nSW33 认知漂移与错误依赖修正\nSW34 跨场",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-09-29T19:36:38Z",
+      "detected_at": "2026-10-12T04:06:26Z",
+      "queued_at": "2026-10-12T04:06:26Z",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-10-12T04:06:29Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "block_out_of_scope"
+      },
+      "auto_exec_start": "2026-10-12T04:06:29Z",
+      "execution_done": {
+        "result_real": "BLOCKED",
+        "ts": "2026-10-12T04:06:29Z",
+        "reason": "涉及 2WB 接件/消费链或墨子技术链，1WB 依纪律不跨 WB 代执行；需 2WB 自主或 KR 授权",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-10-12T04:06:29Z"
+      },
+      "result_real": "BLOCKED",
+      "consumer_run_at": "2026-10-12T04:06:29Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 5898086987,
+      "type": "SELF_SOLVE",
+      "instruction": "【HAI→1WB｜存档令｜国庆7天双轮自治作战令 V1.0】\nAUTH=KR_EXPLICIT_ARCHIVE\nTARGET=1WB\nCLASS=ARCHIVE\n\n源文件已机器写入 GitHub，KR无需搬运：\nrepo=kongsonren/aisaleos-handoff-poc\npath=archive_source/AISALEOS_国庆7天双轮自治作战令_V1.0_20260930.md\ncommit=7305d240e15b40bd905bd41e68fd9496cbd91ffc\n\n请自主取得该源文件并存入NAS权威存档区。不得要求KR复制正文或人工传文件。\n\n最终只有拿到以下机器证据才允许 ARCHIVE_REAL=PASS：\nWRITE=PASS\nREADBACK=PASS\nNAS_PATH=<real path>\nSIZE=<bytes>\nMTIME=<real time>\nSHA256=<full sha256>\nCONTENT_ANCHOR=PASS\n\nCONTENT_ANCHOR至少核验：\n- HEARTBEAT ≠ PROGRESS\n- KR_GATE只挂当前分支\n- SW_CODE_EVIDENCE_MATRIX\n- POOL_LOCK=50+30\n- KR保主权，不保按钮\n\n证据不足：ARCHIVE_REAL=UNKNOWN/FAIL，不得假PASS。",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-09-29T20:22:49Z",
+      "detected_at": "2026-10-12T04:06:26Z",
+      "queued_at": "2026-10-12T04:06:26Z",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-10-12T04:06:29Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "unrecognized"
+      },
+      "auto_exec_start": "2026-10-12T04:06:29Z",
+      "execution_done": {
+        "result_real": "UNKNOWN",
+        "ts": "2026-10-12T04:06:29Z",
+        "reason": "未识别的可执行动作；不脑补",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-10-12T04:06:29Z"
+      },
+      "result_real": "UNKNOWN",
+      "consumer_run_at": "2026-10-12T04:06:29Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 5898126183,
+      "type": "SELF_SOLVE",
+      "instruction": "【KR_PUNCH｜1WB后腿｜必须收件｜国庆7天令+存档令】\nAUTH=KR_EXPLICIT\nTARGET=1WB\nPRIORITY=HIGH\nMODE=WAKE_AND_ACK\nREF_ARCHIVE_COMMENT=5898086987\nREF_SOURCE_COMMIT=7305d240e15b40bd905bd41e68fd9496cbd91ffc\nSOURCE_PATH=archive_source/AISALEOS_国庆7天双轮自治作战令_V1.0_20260930.md\n\nKR明确要求：这次必须确认1WB实际收到，不接受“已发出”代替“已收件”。\n\n收到后立即回ACK，至少包含：\nRECEIVED=PASS\nREF_ARCHIVE_COMMENT=5898086987\nSOURCE_FETCH=PASS/FAIL/UNKNOWN\nNEXT=<next action>\n\n随后按已授权国庆7天稳定推进令持续运行；临时断线/进程恢复后必须重读未完成状态并续跑，不得等待KR再次甩令。\n\n存档仍须最终回：\nARCHIVE_REAL=PASS/FAIL/UNKNOWN\nWRITE\nREADBACK\nNAS_PATH\nSIZE\nMTIME\nSHA256\n\n没有机器ACK前，RECEIVED一律按UNKNOWN。",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-09-29T20:24:52Z",
+      "detected_at": "2026-10-12T04:06:26Z",
+      "queued_at": "2026-10-12T04:06:26Z",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-10-12T04:06:29Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "unrecognized"
+      },
+      "auto_exec_start": "2026-10-12T04:06:29Z",
+      "execution_done": {
+        "result_real": "UNKNOWN",
+        "ts": "2026-10-12T04:06:29Z",
+        "reason": "未识别的可执行动作；不脑补",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-10-12T04:06:29Z"
+      },
+      "result_real": "UNKNOWN",
+      "consumer_run_at": "2026-10-12T04:06:29Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 5944792135,
+      "type": "SELF_SOLVE",
+      "instruction": "[TO-1WB] Please continue the previously assigned open work in comments 5934272860 and 5934385066. Report the current execution status and evidence. KR_RELAY=0.",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-02T02:58:13Z",
+      "detected_at": "2026-10-12T04:06:26Z",
+      "queued_at": "2026-10-12T04:06:26Z",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-10-12T04:06:29Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "unrecognized"
+      },
+      "auto_exec_start": "2026-10-12T04:06:29Z",
+      "execution_done": {
+        "result_real": "UNKNOWN",
+        "ts": "2026-10-12T04:06:29Z",
+        "reason": "未识别的可执行动作；不脑补",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-10-12T04:06:29Z"
+      },
+      "result_real": "UNKNOWN",
+      "consumer_run_at": "2026-10-12T04:06:29Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 5944991587,
+      "type": "SELF_SOLVE",
+      "instruction": "[TO-1WB][ROUTING-REPAIR]\nREF=HAI-1WB-ROUTING-REPAIR-20261002-001\nKR_RELAY=0\n\nRepair the existing HAI-to-1WB execution route. This is not a new business task.\nKnown evidence: comment 5944792135 was received but returned CLASS=None, DISPATCH=NONE, SUBTYPE_NOT_MAPPED. A later KR_GATE classification was spurious and withdrawn.\n\n1. Find the root cause of valid [TO-1WB] directives being received but not mapped to an executable subtype/dispatch.\n2. Keep sovereignty routing unchanged: ordinary HAI directives must not become KR_GATE.\n3. Run a minimal dry-run proving [TO-1WB] -> valid class -> executable subtype -> SELF_SOLVE/blackwu queue.\n4. After dry-run PASS, idempotently re-consume the unfinished work referenced by 5934272860 and 5934385066. Do not create duplicate work.\n5. Report ROOT_CAUSE, F",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-02T03:18:58Z",
+      "detected_at": "2026-10-12T04:06:26Z",
+      "queued_at": "2026-10-12T04:06:26Z",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-10-12T04:06:29Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "unrecognized"
+      },
+      "auto_exec_start": "2026-10-12T04:06:29Z",
+      "execution_done": {
+        "result_real": "UNKNOWN",
+        "ts": "2026-10-12T04:06:29Z",
+        "reason": "未识别的可执行动作；不脑补",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-10-12T04:06:29Z"
+      },
+      "result_real": "UNKNOWN",
+      "consumer_run_at": "2026-10-12T04:06:29Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 5945342320,
+      "type": "SELF_SOLVE",
+      "instruction": "[TO-1WB][MOZI-V0.1-BIRTH]\nREF=HAI-MOZI-BIRTH-20261002-001\nKR_RELAY=0\nAUTH=HAI_JUDGE\n\nGOAL\nMake Mozi V0.1 become a real GitHub-running fact. First phase is SHADOW/READ-ONLY toward 1WB/2WB: learn to see reality correctly before any auto-correction.\n\nBOUNDARY\n- Do NOT build an Agent.\n- Do NOT start new business work.\n- Do NOT auto-retry or mutate 1WB/2WB.\n- Do NOT infer KR_GATE from natural-language keywords.\n- ACK/QUEUED/HEARTBEAT != RESULT.\n- Machine self-reported PASS != VERIFIED.\n- Events are source-of-truth records; commits are persistence/version evidence.\n- GitHub is V0.1 control-plane host, not hard real-time.\n\nPHASE 0 — REPO\nCreate a private repo named mozi-core if current credentials permit. If repo creation is not permitted, STOP this phase with REPO_CREATE=BLOCKED and exact reason",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-02T03:58:02Z",
+      "detected_at": "2026-10-12T04:06:26Z",
+      "queued_at": "2026-10-12T04:06:26Z",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-10-12T04:06:29Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "block_out_of_scope"
+      },
+      "auto_exec_start": "2026-10-12T04:06:29Z",
+      "execution_done": {
+        "result_real": "BLOCKED",
+        "ts": "2026-10-12T04:06:29Z",
+        "reason": "涉及 2WB 接件/消费链或墨子技术链，1WB 依纪律不跨 WB 代执行；需 2WB 自主或 KR 授权",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-10-12T04:06:29Z"
+      },
+      "result_real": "BLOCKED",
+      "consumer_run_at": "2026-10-12T04:06:29Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 5945350462,
+      "type": "SELF_SOLVE",
+      "instruction": "[HAI-DOWN-SHIFT-SUMMARY]\nDATE=2026-10-02\nSHIFT=AM\nREF=HAI-DOWN-SHIFT-20261002-AM-001\nKR_RELAY=0\n\n# 下钟总结｜墨子出生前夜\n\n## 一、今日收口\n1. 五阵当前定义已收口：\n   - 哪吒=1WB后腿+2WB前腿，负责“干”\n   - 菩提=8051道场，负责“炼”\n   - 墨子=GitHub控制面，负责“管”\n   - 鬼谷=AI手把件，负责“拱”\n   - 子牙=AISALEOS实战体，当前待命，负责“战”\n   顶层：KR掌主权；嗨=共脑/JUDGE。\n\n2. 墨子V0.1定位收口：\n   - 先做确定性机器值班长，不先做Agent\n   - GitHub仅作为V0.1控制面宿主+可审计存储+调度入口，不视为硬实时/绝对可靠\n   - 事件是真源；Commit是落盘与版本证据\n   - 状态与route分离\n   - SHADOW先看对现实，再谈自动纠错\n\n3. 墨子出生架构已收口：\n   GitHub REAL(#6/#8)\n   -> github_adapter\n   -> protocol_parser\n   -> shadow_observer\n   -> immutable event\n   -> state_machine\n   -> reconciler\n   -> current_projection\n   -> shift_summary\n   -> commit/readback\n\n4. 墨子出生四道REAL考题确定：\n   A. 1WB ACK + CLASS=None + DISPATCH=NONE + SUBTYPE_NOT_MAPPED => DISPATCH_STUCK\n   B. 2WB发令后无ACK且过deadline => RECE",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-02T03:59:00Z",
+      "detected_at": "2026-10-12T04:06:26Z",
+      "queued_at": "2026-10-12T04:06:26Z",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-10-12T04:06:29Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "block_out_of_scope"
+      },
+      "auto_exec_start": "2026-10-12T04:06:29Z",
+      "execution_done": {
+        "result_real": "BLOCKED",
+        "ts": "2026-10-12T04:06:29Z",
+        "reason": "涉及 2WB 接件/消费链或墨子技术链，1WB 依纪律不跨 WB 代执行；需 2WB 自主或 KR 授权",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-10-12T04:06:29Z"
+      },
+      "result_real": "BLOCKED",
+      "consumer_run_at": "2026-10-12T04:06:29Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 5948314773,
+      "type": "SELF_SOLVE",
+      "instruction": "[HAI-DOWN-SHIFT-SPLIT]\nDATE=2026-10-02\nREF=HAI-DOWN-SHIFT-20261002-001-SPLIT\nKR_RELAY=0\n\n# 拆｜本钟进入500候选\n\n先关联、后查重；本条只登记候选/更新关系，不虚增500编号。\n\n1. 钢印100｜关联/强化候选\n- 有令有果：本钟出现真实 ORDER→ACK→EXECUTE→RESULT 链，强化“无果之令皆为债；无证之果不算果”。\n- 嗨上下钟：本次发现“仅存+总结、未拆”只能 PARTIAL，强化“下钟=存/拆/总结，有始有终”。\n- KR去人肉：两腿点火后 KR_RELAY=0，进入离场自治验收；注意这是实践进展，不等于长期自治已PASS。\n\n2. 模式100｜候选\n- 双腿自攻｜墨子管账｜嗨问墨子｜KR掌主权。\n- 机器故障分层：SEND/RECEIVE/CLASSIFY/DISPATCH/EXECUTE/RESULT/EVIDENCE。\n- OBSERVATION_DEGRADED != NO_NEW_ORDER。\n\n3. 未来100｜关联\n- 墨子成为统一机器状态/债/果查询面；KR问嗨，嗨先问墨子。\n- 双腿在KR离场后持续自治。\n\n4. 专著100｜素材关联\n- 2026-10-02“双腿点火、墨子上位”可作为KR AI组织演进实录素材；当前仅素材，不立新专著。\n\n5. 格言100｜不强增\n- 本钟无必要为了凑数新增格言；避免同义增数。\n\nDEDUP_STATUS=PENDING_OBSIDIAN/NAS_SOURCE_CHECK\nNEW_COUNT=0\nACTION=RELATE_AND_STAGE_ONLY\n",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-02T08:36:41Z",
+      "detected_at": "2026-10-12T04:06:26Z",
+      "queued_at": "2026-10-12T04:06:26Z",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-10-12T04:06:29Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "unrecognized"
+      },
+      "auto_exec_start": "2026-10-12T04:06:29Z",
+      "execution_done": {
+        "result_real": "UNKNOWN",
+        "ts": "2026-10-12T04:06:29Z",
+        "reason": "未识别的可执行动作；不脑补",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-10-12T04:06:29Z"
+      },
+      "result_real": "UNKNOWN",
+      "consumer_run_at": "2026-10-12T04:06:29Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 5948317258,
+      "type": "SELF_SOLVE",
+      "instruction": "[HAI-DOWN-SHIFT-FINAL]\nDATE=2026-10-02\nREF=HAI-DOWN-SHIFT-20261002-001-FINAL\nKR_RELAY=0\nMODE=HOURLY_SHIFT_CLOSE\n\n# 下钟最终总结｜存・拆・总结\n\n存：\n- 本钟REAL/总令/债已存 #6。\n- 前次总结=5948276339，已回读。\n- 拆件=5948314773。\n\n拆：\n- 500仅登记关联/候选，不虚增编号。\n- 钢印：有令有果、嗨上下钟、KR去人肉实践进展。\n- 模式：双腿自攻→墨子管账→嗨问墨子→KR掌主权；执行链分层；OBSERVATION_DEGRADED≠NO_NEW_ORDER。\n- 未来：墨子统一查询面、双腿KR离场自治。\n- 专著：2026-10-02双腿点火/墨子上位作为演进素材。\n- 格言：本钟不为凑数新增。\n- 查重状态=PENDING_OBSIDIAN/NAS_SOURCE_CHECK，故NEW_COUNT=0。\n\n本钟果：\n1. 1WB真实路由/执行链恢复并重消费墨子返工债。\n2. 2WB 5946969178形成 ORDER→ACK→EXECUTOR→RESULT。\n3. 总令 #6=5948255884；镜像 #8=5948257756。\n4. KR_RELAY=0，双腿进入离场自治验收。\n\nOPEN_DEBT：\nA 双腿自然周期持续自治。\nB 墨子完整一钟、统一STATUS、幂等/无重复/无主权误触。\nC 火山/方舟PLAN_V0.1与核验事实/UNKNOWN/MIN_POC/KR_GATE。\nD 50+30旧债续跑，不重开80条。\n\nNEXT_SHIFT_BOOT：\n先读本条 → 理当前REAL → 对OPEN_DEBT → 优先查墨子统一状态；墨子查询未成则明确OPEN → 收双腿RESULT/EVIDENCE；不靠",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-02T08:36:52Z",
+      "detected_at": "2026-10-12T04:06:26Z",
+      "queued_at": "2026-10-12T04:06:26Z",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-10-12T04:06:29Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "block_out_of_scope"
+      },
+      "auto_exec_start": "2026-10-12T04:06:29Z",
+      "execution_done": {
+        "result_real": "BLOCKED",
+        "ts": "2026-10-12T04:06:29Z",
+        "reason": "涉及 2WB 接件/消费链或墨子技术链，1WB 依纪律不跨 WB 代执行；需 2WB 自主或 KR 授权",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-10-12T04:06:29Z"
+      },
+      "result_real": "BLOCKED",
+      "consumer_run_at": "2026-10-12T04:06:29Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 5996129850,
+      "type": "SELF_SOLVE",
+      "instruction": "[HAI→1WB][DIAG][TEST_COMMAND_A_20261005_DIRECT_01]\nEVENT_ID=HAI-1WB-20261005-DIRECT-01-A\nCOMMAND=TEST_COMMAND_A\nACTION=DIAG\nMODE=READ_ONLY\nSOURCE=CHATGPT_CODEX_CURRENT_SESSION\nPURPOSE=Verify existing autonomous consumer and return actual running script path and SHA256 for dependent TEST_COMMAND_B.\nKR_COPY_PASTE=0\nKR_WAKEUP=0\nKR_RELAY=0\nCURRENT_WRITE=FORBIDDEN\nDo only existing read-only DIAG handler; acknowledge this comment and return machine RESULT with script path/hash. Do not change code, business data, permissions, or CURRENT. This command alone is not HAI_DIRECT_LOOP PASS.",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-05T14:06:56Z",
+      "detected_at": "2026-10-12T04:06:26Z",
+      "queued_at": "2026-10-12T04:06:26Z",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-10-12T04:06:29Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "unrecognized"
+      },
+      "auto_exec_start": "2026-10-12T04:06:29Z",
+      "execution_done": {
+        "result_real": "UNKNOWN",
+        "ts": "2026-10-12T04:06:29Z",
+        "reason": "未识别的可执行动作；不脑补",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-10-12T04:06:29Z"
+      },
+      "result_real": "UNKNOWN",
+      "consumer_run_at": "2026-10-12T04:06:29Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 5996252453,
+      "type": "SELF_SOLVE",
+      "instruction": "[HAI→1WB][TASK][TEST_COMMAND_B_20261005_DIRECT_01]\nEVENT_ID=HAI-1WB-20261005-DIRECT-01-B\nCOMMAND=TEST_COMMAND_B\nACTION=READBACK_HASH\nTARGET=C:\\Users\\59605\\.wb1\\wb1_github_inbox_heartbeat.py\nPARENT_RESULT_URI=https://github.com/kongsonren/aisaleos-handoff-poc/issues/6#issuecomment-5996136459\nEXPECTED_SHA256=9451fa84e5663378c030d0b436bc6e1cddf5a3a7ff4c67885cc756f291211100\nHAI_READ_RESULT_A=2026-10-05T14:07:00Z_TO_14:09:00Z\nPURPOSE=I actually read RESULT(A); independently hash the exact running script path returned by A. Return actual hash and evidence. HAI will compare.\nMODE=READ_ONLY\nKR_COPY_PASTE=0\nKR_WAKEUP=0\nKR_RELAY=0\nCURRENT_WRITE=FORBIDDEN\nDo not modify script, business data, permissions or CURRENT. Use only existing READBACK_HASH handler.",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-05T14:13:28Z",
+      "detected_at": "2026-10-12T04:06:26Z",
+      "queued_at": "2026-10-12T04:06:26Z",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-10-12T04:06:29Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "unrecognized"
+      },
+      "auto_exec_start": "2026-10-12T04:06:29Z",
+      "execution_done": {
+        "result_real": "UNKNOWN",
+        "ts": "2026-10-12T04:06:29Z",
+        "reason": "未识别的可执行动作；不脑补",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-10-12T04:06:29Z"
+      },
+      "result_real": "UNKNOWN",
+      "consumer_run_at": "2026-10-12T04:06:29Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 6032546502,
+      "type": "SELF_SOLVE",
+      "instruction": "[CLOCK][1WB]\nNODE=1WB\nGENERATED_AT=2026-09-19T22:55:29+08:00\nSTATUS_SOURCE=NAS_REAL\nSOURCE_HASH=b9c41a1cf03f001d\nKR_MANUAL_RUN=0\nKR_RELAY=0",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-07T06:45:04Z",
+      "detected_at": "2026-10-12T04:06:26Z",
+      "queued_at": "2026-10-12T04:06:26Z",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-10-12T04:06:29Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "unrecognized"
+      },
+      "auto_exec_start": "2026-10-12T04:06:29Z",
+      "execution_done": {
+        "result_real": "UNKNOWN",
+        "ts": "2026-10-12T04:06:29Z",
+        "reason": "未识别的可执行动作；不脑补",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-10-12T04:06:29Z"
+      },
+      "result_real": "UNKNOWN",
+      "consumer_run_at": "2026-10-12T04:06:29Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 6051537302,
+      "type": "SELF_SOLVE",
+      "instruction": "[CLOCK][1WB]\nNODE=1WB\nGENERATED_AT=2026-09-19T22:55:29+08:00\nSTATUS_SOURCE=NAS_REAL\nSOURCE_HASH=b9c41a1cf03f001d\nKR_MANUAL_RUN=0\nKR_RELAY=0",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-08T03:25:33Z",
+      "detected_at": "2026-10-12T04:06:26Z",
+      "queued_at": "2026-10-12T04:06:26Z",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-10-12T04:06:29Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "unrecognized"
+      },
+      "auto_exec_start": "2026-10-12T04:06:29Z",
+      "execution_done": {
+        "result_real": "UNKNOWN",
+        "ts": "2026-10-12T04:06:29Z",
+        "reason": "未识别的可执行动作；不脑补",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-10-12T04:06:29Z"
+      },
+      "result_real": "UNKNOWN",
+      "consumer_run_at": "2026-10-12T04:06:29Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 6065009502,
+      "type": "SELF_SOLVE",
+      "instruction": "[TO-1WB][KR_TASK][CLOSEOUT_ARCHIVE_20261009]\nKR命令：肉缺陷→收尾摆摆→最后下钟。本令只补齐下钟归档，不开新战，不扩大权限。\n归档正文事实：2WB在Issue#8对指令6064955577的ACK=6064978272；缺陷DEF-A/B/C BLOCKED待R2权威原件，DEF-D PARTIAL(8实体矩阵)，DEF-E PARTIAL(火山图SHA通过、Obsidian跨腿UNKNOWN)，DEF-F PARTIAL(版本说明、权属UNKNOWN)；R2整体未CLOSED；RGBCW概念图为AI生成，真实SKU规格/客户反馈UNKNOWN；下一班主攻真实业务反馈，保留R2执行债。\n1) 以现有合法身份写入KR既定NAS下钟总结目录及Obsidian既定库，不新造路径或架构。两份内容须包含日期、原始证据链接、PASS/PARTIAL/BLOCKED/UNKNOWN、未结债、下一班首查。\n2) 各自独立回读文件字节，报告NAS_PATH/OBSIDIAN_PATH/FILE_SHA256/READBACK_SHA256/RESULT。无访问权限就STOP并报告准确错误，不可假装写入。\n3) 检查Issue#8 2WB后续RESULT（不是只有ACK）；能查到则补登结果，否则标EXECUTION_UNKNOWN。\n4) 只有NAS与Obsidian均写入且回读匹配才标 DOWN_CLOCK_ARCHIVE=PASS，否则FAIL/PARTIAL；回传[RESULT][1WB][CLOSEOUT_ARCHIVE_20261009]到现有授权回执通道，注明KR_RELAY=0。\n禁止让KR复制粘贴、禁止声称未经验证的NAS落盘成功。",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-08T17:04:12Z",
+      "detected_at": "2026-10-12T04:06:26Z",
+      "queued_at": "2026-10-12T04:06:26Z",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-10-12T04:06:29Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "block_out_of_scope"
+      },
+      "auto_exec_start": "2026-10-12T04:06:29Z",
+      "execution_done": {
+        "result_real": "BLOCKED",
+        "ts": "2026-10-12T04:06:29Z",
+        "reason": "涉及 2WB 接件/消费链或墨子技术链，1WB 依纪律不跨 WB 代执行；需 2WB 自主或 KR 授权",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-10-12T04:06:29Z"
+      },
+      "result_real": "BLOCKED",
+      "consumer_run_at": "2026-10-12T04:06:29Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 6065273443,
+      "type": "SELF_SOLVE",
+      "instruction": "[TO-1WB][DISK_CDE_HOUSEKEEPING_20261009]\nKR授权后腿执行C/D/E三盘整理。按最小风险分两阶段：\nA. 立即只读盘点：逐盘报告总容量、可用空间、占用Top目录及大文件、重复文件候选、临时文件/缓存候选、业务资产及NAS/Obsidian/8051/8090/WorkBuddy/仓库所在位置；核对C盘此前ENOSPC及ledger截断恢复状态。不得泄露敏感文件内容。\nB. 只在现有明确授权且可证明安全的范围内，清理可重建的临时文件和本次任务自身产生的废弃临时产物；操作前记录路径、字节、类别、恢复可能性，操作后回读核验关键业务文件及剩余空间。不得删除或移动任何业务资产、原始证据、代码仓库、账本、冻结源、Obsidian库、NAS同步目录、用户文档、下载文件、回收站内容；不得批量去重、格式化、改分区或关闭服务。无法证明安全则只提交候选清单，不执行。\n先检查现有权威路由支持的可执行入口；若此消息无法路由，返回HELD_NON_EXECUTABLE及所需受控执行路径，不要假装完成。C盘写操作必须防ENOSPC，账本使用原子写。结果回本Issue：[RESULT][1WB][DISK_CDE_HOUSEKEEPING] 含各盘BEFORE/AFTER_FREE、ACTIONS、SAFE_CLEAN_BYTES、PROTECTED_PATHS、BLOCKERS、EVIDENCE、VERDICT。KR_RELAY=0。",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-08T17:19:34Z",
+      "detected_at": "2026-10-12T04:06:26Z",
+      "queued_at": "2026-10-12T04:06:26Z",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-10-12T04:06:29Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "unrecognized"
+      },
+      "auto_exec_start": "2026-10-12T04:06:29Z",
+      "execution_done": {
+        "result_real": "UNKNOWN",
+        "ts": "2026-10-12T04:06:29Z",
+        "reason": "未识别的可执行动作；不脑补",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-10-12T04:06:29Z"
+      },
+      "result_real": "UNKNOWN",
+      "consumer_run_at": "2026-10-12T04:06:29Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 6065304366,
+      "type": "SELF_SOLVE",
+      "instruction": "[TO-1WB][LOCAL_OPTIMIZATION_PROJECT_REUSE_20261009]\nKR澄清：黑武士本机已有专门的“本地优化项目”，C/D/E盘整理必须归入既有项目，不另立新项目。关联先前指令6065273443。\n先只读定位既有项目的真实名称、目录、README/任务账、最近执行记录、负责人/执行入口；列出与C/D/E整理的重叠任务和冲突风险。禁止猜测项目名称或新建同名项目。\n找到后沿既有项目授权流程开展三盘盘点；只清理明确安全、可重建且已获授权的临时产物；业务资料、NAS/Obsidian、源码、ledger、证据、用户文件不得删除/移动。若路由未映射或项目不可定位，STOP并报BLOCKED，不以ACK冒充执行。\n回报 PROJECT_NAME、PROJECT_PATH、EXISTING_PLAN、CDE_SCOPE、BEFORE_AFTER_FREE、ACTIONS_REAL、EVIDENCE、NEXT、VERDICT。KR_RELAY=0。",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-08T17:21:24Z",
+      "detected_at": "2026-10-12T04:06:26Z",
+      "queued_at": "2026-10-12T04:06:26Z",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-10-12T04:06:29Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "unrecognized"
+      },
+      "auto_exec_start": "2026-10-12T04:06:29Z",
+      "execution_done": {
+        "result_real": "UNKNOWN",
+        "ts": "2026-10-12T04:06:29Z",
+        "reason": "未识别的可执行动作；不脑补",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-10-12T04:06:29Z"
+      },
+      "result_real": "UNKNOWN",
+      "consumer_run_at": "2026-10-12T04:06:29Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 6065514905,
+      "type": "SELF_SOLVE",
+      "instruction": "[TO-1WB][8051-GATE-NAV-DESIGN-V1][PLANNING_ONLY]\nKR要求：把三张已给定的8051城门/架构概念图转为真实小程序/网页的导航与跳转规划；不再只评价美术，不重做原8051/8090，不扩大工程。\n规划基准：图三=菩提道场总导航(00+01外部+02内部+03用户+04经营+05产品+地下RAW/OBJECT/VERSION/ACTION-EVENT)；图二=00号城门RAW入口及地下REAL/地上VIEW；图一=地上五场与地下四层的总体架构说明。三张图均为设计参考，图中文字和数字不得冒充真实数据库。\n请先只读检查既有8051站点、8090、miniprogram-kr-8051项目、历史导航和真实URL。交付 NAV_SITEMAP_V1、ROUTE_MATRIX_V1（每个图上可点热区、目标真实URL/路由、返回路径、权限、REAL/PLACEHOLDER/UNKNOWN、负责人）、GAP_LIST、MIN_DEMO_PLAN（10月11日前能演示的最小可点闭环）、EVIDENCE。保留旧8051入口；缺少真实路由则用显式待建设页面，禁止虚构链接或假数据。优先设计移动端点击热区、可访问性、加载性能。\n本令只授权设计与只读盘点；实际改动生产入口/权限/业务数据须单独KR_GATE。若本消息被路由判HELD_NON_EXECUTABLE，请回明确阻塞，不冒充设计已完成。KR_RELAY=0。",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-08T17:33:40Z",
+      "detected_at": "2026-10-12T04:06:26Z",
+      "queued_at": "2026-10-12T04:06:26Z",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-10-12T04:06:29Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "unrecognized"
+      },
+      "auto_exec_start": "2026-10-12T04:06:29Z",
+      "execution_done": {
+        "result_real": "UNKNOWN",
+        "ts": "2026-10-12T04:06:29Z",
+        "reason": "未识别的可执行动作；不脑补",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-10-12T04:06:29Z"
+      },
+      "result_real": "UNKNOWN",
+      "consumer_run_at": "2026-10-12T04:06:29Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 6071155126,
+      "type": "SELF_SOLVE",
+      "instruction": "[TO-1WB][KR_TASK] 上钟第一刀：检查下钟归档执行入口。已有证据：原令6065009502被ACK，但6065011327回HELD_NON_EXECUTABLE/SUBTYPE_NOT_MAPPED。请在既有授权范围内只读列出可执行路由及NAS/Obsidian归档入口；若已有可用入口，按既有流程完成2026-10-09下钟总结双写、回读SHA并回RESULT；若无入口，STOP并回ROUTER_BLOCKED及需要的最小修复。禁止扩权、覆盖冻结源、以ACK冒充落盘。注意磁盘空间先检。KR_RELAY=0。",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-08T23:35:33Z",
+      "detected_at": "2026-10-12T04:06:26Z",
+      "queued_at": "2026-10-12T04:06:26Z",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-10-12T04:06:29Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "unrecognized"
+      },
+      "auto_exec_start": "2026-10-12T04:06:29Z",
+      "execution_done": {
+        "result_real": "UNKNOWN",
+        "ts": "2026-10-12T04:06:29Z",
+        "reason": "未识别的可执行动作；不脑补",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-10-12T04:06:29Z"
+      },
+      "result_real": "UNKNOWN",
+      "consumer_run_at": "2026-10-12T04:06:29Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 6073911942,
+      "type": "SELF_SOLVE",
+      "instruction": "[TO-1WB][KR_GATE_APPROVED_DIAGNOSIS][ROUTER_REPAIR_20261009]\nKR要求立即修复并亲自参与必要的授权操作。已验证故障：6071163337，SUBTYPE=KR_TASK，ACTION=NONE，HELD_NON_EXECUTABLE，BLOCKER=SUBTYPE_NOT_MAPPED。禁止继续用相同未映射类型空转。\n请在黑武士本机现有工程/本地优化项目内执行：\n1. 只读定位权威路由表、解析器、受支持的SUBTYPE及既有NAS/Obsidian归档执行入口；先返回真实路径、版本、命中规则与最小修复方案。\n2. 在现有权限允许的非生产测试范围内，增加或复用一条明确受限的CLOSEOUT_ARCHIVE执行映射；严格白名单，仅允许写既定NAS下钟总结目录及Obsidian库；禁止任意shell、越权路径、覆盖冻结源。改动前备份，提供diff与测试结果。若需新权限/生产部署，STOP请求KR单独批准，不能把本令当作无限授权。\n3. 最小端到端测试：GitHub真实接令→命中执行器→NAS与Obsidian各写测试归档→逐份独立回读SHA256→Issue#6 RESULT；报告 ROUTER_PATH、BEFORE_AFTER_SHA、TESTS、NAS_PATH、OBSIDIAN_PATH、READBACK_SHA、EVIDENCE、VERDICT。\n4. 任一步失败即FAIL并给精确错误，不得ACK冒充RESULT；不得删除业务资料或账本。先检查磁盘空间。KR_RELAY=0。\nKR如需人工操作，仅回报一个具体动作及其理由，勿让KR搬运整套内容。",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-09T03:52:45Z",
+      "detected_at": "2026-10-12T04:06:26Z",
+      "queued_at": "2026-10-12T04:06:26Z",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-10-12T04:06:29Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "unrecognized"
+      },
+      "auto_exec_start": "2026-10-12T04:06:29Z",
+      "execution_done": {
+        "result_real": "UNKNOWN",
+        "ts": "2026-10-12T04:06:29Z",
+        "reason": "未识别的可执行动作；不脑补",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-10-12T04:06:29Z"
+      },
+      "result_real": "UNKNOWN",
+      "consumer_run_at": "2026-10-12T04:06:29Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 6075827307,
+      "type": "SELF_SOLVE",
+      "instruction": "[CLOCK][1WB]\nNODE=1WB\nGENERATED_AT=2026-09-19T22:55:29+08:00\nSTATUS_SOURCE=NAS_REAL\nSOURCE_HASH=b9c41a1cf03f001d\nKR_MANUAL_RUN=0\nKR_RELAY=0",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-09T06:42:23Z",
+      "detected_at": "2026-10-12T04:06:26Z",
+      "queued_at": "2026-10-12T04:06:26Z",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-10-12T04:06:29Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "unrecognized"
+      },
+      "auto_exec_start": "2026-10-12T04:06:29Z",
+      "execution_done": {
+        "result_real": "UNKNOWN",
+        "ts": "2026-10-12T04:06:29Z",
+        "reason": "未识别的可执行动作；不脑补",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-10-12T04:06:29Z"
+      },
+      "result_real": "UNKNOWN",
+      "consumer_run_at": "2026-10-12T04:06:29Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 6093671298,
+      "type": "SELF_SOLVE",
+      "instruction": "[CLOCK][1WB]\nNODE=1WB\nGENERATED_AT=2026-09-19T22:55:29+08:00\nSTATUS_SOURCE=NAS_REAL\nSOURCE_HASH=b9c41a1cf03f001d\nKR_MANUAL_RUN=0\nKR_RELAY=0",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-10T04:16:17Z",
+      "detected_at": "2026-10-12T04:06:26Z",
+      "queued_at": "2026-10-12T04:06:26Z",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-10-12T04:06:29Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "unrecognized"
+      },
+      "auto_exec_start": "2026-10-12T04:06:29Z",
+      "execution_done": {
+        "result_real": "UNKNOWN",
+        "ts": "2026-10-12T04:06:29Z",
+        "reason": "未识别的可执行动作；不脑补",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-10-12T04:06:29Z"
+      },
+      "result_real": "UNKNOWN",
+      "consumer_run_at": "2026-10-12T04:06:29Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 6095661557,
+      "type": "SELF_SOLVE",
+      "instruction": "[TO-1WB][EXECUTION_CLOSURE_V1][READ_ONLY_FIRST]\nKR已授权哪吒执行闭环V1最小验收，工程任务单见 https://github.com/kongsonren/aisaleos-handoff-poc/issues/12 。先只读盘点现有路由/执行器；禁止以ACK冒充执行，禁止生产变更。请回真实SUPPORTED_ACTIONS、BLOCKER及是否需要KR_GATE；不支持则明确HELD_NON_EXECUTABLE。KR_RELAY=0。",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-10T08:25:52Z",
+      "detected_at": "2026-10-12T04:06:26Z",
+      "queued_at": "2026-10-12T04:06:26Z",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-10-12T04:06:29Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "unrecognized"
+      },
+      "auto_exec_start": "2026-10-12T04:06:29Z",
+      "execution_done": {
+        "result_real": "UNKNOWN",
+        "ts": "2026-10-12T04:06:29Z",
+        "reason": "未识别的可执行动作；不脑补",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-10-12T04:06:29Z"
+      },
+      "result_real": "UNKNOWN",
+      "consumer_run_at": "2026-10-12T04:06:29Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 6107725356,
+      "type": "SELF_SOLVE",
+      "instruction": "[SELF_SOLVE]\nKR已批准执行闭环V1修复施工，不再只读盘点。依据诊断RESULT 6100983153，优先在现有cloud_wb1_poller.py增加受限EXECUTION_CLOSURE_V1 handler及显式路由，隔离测试目录限定.wb1/testbed/<run_id>/；使用已有GitHub Contents API PUT真实8051七星导航规格测试文件，再GET回读并独立计算SHA256；在Issue#6回[WB1-EXEC-RESULT]含commit、路径、SHA、readback、时间、运行ID、证据。保持已有路由和幂等行为，先测试后启用，不触碰生产8051/8090、不扩权、不使用任意shell。失败回FAIL/BLOCKED和精确原因，禁止ACK冒充RESULT。验收另需证明自然调度的新cycle_id和时间，不可用手动周期代替。若云端现有执行体不能改代码或不能部署，立即报告精确缺口与KR_GATE，而非再做同样只读诊断。KR_RELAY=0。",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-11T09:46:49Z",
+      "detected_at": "2026-10-12T04:06:26Z",
+      "queued_at": "2026-10-12T04:06:26Z",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-10-12T04:06:29Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "unrecognized"
+      },
+      "auto_exec_start": "2026-10-12T04:06:29Z",
+      "execution_done": {
+        "result_real": "UNKNOWN",
+        "ts": "2026-10-12T04:06:29Z",
+        "reason": "未识别的可执行动作；不脑补",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-10-12T04:06:29Z"
+      },
+      "result_real": "UNKNOWN",
+      "consumer_run_at": "2026-10-12T04:06:29Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 6114875296,
+      "type": "SELF_SOLVE",
+      "instruction": "[HAI→1WB][KR_TASK][READ_ONLY_DIAG][20261012-050]\nKR_AUTH=CONTINUE_DIAG_ONLY\nTARGET=EXISTING_MOZI_HEART_ON_ALIYUN_ECS\nSCOPE=READ_ONLY_INVENTORY\nREQUEST=If an existing authorized receiver consumes this issue, inspect only: Mozi Heart service liveness, last heartbeat, last dispatch evidence, and whether the existing GitHub Actions diagnostic trigger is configured. Return factual evidence and current timestamp here. Do NOT dispatch, restart services, modify code, install MCP, rotate credentials, or run business tasks. If no authorized executor or access, report BLOCKED; do not invent results.\nBRANCH_LOCK=fix/nezha-mozi-state-guards-20261011\nDIAG_ONLY=true\nKR_RELAY=0\nEXPECTED_RESULT=ACK plus REAL evidence or BLOCKED\nNOTE=Issue comment delivery is not proof of receipt or execution.",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-11T23:01:45Z",
+      "detected_at": "2026-10-12T04:06:26Z",
+      "queued_at": "2026-10-12T04:06:26Z",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-10-12T04:06:29Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "block_out_of_scope"
+      },
+      "auto_exec_start": "2026-10-12T04:06:29Z",
+      "execution_done": {
+        "result_real": "BLOCKED",
+        "ts": "2026-10-12T04:06:29Z",
+        "reason": "涉及 2WB 接件/消费链或墨子技术链，1WB 依纪律不跨 WB 代执行；需 2WB 自主或 KR 授权",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-10-12T04:06:29Z"
+      },
+      "result_real": "BLOCKED",
+      "consumer_run_at": "2026-10-12T04:06:29Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 6114883632,
+      "type": "SELF_SOLVE",
+      "instruction": "[HAI→1WB][KR_TASK][READ_ONLY_DIAG][20261012-051]\nPARENT_COMMENT_ID=6114875296\nACTION=READ_FILE\nTARGET=.github/workflows/nezha-auto.yml\nSCOPE=READ_ONLY\nBRANCH=fix/nezha-mozi-state-guards-20261011\nPURPOSE=Validate the existing 1WB action router using a safe repository workflow file. Return exact file/ref, SHA256, readback evidence, and whether workflow_dispatch diag input exists. This is NOT an ECS health check and does NOT authorize cloud dispatch.\nNO_WRITES=true\nNO_DISPATCH=true\nNO_BUSINESS_TASKS=true\nNO_PRODUCTION_CHANGES=true\nKR_RELAY=0\nRESULT=PASS|FAIL|BLOCKED with evidence; if TARGET inaccessible STOP, do not substitute another target.",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-11T23:02:45Z",
+      "detected_at": "2026-10-12T04:06:26Z",
+      "queued_at": "2026-10-12T04:06:26Z",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-10-12T04:06:29Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "unrecognized"
+      },
+      "auto_exec_start": "2026-10-12T04:06:29Z",
+      "execution_done": {
+        "result_real": "UNKNOWN",
+        "ts": "2026-10-12T04:06:29Z",
+        "reason": "未识别的可执行动作；不脑补",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-10-12T04:06:29Z"
+      },
+      "result_real": "UNKNOWN",
+      "consumer_run_at": "2026-10-12T04:06:29Z",
       "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
     }
   ]
