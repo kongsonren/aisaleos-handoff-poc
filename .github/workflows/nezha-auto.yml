@@ -41,6 +41,12 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Validate cap contract (diagnostic only)
+        if: ${{ inputs.diag == 'true' }}
+        run: |
+          set -e
+          python -m unittest discover -s .wb1/nezha/tests -p 'test_self_schedule_cap_contract.py'
+
       - name: One beat of NEZHA continuous loop
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
