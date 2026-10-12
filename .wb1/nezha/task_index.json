@@ -1,7 +1,7 @@
 {
   "tasks": [
-    "TASK-REAL-001"
+    "TASK-REAL-011"
   ],
   "updated_at": "null",
-  "note": "task registry; second-leg task appended by cloud loop itself"
+  "note": "isolated diagnostic branch index reconciled to existing verified task_state.json; no task state created"
 }
