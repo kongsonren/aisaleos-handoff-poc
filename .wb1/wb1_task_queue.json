@@ -244,7 +244,10 @@
       "comment_id": 6114998703,
       "queued_at": "2026-10-12T00:18:53Z",
       "note": "inbound directive -> needs local 1WB execution",
-      "body_snippet": "[KR→1WB][KR_TASK][DISPATCH_CAPABILITY_CHECK][20261012-059]\nGOAL=Find an already-authorized machine executor for ONE GitHub Actions diagnostic workflow_dispatch.\nREPO=kongsonren/aisaleos-handoff-poc\nWORKFLOW=nezha-auto.yml\nREF=fix/nezha-mozi-state-guards-20261011\nINPUTS=diag:true\nSCOPE=CAPABILITY_CHE"
+      "body_snippet": "[KR→1WB][KR_TASK][DISPATCH_CAPABILITY_CHECK][20261012-059]\nGOAL=Find an already-authorized machine executor for ONE GitHub Actions diagnostic workflow_dispatch.\nREPO=kongsonren/aisaleos-handoff-poc\nWORKFLOW=nezha-auto.yml\nREF=fix/nezha-mozi-state-guards-20261011\nINPUTS=diag:true\nSCOPE=CAPABILITY_CHE",
+      "status": "EXECUTED_IN_CLOUD",
+      "cloud_result_run": 38187880730,
+      "resolved_at": "2026-10-12T00:25:38Z"
     }
   ],
   "processed": [
