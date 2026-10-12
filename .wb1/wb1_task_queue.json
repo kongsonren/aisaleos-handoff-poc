@@ -204,15 +204,6 @@
       "status": "EXECUTED_IN_CLOUD",
       "cloud_result_run": 38187880730,
       "resolved_at": "2026-10-12T00:25:38Z"
-    },
-    {
-      "comment_id": 6119726837,
-      "type": "SELF_SOLVE",
-      "instruction": "[TO-1WB][KR_GATE_APPROVED_DIAGNOSIS][NEZHA_DIAG_RETEST_20261012_069]\nACTION=READ_ONLY_DIAG\nTARGET=kongsonren/aisaleos-handoff-poc/.github/workflows/nezha-auto.yml\nPURPOSE=One bounded GitHub Actions diagnostic retest of isolated-branch fixes.\nWORKFLOW=nezha-auto.yml\nREF=fix/nezha-mozi-state-guards-20261011\nINPUTS=diag:true\nEXPECTED_INDEX_TASK=TASK-REAL-011\nMINIMUM_HEAD=ffd0a121fbf7f3ff1f2fc3e88afed8800fdfb84c\nAUTHORIZATION=KR previously authorized one diagnostic dispatch; request new authorization confirmation if required by executor policy. No production action.\nEXECUTOR=existing authorized cloud1WB GitHub Actions dispatcher only; no arbitrary shell.\nCHECK_FIRST=Verify current isolated ref includes index fix ffd0a121, diagnostic cap test b140a31 and MOZI skip e286210. If any absent STOP.\nI",
-      "status": "PENDING_LOCAL_CONSUME",
-      "sent_at": "2026-10-12T07:27:35Z",
-      "detected_at": "2026-10-12T07:28:03Z",
-      "queued_at": "2026-10-12T07:28:03Z"
     }
   ],
   "processed": [
@@ -1421,6 +1412,34 @@
       },
       "result_real": "UNKNOWN",
       "consumer_run_at": "2026-10-12T04:06:29Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 6119726837,
+      "type": "SELF_SOLVE",
+      "instruction": "[TO-1WB][KR_GATE_APPROVED_DIAGNOSIS][NEZHA_DIAG_RETEST_20261012_069]\nACTION=READ_ONLY_DIAG\nTARGET=kongsonren/aisaleos-handoff-poc/.github/workflows/nezha-auto.yml\nPURPOSE=One bounded GitHub Actions diagnostic retest of isolated-branch fixes.\nWORKFLOW=nezha-auto.yml\nREF=fix/nezha-mozi-state-guards-20261011\nINPUTS=diag:true\nEXPECTED_INDEX_TASK=TASK-REAL-011\nMINIMUM_HEAD=ffd0a121fbf7f3ff1f2fc3e88afed8800fdfb84c\nAUTHORIZATION=KR previously authorized one diagnostic dispatch; request new authorization confirmation if required by executor policy. No production action.\nEXECUTOR=existing authorized cloud1WB GitHub Actions dispatcher only; no arbitrary shell.\nCHECK_FIRST=Verify current isolated ref includes index fix ffd0a121, diagnostic cap test b140a31 and MOZI skip e286210. If any absent STOP.\nI",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-12T07:27:35Z",
+      "detected_at": "2026-10-12T07:28:03Z",
+      "queued_at": "2026-10-12T07:28:03Z",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-10-12T07:28:13Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "block_out_of_scope"
+      },
+      "auto_exec_start": "2026-10-12T07:28:13Z",
+      "execution_done": {
+        "result_real": "BLOCKED",
+        "ts": "2026-10-12T07:28:13Z",
+        "reason": "涉及 2WB 接件/消费链或墨子技术链，1WB 依纪律不跨 WB 代执行；需 2WB 自主或 KR 授权",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-10-12T07:28:13Z"
+      },
+      "result_real": "BLOCKED",
+      "consumer_run_at": "2026-10-12T07:28:13Z",
       "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
     }
   ]
