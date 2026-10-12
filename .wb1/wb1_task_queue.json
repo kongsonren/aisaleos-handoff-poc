@@ -204,6 +204,15 @@
       "status": "EXECUTED_IN_CLOUD",
       "cloud_result_run": 38187880730,
       "resolved_at": "2026-10-12T00:25:38Z"
+    },
+    {
+      "comment_id": 6119726837,
+      "type": "SELF_SOLVE",
+      "instruction": "[TO-1WB][KR_GATE_APPROVED_DIAGNOSIS][NEZHA_DIAG_RETEST_20261012_069]\nACTION=READ_ONLY_DIAG\nTARGET=kongsonren/aisaleos-handoff-poc/.github/workflows/nezha-auto.yml\nPURPOSE=One bounded GitHub Actions diagnostic retest of isolated-branch fixes.\nWORKFLOW=nezha-auto.yml\nREF=fix/nezha-mozi-state-guards-20261011\nINPUTS=diag:true\nEXPECTED_INDEX_TASK=TASK-REAL-011\nMINIMUM_HEAD=ffd0a121fbf7f3ff1f2fc3e88afed8800fdfb84c\nAUTHORIZATION=KR previously authorized one diagnostic dispatch; request new authorization confirmation if required by executor policy. No production action.\nEXECUTOR=existing authorized cloud1WB GitHub Actions dispatcher only; no arbitrary shell.\nCHECK_FIRST=Verify current isolated ref includes index fix ffd0a121, diagnostic cap test b140a31 and MOZI skip e286210. If any absent STOP.\nI",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-12T07:27:35Z",
+      "detected_at": "2026-10-12T07:28:03Z",
+      "queued_at": "2026-10-12T07:28:03Z"
     }
   ],
   "processed": [
