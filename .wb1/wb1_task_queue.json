@@ -239,6 +239,12 @@
       "queued_at": "2026-10-10T18:41:24Z",
       "note": "inbound directive -> needs local 1WB execution",
       "body_snippet": "[TO-1WB][READ_ONLY_INVENTORY]\nKR批准最小执行入口诊断。只读核实Issue#6现有watcher、router和实际executor之间的连接，回答：1) 可执行handler名称；2) EXECUTION_CLOSURE_V1为何SUBTYPE_NOT_MAPPED；3) 哪个现有运行体能够在隔离测试目录生成文件并SHA回读；4) 如果不存在，明确UNSUPPORTED_HANDLER及最小代码缺口。只在Issue#6回机器证据和RESULT=PASS/FAIL/UNKNOWN，不改生产、不扩权、不索要KR人工搬运。ACK不算RESULT。KR_RELAY=0."
+    },
+    {
+      "comment_id": 6114998703,
+      "queued_at": "2026-10-12T00:18:53Z",
+      "note": "inbound directive -> needs local 1WB execution",
+      "body_snippet": "[KR→1WB][KR_TASK][DISPATCH_CAPABILITY_CHECK][20261012-059]\nGOAL=Find an already-authorized machine executor for ONE GitHub Actions diagnostic workflow_dispatch.\nREPO=kongsonren/aisaleos-handoff-poc\nWORKFLOW=nezha-auto.yml\nREF=fix/nezha-mozi-state-guards-20261011\nINPUTS=diag:true\nSCOPE=CAPABILITY_CHE"
     }
   ],
   "processed": [
