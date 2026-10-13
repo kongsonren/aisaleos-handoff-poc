@@ -1,0 +1,56 @@
+test_concurrent_claim_and_process_restart (test_daemon.Tests.test_concurrent_claim_and_process_restart) ... ok
+test_conflicting_nonce_run_issue (test_daemon.Tests.test_conflicting_nonce_run_issue) ... ok
+test_crash_claim_never_reexecutes (test_daemon.Tests.test_crash_claim_never_reexecutes) ... ok
+test_every_field_tamper (test_daemon.Tests.test_every_field_tamper) ... ok
+test_expired_future_and_window (test_daemon.Tests.test_expired_future_and_window) ... ok
+test_false_missing_forged_true_wrong_signature (test_daemon.Tests.test_false_missing_forged_true_wrong_signature) ... ok
+test_legacy_and_protected_task (test_daemon.Tests.test_legacy_and_protected_task) ... ok
+test_legal_restart_duplicate_and_result (test_daemon.Tests.test_legal_restart_duplicate_and_result) ... ok
+test_post_timeout_no_retry (test_daemon.Tests.test_post_timeout_no_retry) ... ok
+test_principal_and_issue_binding (test_daemon.Tests.test_principal_and_issue_binding) ... ok
+test_scan_only_refreshes_simulation (test_daemon.Tests.test_scan_only_refreshes_simulation) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.315s
+
+OK
+concurrent statuses: ['PASS', 'DUPLICATE', 'DUPLICATE', 'DUPLICATE'] new process: DUPLICATE
+{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
+{"status": "HOLD_PENDING_KR", "reason": "source binding"}
+{"status": "HOLD_PENDING_KR", "reason": "source binding"}
+{"status": "HOLD_PENDING_KR", "reason": "source binding"}
+{"status": "HOLD_PENDING_KR", "reason": "untrusted principal/key"}
+{"status": "HOLD_PENDING_KR", "reason": "untrusted principal/key"}
+{"status": "HOLD_PENDING_KR", "reason": "title/content policy"}
+{"status": "HOLD_PENDING_KR", "reason": "signature"}
+{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
+{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
+{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
+{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
+{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
+{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
+{"status": "HOLD_PENDING_KR", "reason": "signature"}
+{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
+{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
+{"status": "HOLD_PENDING_KR", "reason": "simulation identity"}
+{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
+{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
+{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
+{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
+{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
+{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
+{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
+{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
+{"status": "HOLD_PENDING_KR", "reason": "schema/legacy rejected"}
+{"status": "HOLD_PENDING_KR", "reason": "signature"}
+{"status": "HOLD_PENDING_KR", "reason": "schema/legacy rejected"}
+{"status": "HOLD_PENDING_KR", "reason": "protected or non-task issue"}
+{"status": "HOLD_PENDING_KR", "reason": "simulation identity"}
+{"status": "HOLD_PENDING_KR", "reason": "duplicate JSON key"}
+{"type": "RESULT", "status": "PASS", "scope": "simulation-only", "task_id": "SIM-001", "run_id": "SIM-RUN-001", "issue_id": 9001, "issue_number": 999, "payload_sha256": "cb9d73880858f3d210daf1c0a3da089e34775facf5161ff1fe4cd48a7c594d28", "executor_sha256": "3d6c42254125c5d76344ede90538353dc560d97846dde4590be68ab92474d544", "path": "C:\\Users\\59605\\AppData\\Local\\Temp\\tmpsp_7c00r\\bd295747d58f49260aebfffbca6a4861418c851546b97363a6e322ad570334ed\\test.txt", "bytes": 17, "sha256": "ffab9aac57e7a50d1e29c6bec89176a15c6c38d27c6f7ca48b757618b0ebe090", "started_at": 1791923187.3549037, "completed_at": 1791923187.3564112, "pid": 63072}
+{"status": "HOLD_PENDING_KR", "reason": "untrusted principal/key"}
+{"status": "HOLD_PENDING_KR", "reason": "source binding"}
+{"status": "HOLD_PENDING_KR", "reason": "source binding"}
+{"status": "HOLD_PENDING_KR", "reason": "protected or non-task issue"}
+{"status": "HOLD_PENDING_KR", "reason": "title/content policy"}
+{"status": "HOLD_PENDING_KR", "reason": "protected or non-task issue"}

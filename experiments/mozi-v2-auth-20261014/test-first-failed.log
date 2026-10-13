@@ -1,0 +1,93 @@
+test_conflicting_nonce_run_issue (test_daemon.Tests.test_conflicting_nonce_run_issue) ... FAIL
+test_crash_claim_never_reexecutes (test_daemon.Tests.test_crash_claim_never_reexecutes) ... ERROR
+test_every_field_tamper (test_daemon.Tests.test_every_field_tamper) ... ok
+test_expired_future_and_window (test_daemon.Tests.test_expired_future_and_window) ... ok
+test_false_missing_forged_true_wrong_signature (test_daemon.Tests.test_false_missing_forged_true_wrong_signature) ... ok
+test_legacy_and_protected_task (test_daemon.Tests.test_legacy_and_protected_task) ... ok
+test_legal_restart_duplicate_and_result (test_daemon.Tests.test_legal_restart_duplicate_and_result) ... FAIL
+test_post_timeout_no_retry (test_daemon.Tests.test_post_timeout_no_retry) ... FAIL
+test_principal_and_issue_binding (test_daemon.Tests.test_principal_and_issue_binding) ... ok
+test_scan_only_refreshes_simulation (test_daemon.Tests.test_scan_only_refreshes_simulation) ... ok
+
+======================================================================
+ERROR: test_crash_claim_never_reexecutes (test_daemon.Tests.test_crash_claim_never_reexecutes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\59605\.codex\.chatgpt-projects\g-p-6a8437c626508191bcc3bde036554c2b\mozi-v2-auth-20261014\test_daemon.py", line 93, in test_crash_claim_never_reexecutes
+    self.d.db.execute('INSERT INTO jobs VALUES(?,?,?,?,?,?,?,?)',(p['task_id'],p['run_id'],p['nonce'],p['issue_id'],fp,'CLAIMED',None))
+sqlite3.OperationalError: table jobs has 7 columns but 8 values were supplied
+
+======================================================================
+FAIL: test_conflicting_nonce_run_issue (test_daemon.Tests.test_conflicting_nonce_run_issue)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\59605\.codex\.chatgpt-projects\g-p-6a8437c626508191bcc3bde036554c2b\mozi-v2-auth-20261014\test_daemon.py", line 107, in test_conflicting_nonce_run_issue
+    self.assertEqual(self.d.consume(self.issue(),NOW)['status'],'PASS')
+AssertionError: 'HOLD_PENDING_KR' != 'PASS'
+- HOLD_PENDING_KR
++ PASS
+
+
+======================================================================
+FAIL: test_legal_restart_duplicate_and_result (test_daemon.Tests.test_legal_restart_duplicate_and_result)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\59605\.codex\.chatgpt-projects\g-p-6a8437c626508191bcc3bde036554c2b\mozi-v2-auth-20261014\test_daemon.py", line 71, in test_legal_restart_duplicate_and_result
+    self.assertEqual(result['status'],'PASS')
+AssertionError: 'HOLD_PENDING_KR' != 'PASS'
+- HOLD_PENDING_KR
++ PASS
+
+
+======================================================================
+FAIL: test_post_timeout_no_retry (test_daemon.Tests.test_post_timeout_no_retry)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\59605\.codex\.chatgpt-projects\g-p-6a8437c626508191bcc3bde036554c2b\mozi-v2-auth-20261014\test_daemon.py", line 102, in test_post_timeout_no_retry
+    with self.assertRaises(TimeoutError): self.d.publish(result,fail)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: TimeoutError not raised
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.149s
+
+FAILED (failures=3, errors=1)
+{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
+{"status": "HOLD_PENDING_KR", "reason": "source binding"}
+{"status": "HOLD_PENDING_KR", "reason": "source binding"}
+{"status": "HOLD_PENDING_KR", "reason": "source binding"}
+{"status": "HOLD_PENDING_KR", "reason": "untrusted principal/key"}
+{"status": "HOLD_PENDING_KR", "reason": "untrusted principal/key"}
+{"status": "HOLD_PENDING_KR", "reason": "title/content policy"}
+{"status": "HOLD_PENDING_KR", "reason": "signature"}
+{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
+{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
+{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
+{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
+{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
+{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
+{"status": "HOLD_PENDING_KR", "reason": "signature"}
+{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
+{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
+{"status": "HOLD_PENDING_KR", "reason": "simulation identity"}
+{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
+{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
+{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
+{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
+{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
+{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
+{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
+{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
+{"status": "HOLD_PENDING_KR", "reason": "schema/legacy rejected"}
+{"status": "HOLD_PENDING_KR", "reason": "signature"}
+{"status": "HOLD_PENDING_KR", "reason": "schema/legacy rejected"}
+{"status": "HOLD_PENDING_KR", "reason": "protected or non-task issue"}
+{"status": "HOLD_PENDING_KR", "reason": "simulation identity"}
+{"status": "HOLD_PENDING_KR", "reason": "duplicate JSON key"}
+{"status": "HOLD_PENDING_KR", "reason": "table jobs has 7 columns but 8 values were supplied"}
+{"status": "HOLD_PENDING_KR", "reason": "untrusted principal/key"}
+{"status": "HOLD_PENDING_KR", "reason": "source binding"}
+{"status": "HOLD_PENDING_KR", "reason": "source binding"}
+{"status": "HOLD_PENDING_KR", "reason": "protected or non-task issue"}
+{"status": "HOLD_PENDING_KR", "reason": "title/content policy"}
+{"status": "HOLD_PENDING_KR", "reason": "protected or non-task issue"}
