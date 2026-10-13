@@ -1,0 +1,22 @@
+{
+  "status": "fulfilled",
+  "value": {
+    "name": "issue19-comments",
+    "value": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Action completed."
+        }
+      ],
+      "structuredContent": {
+        "comments": [],
+        "url": "https://github.com/kongsonren/aisaleos-handoff-poc/issues/19",
+        "title": "kongsonren/aisaleos-handoff-poc Issue #19 comments",
+        "display_url": "https://github.com/kongsonren/aisaleos-handoff-poc/issues/19",
+        "display_title": "kongsonren/aisaleos-handoff-poc Issue #19 comments"
+      },
+      "isError": false
+    }
+  }
+}

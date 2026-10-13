@@ -1,0 +1,21 @@
+{
+  "verdict": "PASS",
+  "evidence": [
+    {
+      "job": 115458934404,
+      "head_sha": "76253379d9569ce190ac9e3246dd24dbf1905651",
+      "completion_marker": true,
+      "log_sha256": "b423127cbd915c42cb5d21ac37888d0eb8dca0ff033941c2156e79b063a1d9d9"
+    },
+    {
+      "job": 115459048778,
+      "head_sha": "045967553eab2d370a40e4ec54e0ed61fa812af9",
+      "completion_marker": true,
+      "log_sha256": "98c3cebb4879a7daa01a40c6df1aea6027bb8f99826253e57b6cf8cfebc07d30"
+    },
+    {
+      "pinned_module_matches_local": true,
+      "normalized_sha256": "0c455979dc39cc2a613b65fe0ae93c2a8dc7c99d37ee672218d57fc0ca5fabcc"
+    }
+  ]
+}

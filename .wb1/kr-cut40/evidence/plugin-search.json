@@ -1,0 +1,45 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "Action completed."
+    }
+  ],
+  "structuredContent": {
+    "meta": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"plugins\":[{\"id\":\"plugin_connector_1p_1a69035c238881919c4190932b2df699\",\"name\":\"github\",\"display_name\":\"GitHub\",\"description\":\"Inspect repositories, triage pull requests and issues, debug CI, and publish changes through a hybrid GitHub connector and CLI workflow.\",\"scope\":\"GLOBAL\",\"status\":\"ENABLED\",\"installation_policy\":\"AVAILABLE\",\"installed\":true},{\"id\":\"plugin_asdk_app_6a576f075ec4819196c203b7049542be\",\"name\":\"app-6a576f075ec4819196c203b7049542be\",\"display_name\":\"GitBook\",\"description\":\"The GitBook MCP server gives AI agents a full read/write connection to your GitBook organization. Create and configure docs sites, spaces, and sections; draft, edit, and restructure content; open change requests and push updates for review; publish OpenAPI specs; and manage site customization — all through natural conversation, with OAuth sign-in or a personal access token. Pairs with the GitBook Skills plugin, which teaches agents how to use these capabilities effectively.\",\"scope\":\"GLOBAL\",\"status\":\"ENABLED\",\"installation_policy\":\"AVAILABLE\",\"installed\":false}]}",
+        "annotations": null,
+        "meta": null
+      }
+    ],
+    "structuredContent": {
+      "plugins": [
+        {
+          "id": "plugin_connector_1p_1a69035c238881919c4190932b2df699",
+          "name": "github",
+          "display_name": "GitHub",
+          "description": "Inspect repositories, triage pull requests and issues, debug CI, and publish changes through a hybrid GitHub connector and CLI workflow.",
+          "scope": "GLOBAL",
+          "status": "ENABLED",
+          "installation_policy": "AVAILABLE",
+          "installed": true
+        },
+        {
+          "id": "plugin_asdk_app_6a576f075ec4819196c203b7049542be",
+          "name": "app-6a576f075ec4819196c203b7049542be",
+          "display_name": "GitBook",
+          "description": "The GitBook MCP server gives AI agents a full read/write connection to your GitBook organization. Create and configure docs sites, spaces, and sections; draft, edit, and restructure content; open change requests and push updates for review; publish OpenAPI specs; and manage site customization — all through natural conversation, with OAuth sign-in or a personal access token. Pairs with the GitBook Skills plugin, which teaches agents how to use these capabilities effectively.",
+          "scope": "GLOBAL",
+          "status": "ENABLED",
+          "installation_policy": "AVAILABLE",
+          "installed": false
+        }
+      ]
+    },
+    "isError": false
+  },
+  "isError": false
+}

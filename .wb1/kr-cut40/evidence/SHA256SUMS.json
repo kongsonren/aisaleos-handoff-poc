@@ -1,0 +1,106 @@
+[
+  {
+    "name": "candidate-commit.json",
+    "sha256": "fd903635354b4229644a037aa09f13d3850de7c5064fdcca2b3060f7aa424a54"
+  },
+  {
+    "name": "evidence-verification.json",
+    "sha256": "8cb4cb8d2201de35d70488121514a9192fdcad480217396c28d2dc75d5526a97"
+  },
+  {
+    "name": "host-readback.sh",
+    "sha256": "8ea962d0d94bde8156024848f4696f5883cde7aaa1ade46a07b8f6a61894127e"
+  },
+  {
+    "name": "issue19-comments.json",
+    "sha256": "2cf79891a3cb40d0e3be33497200759ca99d5bc6fb6cf0db29639f880e57df32"
+  },
+  {
+    "name": "issue19.json",
+    "sha256": "98f240002aaca04f80d2cf71d760b821384a39e55c214ce03e1e007214664988"
+  },
+  {
+    "name": "job-115458934404.json",
+    "sha256": "4cba7ebad69e581dd5d0cafc8aae21d4bb96aaa987be36ce7699ec013e84bd43"
+  },
+  {
+    "name": "job-115459048778.json",
+    "sha256": "c8fee8b04a02914bcc9bd80c4d49345b60b480732a995db0e1252295207c6db0"
+  },
+  {
+    "name": "jobs-38444409084.json",
+    "sha256": "fdf5ccc6439dcf132cfb8237399df3841a853dee3467e3be37d432690e253f67"
+  },
+  {
+    "name": "jobs-38444440431.json",
+    "sha256": "3393cf7a79a5c6e387780513f4ccc47b2202aa562efaffa2f453204fb165d1b2"
+  },
+  {
+    "name": "ledger-content.json",
+    "sha256": "08f3c694bd315710162dc54bf776c90024bb12ab60f5f691f0738ada6b433aeb"
+  },
+  {
+    "name": "ledger.json",
+    "sha256": "b057444c2e3b97e56db4147016eed761e8f5ab2b989bdc6fb098489e29dc515a"
+  },
+  {
+    "name": "pinned-module.json",
+    "sha256": "8f7ce2b768ccaa98b4a3281731a673f1a8e61280ad7c8a5ba4835c2a14cc1d1c"
+  },
+  {
+    "name": "plugin-search.json",
+    "sha256": "bed34de920c330ffbe9385978807865a4978c47dd987311740bd1f1057d91e2e"
+  },
+  {
+    "name": "preflight-tests.log",
+    "sha256": "c4ba0fc1d633e2a27e167413ccb0466bc4157416a5cd2266245a36f9967c3a2d"
+  },
+  {
+    "name": "production-integrity.json",
+    "sha256": "67bda340b9a9a80726dd58671ac44e5b0c2361666d8f17f4e999e1d4f11a6394"
+  },
+  {
+    "name": "recovery_preflight.py",
+    "sha256": "5fa58cf0c38ff950f0f219cf2329d1ab395e02447877698393c8717f26bef869"
+  },
+  {
+    "name": "recovery-plan.json",
+    "sha256": "3a25f0fc1dea4b717e3e0e2a9788b223f4891c7415cebef14136a1b9ae2c5fb8"
+  },
+  {
+    "name": "REPORT.md",
+    "sha256": "d1b3e7968be6a1e461a445cc6fb9dcb8e365e258581646347e89b4ca3ec11c05"
+  },
+  {
+    "name": "review_tests.py",
+    "sha256": "10ff1499f797853e0344dba3a36c0554463bfa4a65e7bc49f2faa9ba77f95434"
+  },
+  {
+    "name": "review-tests.log",
+    "sha256": "284ff6fa8d9a9bc8d12058f02037107c3fa76d87cb9e40d30d7065c4c6bc7608"
+  },
+  {
+    "name": "ssh-probe.json",
+    "sha256": "8ec45ec9ab27c88143ceeae5840ef7d3e0785714f1a46580e85f84220bfedf1a"
+  },
+  {
+    "name": "ssh-probe.log",
+    "sha256": "efd2559cdce8dd1de065bc7a188e841716e19bbfef589e690d193d81ab18ca87"
+  },
+  {
+    "name": "task-state.json",
+    "sha256": "b2b33e69dec0189db26c76990b8589e60f237038a24690085b467e8f36ecae96"
+  },
+  {
+    "name": "test_preflight.py",
+    "sha256": "2b108cfb60c5098929b25d9b72f8d4e020c19d1f7583e3482d49efe15b5e2df5"
+  },
+  {
+    "name": "verify_evidence.py",
+    "sha256": "40bb4f7644940bc7059a8db91242e589b611a4fa91bd99b2caf420127a4d71b5"
+  },
+  {
+    "name": "WAKEUP-ACCEPTANCE.md",
+    "sha256": "12e67e157edfcabb802f370e6ca95af61ab573fe34eafa7a06e181f18223b210"
+  }
+]

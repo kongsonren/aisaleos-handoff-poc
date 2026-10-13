@@ -1,0 +1,6 @@
+{"actual": "kr-cut39-isolated-20261014", "case": "adapter branch mismatch reproduced", "network": false, "requested": "kr-cut39-isolated-other", "verdict": "FAIL"}
+{"ack_written": false, "case": "receiver rejects seq243", "verdict": "FAIL"}
+{"case": "ACK is start-only, not completion", "execution": "FAILED", "fault_injection": true, "status": "ACK", "verdict": "PASS_FINDING"}
+{"case": "pump lacks per-row scope guard", "dispatch_observer_calls": 1, "exit": 4, "network": false, "verdict": "FAIL"}
+{"case": "actual GitHubStore constructor", "parameters": ["self", "token", "repo", "branch"]}
+PASS CUT40 review reproductions; FAIL findings are deployment blockers, not failed test assertions

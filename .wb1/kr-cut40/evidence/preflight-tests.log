@@ -1,0 +1,13 @@
+{"case": "eligible is still deployment gated", "verdict": "PASS", "decision": "ELIGIBLE_AFTER_DEPLOYMENT_GATES"}
+{"case": "future", "verdict": "PASS", "decision": "WAIT"}
+{"case": "exhausted", "verdict": "PASS", "decision": "BLOCKED"}
+{"case": "seq243", "verdict": "PASS", "decision": "BLOCKED"}
+{"case": "main row", "verdict": "PASS", "decision": "BLOCKED"}
+{"case": "wrong workflow", "verdict": "PASS", "decision": "BLOCKED"}
+{"case": "unknown", "verdict": "PASS", "decision": "RECONCILE_ONLY_NO_POST"}
+{"case": "crashed claim", "verdict": "PASS", "decision": "RECONCILE_ONLY_NO_POST"}
+{"case": "submitted", "verdict": "PASS", "decision": "RECONCILE_ONLY_NO_POST"}
+{"case": "ack is not result", "verdict": "PASS", "decision": "VERIFY_EXECUTION_SEPARATELY"}
+{"case": "invalid ack", "verdict": "PASS", "decision": "BLOCKED"}
+{"case": "invalid due", "verdict": "PASS", "decision": "BLOCKED"}
+PASS 12 preflight cases; no deployment or remote execution

@@ -1,0 +1,42 @@
+{
+  "status": "fulfilled",
+  "value": {
+    "content": [
+      {
+        "type": "text",
+        "text": "Action completed."
+      }
+    ],
+    "structuredContent": {
+      "issue": {
+        "url": "https://github.com/kongsonren/aisaleos-handoff-poc/issues/19",
+        "title": "[KR-CUT39-ISOLATED] durable scheduling boundary acceptance and wakeup blockers",
+        "issue_number": 19,
+        "body": "KR第39刀：隔离调度修复与实际云端边界测试；完整六段链 UNKNOWN，主动唤醒 BLOCKED（验收入口缺失）。\n\n隔离分支 kr-cut39-isolated-20261014；核心补丁 commit 345001ac2caa1372eaa4d57e19e29b3c4cf85bbd。\n实际 Run 38444409084 → 自动 dispatch → Run 38444440431；seq241 → 242。两次原始日志均有 REAL_EXECUTOR_COMPLETE 与边界/重启/重试/幂等测试通过，不以绿色状态代替执行证据。\n持久调度账本 .wb1/kr-cut39/schedule.json 位于隔离分支，两个 key 的 attempts=1、status=ACK、独立 run_id。HTTP204只记SENT，未确认返回非0；429三次上限，超时/5xx留UNKNOWN并禁止盲重发。CAS冲突最多3次。\n第38刀路由修复回归通过：普通报告IGNORE，身份保留SUBTYPE，KR_GATE STOP，未知subtype HELD。未部署本机生产入口。\n限制：本次为隔离调度迁移候选和两拍云验收，未部署独立Daemon恢复扫描；持续无人值守调度、云宿主独立回读、会话结束后主动唤醒均未通过。仓库hooks查询200且为空；不能据此排除所有外部订阅。本轮日志读取属于主动GET，绝不计作主动唤醒。\n无新简单文件回执任务，无KR人工搬运，无生产/main修改，无凭据扩权，无SSH验证绕过，无24小时等待。\n\n\n完整报告与原始日志（隔离证据提交）：https://github.com/kongsonren/aisaleos-handoff-poc/blob/1c7a64ba872e2d2c690c0a2d817c9c486495a55e/.wb1/kr-cut39/evidence/REPORT.md\n交付提交SHA：1c7a64ba872e2d2c690c0a2d817c9c486495a55e。核心云验收代码SHA及实际Run SHA见报告，勿混同。",
+        "state": "open",
+        "user": {
+          "login": "kongsonren",
+          "name": "kongsonren",
+          "email": null,
+          "avatar_url": "https://avatars.githubusercontent.com/u/259898029?v=4",
+          "id": 259898029
+        },
+        "assignees": null,
+        "labels": null,
+        "milestone": null,
+        "state_reason": null,
+        "comments": 0,
+        "created_at": "2026-10-13T18:15:11Z",
+        "updated_at": "2026-10-13T18:18:05Z",
+        "closed_at": null,
+        "display_url": "https://github.com/kongsonren/aisaleos-handoff-poc/issues/19",
+        "display_title": "[KR-CUT39-ISOLATED] durable scheduling boundary acceptance and wakeup blockers"
+      },
+      "url": "https://github.com/kongsonren/aisaleos-handoff-poc/issues/19",
+      "title": "[KR-CUT39-ISOLATED] durable scheduling boundary acceptance and wakeup blockers",
+      "display_url": "https://github.com/kongsonren/aisaleos-handoff-poc/issues/19",
+      "display_title": "[KR-CUT39-ISOLATED] durable scheduling boundary acceptance and wakeup blockers"
+    },
+    "isError": false
+  }
+}

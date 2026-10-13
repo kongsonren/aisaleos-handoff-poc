@@ -1,0 +1,18 @@
+{
+  "deployment": "BLOCKED",
+  "dispatches": 0,
+  "mode": "READ_ONLY_PLAN",
+  "rows": [
+    {
+      "decision": "VERIFY_EXECUTION_SEPARATELY",
+      "key": "kr-cut39-isolated-20261014:241",
+      "reasons": []
+    },
+    {
+      "decision": "VERIFY_EXECUTION_SEPARATELY",
+      "key": "kr-cut39-isolated-20261014:242",
+      "reasons": []
+    }
+  ],
+  "writes": 0
+}
