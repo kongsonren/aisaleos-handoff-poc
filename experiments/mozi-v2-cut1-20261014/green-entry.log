@@ -1,0 +1,18 @@
+test_audit_digest_tamper (test_entrypoint.EntryTests.test_audit_digest_tamper) ... ok
+test_audit_failure_stops (test_entrypoint.EntryTests.test_audit_failure_stops) ... ok
+test_broker_paths_and_zero_post (test_entrypoint.EntryTests.test_broker_paths_and_zero_post) ... ok
+test_cli_offline_and_path_denial (test_entrypoint.EntryTests.test_cli_offline_and_path_denial) ... ok
+test_clock_replay_conflict (test_entrypoint.EntryTests.test_clock_replay_conflict) ... ok
+test_default_and_live_deny (test_entrypoint.EntryTests.test_default_and_live_deny) ... ok
+test_fixture_size_and_schema (test_entrypoint.EntryTests.test_fixture_size_and_schema) ... ok
+test_good_duplicate_restart_audit (test_entrypoint.EntryTests.test_good_duplicate_restart_audit) ... ok
+test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) ... ok
+test_no_network_or_scan (test_entrypoint.EntryTests.test_no_network_or_scan) ... ok
+test_path_alias_and_hardlink (test_entrypoint.EntryTests.test_path_alias_and_hardlink) ... ok
+test_payload_boundary (test_entrypoint.EntryTests.test_payload_boundary) ... ok
+test_source_digest_before_import (test_entrypoint.EntryTests.test_source_digest_before_import) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 1.291s
+
+OK

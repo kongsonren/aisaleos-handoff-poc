@@ -1,0 +1,20 @@
+test_source_digest_before_import (test_entrypoint.EntryTests.test_source_digest_before_import) ... ERROR
+
+======================================================================
+ERROR: test_source_digest_before_import (test_entrypoint.EntryTests.test_source_digest_before_import)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\59605\AppData\Local\Temp\tmpow444xcy\test_entrypoint.py", line 73, in test_source_digest_before_import
+    with self.assertRaises(e.Denied): e.offline_once(self.issue,self.root,NOW)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\59605\AppData\Local\Temp\tmpow444xcy\entrypoint.py", line 102, in offline_once
+    d=core.Daemon(state,{'sim':(ISSUER_ID,MOCK_KEY)},expected_sha256=DAEMON_SHA,
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\59605\AppData\Local\Temp\tmpow444xcy\daemon.py", line 55, in __init__
+    raise Hold('executor measurement mismatch')
+mozi_cut1_pinned.Hold: executor measurement mismatch
+
+----------------------------------------------------------------------
+Ran 1 test in 0.022s
+
+FAILED (errors=1)

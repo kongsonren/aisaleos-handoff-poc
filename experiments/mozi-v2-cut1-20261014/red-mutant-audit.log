@@ -1,0 +1,15 @@
+test_audit_digest_tamper (test_entrypoint.EntryTests.test_audit_digest_tamper) ... FAIL
+
+======================================================================
+FAIL: test_audit_digest_tamper (test_entrypoint.EntryTests.test_audit_digest_tamper)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\59605\AppData\Local\Temp\tmp6pxgl07o\test_entrypoint.py", line 122, in test_audit_digest_tamper
+    with self.assertRaises(e.Denied): e.offline_once(self.issue,self.root,NOW)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Denied not raised
+
+----------------------------------------------------------------------
+Ran 1 test in 0.055s
+
+FAILED (failures=1)

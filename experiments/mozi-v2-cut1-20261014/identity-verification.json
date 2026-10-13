@@ -1,0 +1,301 @@
+{
+  "identity": {
+    "queried_at": {
+      "current_time": "2026-10-13 22:09:33 UTC"
+    },
+    "profile": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Action completed."
+        }
+      ],
+      "structuredContent": {
+        "id": "259898029",
+        "name": null,
+        "email": "kongsonren@gmail.com",
+        "nickname": "kongsonren",
+        "picture": "https://avatars.githubusercontent.com/u/259898029?v=4",
+        "workspace_id": null,
+        "workspace_name": null,
+        "workspace_picture": null
+      },
+      "isError": false
+    },
+    "repository": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Action completed."
+        }
+      ],
+      "structuredContent": {
+        "id": "1357322725",
+        "name": "aisaleos-handoff-poc",
+        "owner": {
+          "login": "kongsonren",
+          "id": 259898029,
+          "type": "User",
+          "avatar_url": "https://avatars.githubusercontent.com/u/259898029?v=4",
+          "url": "https://api.github.com/users/kongsonren"
+        },
+        "repository_full_name": "kongsonren/aisaleos-handoff-poc",
+        "permissions": {
+          "admin": true,
+          "maintain": true,
+          "pull": true,
+          "push": true,
+          "triage": true
+        },
+        "allow_auto_merge": false,
+        "allow_merge_commit": true,
+        "allow_rebase_merge": true,
+        "allow_squash_merge": true,
+        "allow_update_branch": false,
+        "clone_url": "https://github.com/kongsonren/aisaleos-handoff-poc.git",
+        "size": 3347,
+        "default_branch": "main",
+        "git_commits_url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/commits{/sha}",
+        "git_refs_url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/refs{/sha}",
+        "git_url": "git://github.com/kongsonren/aisaleos-handoff-poc.git",
+        "master_branch": null,
+        "visibility": "public",
+        "archived": false,
+        "is_code_search_indexed": null
+      },
+      "isError": false
+    },
+    "permission": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Action completed."
+        }
+      ],
+      "structuredContent": {
+        "permission": "admin"
+      },
+      "isError": false
+    },
+    "simulation_search": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Action completed."
+        }
+      ],
+      "structuredContent": {
+        "issues": []
+      },
+      "isError": false
+    },
+    "result_bot": {
+      "status": "UNKNOWN",
+      "reason": "No approved dedicated bot login/ID or credential ownership evidence"
+    },
+    "signer": {
+      "status": "PASS",
+      "login": "kongsonren",
+      "id": 259898029,
+      "permission": "admin"
+    },
+    "simulation": {
+      "status": "UNKNOWN",
+      "reason": "Search returned no matching issue; search absence is not exhaustive nonexistence proof"
+    }
+  },
+  "issue20": {
+    "status": "fulfilled",
+    "value": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Action completed."
+        }
+      ],
+      "structuredContent": {
+        "issue": {
+          "url": "https://github.com/kongsonren/aisaleos-handoff-poc/issues/20",
+          "title": "[KR-ISOLATED-HOLD] TASK-REAL-042",
+          "issue_number": 20,
+          "body": "第42刀；BLOCKED_HOST_ACCESS。禁止Actions替代、历史Issue #16替代；保持open。旧Daemon前缀不匹配，暂停执行。\n\n```json\n{\n  \"protocol\": \"kr-task-real-v1\",\n  \"task_id\": \"TASK-REAL-042\",\n  \"run_id\": \"KR-CUT42-20261014-01\",\n  \"state\": \"BLOCKED_HOST_ACCESS\",\n  \"execution_authorized\": false,\n  \"scope\": \"isolated-only\",\n  \"code_sha\": \"f54edaa0d41833940361f273cee4fbc4c4315c47\",\n  \"baseline_report_sha\": \"e1866b4c3d3ba17c5477d6f6ce963c2302bf4db8\",\n  \"executor\": \"independent-cloud-daemon-only\",\n  \"action\": \"write_read_hash\",\n  \"filename\": \"test_cut42.txt\",\n  \"content\": \"TASK-REAL-042\\nrun_id=KR-CUT42-20261014-01\\nscope=isolated-only\\n\",\n  \"constraints\": {\n    \"no_actions_substitute\": true,\n    \"no_main_changes\": true,\n    \"no_production_changes\": true,\n    \"no_permission_changes\": true,\n    \"no_unreviewed_code_pull\": true,\n    \"strict_host_key_checking\": true,\n    \"production_gate\": \"KR_GATE\"\n  },\n  \"result_required\": [\n    \"task_id\",\n    \"run_id\",\n    \"host\",\n    \"pid\",\n    \"uptime_seconds\",\n    \"executor_code_sha\",\n    \"path\",\n    \"bytes\",\n    \"sha256\",\n    \"started_at\",\n    \"completed_at\"\n  ],\n  \"independent_verification\": {\n    \"required\": true,\n    \"read_raw_file_via_trusted_host_channel\": true,\n    \"recompute_sha256\": true,\n    \"daemon_hash_is_claim_only\": true,\n    \"require_content_equals_task\": true,\n    \"exclude_issue16_history\": true\n  },\n  \"closure\": \"VERIFIED_CLOSED only after independent raw-byte readback and hash/content correlation; otherwise remain open\",\n  \"blocker\": \"Existing SSH identity inaccessible and connection denied. No trusted host readback. Hold execution until existing authorized host access is restored and isolated deployment is reviewed.\"\n}\n```",
+          "state": "open",
+          "user": {
+            "login": "kongsonren",
+            "name": "kongsonren",
+            "email": null,
+            "avatar_url": "https://avatars.githubusercontent.com/u/259898029?v=4",
+            "id": 259898029
+          },
+          "assignees": null,
+          "labels": null,
+          "milestone": null,
+          "state_reason": null,
+          "comments": 1,
+          "created_at": "2026-10-13T19:22:56Z",
+          "updated_at": "2026-10-13T19:24:49Z",
+          "closed_at": null,
+          "display_url": "https://github.com/kongsonren/aisaleos-handoff-poc/issues/20",
+          "display_title": "[KR-ISOLATED-HOLD] TASK-REAL-042"
+        },
+        "url": "https://github.com/kongsonren/aisaleos-handoff-poc/issues/20",
+        "title": "[KR-ISOLATED-HOLD] TASK-REAL-042",
+        "display_url": "https://github.com/kongsonren/aisaleos-handoff-poc/issues/20",
+        "display_title": "[KR-ISOLATED-HOLD] TASK-REAL-042"
+      },
+      "isError": false
+    }
+  },
+  "basecommit": {
+    "status": "fulfilled",
+    "value": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Action completed."
+        }
+      ],
+      "structuredContent": {
+        "content": "{\"sha\":\"bf7eec65af9a65da065a781a5ed91b8f8038f61c\",\"node_id\":\"C_kwDOUOcZ5doAKGJmN2VlYzY1YWY5YTY1ZGEwNjVhNzgxYTVlZDkxYjhmODAzOGY2MWM\",\"url\":\"https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/commits/bf7eec65af9a65da065a781a5ed91b8f8038f61c\",\"html_url\":\"https://github.com/kongsonren/aisaleos-handoff-poc/commit/bf7eec65af9a65da065a781a5ed91b8f8038f61c\",\"author\":{\"name\":\"kongsonren\",\"email\":\"kongsonren@gmail.com\",\"date\":\"2026-10-13T21:12:13Z\"},\"committer\":{\"name\":\"kongsonren\",\"email\":\"kongsonren@gmail.com\",\"date\":\"2026-10-13T21:12:13Z\"},\"tree\":{\"sha\":\"64d4a30a8f7dad3eb79f01b35cb03b2619d33729\",\"url\":\"https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/trees/64d4a30a8f7dad3eb79f01b35cb03b2619d33729\"},\"message\":\"Fix Mozi v2 R1-R4 with isolated red/green security regressions\",\"parents\":[{\"sha\":\"efc2efc10007bb5797be26c13879a61c82eed394\",\"url\":\"https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/commits/efc2efc10007bb5797be26c13879a61c82eed394\",\"html_url\":\"https://github.com/kongsonren/aisaleos-handoff-poc/commit/efc2efc10007bb5797be26c13879a61c82eed394\"}],\"verification\":{\"verified\":false,\"reason\":\"unsigned\",\"signature\":null,\"payload\":null,\"verified_at\":null}}",
+        "title": "bf7eec65af9a65da065a781a5ed91b8f8038f61c",
+        "modified_date": null,
+        "url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/commits/bf7eec65af9a65da065a781a5ed91b8f8038f61c",
+        "display_url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/commits/bf7eec65af9a65da065a781a5ed91b8f8038f61c",
+        "display_title": "bf7eec65af9a65da065a781a5ed91b8f8038f61c",
+        "structuredContent": {
+          "title": "bf7eec65af9a65da065a781a5ed91b8f8038f61c",
+          "content": "{\"sha\":\"bf7eec65af9a65da065a781a5ed91b8f8038f61c\",\"node_id\":\"C_kwDOUOcZ5doAKGJmN2VlYzY1YWY5YTY1ZGEwNjVhNzgxYTVlZDkxYjhmODAzOGY2MWM\",\"url\":\"https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/commits/bf7eec65af9a65da065a781a5ed91b8f8038f61c\",\"html_url\":\"https://github.com/kongsonren/aisaleos-handoff-poc/commit/bf7eec65af9a65da065a781a5ed91b8f8038f61c\",\"author\":{\"name\":\"kongsonren\",\"email\":\"kongsonren@gmail.com\",\"date\":\"2026-10-13T21:12:13Z\"},\"committer\":{\"name\":\"kongsonren\",\"email\":\"kongsonren@gmail.com\",\"date\":\"2026-10-13T21:12:13Z\"},\"tree\":{\"sha\":\"64d4a30a8f7dad3eb79f01b35cb03b2619d33729\",\"url\":\"https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/trees/64d4a30a8f7dad3eb79f01b35cb03b2619d33729\"},\"message\":\"Fix Mozi v2 R1-R4 with isolated red/green security regressions\",\"parents\":[{\"sha\":\"efc2efc10007bb5797be26c13879a61c82eed394\",\"url\":\"https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/commits/efc2efc10007bb5797be26c13879a61c82eed394\",\"html_url\":\"https://github.com/kongsonren/aisaleos-handoff-poc/commit/efc2efc10007bb5797be26c13879a61c82eed394\"}],\"verification\":{\"verified\":false,\"reason\":\"unsigned\",\"signature\":null,\"payload\":null,\"verified_at\":null}}",
+          "display_url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/commits/bf7eec65af9a65da065a781a5ed91b8f8038f61c"
+        }
+      },
+      "isError": false
+    }
+  },
+  "main_before": {
+    "status": "fulfilled",
+    "value": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Action completed."
+        }
+      ],
+      "structuredContent": {
+        "content": "{\"ref\":\"refs/heads/main\",\"node_id\":\"REF_kwDOUOcZ5a9yZWZzL2hlYWRzL21haW4\",\"url\":\"https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/refs/heads/main\",\"object\":{\"sha\":\"875d6fa4238c58388320d18edc1b1e67da19ca60\",\"type\":\"commit\",\"url\":\"https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/commits/875d6fa4238c58388320d18edc1b1e67da19ca60\"}}",
+        "title": "main",
+        "modified_date": null,
+        "url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/ref/heads/main",
+        "display_url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/ref/heads/main",
+        "display_title": "main",
+        "structuredContent": {
+          "title": "main",
+          "content": "{\"ref\":\"refs/heads/main\",\"node_id\":\"REF_kwDOUOcZ5a9yZWZzL2hlYWRzL21haW4\",\"url\":\"https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/refs/heads/main\",\"object\":{\"sha\":\"875d6fa4238c58388320d18edc1b1e67da19ca60\",\"type\":\"commit\",\"url\":\"https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/commits/875d6fa4238c58388320d18edc1b1e67da19ca60\"}}",
+          "display_url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/ref/heads/main"
+        }
+      },
+      "isError": false
+    }
+  },
+  "workflow_reads": [
+    {
+      "status": "fulfilled",
+      "value": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Action completed."
+          }
+        ],
+        "structuredContent": {
+          "content": "name: MOZI-INDEPENDENT-WATCH\n\n# ⑥ 墨子独立故障域（KR 验收口径：哪吒执行链死掉以后，墨子还能不能独立发现）\n#\n# 与哪吒链**完全解耦**：\n#   · 自己的 workflow 文件（mozi-auto.yml，不是 nezha-auto.yml）\n#   · 自己的 concurrency 组（mozi-independent-watch，不与哪吒抢）\n#   · 自己的自起拍链（mozi_watch.py --wait-and-schedule dispatch 自己）\n#   · 自己的节拍标记（.wb1/nezha/mozi_beat.json）\n# 因此：哪吒链断 ≠ 墨子停。哪吒链同拍里的 MOZI patrol 只是历史搭车，\n# 独立链跑稳后会从 nezha-auto.yml 摘除（不双跑、不冒充）。\n#\n# 墨子仍是 WATCH ONLY：只看、只记、只判。不创建任务、不抢活、不下指令。\non:\n  workflow_dispatch:\n  schedule:\n    - cron: \"17,47 * * * *\"   # 每 30 分钟（尽力；本仓库 cron 实测不自行触发 → 靠自起拍链）\n\nconcurrency:\n  group: mozi-independent-watch\n  cancel-in-progress: false\n\npermissions:\n  contents: write\n  actions: write      # 允许墨子自己 dispatch 下一拍（独立自延续）\n\nenv:\n  MOZI_SELF_SCHEDULE: \"1\"\n  MOZI_BEAT_MIN: \"30\"\n\njobs:\n  watch:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Checkout\n        uses: actions/checkout@v4\n\n      - name: Setup Python\n        uses: actions/setup-python@v5\n        with:\n          python-version: \"3.11\"\n\n      - name: MOZI watch (read-only)\n        env:\n          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}\n        run: |\n          echo \"run_id=$GITHUB_RUN_ID started=$(date -u +%FT%TZ)\"\n          python .wb1/nezha/mozi_watch.py\n          echo \"watchexit=$?\"\n\n      # 独立自起拍：睡到下一个 30 分钟边界后由**墨子自己** dispatch 下一拍。\n      # 这一拍的发起方是墨子，不是哪吒 —— 这是\"独立故障域\"成立的关键。\n      - name: MOZI self-schedules next beat\n        if: always()\n        env:\n          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}\n          MOZI_SELF_SCHEDULE: \"1\"\n          MOZI_BEAT_MIN: \"30\"\n          MOZI_MAX_BEATS: \"120\"\n        run: |\n          python .wb1/nezha/mozi_watch.py --wait-and-schedule\n          echo \"nextexit=$?\"\n",
+          "title": "991dafa21e20bd6476b8dd20ed9a46162c50a1d7",
+          "modified_date": null,
+          "url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/blobs/991dafa21e20bd6476b8dd20ed9a46162c50a1d7",
+          "display_url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/blobs/991dafa21e20bd6476b8dd20ed9a46162c50a1d7",
+          "display_title": "991dafa21e20bd6476b8dd20ed9a46162c50a1d7",
+          "structuredContent": {
+            "title": "991dafa21e20bd6476b8dd20ed9a46162c50a1d7",
+            "content": "name: MOZI-INDEPENDENT-WATCH\n\n# ⑥ 墨子独立故障域（KR 验收口径：哪吒执行链死掉以后，墨子还能不能独立发现）\n#\n# 与哪吒链**完全解耦**：\n#   · 自己的 workflow 文件（mozi-auto.yml，不是 nezha-auto.yml）\n#   · 自己的 concurrency 组（mozi-independent-watch，不与哪吒抢）\n#   · 自己的自起拍链（mozi_watch.py --wait-and-schedule dispatch 自己）\n#   · 自己的节拍标记（.wb1/nezha/mozi_beat.json）\n# 因此：哪吒链断 ≠ 墨子停。哪吒链同拍里的 MOZI patrol 只是历史搭车，\n# 独立链跑稳后会从 nezha-auto.yml 摘除（不双跑、不冒充）。\n#\n# 墨子仍是 WATCH ONLY：只看、只记、只判。不创建任务、不抢活、不下指令。\non:\n  workflow_dispatch:\n  schedule:\n    - cron: \"17,47 * * * *\"   # 每 30 分钟（尽力；本仓库 cron 实测不自行触发 → 靠自起拍链）\n\nconcurrency:\n  group: mozi-independent-watch\n  cancel-in-progress: false\n\npermissions:\n  contents: write\n  actions: write      # 允许墨子自己 dispatch 下一拍（独立自延续）\n\nenv:\n  MOZI_SELF_SCHEDULE: \"1\"\n  MOZI_BEAT_MIN: \"30\"\n\njobs:\n  watch:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Checkout\n        uses: actions/checkout@v4\n\n      - name: Setup Python\n        uses: actions/setup-python@v5\n        with:\n          python-version: \"3.11\"\n\n      - name: MOZI watch (read-only)\n        env:\n          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}\n        run: |\n          echo \"run_id=$GITHUB_RUN_ID started=$(date -u +%FT%TZ)\"\n          python .wb1/nezha/mozi_watch.py\n          echo \"watchexit=$?\"\n\n      # 独立自起拍：睡到下一个 30 分钟边界后由**墨子自己** dispatch 下一拍。\n      # 这一拍的发起方是墨子，不是哪吒 —— 这是\"独立故障域\"成立的关键。\n      - name: MOZI self-schedules next beat\n        if: always()\n        env:\n          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}\n          MOZI_SELF_SCHEDULE: \"1\"\n          MOZI_BEAT_MIN: \"30\"\n          MOZI_MAX_BEATS: \"120\"\n        run: |\n          python .wb1/nezha/mozi_watch.py --wait-and-schedule\n          echo \"nextexit=$?\"\n",
+            "display_url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/blobs/991dafa21e20bd6476b8dd20ed9a46162c50a1d7"
+          }
+        },
+        "isError": false
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Action completed."
+          }
+        ],
+        "structuredContent": {
+          "content": "name: MOZI-CLOUD-WATCH\n\n# 墨子：云端 WATCH ONLY —— 只看、只记、只判。\n# 不创建任务、不改业务状态、不调度哪吒、不下达任何指令。\n#\n# 真实限制（不吹）：GitHub cron 最小粒度 5 分钟，做不到 60 秒级；\n# 60 秒级常驻观察需要真实云主机（腾讯云轻量），届时才上。\non:\n  workflow_dispatch:\n  schedule:\n    - cron: \"7 * * * *\"   # 每小时一次（720 次/月，落在免费额度内）\n\npermissions:\n  contents: write\n\njobs:\n  watch:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Checkout\n        uses: actions/checkout@v4\n\n      - name: Setup Python\n        uses: actions/setup-python@v5\n        with:\n          python-version: \"3.11\"\n\n      - name: Run MOZI watch\n        env:\n          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}\n        run: |\n          echo \"run_id=$GITHUB_RUN_ID started=$(date -u +%FT%TZ)\"\n          python .wb1/nezha/mozi_watch.py\n          echo \"exit=$?\"\n",
+          "title": "276d8b3226a704c4ed5b4271a1ab5017cd1f7e2b",
+          "modified_date": null,
+          "url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/blobs/276d8b3226a704c4ed5b4271a1ab5017cd1f7e2b",
+          "display_url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/blobs/276d8b3226a704c4ed5b4271a1ab5017cd1f7e2b",
+          "display_title": "276d8b3226a704c4ed5b4271a1ab5017cd1f7e2b",
+          "structuredContent": {
+            "title": "276d8b3226a704c4ed5b4271a1ab5017cd1f7e2b",
+            "content": "name: MOZI-CLOUD-WATCH\n\n# 墨子：云端 WATCH ONLY —— 只看、只记、只判。\n# 不创建任务、不改业务状态、不调度哪吒、不下达任何指令。\n#\n# 真实限制（不吹）：GitHub cron 最小粒度 5 分钟，做不到 60 秒级；\n# 60 秒级常驻观察需要真实云主机（腾讯云轻量），届时才上。\non:\n  workflow_dispatch:\n  schedule:\n    - cron: \"7 * * * *\"   # 每小时一次（720 次/月，落在免费额度内）\n\npermissions:\n  contents: write\n\njobs:\n  watch:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Checkout\n        uses: actions/checkout@v4\n\n      - name: Setup Python\n        uses: actions/setup-python@v5\n        with:\n          python-version: \"3.11\"\n\n      - name: Run MOZI watch\n        env:\n          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}\n        run: |\n          echo \"run_id=$GITHUB_RUN_ID started=$(date -u +%FT%TZ)\"\n          python .wb1/nezha/mozi_watch.py\n          echo \"exit=$?\"\n",
+            "display_url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/blobs/276d8b3226a704c4ed5b4271a1ab5017cd1f7e2b"
+          }
+        },
+        "isError": false
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Action completed."
+          }
+        ],
+        "structuredContent": {
+          "content": "name: NEZHA-CLOUD-CONTINUOUS-LOOP\n\n# 今晚唯一一条云起搏（原 NEZHA-CLOUD-AUTO-TAKEOVER 已改写为本循环）。\n#\n# 目的：把本地 1WB 后腿的「自主工作循环」搬到云肉身 ——\n#   每一拍：读 STATE → 分类（RUNNING / LOCAL_HELD 不抢活 / TAKEOVER / IDLE 扫描 / GENUINE_IDLE）\n#          → 只做一个动作 → 写 heartbeat(round_seq+1)\n# 第五到十分钟的调度延迟是 GitHub 的常态，**准点不是 PASS 条件**；\n# PASS 条件是：黑武士关机以后，下一拍仍然由这里自己发生。\non:\n  workflow_dispatch:\n    inputs:\n      diag:\n        description: \"true = diagnostic scan only (no task created, no state change)\"\n        required: false\n        default: \"false\"\n  schedule:\n    - cron: \"*/5 * * * *\"\n\nconcurrency:\n  group: nezha-cloud-executor   # 与原 concurrent 组同名：保证同一时刻只有一个被执行，绝不双跑\n  cancel-in-progress: false\n\npermissions:\n  contents: write\n  actions: write        # 允许云端自己 dispatch 下一拍（自延续链）\n\nenv:\n  NEZHA_SELF_SCHEDULE: \"1\"\n\njobs:\n  loop:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Checkout\n        uses: actions/checkout@v4\n\n      - name: Setup Python\n        uses: actions/setup-python@v5\n        with:\n          python-version: \"3.11\"\n\n      - name: One beat of NEZHA continuous loop\n        env:\n          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}\n          NEZHA_AUTH_ID: KR-TOKEN-20260928-POWEROFF-V2\n          NEZHA_STALE_SEC: \"900\"   # LOCAL 不再有常驻心跳：最后一吻时间戳 + 15 分钟窗口，\n                                   # KR 须在冻结后 15 分钟内物理关机，接管必然晚于关机\n        run: |\n          echo \"run_id=$GITHUB_RUN_ID attempt=$GITHUB_RUN_ATTEMPT started=$(date -u +%FT%TZ)\"\n          if [ \"${{ inputs.diag }}\" = \"true\" ]; then\n            echo \"mode=diagnose\"\n            python .wb1/nezha/loop.py --diagnose\n          else\n            python .wb1/nezha/loop.py\n          fi\n          echo \"exit=$?\"\n\n      # 墨子云端巡检（5分钟同拍）：只读两条腿生命与业务推进，不替哪吒决定战争。\n      # 目的：KR 要求墨子按 5 分钟节拍盯「有没有持续产 REAL」，而不是盯 PID/定时器/HTTP200。\n      # mozi.yml 无 cron 自触发能力（本仓库 schedule 历史 0 条），故挂在自起拍链同拍执行。\n      - name: MOZI patrol (read-only)\n        if: always()\n        env:\n          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}\n        run: |\n          python .wb1/nezha/mozi_watch.py\n          echo \"moziexit=$?\"\n\n      # 云自起拍：睡到下一个 5 分钟边界后由**本 runner 自己** dispatch 下一拍。\n      # 用途：GitHub 原生 schedule cron 在本仓库实测长期不自行触发（event=schedule 历史 0 条），\n      # 这是减损链。第一推动力在黑武士关机前搬一次，此后每一拍的发起都由云端自己完成。\n      - name: Cloud self-schedules next beat\n        if: always()\n        env:\n          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}\n          NEZHA_SELF_SCHEDULE: \"1\"\n          NEZHA_BEAT_MIN: \"5\"\n          NEZHA_MAX_BEATS: \"240\"\n        run: |\n          python .wb1/nezha/loop.py --wait-and-schedule\n          echo \"nextexit=$?\"\n",
+          "title": "5067b6ee633676d9d0f678cdadea514cfd87af84",
+          "modified_date": null,
+          "url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/blobs/5067b6ee633676d9d0f678cdadea514cfd87af84",
+          "display_url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/blobs/5067b6ee633676d9d0f678cdadea514cfd87af84",
+          "display_title": "5067b6ee633676d9d0f678cdadea514cfd87af84",
+          "structuredContent": {
+            "title": "5067b6ee633676d9d0f678cdadea514cfd87af84",
+            "content": "name: NEZHA-CLOUD-CONTINUOUS-LOOP\n\n# 今晚唯一一条云起搏（原 NEZHA-CLOUD-AUTO-TAKEOVER 已改写为本循环）。\n#\n# 目的：把本地 1WB 后腿的「自主工作循环」搬到云肉身 ——\n#   每一拍：读 STATE → 分类（RUNNING / LOCAL_HELD 不抢活 / TAKEOVER / IDLE 扫描 / GENUINE_IDLE）\n#          → 只做一个动作 → 写 heartbeat(round_seq+1)\n# 第五到十分钟的调度延迟是 GitHub 的常态，**准点不是 PASS 条件**；\n# PASS 条件是：黑武士关机以后，下一拍仍然由这里自己发生。\non:\n  workflow_dispatch:\n    inputs:\n      diag:\n        description: \"true = diagnostic scan only (no task created, no state change)\"\n        required: false\n        default: \"false\"\n  schedule:\n    - cron: \"*/5 * * * *\"\n\nconcurrency:\n  group: nezha-cloud-executor   # 与原 concurrent 组同名：保证同一时刻只有一个被执行，绝不双跑\n  cancel-in-progress: false\n\npermissions:\n  contents: write\n  actions: write        # 允许云端自己 dispatch 下一拍（自延续链）\n\nenv:\n  NEZHA_SELF_SCHEDULE: \"1\"\n\njobs:\n  loop:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Checkout\n        uses: actions/checkout@v4\n\n      - name: Setup Python\n        uses: actions/setup-python@v5\n        with:\n          python-version: \"3.11\"\n\n      - name: One beat of NEZHA continuous loop\n        env:\n          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}\n          NEZHA_AUTH_ID: KR-TOKEN-20260928-POWEROFF-V2\n          NEZHA_STALE_SEC: \"900\"   # LOCAL 不再有常驻心跳：最后一吻时间戳 + 15 分钟窗口，\n                                   # KR 须在冻结后 15 分钟内物理关机，接管必然晚于关机\n        run: |\n          echo \"run_id=$GITHUB_RUN_ID attempt=$GITHUB_RUN_ATTEMPT started=$(date -u +%FT%TZ)\"\n          if [ \"${{ inputs.diag }}\" = \"true\" ]; then\n            echo \"mode=diagnose\"\n            python .wb1/nezha/loop.py --diagnose\n          else\n            python .wb1/nezha/loop.py\n          fi\n          echo \"exit=$?\"\n\n      # 墨子云端巡检（5分钟同拍）：只读两条腿生命与业务推进，不替哪吒决定战争。\n      # 目的：KR 要求墨子按 5 分钟节拍盯「有没有持续产 REAL」，而不是盯 PID/定时器/HTTP200。\n      # mozi.yml 无 cron 自触发能力（本仓库 schedule 历史 0 条），故挂在自起拍链同拍执行。\n      - name: MOZI patrol (read-only)\n        if: always()\n        env:\n          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}\n        run: |\n          python .wb1/nezha/mozi_watch.py\n          echo \"moziexit=$?\"\n\n      # 云自起拍：睡到下一个 5 分钟边界后由**本 runner 自己** dispatch 下一拍。\n      # 用途：GitHub 原生 schedule cron 在本仓库实测长期不自行触发（event=schedule 历史 0 条），\n      # 这是减损链。第一推动力在黑武士关机前搬一次，此后每一拍的发起都由云端自己完成。\n      - name: Cloud self-schedules next beat\n        if: always()\n        env:\n          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}\n          NEZHA_SELF_SCHEDULE: \"1\"\n          NEZHA_BEAT_MIN: \"5\"\n          NEZHA_MAX_BEATS: \"240\"\n        run: |\n          python .wb1/nezha/loop.py --wait-and-schedule\n          echo \"nextexit=$?\"\n",
+            "display_url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/blobs/5067b6ee633676d9d0f678cdadea514cfd87af84"
+          }
+        },
+        "isError": false
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Action completed."
+          }
+        ],
+        "structuredContent": {
+          "content": "name: NEZHA-CLOUD-EXECUTOR\n\n# 哪吒：云端最小 EXECUTOR。运行在 GitHub 托管 runner 上，\n# 脱离本地 12WB / 当前会话 / 当前 shell —— 本地关机不影响它。\non:\n  workflow_dispatch:\n    inputs:\n      note:\n        description: \"触发说明（仅记录，不作为参数）\"\n        required: false\n        default: \"\"\n\npermissions:\n  contents: write\n\njobs:\n  execute:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Checkout\n        uses: actions/checkout@v4\n\n      - name: Setup Python\n        uses: actions/setup-python@v5\n        with:\n          python-version: \"3.11\"\n\n      - name: Run NEZHA executor\n        env:\n          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}\n          NEZHA_AUTH_ID: KR-TOKEN-20260928-NEZHA-TAKEOVER\n        run: |\n          echo \"run_id=$GITHUB_RUN_ID started=$(date -u +%FT%TZ)\"\n          python .wb1/nezha/cloud_executor.py\n          echo \"exit=$?\"\n",
+          "title": "fbe0da9a43dc7420bb3aa98cd11123383b76aede",
+          "modified_date": null,
+          "url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/blobs/fbe0da9a43dc7420bb3aa98cd11123383b76aede",
+          "display_url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/blobs/fbe0da9a43dc7420bb3aa98cd11123383b76aede",
+          "display_title": "fbe0da9a43dc7420bb3aa98cd11123383b76aede",
+          "structuredContent": {
+            "title": "fbe0da9a43dc7420bb3aa98cd11123383b76aede",
+            "content": "name: NEZHA-CLOUD-EXECUTOR\n\n# 哪吒：云端最小 EXECUTOR。运行在 GitHub 托管 runner 上，\n# 脱离本地 12WB / 当前会话 / 当前 shell —— 本地关机不影响它。\non:\n  workflow_dispatch:\n    inputs:\n      note:\n        description: \"触发说明（仅记录，不作为参数）\"\n        required: false\n        default: \"\"\n\npermissions:\n  contents: write\n\njobs:\n  execute:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Checkout\n        uses: actions/checkout@v4\n\n      - name: Setup Python\n        uses: actions/setup-python@v5\n        with:\n          python-version: \"3.11\"\n\n      - name: Run NEZHA executor\n        env:\n          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}\n          NEZHA_AUTH_ID: KR-TOKEN-20260928-NEZHA-TAKEOVER\n        run: |\n          echo \"run_id=$GITHUB_RUN_ID started=$(date -u +%FT%TZ)\"\n          python .wb1/nezha/cloud_executor.py\n          echo \"exit=$?\"\n",
+            "display_url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/blobs/fbe0da9a43dc7420bb3aa98cd11123383b76aede"
+          }
+        },
+        "isError": false
+      }
+    }
+  ]
+}

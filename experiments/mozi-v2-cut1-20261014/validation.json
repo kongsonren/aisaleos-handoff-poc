@@ -1,0 +1,33 @@
+{
+  "started_utc": "2026-10-13T22:15:36.204205+00:00",
+  "ended_utc": "2026-10-13T22:15:39.764912+00:00",
+  "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+  "mode": "OFFLINE_MOCK",
+  "results": [
+    {
+      "log": "red-mutant-identity.log",
+      "exit": 1,
+      "sha256": "f86d5d7b29fb9863a59954b958ce265387f778b41e1e911a072420beea554981"
+    },
+    {
+      "log": "red-mutant-digest.log",
+      "exit": 1,
+      "sha256": "c46e3a06a43f26ba1c789d4a8056a5595f40dd46f0db21673e7e838f2c4193da"
+    },
+    {
+      "log": "red-mutant-audit.log",
+      "exit": 1,
+      "sha256": "e5411385527939e03f8d6e20779d1071966a7c43834fe269636b83d8a106529a"
+    },
+    {
+      "log": "green-original20.log",
+      "exit": 0,
+      "sha256": "475310aa5a7081bef9d946bb174d0b2222a5baea0a3a3b6f4d0a8cf5f0e579bb"
+    },
+    {
+      "log": "green-entry.log",
+      "exit": 0,
+      "sha256": "0485d84e3002269d813fbd601af7c02eef0cfa0de65dd8594cc7b116af5c1d0c"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+test_audit_failure_stops (test_entrypoint.EntryTests.test_audit_failure_stops) ... FAIL
+test_broker_paths_and_zero_post (test_entrypoint.EntryTests.test_broker_paths_and_zero_post) ... ok
+test_clock_replay_conflict (test_entrypoint.EntryTests.test_clock_replay_conflict) ... ok
+test_default_and_live_deny (test_entrypoint.EntryTests.test_default_and_live_deny) ... ok
+test_fixture_size_and_schema (test_entrypoint.EntryTests.test_fixture_size_and_schema) ... ok
+test_good_duplicate_restart_audit (test_entrypoint.EntryTests.test_good_duplicate_restart_audit) ... ok
+test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) ... ok
+test_path_alias_and_hardlink (test_entrypoint.EntryTests.test_path_alias_and_hardlink) ... ok
+test_payload_boundary (test_entrypoint.EntryTests.test_payload_boundary) ... ok
+test_source_digest_before_import (test_entrypoint.EntryTests.test_source_digest_before_import) ... ok
+
+======================================================================
+FAIL: test_audit_failure_stops (test_entrypoint.EntryTests.test_audit_failure_stops)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\59605\.codex\.chatgpt-projects\g-p-6a8437c626508191bcc3bde036554c2b\mozi-v2-cut1-20261014\test_entrypoint.py", line 89, in test_audit_failure_stops
+    with self.assertRaises(Exception): e.offline_once(self.issue,self.root,NOW)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Exception not raised
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.845s
+
+FAILED (failures=1)

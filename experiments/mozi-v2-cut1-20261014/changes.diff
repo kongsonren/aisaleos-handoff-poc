@@ -1,0 +1,1549 @@
+--- /dev/null
++++ b/experiments/mozi-v2-cut1-20261014/daemon.py
+@@ -0,0 +1,264 @@
++"""Isolated v2 candidate. No production protocol, shell, SSH, or self-update."""
++import hashlib
++import hmac
++import json
++import os
++import pathlib
++import re
++import sqlite3
++import sys
++import time
++import urllib.request
++
++REPO = 'kongsonren/aisaleos-handoff-poc'
++API_BASE = 'https://api.github.com/repos/' + REPO
++
++def positive(value):
++    return type(value) is int and value > 0
++
++def sync_directory(path):
++    # Windows has no portable directory fsync; Linux durability is gated separately.
++    if os.name == 'posix':
++        fd = os.open(path, os.O_RDONLY | os.O_DIRECTORY)
++        try: os.fsync(fd)
++        finally: os.close(fd)
++FIELDS = set('protocol repository issue_id issue_number issuer_id key_id task_id run_id state execution_authorized scope executor action filename content issued_at expires_at nonce executor_sha256'.split())
++
++class Hold(Exception):
++    pass
++
++def canonical(payload):
++    return json.dumps(payload, sort_keys=True, separators=(',', ':'), ensure_ascii=True, allow_nan=False).encode('ascii')
++
++def digest(payload, key):
++    return hmac.new(key, b'mozi-v2-auth\0' + canonical(payload), hashlib.sha256).hexdigest()
++
++def parse(body):
++    def unique(pairs):
++        result = {}
++        for k, v in pairs:
++            if k in result:
++                raise Hold('duplicate JSON key')
++            result[k] = v
++        return result
++    try:
++        return json.loads(body, object_pairs_hook=unique)
++    except (ValueError, TypeError) as exc:
++        raise Hold('invalid JSON') from exc
++
++class Daemon:
++    def __init__(self, root, keys, *, expected_sha256=None, result_author_id=None):
++        if sys.version_info < (3, 12):
++            raise Hold('Python 3.12+ required')
++        self.code = hashlib.sha256(pathlib.Path(__file__).read_bytes()).hexdigest()
++        if expected_sha256 is not None and expected_sha256 != self.code:
++            raise Hold('executor measurement mismatch')
++        if result_author_id is not None and not positive(result_author_id):
++            raise Hold('invalid RESULT principal')
++        self.result_author_id = result_author_id
++        self.audit_failed = False
++        # root must be a dedicated, trusted, private directory; never a legacy state directory.
++        self.root = pathlib.Path(root).absolute()
++        if self.root.is_symlink() or self.root.is_junction():
++            raise Hold('unsafe state root')
++        if not self.root.parent.is_dir():
++            raise Hold('state parent must exist')
++        self.root.mkdir(mode=0o700, exist_ok=True)
++        sync_directory(self.root.parent)
++        for name in ('ledger.sqlite', 'ledger.sqlite-wal', 'ledger.sqlite-shm'):
++            p = self.root / name
++            if p.is_symlink() or p.is_junction():
++                raise Hold('unsafe ledger')
++        self.keys = keys  # key_id -> (trusted numeric GitHub author id, secret bytes)
++        self.db = sqlite3.connect(self.root / 'ledger.sqlite', timeout=10)
++        self.db.execute('PRAGMA journal_mode=WAL')
++        self.db.execute('PRAGMA synchronous=FULL')
++        self.db.execute('CREATE TABLE IF NOT EXISTS jobs(task TEXT PRIMARY KEY, run TEXT UNIQUE, nonce TEXT UNIQUE, issue INTEGER UNIQUE, fingerprint TEXT, status TEXT, result TEXT)')
++        self.db.execute('CREATE TABLE IF NOT EXISTS audit(id INTEGER PRIMARY KEY, event TEXT NOT NULL, event_hash TEXT NOT NULL)')
++        self.db.commit()
++        sync_directory(self.root)
++
++    def audit(self, issue, reason, execution_state):
++        if self.audit_failed:
++            raise Hold('audit unavailable; execution blocked')
++        # Never persist input text, exception messages, signatures, tokens or keys.
++        try:
++            raw = canonical(issue)
++        except (ValueError, TypeError, RecursionError):
++            raw = b'unserializable-input'
++        source = issue if type(issue) is dict else {}
++        event = canonical(dict(time_ns=time.time_ns(), repository=REPO,
++            api_endpoint=API_BASE, issue_number=source.get('number') if positive(source.get('number')) else None,
++            input_sha256=hashlib.sha256(raw).hexdigest(), reason=reason, execution_state=execution_state)).decode()
++        try:
++            with self.db:
++                self.db.execute('INSERT INTO audit(event,event_hash) VALUES(?,?)', (event,hashlib.sha256(event.encode()).hexdigest()))
++        except Exception:
++            self.audit_failed = True
++            raise Hold('audit unavailable; execution blocked') from None
++
++    def validate(self, issue, current):
++        if type(issue) is not dict or not positive(issue.get('id')) or not positive(issue.get('number')) or type(issue.get('user')) is not dict or not positive(issue['user'].get('id')) or type(issue.get('title')) is not str:
++            raise Hold('malformed metadata')
++        if issue.get('number') == 20 or 'pull_request' in issue or issue.get('state') != 'open':
++            raise Hold('protected or non-task issue')
++        p = parse(issue.get('body'))
++        if not isinstance(p, dict) or set(p) != FIELDS | {'auth_digest'}:
++            raise Hold('schema/legacy rejected')
++        signature = p.pop('auth_digest')
++        if p['execution_authorized'] is not True or p['state'] != 'READY':
++            raise Hold('authorization/HOLD')
++        for k in ('issue_id', 'issue_number', 'issuer_id', 'issued_at', 'expires_at'):
++            if type(p[k]) is not int or p[k] <= 0:
++                raise Hold('integer required')
++        for k in FIELDS - {'issue_id', 'issue_number', 'issuer_id', 'issued_at', 'expires_at', 'execution_authorized'}:
++            if type(p[k]) is not str:
++                raise Hold('string required')
++        trusted = self.keys.get(p['key_id'])
++        if not trusted or len(trusted[1]) < 32 or trusted[0] != p['issuer_id'] or issue.get('user', {}).get('id') != trusted[0]:
++            raise Hold('untrusted principal/key')
++        if p['repository'] != REPO or p['issue_id'] != issue.get('id') or p['issue_number'] != issue.get('number'):
++            raise Hold('source binding')
++        if p['protocol'] != 'mozi-v2-auth' or p['scope'] != 'simulation-only' or p['executor'] != 'isolated-file-v2' or p['action'] != 'write_read_hash' or p['filename'] != 'test.txt' or p['executor_sha256'] != self.code:
++            raise Hold('execution policy')
++        if not re.fullmatch(r'SIM-[A-Za-z0-9-]{1,64}', p['task_id']) or not re.fullmatch(r'SIM-[A-Za-z0-9-]{1,64}', p['run_id']) or not re.fullmatch(r'[a-f0-9]{32,64}', p['nonce']):
++            raise Hold('simulation identity')
++        if issue.get('title') != '[MOZI-V2-SIM] ' + p['task_id'] or len(p['content'].encode()) > 4096:
++            raise Hold('title/content policy')
++        if not 0 < p['expires_at'] - p['issued_at'] <= 300 or not p['issued_at'] <= current < p['expires_at']:
++            raise Hold('expired/future authorization')
++        if type(signature) is not str or not hmac.compare_digest(digest(p, trusted[1]), signature):
++            raise Hold('signature')
++        return p, hashlib.sha256(canonical(p)).hexdigest()
++
++    def consume(self, issue, current=None):
++        execution_state = 'NOT_STARTED'
++        try:
++            p, fingerprint = self.validate(issue, int(time.time()) if current is None else current)
++            self.audit(issue, 'AUTHORIZED', execution_state)
++            # Atomic reservation is committed BEFORE any file effect. Ambiguous claims never rerun.
++            try:
++                with self.db:
++                    self.db.execute('INSERT INTO jobs VALUES(?,?,?,?,?,?,?)', (p['task_id'], p['run_id'], p['nonce'], p['issue_id'], fingerprint, 'CLAIMED', None))
++            except sqlite3.IntegrityError:
++                row = self.db.execute('SELECT fingerprint,status,result FROM jobs WHERE task=?', (p['task_id'],)).fetchone()
++                if row and row[0] == fingerprint and row[1] in ('DONE', 'POST_ATTEMPT', 'VERIFIED'):
++                    return {'status': 'DUPLICATE', 'result': json.loads(row[2])}
++                raise Hold('replay/conflict/ambiguous claim')
++            started = time.time()
++            execution_state = 'CLAIMED'
++            folder = self.root / hashlib.sha256(p['task_id'].encode()).hexdigest()
++            folder.mkdir(mode=0o700)  # existing directory fails closed
++            sync_directory(self.root)
++            target = folder / 'test.txt'
++            content = p['content'].encode()
++            flags = os.O_CREAT | os.O_EXCL | os.O_WRONLY | getattr(os, 'O_NOFOLLOW', 0)
++            fd = os.open(target, flags, 0o600)
++            with os.fdopen(fd, 'wb') as f:
++                f.write(content)
++                f.flush()
++                os.fsync(f.fileno())
++            sync_directory(folder)
++            actual = target.read_bytes()
++            if actual != content:
++                raise Hold('readback mismatch')
++            result = dict(type='RESULT', status='PASS', scope='simulation-only', task_id=p['task_id'], run_id=p['run_id'], issue_id=p['issue_id'], issue_number=p['issue_number'], payload_sha256=fingerprint, executor_sha256=self.code, path=str(target), bytes=len(actual), sha256=hashlib.sha256(actual).hexdigest(), started_at=started, completed_at=time.time(), pid=os.getpid())
++            with self.db:
++                self.db.execute('UPDATE jobs SET status=?,result=? WHERE task=?', ('DONE', canonical(result).decode(), p['task_id']))
++            return result
++        except Exception as exc:
++            reason = str(exc) if isinstance(exc, Hold) else 'task processing failure'
++            self.audit(issue, reason if isinstance(exc, Hold) else type(exc).__name__, execution_state)
++            return {'status': 'HOLD_PENDING_KR', 'reason': reason}
++
++    def publish(self, result, api):
++        """Durable at-most-once POST; ambiguity is HOLD, never blind retry."""
++        if result.get('status') == 'DUPLICATE':
++            result = result['result']
++        if result.get('status') != 'PASS':
++            return result
++        if not positive(self.result_author_id):
++            raise Hold('RESULT principal not configured')
++        task = result['task_id']
++        row = self.db.execute('SELECT status,result FROM jobs WHERE task=?', (task,)).fetchone()
++        if not row or json.loads(row[1]) != result:
++            raise Hold('result binding')
++        if row[0] == 'VERIFIED':
++            return {'status': 'ALREADY_VERIFIED'}
++        if row[0] != 'DONE':
++            return {'status': 'HOLD_PENDING_KR', 'reason': 'POST ambiguous'}
++        with self.db:
++            changed = self.db.execute('UPDATE jobs SET status=? WHERE task=? AND status=?', ('POST_ATTEMPT', task, 'DONE')).rowcount
++        if changed != 1:
++            raise Hold('concurrent POST')
++        body = '[MOZI-V2-SIM-RESULT]\n' + canonical(result).decode()
++        posted = api('POST', '/issues/' + str(result['issue_number']) + '/comments', {'body': body})
++        if type(posted) is not dict or not positive(posted.get('id')):
++            raise Hold('RESULT POST metadata')
++        comment_id = posted['id']
++        readback = api('GET', '/issues/comments/' + str(posted['id']))
++        def bound(comment):
++            return (type(comment) is dict and positive(comment.get('id')) and comment['id'] == comment_id
++                and type(comment.get('user')) is dict and positive(comment['user'].get('id'))
++                and comment['user']['id'] == self.result_author_id
++                and comment.get('issue_url') == API_BASE + '/issues/' + str(result['issue_number'])
++                and comment.get('url') == API_BASE + '/issues/comments/' + str(comment_id)
++                and comment.get('body') == body)
++        if not bound(posted) or not bound(readback):
++            raise Hold('RESULT readback')
++        with self.db:
++            self.db.execute('UPDATE jobs SET status=? WHERE task=?', ('VERIFIED', task))
++        return {'status': 'RESULT_VERIFIED', 'comment_id': posted['id']}
++
++def scan(daemon, api):
++    for page in range(1, 101):
++        issues = api('GET', '/issues?state=open&per_page=100&page=' + str(page))
++        if type(issues) is not list:
++            raise Hold('global API list failure')
++        for issue in issues:
++            try:
++                if type(issue) is not dict or not positive(issue.get('number')) or type(issue.get('title')) is not str:
++                    raise Hold('malformed scan metadata')
++                if issue['number'] == 20 or not issue['title'].startswith('[MOZI-V2-SIM] '):
++                    continue
++                fresh = api('GET', '/issues/' + str(issue['number']))
++                if type(fresh) is not dict or fresh.get('number') != issue['number']:
++                    raise Hold('refresh source mismatch')
++                result = daemon.consume(fresh)
++                print(json.dumps(daemon.publish(result, api)), flush=True)
++            except Exception:
++                daemon.audit(issue, 'SCAN_TASK_FAILURE', 'UNKNOWN')
++                print(json.dumps({'status':'HOLD_PENDING_KR','reason':'scan task failure'}), flush=True)
++        if len(issues) < 100:
++            return
++    raise Hold('pagination limit')
++
++class GitHubAPI:
++    """Injected only after KR_GATE; token never stored in ledger/results."""
++    def __init__(self, token):
++        if not token:
++            raise Hold('missing GitHub credential')
++        self.token = token
++
++    def __call__(self, method, path, data=None):
++        if method not in ('GET', 'POST') or not re.fullmatch(r'/issues(?:/[1-9][0-9]*(?:/comments)?|/comments/[1-9][0-9]*|\?state=open&per_page=100&page=[1-9][0-9]*)', path):
++            raise Hold('API policy')
++        if method == 'POST' and not re.fullmatch(r'/issues/[0-9]+/comments', path):
++            raise Hold('write policy')
++        if re.match(r'/issues/20(?:/|$|\?)', path):
++            raise Hold('protected issue')
++        req = urllib.request.Request('https://api.github.com/repos/' + REPO + path,
++            method=method, data=None if data is None else canonical(data),
++            headers={'Authorization': 'Bearer ' + self.token, 'Accept': 'application/vnd.github+json',
++                     'Content-Type': 'application/json', 'User-Agent': 'mozi-v2-isolated-candidate'})
++        # Redirects are rejected so bearer credentials never follow another host.
++        class NoRedirect(urllib.request.HTTPRedirectHandler):
++            def redirect_request(self, *args, **kwargs):
++                raise Hold('API redirect rejected')
++        with urllib.request.build_opener(NoRedirect()).open(req, timeout=20) as response:
++            if response.geturl() != API_BASE + path:
++                raise Hold('untrusted API endpoint')
++            return json.load(response)
++
++# Deliberately no executable network entrypoint in this non-deployment candidate.
++# Cloud lifecycle, secret provisioning and enabling live API writes require KR_GATE.
+--- /dev/null
++++ b/experiments/mozi-v2-cut1-20261014/test_daemon.py
+@@ -0,0 +1,142 @@
++import copy
++import hashlib
++import json
++import pathlib
++import tempfile
++import unittest
++import concurrent.futures
++import subprocess
++import sys
++from daemon import Daemon, REPO, digest, scan
++
++KEY = b'local-simulation-only-key-00000000'
++NOW = 1791936000
++
++class Tests(unittest.TestCase):
++    def setUp(self):
++        self.tmp = tempfile.TemporaryDirectory()
++        self.addCleanup(self.tmp.cleanup)
++        self.d = Daemon(self.tmp.name, {'sim': (123, KEY)}, result_author_id=123)
++        self.addCleanup(self.d.db.close)
++        self.p = dict(protocol='mozi-v2-auth', repository=REPO, issue_id=9001, issue_number=999,
++                      issuer_id=123, key_id='sim', task_id='SIM-001', run_id='SIM-RUN-001',
++                      state='READY', execution_authorized=True, scope='simulation-only',
++                      executor='isolated-file-v2', action='write_read_hash', filename='test.txt',
++                      content='simulation bytes\n', issued_at=NOW, expires_at=NOW+300,
++                      nonce='a'*32, executor_sha256=self.d.code)
++
++    def issue(self, p=None, signed=True):
++        p = copy.deepcopy(self.p if p is None else p)
++        p['auth_digest'] = digest(p, KEY) if signed else '0'*64
++        return dict(id=9001, number=999, user={'id':123}, title='[MOZI-V2-SIM] SIM-001', state='open', body=json.dumps(p))
++
++    def reject(self, issue, now=NOW):
++        result = self.d.consume(issue, now)
++        print(json.dumps(result))
++        self.assertEqual(result['status'], 'HOLD_PENDING_KR')
++        self.assertEqual(list(pathlib.Path(self.tmp.name).rglob('test.txt')), [])
++        self.assertEqual(self.d.db.execute('SELECT COUNT(*) FROM jobs').fetchone()[0], 0)
++
++    def test_false_missing_forged_true_wrong_signature(self):
++        for value in (False, 'true', 1, None):
++            p=copy.deepcopy(self.p); p['execution_authorized']=value
++            self.reject(self.issue(p))
++        p=copy.deepcopy(self.p); del p['execution_authorized']; self.reject(self.issue(p))
++        self.reject(self.issue(signed=False))
++
++    def test_every_field_tamper(self):
++        issue=self.issue()
++        for field in self.p:
++            with self.subTest(field=field):
++                q=json.loads(issue['body'])
++                q[field] = q[field]+1 if type(q[field]) is int else (False if type(q[field]) is bool else q[field]+'X')
++                changed=copy.deepcopy(issue); changed['body']=json.dumps(q)
++                self.reject(changed)
++
++    def test_expired_future_and_window(self):
++        self.reject(self.issue(), NOW+300)
++        self.reject(self.issue(), NOW-1)
++        p=copy.deepcopy(self.p); p['expires_at']=NOW+301; self.reject(self.issue(p))
++
++    def test_principal_and_issue_binding(self):
++        for field,value in [('user',{'id':456}),('id',9002),('number',998),('state','closed'),('title','[KR-ISOLATED-HOLD] SIM-001'),('pull_request',{})]:
++            i=self.issue(); i[field]=value; self.reject(i)
++
++    def test_legacy_and_protected_task(self):
++        i=self.issue(); i['body']=json.dumps(dict(protocol='isolated-file-v1',action='write_read_hash',content='x',run_id='CLOUD-DAEMON-20261013-02')); self.reject(i)
++        i=self.issue(); i['number']=20; self.reject(i)
++        p=copy.deepcopy(self.p); p['task_id']='TASK-REAL-042'; self.reject(self.issue(p))
++        i=self.issue(); i['body']=i['body'][:-1]+',"execution_authorized":true}'; self.reject(i)
++
++    def test_legal_restart_duplicate_and_result(self):
++        result=self.d.consume(self.issue(), NOW)
++        print(json.dumps(result))
++        self.assertEqual(result['status'],'PASS')
++        target=pathlib.Path(result['path']); before=target.stat().st_mtime_ns
++        self.assertEqual(target.read_bytes(),self.p['content'].encode())
++        self.assertEqual(hashlib.sha256(target.read_bytes()).hexdigest(),result['sha256'])
++        other=Daemon(self.tmp.name,{'sim':(123,KEY)},result_author_id=123)
++        try:
++            duplicate=other.consume(self.issue(),NOW+1)
++            self.assertEqual(duplicate['status'],'DUPLICATE')
++            self.assertEqual(target.stat().st_mtime_ns,before)
++            calls=[]
++            def api(method,path,data=None):
++                calls.append((method,path,data))
++                return dict(id=12,user={'id':123},body=calls[0][2]['body'],
++                    issue_url='https://api.github.com/repos/'+REPO+'/issues/999',
++                    url='https://api.github.com/repos/'+REPO+'/issues/comments/12')
++            self.assertEqual(other.publish(duplicate,api)['status'],'RESULT_VERIFIED')
++            self.assertEqual(other.publish(other.consume(self.issue(),NOW+2),api)['status'],'ALREADY_VERIFIED')
++            self.assertEqual(len(calls),2)
++            self.assertEqual(other.consume(self.issue(),NOW+301)['status'],'HOLD_PENDING_KR')
++        finally: other.db.close()
++
++    def test_crash_claim_never_reexecutes(self):
++        p,fp=self.d.validate(self.issue(),NOW)
++        with self.d.db:
++            self.d.db.execute('INSERT INTO jobs VALUES(?,?,?,?,?,?,?)',(p['task_id'],p['run_id'],p['nonce'],p['issue_id'],fp,'CLAIMED',None))
++        self.assertEqual(self.d.consume(self.issue(),NOW)['status'],'HOLD_PENDING_KR')
++        self.assertEqual(list(pathlib.Path(self.tmp.name).rglob('test.txt')),[])
++
++    def test_post_timeout_no_retry(self):
++        result=self.d.consume(self.issue(),NOW)
++        calls=[]
++        def fail(*args):
++            calls.append(args); raise TimeoutError('simulated ambiguous POST')
++        with self.assertRaises(TimeoutError): self.d.publish(result,fail)
++        self.assertEqual(self.d.publish(self.d.consume(self.issue(),NOW),fail)['status'],'HOLD_PENDING_KR')
++        self.assertEqual(len(calls),1)
++
++    def test_conflicting_nonce_run_issue(self):
++        self.assertEqual(self.d.consume(self.issue(),NOW)['status'],'PASS')
++        for field in ('task_id','run_id','nonce','content'):
++            p=copy.deepcopy(self.p); p[field]+='b'
++            i=self.issue(p); i['title']='[MOZI-V2-SIM] '+p['task_id']
++            self.assertEqual(self.d.consume(i,NOW)['status'],'HOLD_PENDING_KR')
++        self.assertEqual(len(list(pathlib.Path(self.tmp.name).rglob('test.txt'))),1)
++
++    def test_scan_only_refreshes_simulation(self):
++        calls=[]
++        def api(method,path,data=None):
++            calls.append((method,path))
++            return [{'number':20,'title':'[MOZI-V2-SIM] SIM-X'}, {'number':1,'title':'[ISOLATED-DAEMON-POC] old'}]
++        scan(self.d,api)
++        self.assertEqual(len(calls),1)
++
++    def test_concurrent_claim_and_process_restart(self):
++        issue=self.issue()
++        def work(_):
++            d=Daemon(self.tmp.name,{'sim':(123,KEY)})
++            try: return d.consume(issue,NOW)['status']
++            finally: d.db.close()
++        with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
++            statuses=list(pool.map(work,range(4)))
++        self.assertEqual(statuses.count('PASS'),1)
++        self.assertEqual(len(list(pathlib.Path(self.tmp.name).rglob('test.txt'))),1)
++        script='from daemon import *; import sys; d=Daemon(sys.argv[1], {"sim":(123,bytes.fromhex(sys.argv[2]))}); print(d.consume(json.loads(sys.argv[3]),int(sys.argv[4]))["status"]); d.db.close()'
++        result=subprocess.run([sys.executable,'-c',script,self.tmp.name,KEY.hex(),json.dumps(issue),str(NOW)],capture_output=True,text=True,check=True)
++        self.assertEqual(result.stdout.strip(),'DUPLICATE')
++        print('concurrent statuses:',statuses,'new process:',result.stdout.strip())
++
++if __name__=='__main__': unittest.main(verbosity=2)
+--- /dev/null
++++ b/experiments/mozi-v2-cut1-20261014/test_security.py
+@@ -0,0 +1,96 @@
++import copy
++import hashlib
++import json
++import pathlib
++import sqlite3
++import tempfile
++import unittest
++from unittest.mock import patch
++from test_daemon import Tests, KEY, NOW
++from daemon import Daemon, GitHubAPI, Hold, REPO, scan
++
++BASE = 'https://api.github.com/repos/' + REPO
++
++class Security(unittest.TestCase):
++    def setUp(self):
++        self.t = Tests(); self.t.setUp(); self.addCleanup(self.t.doCleanups)
++
++    def test_R1_wrong_result_metadata(self):
++        for field, value in [('id',999),('id',True),('user',None),('user',{'id':True}),('user',{'id':666}),('issue_url',BASE+'/issues/1'),('url','https://evil.invalid/comments/12')]:
++            with self.subTest(field=field,value=value):
++                t=Tests(); t.setUp()
++                try:
++                    t.d.result_author_id=123
++                    result=t.d.consume(t.issue(),NOW)
++                    def api(method,path,data=None):
++                        if method=='POST':
++                            api.body=data['body']
++                        meta=dict(id=12,user={'id':123},issue_url=BASE+'/issues/999',url=BASE+'/issues/comments/12',body=api.body)
++                        if method=='GET': meta[field]=value
++                        return meta
++                    try: t.d.publish(result,api)
++                    except Hold: pass
++                    self.assertEqual(t.d.db.execute("SELECT count(*) FROM jobs WHERE status='VERIFIED'").fetchone()[0],0)
++                finally: t.doCleanups()
++
++    def test_R2_malformed(self):
++        for field,value in [('user',None),('user',[]),('user',{'id':True}),('id',True),('number','999'),('title',None)]:
++            i=self.t.issue(); i[field]=value
++            self.assertEqual(self.t.d.consume(i,NOW)['status'],'HOLD_PENDING_KR')
++        self.assertEqual(self.t.d.db.execute('SELECT count(*) FROM jobs').fetchone()[0],0)
++
++    def test_R2_scan_continues(self):
++        bad=self.t.issue(); bad['user']=None; bad['number']=998
++        good=self.t.issue()
++        def api(method,path,data=None):
++            if '?' in path: return [dict(number=998,title='[MOZI-V2-SIM] bad'),dict(number=999,title=good['title'])]
++            if path=='/issues/998': return bad
++            if path=='/issues/999': return good
++            raise TimeoutError('local-only')
++        with patch('daemon.time.time',return_value=NOW): scan(self.t.d,api)
++        self.assertEqual(self.t.d.db.execute('SELECT count(*) FROM jobs').fetchone()[0],1)
++
++    def test_R2_global_failure(self):
++        with self.assertRaises(Exception): scan(self.t.d,lambda *a: None)
++        with self.assertRaises(TimeoutError): scan(self.t.d,lambda *a: (_ for _ in ()).throw(TimeoutError('local outage')))
++
++    def test_R1_transport_endpoint(self):
++        class Response:
++            def __enter__(self): return self
++            def __exit__(self,*args): pass
++            def geturl(self): return 'https://evil.invalid/'
++        class Opener:
++            def open(self,*args,**kwargs): return Response()
++        with patch('daemon.urllib.request.build_opener',return_value=Opener()):
++            with self.assertRaises(Hold): GitHubAPI('local-fake-token')('GET','/issues/999')
++        for path in ['/issues/20','/issues/20/comments','/issues/../secrets','/issues@evil.invalid']:
++            with self.assertRaises(Hold): GitHubAPI('local-fake-token')('GET',path)
++
++    def test_R3_no_override(self):
++        with tempfile.TemporaryDirectory() as root:
++            with self.assertRaises(TypeError):
++                d=Daemon(root,{'sim':(123,KEY)},executor_sha256='0'*64)
++                d.db.close()
++
++    def test_R3_expected_mismatch(self):
++        with tempfile.TemporaryDirectory() as root:
++            with self.assertRaises(Hold): Daemon(root,{'sim':(123,KEY)},expected_sha256='0'*64)
++            self.assertEqual(list(pathlib.Path(root).iterdir()),[])
++
++    def test_R4_persistent_secret_free(self):
++        issue=self.t.issue(signed=False)
++        self.t.d.consume(issue,NOW)
++        db=sqlite3.connect(pathlib.Path(self.t.tmp.name)/'ledger.sqlite')
++        try: rows=db.execute('SELECT event,event_hash FROM audit').fetchall()
++        finally: db.close()
++        self.assertEqual(len(rows),1)
++        event=json.loads(rows[0][0]); self.assertEqual(event['execution_state'],'NOT_STARTED')
++        self.assertEqual(hashlib.sha256(rows[0][0].encode()).hexdigest(),rows[0][1])
++        self.assertNotIn(KEY.decode(),rows[0][0]); self.assertNotIn(issue['body'],rows[0][0])
++
++    def test_R4_audit_failure_zero_execution(self):
++        self.t.d.db.execute('DROP TABLE audit'); self.t.d.db.commit()
++        with self.assertRaises(Hold): self.t.d.consume(self.t.issue(),NOW)
++        self.assertEqual(list(pathlib.Path(self.t.tmp.name).rglob('test.txt')),[])
++
++if __name__=='__main__': unittest.main(verbosity=2)
+--- /dev/null
++++ b/experiments/mozi-v2-cut1-20261014/run_tests.py
+@@ -0,0 +1,11 @@
++"""Local subprocess regressions; no network, credentials or deployment."""
++import pathlib
++import subprocess
++import sys
++
++p = subprocess.run([sys.executable, '-m', 'unittest', 'test_security.Security',
++                    'test_daemon.Tests', '-v'], capture_output=True)
++pathlib.Path('green.log').write_bytes(p.stdout + p.stderr)
++print('Python:',sys.version)
++print('regression exit:',p.returncode)
++sys.exit(p.returncode)
+--- /dev/null
++++ b/experiments/mozi-v2-cut1-20261014/entrypoint.py
+@@ -0,0 +1,138 @@
++"""One-shot OFFLINE launcher. Live mode has no implementation or credential path.
++
++Local fixtures are untrusted data. Synthetic IDs/key never authorize GitHub.
++OS sandboxing and trusted read-only installation are separate Linux gates.
++"""
++import argparse
++import copy
++import hashlib
++import json
++import os
++import pathlib
++import stat
++import sqlite3
++import sys
++import types
++
++PARENT = 'bf7eec65af9a65da065a781a5ed91b8f8038f61c'
++DAEMON_SHA = '0afef212dc11f0cd6a12f4281891883694047371c850a8b80819cb131d195971'
++BASE = 'https://api.github.com/repos/kongsonren/aisaleos-handoff-poc'
++TASK = 'SIM-MOZI-V2-20261014-01'
++TITLE = '[MOZI-V2-SIM] '+TASK
++MOCK_KEY = b'local-simulation-only-key-00000000'
++ISSUE_ID, ISSUE_NUMBER, ISSUER_ID = 9001, 999, 123  # MOCK ONLY; never real identity evidence
++
++class Denied(Exception):
++    pass
++
++def safe_path(path):
++    path=pathlib.Path(path)
++    if not path.is_absolute() or '..' in path.parts:
++        raise Denied('absolute non-traversing path required')
++    for part in (*reversed(path.parents),path):
++        if part.is_symlink() or part.is_junction():
++            raise Denied('path alias refused')
++        if part.exists():
++            st=part.lstat()
++            if not stat.S_ISDIR(st.st_mode) and not stat.S_ISREG(st.st_mode):
++                raise Denied('special file refused')
++            if stat.S_ISREG(st.st_mode) and st.st_nlink != 1:
++                raise Denied('hardlink refused')
++    return path
++
++def load_pinned():
++    path=safe_path(pathlib.Path(__file__).absolute().with_name('daemon.py'))
++    raw=path.read_bytes()
++    if hashlib.sha256(raw).hexdigest()!=DAEMON_SHA:
++        raise Denied('pinned source mismatch')
++    # Compile the measured bytes, avoiding a second file read/import-cache race.
++    module=types.ModuleType('mozi_cut1_pinned'); module.__file__=str(path)
++    exec(compile(raw,str(path),'exec'),module.__dict__)
++    return module
++
++def bound_issue(issue):
++    if type(issue) is not dict:
++        raise Denied('fixture object required')
++    try: encoded=json.dumps(issue,allow_nan=False).encode()
++    except (ValueError,TypeError,RecursionError): raise Denied('invalid fixture') from None
++    if len(encoded)>16384: raise Denied('fixture size limit')
++    if (type(issue.get('id')) is not int or issue['id']!=ISSUE_ID
++        or type(issue.get('number')) is not int or issue['number']!=ISSUE_NUMBER
++        or type(issue.get('user')) is not dict
++        or type(issue['user'].get('id')) is not int or issue['user']['id']!=ISSUER_ID
++        or issue.get('title')!=TITLE or issue.get('state')!='open'
++        or 'pull_request' in issue or issue.get('repository_url')!=BASE
++        or issue.get('url')!=BASE+'/issues/999'):
++        raise Denied('single MOCK issue binding refused')
++    return copy.deepcopy(issue)
++
++class OfflineIssue:
++    """No HTTP client, token, POST, pagination, redirect, or list endpoint."""
++    def __init__(self,issue):
++        self.issue=bound_issue(issue); self.calls=[]
++    def __call__(self,method,path,data=None):
++        if method!='GET' or path!='/issues/999' or data is not None:
++            raise Denied('offline single issue GET only')
++        self.calls.append((method,path))
++        return copy.deepcopy(self.issue)
++
++def offline_once(issue,scratch,current):
++    if type(current) is not int or current<=0: raise Denied('integer mock time required')
++    core=load_pinned()
++    api=OfflineIssue(issue)  # rejects before state/ledger creation
++    scratch=safe_path(scratch)
++    if not scratch.is_dir(): raise Denied('existing dedicated scratch required')
++    # Caller must provide a private, exclusively owned scratch. Never a deployment path.
++    state=safe_path(scratch/'mozi-v2-cut1-state')
++    if state.exists():
++        for p in state.rglob('*'): safe_path(p)
++        ledger=state/'ledger.sqlite'
++        if not ledger.is_file(): raise Denied('existing state without ledger')
++        # Read-only preflight: never silently repair a missing/corrupt audit table.
++        db=sqlite3.connect(ledger.as_uri()+'?mode=ro',uri=True)
++        try:
++            if db.execute('PRAGMA integrity_check').fetchone()!=('ok',):
++                raise Denied('ledger integrity')
++            for event,event_hash in db.execute('SELECT event,event_hash FROM audit'):
++                if hashlib.sha256(event.encode()).hexdigest()!=event_hash:
++                    raise Denied('audit digest')
++            db.execute('SELECT task,status FROM jobs LIMIT 1').fetchall()
++        finally: db.close()
++    fresh=api('GET','/issues/999')
++    d=core.Daemon(state,{'sim':(ISSUER_ID,MOCK_KEY)},expected_sha256=DAEMON_SHA,
++                  result_author_id=ISSUER_ID)
++    try:
++        d.audit(fresh,'OFFLINE_SINGLE_ISSUE_ENTER','NOT_STARTED')
++        payload=core.parse(fresh.get('body'))
++        if type(payload) is not dict or payload.get('task_id')!=TASK:
++            d.audit(fresh,'FIXED_TASK_DENIED','NOT_STARTED')
++            return {'status':'HOLD_PENDING_KR','reason':'fixed simulation task required'}
++        result=d.consume(fresh,current)
++        d.audit(fresh,'OFFLINE_SINGLE_ISSUE_EXIT',result['status'])
++        return result  # deliberately no publish call
++    finally: d.db.close()
++
++def main(argv=None):
++    parser=argparse.ArgumentParser(description='MOCK-only single issue launcher; live denied')
++    parser.add_argument('--offline-fixture',required=True)
++    parser.add_argument('--scratch',required=True)
++    parser.add_argument('--mock-time',required=True,type=int)
++    args=parser.parse_args(argv)
++    try:
++        scratch=safe_path(pathlib.Path(args.scratch))
++        allowed=pathlib.Path(__file__).absolute().parent/'offline-workspaces'
++        if scratch.parent!=allowed or scratch.name in ('','.', '..'):
++            raise Denied('CLI scratch outside local offline workspaces')
++        fixture=safe_path(args.offline_fixture)
++        if fixture.stat().st_size>16384: raise Denied('fixture size limit')
++        # Duplicate JSON keys are rejected even in the outer fixture.
++        core=load_pinned(); issue=core.parse(fixture.read_text(encoding='utf-8'))
++        result=offline_once(issue,scratch,args.mock_time)
++        print(json.dumps({'mode':'OFFLINE_MOCK','parent':PARENT,'result':result}))
++        return 0 if result['status'] in ('PASS','DUPLICATE') else 2
++    except Exception:
++        # No raw payloads, credentials, exception text, or fake live success.
++        print(json.dumps({'mode':'OFFLINE_MOCK','status':'HOLD_PENDING_KR','reason':'entry denied'}))
++        return 2
++
++if __name__=='__main__': sys.exit(main())
+--- /dev/null
++++ b/experiments/mozi-v2-cut1-20261014/test_entrypoint.py
+@@ -0,0 +1,129 @@
++"""Cut 1 contracts: synthetic IDs, synthetic key, no network."""
++import copy
++import hashlib
++import json
++import pathlib
++import subprocess
++import sys
++import tempfile
++import unittest
++from unittest.mock import patch
++import entrypoint as e
++from test_daemon import Tests as Fixture, NOW
++
++class EntryTests(unittest.TestCase):
++    def setUp(self):
++        self.f = Fixture(); self.f.setUp(); self.addCleanup(self.f.doCleanups)
++        self.issue = self.f.issue()
++        p = json.loads(self.issue['body'])
++        p['task_id'] = e.TASK
++        from daemon import digest
++        p.pop('auth_digest'); p['auth_digest'] = digest(p, e.MOCK_KEY)
++        self.issue.update(title=e.TITLE, body=json.dumps(p), url=e.BASE+'/issues/999',
++                          repository_url=e.BASE)
++        self.tmp = tempfile.TemporaryDirectory(); self.addCleanup(self.tmp.cleanup)
++        self.root = pathlib.Path(self.tmp.name)
++
++    def test_default_and_live_deny(self):
++        for args in ([], ['--live'], ['--token','fake'], ['--issue','20']):
++            p = subprocess.run([sys.executable, 'entrypoint.py', *args], capture_output=True)
++            self.assertNotEqual(p.returncode, 0)
++            self.assertNotIn(b'PASS', p.stdout)
++
++    def test_good_duplicate_restart_audit(self):
++        a=e.offline_once(self.issue,self.root,NOW)
++        b=e.offline_once(self.issue,self.root,NOW+1)
++        self.assertEqual(a['status'],'PASS'); self.assertEqual(b['status'],'DUPLICATE')
++        files=list(self.root.rglob('test.txt')); self.assertEqual(len(files),1)
++        self.assertEqual(files[0].read_bytes(),b'simulation bytes\n')
++        import sqlite3
++        db=sqlite3.connect(self.root/'mozi-v2-cut1-state'/'ledger.sqlite')
++        try:
++            rows=db.execute('SELECT event,event_hash FROM audit').fetchall()
++            self.assertGreaterEqual(len(rows),4)
++            for raw,h in rows: self.assertEqual(hashlib.sha256(raw.encode()).hexdigest(),h)
++        finally: db.close()
++
++    def test_issue_metadata_and_principal(self):
++        for field,value in [('number',20),('number',998),('number',True),('id',9002),('user',None),('user',{'id':True}),('user',{'id':259898029}),('url',e.BASE+'/issues/20'),('repository_url','https://evil.invalid'),('pull_request',{})]:
++            with self.subTest(field=field,value=value):
++                i=copy.deepcopy(self.issue); i[field]=value
++                with self.assertRaises(e.Denied): e.offline_once(i,self.root,NOW)
++                self.assertFalse((self.root/'mozi-v2-cut1-state').exists())
++
++    def test_payload_boundary(self):
++        for field,value in [('task_id','TASK-REAL-042'),('task_id','SIM-other'),('repository','evil/repo'),('filename','../test.txt'),('action','shell'),('issuer_id',True),('execution_authorized',False),('auth_digest','0'*64),('content','x'*4097)]:
++            i=copy.deepcopy(self.issue); p=json.loads(i['body']); p[field]=value; i['body']=json.dumps(p)
++            with self.subTest(field=field):
++                result=e.offline_once(i,self.root,NOW)
++                self.assertEqual(result['status'],'HOLD_PENDING_KR')
++                self.assertEqual(list(self.root.rglob('test.txt')),[])
++
++    def test_clock_replay_conflict(self):
++        self.assertEqual(e.offline_once(self.issue,self.root,NOW+300)['status'],'HOLD_PENDING_KR')
++        self.assertEqual(e.offline_once(self.issue,self.root,NOW-1)['status'],'HOLD_PENDING_KR')
++        self.assertEqual(e.offline_once(self.issue,self.root,NOW)['status'],'PASS')
++        i=copy.deepcopy(self.issue); p=json.loads(i['body']); p['content']='changed'
++        from daemon import digest
++        p.pop('auth_digest'); p['auth_digest']=digest(p,e.MOCK_KEY); i['body']=json.dumps(p)
++        self.assertEqual(e.offline_once(i,self.root,NOW)['status'],'HOLD_PENDING_KR')
++
++    def test_source_digest_before_import(self):
++        with patch.object(e,'DAEMON_SHA','0'*64):
++            with self.assertRaises(e.Denied): e.offline_once(self.issue,self.root,NOW)
++        self.assertEqual(list(self.root.iterdir()),[])
++
++    def test_path_alias_and_hardlink(self):
++        state=self.root/'mozi-v2-cut1-state'; state.mkdir()
++        import os
++        target=self.root/'other'; target.write_bytes(b'untouched')
++        os.link(target,state/'ledger.sqlite')
++        with self.assertRaises(e.Denied): e.offline_once(self.issue,self.root,NOW)
++        self.assertEqual(target.read_bytes(),b'untouched')
++
++    def test_audit_failure_stops(self):
++        e.offline_once(self.issue,self.root,NOW+300)
++        import sqlite3
++        db=sqlite3.connect(self.root/'mozi-v2-cut1-state'/'ledger.sqlite')
++        db.execute('DROP TABLE audit'); db.commit(); db.close()
++        with self.assertRaises(Exception): e.offline_once(self.issue,self.root,NOW)
++        self.assertEqual(list(self.root.rglob('test.txt')),[])
++
++    def test_broker_paths_and_zero_post(self):
++        api=e.OfflineIssue(self.issue)
++        for method,path in [('GET','/issues'),('GET','/issues?state=open'),('GET','/issues/20'),('GET','/issues/998'),('GET','/issues/999/comments'),('POST','/issues/999/comments'),('PATCH','/issues/999'),('GET','/issues/999?x=1'),('GET','/issues/../999')]:
++            with self.assertRaises(e.Denied): api(method,path)
++        self.assertEqual(api('GET','/issues/999'),self.issue)
++        self.assertEqual(api.calls,[('GET','/issues/999')])
++
++    def test_fixture_size_and_schema(self):
++        for i in (None,[],{'body':'x'*20000}):
++            with self.assertRaises(e.Denied): e.offline_once(i,self.root,NOW)
++
++    def test_cli_offline_and_path_denial(self):
++        fixture=self.root/'issue.json'; fixture.write_text(json.dumps(self.issue),encoding='utf-8')
++        args=[sys.executable,'entrypoint.py','--offline-fixture',str(fixture),'--mock-time',str(NOW),'--scratch']
++        p=subprocess.run(args+[str(self.root)],capture_output=True)
++        self.assertEqual(p.returncode,2)
++        allowed=pathlib.Path(e.__file__).absolute().parent/'offline-workspaces'
++        allowed.mkdir(exist_ok=True)
++        with tempfile.TemporaryDirectory(dir=allowed) as scratch:
++            for status in ('PASS','DUPLICATE'):
++                p=subprocess.run(args+[scratch],capture_output=True)
++                self.assertEqual(p.returncode,0,p.stderr)
++                data=json.loads(p.stdout); self.assertEqual(data['mode'],'OFFLINE_MOCK')
++                self.assertEqual(data['result']['status'],status)
++
++    def test_audit_digest_tamper(self):
++        e.offline_once(self.issue,self.root,NOW+300)
++        import sqlite3
++        db=sqlite3.connect(self.root/'mozi-v2-cut1-state'/'ledger.sqlite')
++        db.execute("UPDATE audit SET event_hash='forged'"); db.commit(); db.close()
++        with self.assertRaises(e.Denied): e.offline_once(self.issue,self.root,NOW)
++        self.assertEqual(list(self.root.rglob('test.txt')),[])
++
++    def test_no_network_or_scan(self):
++        with patch('socket.socket',side_effect=AssertionError('network forbidden')), patch('daemon.scan',side_effect=AssertionError('scan forbidden')):
++            self.assertEqual(e.offline_once(self.issue,self.root,NOW)['status'],'PASS')
++
++if __name__=='__main__': unittest.main(verbosity=2)
+--- /dev/null
++++ b/experiments/mozi-v2-cut1-20261014/validate.py
+@@ -0,0 +1,36 @@
++"""Capture raw byte logs and reproducible red mutation/green results offline."""
++import hashlib
++import json
++import pathlib
++import subprocess
++import sys
++import tempfile
++from datetime import datetime, timezone
++
++ROOT=pathlib.Path(__file__).resolve().parent
++started=datetime.now(timezone.utc).isoformat()
++results=[]
++def run(name,args,cwd=ROOT):
++    p=subprocess.run([sys.executable,'-B',*args],cwd=cwd,capture_output=True)
++    (ROOT/name).write_bytes(p.stdout+p.stderr)
++    results.append(dict(log=name,exit=p.returncode,sha256=hashlib.sha256(p.stdout+p.stderr).hexdigest()))
++    return p.returncode
++
++# Remove one real guard at a time; the same security assertions must detect it.
++source=(ROOT/'entrypoint.py').read_text(encoding='utf-8')
++mutants=[('identity',"    if type(issue) is not dict:","    return copy.deepcopy(issue)\n    if type(issue) is not dict:",'test_issue_metadata_and_principal'),
++         ('digest',"if hashlib.sha256(raw).hexdigest()!=DAEMON_SHA:","if False:",'test_source_digest_before_import'),
++         ('audit',"for event,event_hash in db.execute('SELECT event,event_hash FROM audit'):","for event,event_hash in []:",'test_audit_digest_tamper')]
++for name,old,new,test in mutants:
++    assert old in source
++    with tempfile.TemporaryDirectory() as tmp:
++        dst=pathlib.Path(tmp)
++        for file in ('daemon.py','test_daemon.py','test_entrypoint.py'):
++            (dst/file).write_bytes((ROOT/file).read_bytes())
++        (dst/'entrypoint.py').write_text(source.replace(old,new,1),encoding='utf-8')
++        assert run('red-mutant-'+name+'.log',['-m','unittest','test_entrypoint.EntryTests.'+test,'-v'],dst)!=0
++assert run('green-original20.log',['-m','unittest','test_security.Security','test_daemon.Tests','-v'])==0
++assert run('green-entry.log',['-m','unittest','test_entrypoint.EntryTests','-v'])==0
++(ROOT/'validation.json').write_text(json.dumps(dict(started_utc=started,ended_utc=datetime.now(timezone.utc).isoformat(),
++    python=sys.version,mode='OFFLINE_MOCK',results=results),indent=2),encoding='utf-8')
++print(json.dumps(results,indent=2))
+--- /dev/null
++++ b/experiments/mozi-v2-cut1-20261014/package_delivery.py
+@@ -0,0 +1,24 @@
++"""Prepare exact UTF-8 Git tree entries; no network or credentials."""
++import difflib
++import hashlib
++import json
++import pathlib
++ROOT=pathlib.Path(__file__).resolve().parent
++names=['daemon.py','test_daemon.py','test_security.py','run_tests.py','entrypoint.py',
++       'test_entrypoint.py','validate.py','package_delivery.py','.gitignore','REPORT.md','KR_GATE.md',
++       'identity-verification.json','validation.json','green-original20.log','green-entry.log',
++       'red-entry.log','red-audit.log','red-mutant-identity.log','red-mutant-digest.log','red-mutant-audit.log']
++prefix='experiments/mozi-v2-cut1-20261014/'
++patch=[]
++for name in names:
++    text=(ROOT/name).read_bytes().decode('utf-8')
++    patch.extend(difflib.unified_diff([],text.splitlines(keepends=True),fromfile='/dev/null',tofile='b/'+prefix+name))
++(ROOT/'changes.diff').write_bytes(''.join(patch).encode('utf-8'))
++names.append('changes.diff')
++manifest={n:hashlib.sha256((ROOT/n).read_bytes()).hexdigest() for n in names}
++(ROOT/'SHA256SUMS.json').write_bytes((json.dumps(manifest,indent=2)+'\n').encode())
++names.append('SHA256SUMS.json')
++entries=[dict(path=prefix+n,mode='100644',type='blob',content=(ROOT/n).read_bytes().decode('utf-8')) for n in names]
++out=ROOT.parent/'evidence'/'mozi-v2-cut1-delivery-20261014'; out.mkdir(exist_ok=True)
++(out/'tree-payload.json').write_bytes(json.dumps(entries,ensure_ascii=False).encode('utf-8'))
++print(json.dumps(dict(files=len(names),manifest_sha256=hashlib.sha256((ROOT/'SHA256SUMS.json').read_bytes()).hexdigest(),bytes=sum((ROOT/n).stat().st_size for n in names))))
+--- /dev/null
++++ b/experiments/mozi-v2-cut1-20261014/.gitignore
+@@ -0,0 +1,2 @@
++__pycache__/
++offline-workspaces/
+--- /dev/null
++++ b/experiments/mozi-v2-cut1-20261014/REPORT.md
+@@ -0,0 +1,30 @@
++# 墨子 v2 第1刀：本地隔离入口施工交付
++
++2026-10-14，北京时间。KR 本次“开”和“继续1”授权本地隔离开发、回归、GitHub 隔离分支提交；不扩展为云主机施工或真实 Issue POST 授权。
++
++## 实际结果
++
++- PASS：新增 `entrypoint.py`，一次性离线启动入口及固定单 Issue 包装器。默认无参数、live/token/Issue覆盖参数全部拒绝；无 HTTP、凭据装载、publish、scan、循环、pull、自更新、自重启入口。
++- PASS：固定父版本 bf7eec65af9a65da065a781a5ed91b8f8038f61c；daemon.py 原字节不改，SHA256 0afef212dc11f0cd6a12f4281891883694047371c850a8b80819cb131d195971。先验摘要再编译同一份字节，构造库时再次校验摘要。
++- PASS：固定仓库/API来源、模拟标题/task、MOCK id=9001/number=999/issuer=123；这些是离线测试专用值，绝不是实证身份。真实模式不可通过配置启用。固定 write_read_hash/test.txt、simulation-only、签名及TTL策略沿用已封版库。
++- PASS：CLI 可写状态仅入口同目录 `offline-workspaces/<独立目录>/mozi-v2-cut1-state`。库测试接口允许可信测试程序传入临时目录。路径祖先拒绝 symlink/junction、普通文件硬链接、特殊文件；SQLite已有状态必须完整且审计摘要吻合；缺审计表不自动修复。
++- PASS：原20组全量回归；新增13组全绿。新增测试涵盖CLI实际启动/二次调用去重、默认拒绝、唯一Issue和来源、异常/伪造身份、授权拒绝、摘要篡改、路径/硬链接、重放冲突、审计缺表/摘要篡改、禁止网络与扫描。原并发、跨进程去重、POST超时不重试组全部重跑。
++- PASS：3个实际移除守卫的 mutation 红测均 exit=1，分别检测身份绕过、源码摘要绕过、审计摘要绕过。red-entry.log 是最初入口缺失的开发红测；red-audit.log 是发现审计表重建问题时的实际FAIL；最终验收以 validation.json 和 green-original20.log/green-entry.log 为准。
++
++## 只读身份及边界核验
++
++原始连接器响应保存在 identity-verification.json。GitHub账户 kongsonren 的数字ID=259898029，仓库owner同ID，权限admin；现有连接为宽权限，不能作为未来专用最小权限执行凭据。账户解析PASS不等于HMAC密钥归属/可信签发关系已证明；该关系UNKNOWN，未读/复制任何密钥。HMAC为共享秘密认证，不是不可否认数字签名；父commit GitHub verification=unsigned。
++
++专用RESULT测试bot登录名/数字ID/仓库权限/秘密引用仍UNKNOWN。模拟Issue精确关键词搜索返回空，不能由搜索空结果断言绝对不存在；真实Issue id/number UNKNOWN，未新建。Issue #20新鲜读取为open、BLOCKED_HOST_ACCESS（HOLD）、execution_authorized=false；未改动、未执行TASK-REAL-042。
++
++## 可复验
++
++在交付目录使用Python3.12+运行 `python -B validate.py`。它重新生成三份真实红测日志和20+13绿测日志，保留原始stdout/stderr字节及退出码。日志包含MOCK结果，不能提升成在线闭环PASS。独立Git blob与本地SHA256回读校验另见本地 delivery-verification.json。
++
++GitHub仅新增 experiments/mozi-v2-cut1-20261014 子树，父commit不变；新隔离分支 kr/mozi-v2-cut1-20261014，不提交main，不发PR、不触发Actions、不改workflow。四个继承workflow只声明schedule/workflow_dispatch，无push/create触发；已先只读核查。Github Git对象/分支提交是本次明确授权的交付写入；没有真实Issue POST、云主机写入或服务变更。
++
++## 限制与下一阶段
++
++此入口是已实测的离线Daemon库启动器，在线Daemon仍拒绝启动。不能把它当Linux安装器、在线受限代理或systemd沙箱证明。专用UID/root树、挂载/cgroup/配额/ACL、时钟、独立密钥管理、真实bot/Issue、在线代理与POST回读仍须下一阶段。代码及scratch要求可信、独占、不可被同UID对手并发替换；Python路径检查不宣称能抵御恶意并发文件系统替换。审计无密钥摘要不证明恶意删除/重算后的真实性，需受保护导出。Windows不宣称Linux目录fsync/掉电/ENOSPC/namespace已经验证。
++
++下一票见KR_GATE.md。第1刀本地实现/测试PASS；在线身份闭环UNKNOWN；真实启动未执行且保持拒绝。
+--- /dev/null
++++ b/experiments/mozi-v2-cut1-20261014/KR_GATE.md
+@@ -0,0 +1,15 @@
++# KR_GATE CUT1→CUT2 v1（未授权执行）
++
++绑定本目录SHA256SUMS.json及隔离分支交付commit；精确commit由本地DELIVERY.md记录。已有bf7eec65af9a65da065a781a5ed91b8f8038f61c只作为固定库来源，不能替代本入口manifest。本文不提供云安装/启动脚本；当前在线启动判定UNKNOWN→DENY。
++
++1. 已完成：第1刀本地离线入口、固定MOCK单Issue、原20+新增13回归、身份只读解析与隔离分支提交。无需再次审批该已完成工作。
++2. 下一阶段首先完成只读证据：issuer kongsonren/259898029与独立签发密钥控制关系；RESULT专用bot精确login/id/仓库权限；现有模拟Issue exact title=[MOZI-V2-SIM] SIM-MOZI-V2-20261014-01、非20非PR、真实id/number；缺失保留UNKNOWN。不得将MOCK 123/9001/999复制进在线票。
++3. 如果确无模拟Issue，另行明确批准“仅创建一次上述标题Issue”，取得真实id/number后封版；POST响应未知禁止重试。本票未授权该动作。
++4. 实现独立在线受限代理，Daemon不持GitHub token；只GET封版Issue、只一次POST该Issue comments及GET本次返回comment id，禁止列表/其他Issue/重定向/环境代理；请求体≤4096字节、响应≤1MiB、超时20秒、持久POST_ATTEMPT，超时HOLD。代理、启动器、unit和root树必须另行逐字节审核和manifest锁定，不能把本MOCK入口改几个ID就上线。
++5. 秘密仅批准安全引用/注入/撤销入口，禁止在证据中记录内容。令牌单仓库Metadata read+Issues write、≤24h；当前admin连接不能直接作为Daemon凭据。可信签发关系、密钥保管与撤销实证UNKNOWN时禁止在线运行。
++6. Linux施工票必须封版：UID/GID62042无冲突/附加组、路径 /opt/mozi-v2-isolated/releases/<封版SHA>/ 与 /var/lib/mozi-v2-isolated/data/{state,log,evidence}；1GiB专用镜像、代码≤256MiB、日志≤64MiB、根余量≥20GiB/inode≥500000；MemoryMax201326592、CPU20%、Tasks32、no swap、只读root树、A无网络。原设计列出的ACL/cgroup/mount/root树依赖及OOB/生产完整基线全部需新鲜实证；任何UNKNOWN停止，不临时放宽。
++7. Linux只在批准封版字节后进行A离线安装/故障验收：新候选unit，Restart=no，不enable，≤900秒；专用故障镜像内ENOSPC、kill/restart去重、独立读取实际文件字节与ledger；不改旧服务、不自动git pull/重启，不改变全机防火墙。主机与服务隔离PASS必须来自真实Linux证据。
++8. B另行精确审批：真实仓库/Issue及issuer/result数字ID、完整manifest、绝对UTC起止≤15min、时钟偏差≤5s、批准单次模拟RESULT内容/字节摘要、proxy权限及独立GET回读。启动前所有关键项PASS；凭据/授权/时间窗缺失时DENY。批准不继承至下一轮。
++9. 回滚仅停候选并核对该unit cgroup、撤销专用秘密、保留ledger/日志；不清ledger、不修复/重启生产。任何生产基线差异、审计失败、路径/身份不符、未知POST即HOLD并停止候选。
++
++永久排除：main、生产Daemon/云服务、Issue20任何写入、TASK-REAL-042、Actions替代验收、自动pull/自重启、未批准真实POST/新Issue。当前请求不包含CUT2云施工或B在线授权。
+--- /dev/null
++++ b/experiments/mozi-v2-cut1-20261014/identity-verification.json
+@@ -0,0 +1,301 @@
++{
++  "identity": {
++    "queried_at": {
++      "current_time": "2026-10-13 22:09:33 UTC"
++    },
++    "profile": {
++      "content": [
++        {
++          "type": "text",
++          "text": "Action completed."
++        }
++      ],
++      "structuredContent": {
++        "id": "259898029",
++        "name": null,
++        "email": "kongsonren@gmail.com",
++        "nickname": "kongsonren",
++        "picture": "https://avatars.githubusercontent.com/u/259898029?v=4",
++        "workspace_id": null,
++        "workspace_name": null,
++        "workspace_picture": null
++      },
++      "isError": false
++    },
++    "repository": {
++      "content": [
++        {
++          "type": "text",
++          "text": "Action completed."
++        }
++      ],
++      "structuredContent": {
++        "id": "1357322725",
++        "name": "aisaleos-handoff-poc",
++        "owner": {
++          "login": "kongsonren",
++          "id": 259898029,
++          "type": "User",
++          "avatar_url": "https://avatars.githubusercontent.com/u/259898029?v=4",
++          "url": "https://api.github.com/users/kongsonren"
++        },
++        "repository_full_name": "kongsonren/aisaleos-handoff-poc",
++        "permissions": {
++          "admin": true,
++          "maintain": true,
++          "pull": true,
++          "push": true,
++          "triage": true
++        },
++        "allow_auto_merge": false,
++        "allow_merge_commit": true,
++        "allow_rebase_merge": true,
++        "allow_squash_merge": true,
++        "allow_update_branch": false,
++        "clone_url": "https://github.com/kongsonren/aisaleos-handoff-poc.git",
++        "size": 3347,
++        "default_branch": "main",
++        "git_commits_url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/commits{/sha}",
++        "git_refs_url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/refs{/sha}",
++        "git_url": "git://github.com/kongsonren/aisaleos-handoff-poc.git",
++        "master_branch": null,
++        "visibility": "public",
++        "archived": false,
++        "is_code_search_indexed": null
++      },
++      "isError": false
++    },
++    "permission": {
++      "content": [
++        {
++          "type": "text",
++          "text": "Action completed."
++        }
++      ],
++      "structuredContent": {
++        "permission": "admin"
++      },
++      "isError": false
++    },
++    "simulation_search": {
++      "content": [
++        {
++          "type": "text",
++          "text": "Action completed."
++        }
++      ],
++      "structuredContent": {
++        "issues": []
++      },
++      "isError": false
++    },
++    "result_bot": {
++      "status": "UNKNOWN",
++      "reason": "No approved dedicated bot login/ID or credential ownership evidence"
++    },
++    "signer": {
++      "status": "PASS",
++      "login": "kongsonren",
++      "id": 259898029,
++      "permission": "admin"
++    },
++    "simulation": {
++      "status": "UNKNOWN",
++      "reason": "Search returned no matching issue; search absence is not exhaustive nonexistence proof"
++    }
++  },
++  "issue20": {
++    "status": "fulfilled",
++    "value": {
++      "content": [
++        {
++          "type": "text",
++          "text": "Action completed."
++        }
++      ],
++      "structuredContent": {
++        "issue": {
++          "url": "https://github.com/kongsonren/aisaleos-handoff-poc/issues/20",
++          "title": "[KR-ISOLATED-HOLD] TASK-REAL-042",
++          "issue_number": 20,
++          "body": "第42刀；BLOCKED_HOST_ACCESS。禁止Actions替代、历史Issue #16替代；保持open。旧Daemon前缀不匹配，暂停执行。\n\n```json\n{\n  \"protocol\": \"kr-task-real-v1\",\n  \"task_id\": \"TASK-REAL-042\",\n  \"run_id\": \"KR-CUT42-20261014-01\",\n  \"state\": \"BLOCKED_HOST_ACCESS\",\n  \"execution_authorized\": false,\n  \"scope\": \"isolated-only\",\n  \"code_sha\": \"f54edaa0d41833940361f273cee4fbc4c4315c47\",\n  \"baseline_report_sha\": \"e1866b4c3d3ba17c5477d6f6ce963c2302bf4db8\",\n  \"executor\": \"independent-cloud-daemon-only\",\n  \"action\": \"write_read_hash\",\n  \"filename\": \"test_cut42.txt\",\n  \"content\": \"TASK-REAL-042\\nrun_id=KR-CUT42-20261014-01\\nscope=isolated-only\\n\",\n  \"constraints\": {\n    \"no_actions_substitute\": true,\n    \"no_main_changes\": true,\n    \"no_production_changes\": true,\n    \"no_permission_changes\": true,\n    \"no_unreviewed_code_pull\": true,\n    \"strict_host_key_checking\": true,\n    \"production_gate\": \"KR_GATE\"\n  },\n  \"result_required\": [\n    \"task_id\",\n    \"run_id\",\n    \"host\",\n    \"pid\",\n    \"uptime_seconds\",\n    \"executor_code_sha\",\n    \"path\",\n    \"bytes\",\n    \"sha256\",\n    \"started_at\",\n    \"completed_at\"\n  ],\n  \"independent_verification\": {\n    \"required\": true,\n    \"read_raw_file_via_trusted_host_channel\": true,\n    \"recompute_sha256\": true,\n    \"daemon_hash_is_claim_only\": true,\n    \"require_content_equals_task\": true,\n    \"exclude_issue16_history\": true\n  },\n  \"closure\": \"VERIFIED_CLOSED only after independent raw-byte readback and hash/content correlation; otherwise remain open\",\n  \"blocker\": \"Existing SSH identity inaccessible and connection denied. No trusted host readback. Hold execution until existing authorized host access is restored and isolated deployment is reviewed.\"\n}\n```",
++          "state": "open",
++          "user": {
++            "login": "kongsonren",
++            "name": "kongsonren",
++            "email": null,
++            "avatar_url": "https://avatars.githubusercontent.com/u/259898029?v=4",
++            "id": 259898029
++          },
++          "assignees": null,
++          "labels": null,
++          "milestone": null,
++          "state_reason": null,
++          "comments": 1,
++          "created_at": "2026-10-13T19:22:56Z",
++          "updated_at": "2026-10-13T19:24:49Z",
++          "closed_at": null,
++          "display_url": "https://github.com/kongsonren/aisaleos-handoff-poc/issues/20",
++          "display_title": "[KR-ISOLATED-HOLD] TASK-REAL-042"
++        },
++        "url": "https://github.com/kongsonren/aisaleos-handoff-poc/issues/20",
++        "title": "[KR-ISOLATED-HOLD] TASK-REAL-042",
++        "display_url": "https://github.com/kongsonren/aisaleos-handoff-poc/issues/20",
++        "display_title": "[KR-ISOLATED-HOLD] TASK-REAL-042"
++      },
++      "isError": false
++    }
++  },
++  "basecommit": {
++    "status": "fulfilled",
++    "value": {
++      "content": [
++        {
++          "type": "text",
++          "text": "Action completed."
++        }
++      ],
++      "structuredContent": {
++        "content": "{\"sha\":\"bf7eec65af9a65da065a781a5ed91b8f8038f61c\",\"node_id\":\"C_kwDOUOcZ5doAKGJmN2VlYzY1YWY5YTY1ZGEwNjVhNzgxYTVlZDkxYjhmODAzOGY2MWM\",\"url\":\"https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/commits/bf7eec65af9a65da065a781a5ed91b8f8038f61c\",\"html_url\":\"https://github.com/kongsonren/aisaleos-handoff-poc/commit/bf7eec65af9a65da065a781a5ed91b8f8038f61c\",\"author\":{\"name\":\"kongsonren\",\"email\":\"kongsonren@gmail.com\",\"date\":\"2026-10-13T21:12:13Z\"},\"committer\":{\"name\":\"kongsonren\",\"email\":\"kongsonren@gmail.com\",\"date\":\"2026-10-13T21:12:13Z\"},\"tree\":{\"sha\":\"64d4a30a8f7dad3eb79f01b35cb03b2619d33729\",\"url\":\"https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/trees/64d4a30a8f7dad3eb79f01b35cb03b2619d33729\"},\"message\":\"Fix Mozi v2 R1-R4 with isolated red/green security regressions\",\"parents\":[{\"sha\":\"efc2efc10007bb5797be26c13879a61c82eed394\",\"url\":\"https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/commits/efc2efc10007bb5797be26c13879a61c82eed394\",\"html_url\":\"https://github.com/kongsonren/aisaleos-handoff-poc/commit/efc2efc10007bb5797be26c13879a61c82eed394\"}],\"verification\":{\"verified\":false,\"reason\":\"unsigned\",\"signature\":null,\"payload\":null,\"verified_at\":null}}",
++        "title": "bf7eec65af9a65da065a781a5ed91b8f8038f61c",
++        "modified_date": null,
++        "url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/commits/bf7eec65af9a65da065a781a5ed91b8f8038f61c",
++        "display_url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/commits/bf7eec65af9a65da065a781a5ed91b8f8038f61c",
++        "display_title": "bf7eec65af9a65da065a781a5ed91b8f8038f61c",
++        "structuredContent": {
++          "title": "bf7eec65af9a65da065a781a5ed91b8f8038f61c",
++          "content": "{\"sha\":\"bf7eec65af9a65da065a781a5ed91b8f8038f61c\",\"node_id\":\"C_kwDOUOcZ5doAKGJmN2VlYzY1YWY5YTY1ZGEwNjVhNzgxYTVlZDkxYjhmODAzOGY2MWM\",\"url\":\"https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/commits/bf7eec65af9a65da065a781a5ed91b8f8038f61c\",\"html_url\":\"https://github.com/kongsonren/aisaleos-handoff-poc/commit/bf7eec65af9a65da065a781a5ed91b8f8038f61c\",\"author\":{\"name\":\"kongsonren\",\"email\":\"kongsonren@gmail.com\",\"date\":\"2026-10-13T21:12:13Z\"},\"committer\":{\"name\":\"kongsonren\",\"email\":\"kongsonren@gmail.com\",\"date\":\"2026-10-13T21:12:13Z\"},\"tree\":{\"sha\":\"64d4a30a8f7dad3eb79f01b35cb03b2619d33729\",\"url\":\"https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/trees/64d4a30a8f7dad3eb79f01b35cb03b2619d33729\"},\"message\":\"Fix Mozi v2 R1-R4 with isolated red/green security regressions\",\"parents\":[{\"sha\":\"efc2efc10007bb5797be26c13879a61c82eed394\",\"url\":\"https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/commits/efc2efc10007bb5797be26c13879a61c82eed394\",\"html_url\":\"https://github.com/kongsonren/aisaleos-handoff-poc/commit/efc2efc10007bb5797be26c13879a61c82eed394\"}],\"verification\":{\"verified\":false,\"reason\":\"unsigned\",\"signature\":null,\"payload\":null,\"verified_at\":null}}",
++          "display_url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/commits/bf7eec65af9a65da065a781a5ed91b8f8038f61c"
++        }
++      },
++      "isError": false
++    }
++  },
++  "main_before": {
++    "status": "fulfilled",
++    "value": {
++      "content": [
++        {
++          "type": "text",
++          "text": "Action completed."
++        }
++      ],
++      "structuredContent": {
++        "content": "{\"ref\":\"refs/heads/main\",\"node_id\":\"REF_kwDOUOcZ5a9yZWZzL2hlYWRzL21haW4\",\"url\":\"https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/refs/heads/main\",\"object\":{\"sha\":\"875d6fa4238c58388320d18edc1b1e67da19ca60\",\"type\":\"commit\",\"url\":\"https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/commits/875d6fa4238c58388320d18edc1b1e67da19ca60\"}}",
++        "title": "main",
++        "modified_date": null,
++        "url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/ref/heads/main",
++        "display_url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/ref/heads/main",
++        "display_title": "main",
++        "structuredContent": {
++          "title": "main",
++          "content": "{\"ref\":\"refs/heads/main\",\"node_id\":\"REF_kwDOUOcZ5a9yZWZzL2hlYWRzL21haW4\",\"url\":\"https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/refs/heads/main\",\"object\":{\"sha\":\"875d6fa4238c58388320d18edc1b1e67da19ca60\",\"type\":\"commit\",\"url\":\"https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/commits/875d6fa4238c58388320d18edc1b1e67da19ca60\"}}",
++          "display_url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/ref/heads/main"
++        }
++      },
++      "isError": false
++    }
++  },
++  "workflow_reads": [
++    {
++      "status": "fulfilled",
++      "value": {
++        "content": [
++          {
++            "type": "text",
++            "text": "Action completed."
++          }
++        ],
++        "structuredContent": {
++          "content": "name: MOZI-INDEPENDENT-WATCH\n\n# ⑥ 墨子独立故障域（KR 验收口径：哪吒执行链死掉以后，墨子还能不能独立发现）\n#\n# 与哪吒链**完全解耦**：\n#   · 自己的 workflow 文件（mozi-auto.yml，不是 nezha-auto.yml）\n#   · 自己的 concurrency 组（mozi-independent-watch，不与哪吒抢）\n#   · 自己的自起拍链（mozi_watch.py --wait-and-schedule dispatch 自己）\n#   · 自己的节拍标记（.wb1/nezha/mozi_beat.json）\n# 因此：哪吒链断 ≠ 墨子停。哪吒链同拍里的 MOZI patrol 只是历史搭车，\n# 独立链跑稳后会从 nezha-auto.yml 摘除（不双跑、不冒充）。\n#\n# 墨子仍是 WATCH ONLY：只看、只记、只判。不创建任务、不抢活、不下指令。\non:\n  workflow_dispatch:\n  schedule:\n    - cron: \"17,47 * * * *\"   # 每 30 分钟（尽力；本仓库 cron 实测不自行触发 → 靠自起拍链）\n\nconcurrency:\n  group: mozi-independent-watch\n  cancel-in-progress: false\n\npermissions:\n  contents: write\n  actions: write      # 允许墨子自己 dispatch 下一拍（独立自延续）\n\nenv:\n  MOZI_SELF_SCHEDULE: \"1\"\n  MOZI_BEAT_MIN: \"30\"\n\njobs:\n  watch:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Checkout\n        uses: actions/checkout@v4\n\n      - name: Setup Python\n        uses: actions/setup-python@v5\n        with:\n          python-version: \"3.11\"\n\n      - name: MOZI watch (read-only)\n        env:\n          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}\n        run: |\n          echo \"run_id=$GITHUB_RUN_ID started=$(date -u +%FT%TZ)\"\n          python .wb1/nezha/mozi_watch.py\n          echo \"watchexit=$?\"\n\n      # 独立自起拍：睡到下一个 30 分钟边界后由**墨子自己** dispatch 下一拍。\n      # 这一拍的发起方是墨子，不是哪吒 —— 这是\"独立故障域\"成立的关键。\n      - name: MOZI self-schedules next beat\n        if: always()\n        env:\n          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}\n          MOZI_SELF_SCHEDULE: \"1\"\n          MOZI_BEAT_MIN: \"30\"\n          MOZI_MAX_BEATS: \"120\"\n        run: |\n          python .wb1/nezha/mozi_watch.py --wait-and-schedule\n          echo \"nextexit=$?\"\n",
++          "title": "991dafa21e20bd6476b8dd20ed9a46162c50a1d7",
++          "modified_date": null,
++          "url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/blobs/991dafa21e20bd6476b8dd20ed9a46162c50a1d7",
++          "display_url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/blobs/991dafa21e20bd6476b8dd20ed9a46162c50a1d7",
++          "display_title": "991dafa21e20bd6476b8dd20ed9a46162c50a1d7",
++          "structuredContent": {
++            "title": "991dafa21e20bd6476b8dd20ed9a46162c50a1d7",
++            "content": "name: MOZI-INDEPENDENT-WATCH\n\n# ⑥ 墨子独立故障域（KR 验收口径：哪吒执行链死掉以后，墨子还能不能独立发现）\n#\n# 与哪吒链**完全解耦**：\n#   · 自己的 workflow 文件（mozi-auto.yml，不是 nezha-auto.yml）\n#   · 自己的 concurrency 组（mozi-independent-watch，不与哪吒抢）\n#   · 自己的自起拍链（mozi_watch.py --wait-and-schedule dispatch 自己）\n#   · 自己的节拍标记（.wb1/nezha/mozi_beat.json）\n# 因此：哪吒链断 ≠ 墨子停。哪吒链同拍里的 MOZI patrol 只是历史搭车，\n# 独立链跑稳后会从 nezha-auto.yml 摘除（不双跑、不冒充）。\n#\n# 墨子仍是 WATCH ONLY：只看、只记、只判。不创建任务、不抢活、不下指令。\non:\n  workflow_dispatch:\n  schedule:\n    - cron: \"17,47 * * * *\"   # 每 30 分钟（尽力；本仓库 cron 实测不自行触发 → 靠自起拍链）\n\nconcurrency:\n  group: mozi-independent-watch\n  cancel-in-progress: false\n\npermissions:\n  contents: write\n  actions: write      # 允许墨子自己 dispatch 下一拍（独立自延续）\n\nenv:\n  MOZI_SELF_SCHEDULE: \"1\"\n  MOZI_BEAT_MIN: \"30\"\n\njobs:\n  watch:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Checkout\n        uses: actions/checkout@v4\n\n      - name: Setup Python\n        uses: actions/setup-python@v5\n        with:\n          python-version: \"3.11\"\n\n      - name: MOZI watch (read-only)\n        env:\n          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}\n        run: |\n          echo \"run_id=$GITHUB_RUN_ID started=$(date -u +%FT%TZ)\"\n          python .wb1/nezha/mozi_watch.py\n          echo \"watchexit=$?\"\n\n      # 独立自起拍：睡到下一个 30 分钟边界后由**墨子自己** dispatch 下一拍。\n      # 这一拍的发起方是墨子，不是哪吒 —— 这是\"独立故障域\"成立的关键。\n      - name: MOZI self-schedules next beat\n        if: always()\n        env:\n          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}\n          MOZI_SELF_SCHEDULE: \"1\"\n          MOZI_BEAT_MIN: \"30\"\n          MOZI_MAX_BEATS: \"120\"\n        run: |\n          python .wb1/nezha/mozi_watch.py --wait-and-schedule\n          echo \"nextexit=$?\"\n",
++            "display_url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/blobs/991dafa21e20bd6476b8dd20ed9a46162c50a1d7"
++          }
++        },
++        "isError": false
++      }
++    },
++    {
++      "status": "fulfilled",
++      "value": {
++        "content": [
++          {
++            "type": "text",
++            "text": "Action completed."
++          }
++        ],
++        "structuredContent": {
++          "content": "name: MOZI-CLOUD-WATCH\n\n# 墨子：云端 WATCH ONLY —— 只看、只记、只判。\n# 不创建任务、不改业务状态、不调度哪吒、不下达任何指令。\n#\n# 真实限制（不吹）：GitHub cron 最小粒度 5 分钟，做不到 60 秒级；\n# 60 秒级常驻观察需要真实云主机（腾讯云轻量），届时才上。\non:\n  workflow_dispatch:\n  schedule:\n    - cron: \"7 * * * *\"   # 每小时一次（720 次/月，落在免费额度内）\n\npermissions:\n  contents: write\n\njobs:\n  watch:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Checkout\n        uses: actions/checkout@v4\n\n      - name: Setup Python\n        uses: actions/setup-python@v5\n        with:\n          python-version: \"3.11\"\n\n      - name: Run MOZI watch\n        env:\n          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}\n        run: |\n          echo \"run_id=$GITHUB_RUN_ID started=$(date -u +%FT%TZ)\"\n          python .wb1/nezha/mozi_watch.py\n          echo \"exit=$?\"\n",
++          "title": "276d8b3226a704c4ed5b4271a1ab5017cd1f7e2b",
++          "modified_date": null,
++          "url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/blobs/276d8b3226a704c4ed5b4271a1ab5017cd1f7e2b",
++          "display_url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/blobs/276d8b3226a704c4ed5b4271a1ab5017cd1f7e2b",
++          "display_title": "276d8b3226a704c4ed5b4271a1ab5017cd1f7e2b",
++          "structuredContent": {
++            "title": "276d8b3226a704c4ed5b4271a1ab5017cd1f7e2b",
++            "content": "name: MOZI-CLOUD-WATCH\n\n# 墨子：云端 WATCH ONLY —— 只看、只记、只判。\n# 不创建任务、不改业务状态、不调度哪吒、不下达任何指令。\n#\n# 真实限制（不吹）：GitHub cron 最小粒度 5 分钟，做不到 60 秒级；\n# 60 秒级常驻观察需要真实云主机（腾讯云轻量），届时才上。\non:\n  workflow_dispatch:\n  schedule:\n    - cron: \"7 * * * *\"   # 每小时一次（720 次/月，落在免费额度内）\n\npermissions:\n  contents: write\n\njobs:\n  watch:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Checkout\n        uses: actions/checkout@v4\n\n      - name: Setup Python\n        uses: actions/setup-python@v5\n        with:\n          python-version: \"3.11\"\n\n      - name: Run MOZI watch\n        env:\n          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}\n        run: |\n          echo \"run_id=$GITHUB_RUN_ID started=$(date -u +%FT%TZ)\"\n          python .wb1/nezha/mozi_watch.py\n          echo \"exit=$?\"\n",
++            "display_url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/blobs/276d8b3226a704c4ed5b4271a1ab5017cd1f7e2b"
++          }
++        },
++        "isError": false
++      }
++    },
++    {
++      "status": "fulfilled",
++      "value": {
++        "content": [
++          {
++            "type": "text",
++            "text": "Action completed."
++          }
++        ],
++        "structuredContent": {
++          "content": "name: NEZHA-CLOUD-CONTINUOUS-LOOP\n\n# 今晚唯一一条云起搏（原 NEZHA-CLOUD-AUTO-TAKEOVER 已改写为本循环）。\n#\n# 目的：把本地 1WB 后腿的「自主工作循环」搬到云肉身 ——\n#   每一拍：读 STATE → 分类（RUNNING / LOCAL_HELD 不抢活 / TAKEOVER / IDLE 扫描 / GENUINE_IDLE）\n#          → 只做一个动作 → 写 heartbeat(round_seq+1)\n# 第五到十分钟的调度延迟是 GitHub 的常态，**准点不是 PASS 条件**；\n# PASS 条件是：黑武士关机以后，下一拍仍然由这里自己发生。\non:\n  workflow_dispatch:\n    inputs:\n      diag:\n        description: \"true = diagnostic scan only (no task created, no state change)\"\n        required: false\n        default: \"false\"\n  schedule:\n    - cron: \"*/5 * * * *\"\n\nconcurrency:\n  group: nezha-cloud-executor   # 与原 concurrent 组同名：保证同一时刻只有一个被执行，绝不双跑\n  cancel-in-progress: false\n\npermissions:\n  contents: write\n  actions: write        # 允许云端自己 dispatch 下一拍（自延续链）\n\nenv:\n  NEZHA_SELF_SCHEDULE: \"1\"\n\njobs:\n  loop:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Checkout\n        uses: actions/checkout@v4\n\n      - name: Setup Python\n        uses: actions/setup-python@v5\n        with:\n          python-version: \"3.11\"\n\n      - name: One beat of NEZHA continuous loop\n        env:\n          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}\n          NEZHA_AUTH_ID: KR-TOKEN-20260928-POWEROFF-V2\n          NEZHA_STALE_SEC: \"900\"   # LOCAL 不再有常驻心跳：最后一吻时间戳 + 15 分钟窗口，\n                                   # KR 须在冻结后 15 分钟内物理关机，接管必然晚于关机\n        run: |\n          echo \"run_id=$GITHUB_RUN_ID attempt=$GITHUB_RUN_ATTEMPT started=$(date -u +%FT%TZ)\"\n          if [ \"${{ inputs.diag }}\" = \"true\" ]; then\n            echo \"mode=diagnose\"\n            python .wb1/nezha/loop.py --diagnose\n          else\n            python .wb1/nezha/loop.py\n          fi\n          echo \"exit=$?\"\n\n      # 墨子云端巡检（5分钟同拍）：只读两条腿生命与业务推进，不替哪吒决定战争。\n      # 目的：KR 要求墨子按 5 分钟节拍盯「有没有持续产 REAL」，而不是盯 PID/定时器/HTTP200。\n      # mozi.yml 无 cron 自触发能力（本仓库 schedule 历史 0 条），故挂在自起拍链同拍执行。\n      - name: MOZI patrol (read-only)\n        if: always()\n        env:\n          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}\n        run: |\n          python .wb1/nezha/mozi_watch.py\n          echo \"moziexit=$?\"\n\n      # 云自起拍：睡到下一个 5 分钟边界后由**本 runner 自己** dispatch 下一拍。\n      # 用途：GitHub 原生 schedule cron 在本仓库实测长期不自行触发（event=schedule 历史 0 条），\n      # 这是减损链。第一推动力在黑武士关机前搬一次，此后每一拍的发起都由云端自己完成。\n      - name: Cloud self-schedules next beat\n        if: always()\n        env:\n          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}\n          NEZHA_SELF_SCHEDULE: \"1\"\n          NEZHA_BEAT_MIN: \"5\"\n          NEZHA_MAX_BEATS: \"240\"\n        run: |\n          python .wb1/nezha/loop.py --wait-and-schedule\n          echo \"nextexit=$?\"\n",
++          "title": "5067b6ee633676d9d0f678cdadea514cfd87af84",
++          "modified_date": null,
++          "url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/blobs/5067b6ee633676d9d0f678cdadea514cfd87af84",
++          "display_url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/blobs/5067b6ee633676d9d0f678cdadea514cfd87af84",
++          "display_title": "5067b6ee633676d9d0f678cdadea514cfd87af84",
++          "structuredContent": {
++            "title": "5067b6ee633676d9d0f678cdadea514cfd87af84",
++            "content": "name: NEZHA-CLOUD-CONTINUOUS-LOOP\n\n# 今晚唯一一条云起搏（原 NEZHA-CLOUD-AUTO-TAKEOVER 已改写为本循环）。\n#\n# 目的：把本地 1WB 后腿的「自主工作循环」搬到云肉身 ——\n#   每一拍：读 STATE → 分类（RUNNING / LOCAL_HELD 不抢活 / TAKEOVER / IDLE 扫描 / GENUINE_IDLE）\n#          → 只做一个动作 → 写 heartbeat(round_seq+1)\n# 第五到十分钟的调度延迟是 GitHub 的常态，**准点不是 PASS 条件**；\n# PASS 条件是：黑武士关机以后，下一拍仍然由这里自己发生。\non:\n  workflow_dispatch:\n    inputs:\n      diag:\n        description: \"true = diagnostic scan only (no task created, no state change)\"\n        required: false\n        default: \"false\"\n  schedule:\n    - cron: \"*/5 * * * *\"\n\nconcurrency:\n  group: nezha-cloud-executor   # 与原 concurrent 组同名：保证同一时刻只有一个被执行，绝不双跑\n  cancel-in-progress: false\n\npermissions:\n  contents: write\n  actions: write        # 允许云端自己 dispatch 下一拍（自延续链）\n\nenv:\n  NEZHA_SELF_SCHEDULE: \"1\"\n\njobs:\n  loop:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Checkout\n        uses: actions/checkout@v4\n\n      - name: Setup Python\n        uses: actions/setup-python@v5\n        with:\n          python-version: \"3.11\"\n\n      - name: One beat of NEZHA continuous loop\n        env:\n          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}\n          NEZHA_AUTH_ID: KR-TOKEN-20260928-POWEROFF-V2\n          NEZHA_STALE_SEC: \"900\"   # LOCAL 不再有常驻心跳：最后一吻时间戳 + 15 分钟窗口，\n                                   # KR 须在冻结后 15 分钟内物理关机，接管必然晚于关机\n        run: |\n          echo \"run_id=$GITHUB_RUN_ID attempt=$GITHUB_RUN_ATTEMPT started=$(date -u +%FT%TZ)\"\n          if [ \"${{ inputs.diag }}\" = \"true\" ]; then\n            echo \"mode=diagnose\"\n            python .wb1/nezha/loop.py --diagnose\n          else\n            python .wb1/nezha/loop.py\n          fi\n          echo \"exit=$?\"\n\n      # 墨子云端巡检（5分钟同拍）：只读两条腿生命与业务推进，不替哪吒决定战争。\n      # 目的：KR 要求墨子按 5 分钟节拍盯「有没有持续产 REAL」，而不是盯 PID/定时器/HTTP200。\n      # mozi.yml 无 cron 自触发能力（本仓库 schedule 历史 0 条），故挂在自起拍链同拍执行。\n      - name: MOZI patrol (read-only)\n        if: always()\n        env:\n          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}\n        run: |\n          python .wb1/nezha/mozi_watch.py\n          echo \"moziexit=$?\"\n\n      # 云自起拍：睡到下一个 5 分钟边界后由**本 runner 自己** dispatch 下一拍。\n      # 用途：GitHub 原生 schedule cron 在本仓库实测长期不自行触发（event=schedule 历史 0 条），\n      # 这是减损链。第一推动力在黑武士关机前搬一次，此后每一拍的发起都由云端自己完成。\n      - name: Cloud self-schedules next beat\n        if: always()\n        env:\n          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}\n          NEZHA_SELF_SCHEDULE: \"1\"\n          NEZHA_BEAT_MIN: \"5\"\n          NEZHA_MAX_BEATS: \"240\"\n        run: |\n          python .wb1/nezha/loop.py --wait-and-schedule\n          echo \"nextexit=$?\"\n",
++            "display_url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/blobs/5067b6ee633676d9d0f678cdadea514cfd87af84"
++          }
++        },
++        "isError": false
++      }
++    },
++    {
++      "status": "fulfilled",
++      "value": {
++        "content": [
++          {
++            "type": "text",
++            "text": "Action completed."
++          }
++        ],
++        "structuredContent": {
++          "content": "name: NEZHA-CLOUD-EXECUTOR\n\n# 哪吒：云端最小 EXECUTOR。运行在 GitHub 托管 runner 上，\n# 脱离本地 12WB / 当前会话 / 当前 shell —— 本地关机不影响它。\non:\n  workflow_dispatch:\n    inputs:\n      note:\n        description: \"触发说明（仅记录，不作为参数）\"\n        required: false\n        default: \"\"\n\npermissions:\n  contents: write\n\njobs:\n  execute:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Checkout\n        uses: actions/checkout@v4\n\n      - name: Setup Python\n        uses: actions/setup-python@v5\n        with:\n          python-version: \"3.11\"\n\n      - name: Run NEZHA executor\n        env:\n          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}\n          NEZHA_AUTH_ID: KR-TOKEN-20260928-NEZHA-TAKEOVER\n        run: |\n          echo \"run_id=$GITHUB_RUN_ID started=$(date -u +%FT%TZ)\"\n          python .wb1/nezha/cloud_executor.py\n          echo \"exit=$?\"\n",
++          "title": "fbe0da9a43dc7420bb3aa98cd11123383b76aede",
++          "modified_date": null,
++          "url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/blobs/fbe0da9a43dc7420bb3aa98cd11123383b76aede",
++          "display_url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/blobs/fbe0da9a43dc7420bb3aa98cd11123383b76aede",
++          "display_title": "fbe0da9a43dc7420bb3aa98cd11123383b76aede",
++          "structuredContent": {
++            "title": "fbe0da9a43dc7420bb3aa98cd11123383b76aede",
++            "content": "name: NEZHA-CLOUD-EXECUTOR\n\n# 哪吒：云端最小 EXECUTOR。运行在 GitHub 托管 runner 上，\n# 脱离本地 12WB / 当前会话 / 当前 shell —— 本地关机不影响它。\non:\n  workflow_dispatch:\n    inputs:\n      note:\n        description: \"触发说明（仅记录，不作为参数）\"\n        required: false\n        default: \"\"\n\npermissions:\n  contents: write\n\njobs:\n  execute:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Checkout\n        uses: actions/checkout@v4\n\n      - name: Setup Python\n        uses: actions/setup-python@v5\n        with:\n          python-version: \"3.11\"\n\n      - name: Run NEZHA executor\n        env:\n          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}\n          NEZHA_AUTH_ID: KR-TOKEN-20260928-NEZHA-TAKEOVER\n        run: |\n          echo \"run_id=$GITHUB_RUN_ID started=$(date -u +%FT%TZ)\"\n          python .wb1/nezha/cloud_executor.py\n          echo \"exit=$?\"\n",
++            "display_url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/blobs/fbe0da9a43dc7420bb3aa98cd11123383b76aede"
++          }
++        },
++        "isError": false
++      }
++    }
++  ]
++}
+--- /dev/null
++++ b/experiments/mozi-v2-cut1-20261014/validation.json
+@@ -0,0 +1,33 @@
++{
++  "started_utc": "2026-10-13T22:15:36.204205+00:00",
++  "ended_utc": "2026-10-13T22:15:39.764912+00:00",
++  "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
++  "mode": "OFFLINE_MOCK",
++  "results": [
++    {
++      "log": "red-mutant-identity.log",
++      "exit": 1,
++      "sha256": "f86d5d7b29fb9863a59954b958ce265387f778b41e1e911a072420beea554981"
++    },
++    {
++      "log": "red-mutant-digest.log",
++      "exit": 1,
++      "sha256": "c46e3a06a43f26ba1c789d4a8056a5595f40dd46f0db21673e7e838f2c4193da"
++    },
++    {
++      "log": "red-mutant-audit.log",
++      "exit": 1,
++      "sha256": "e5411385527939e03f8d6e20779d1071966a7c43834fe269636b83d8a106529a"
++    },
++    {
++      "log": "green-original20.log",
++      "exit": 0,
++      "sha256": "475310aa5a7081bef9d946bb174d0b2222a5baea0a3a3b6f4d0a8cf5f0e579bb"
++    },
++    {
++      "log": "green-entry.log",
++      "exit": 0,
++      "sha256": "0485d84e3002269d813fbd601af7c02eef0cfa0de65dd8594cc7b116af5c1d0c"
++    }
++  ]
++}--- /dev/null
++++ b/experiments/mozi-v2-cut1-20261014/green-original20.log
+@@ -0,0 +1,67 @@
++{"status": "HOLD_PENDING_KR", "reason": "malformed metadata"}
++{"status": "HOLD_PENDING_KR", "reason": "scan task failure"}
++concurrent statuses: ['PASS', 'DUPLICATE', 'DUPLICATE', 'DUPLICATE'] new process: DUPLICATE
++{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
++{"status": "HOLD_PENDING_KR", "reason": "source binding"}
++{"status": "HOLD_PENDING_KR", "reason": "source binding"}
++{"status": "HOLD_PENDING_KR", "reason": "source binding"}
++{"status": "HOLD_PENDING_KR", "reason": "untrusted principal/key"}
++{"status": "HOLD_PENDING_KR", "reason": "untrusted principal/key"}
++{"status": "HOLD_PENDING_KR", "reason": "title/content policy"}
++{"status": "HOLD_PENDING_KR", "reason": "signature"}
++{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
++{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
++{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
++{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
++{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
++{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
++{"status": "HOLD_PENDING_KR", "reason": "signature"}
++{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
++{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
++{"status": "HOLD_PENDING_KR", "reason": "simulation identity"}
++{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
++{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
++{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
++{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
++{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
++{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
++{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
++{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
++{"status": "HOLD_PENDING_KR", "reason": "schema/legacy rejected"}
++{"status": "HOLD_PENDING_KR", "reason": "signature"}
++{"status": "HOLD_PENDING_KR", "reason": "schema/legacy rejected"}
++{"status": "HOLD_PENDING_KR", "reason": "protected or non-task issue"}
++{"status": "HOLD_PENDING_KR", "reason": "simulation identity"}
++{"status": "HOLD_PENDING_KR", "reason": "duplicate JSON key"}
++{"type": "RESULT", "status": "PASS", "scope": "simulation-only", "task_id": "SIM-001", "run_id": "SIM-RUN-001", "issue_id": 9001, "issue_number": 999, "payload_sha256": "77a8c656cc0f5d9ca6cf2600305b6550ed904d4a83d01f380c1d866732b80b3c", "executor_sha256": "0afef212dc11f0cd6a12f4281891883694047371c850a8b80819cb131d195971", "path": "C:\\Users\\59605\\AppData\\Local\\Temp\\tmpxges1llx\\bd295747d58f49260aebfffbca6a4861418c851546b97363a6e322ad570334ed\\test.txt", "bytes": 17, "sha256": "ffab9aac57e7a50d1e29c6bec89176a15c6c38d27c6f7ca48b757618b0ebe090", "started_at": 1791929738.1211674, "completed_at": 1791929738.1221685, "pid": 64748}
++{"status": "HOLD_PENDING_KR", "reason": "untrusted principal/key"}
++{"status": "HOLD_PENDING_KR", "reason": "source binding"}
++{"status": "HOLD_PENDING_KR", "reason": "source binding"}
++{"status": "HOLD_PENDING_KR", "reason": "protected or non-task issue"}
++{"status": "HOLD_PENDING_KR", "reason": "title/content policy"}
++{"status": "HOLD_PENDING_KR", "reason": "protected or non-task issue"}
++test_R1_transport_endpoint (test_security.Security.test_R1_transport_endpoint) ... ok
++test_R1_wrong_result_metadata (test_security.Security.test_R1_wrong_result_metadata) ... ok
++test_R2_global_failure (test_security.Security.test_R2_global_failure) ... ok
++test_R2_malformed (test_security.Security.test_R2_malformed) ... ok
++test_R2_scan_continues (test_security.Security.test_R2_scan_continues) ... ok
++test_R3_expected_mismatch (test_security.Security.test_R3_expected_mismatch) ... ok
++test_R3_no_override (test_security.Security.test_R3_no_override) ... ok
++test_R4_audit_failure_zero_execution (test_security.Security.test_R4_audit_failure_zero_execution) ... ok
++test_R4_persistent_secret_free (test_security.Security.test_R4_persistent_secret_free) ... ok
++test_concurrent_claim_and_process_restart (test_daemon.Tests.test_concurrent_claim_and_process_restart) ... ok
++test_conflicting_nonce_run_issue (test_daemon.Tests.test_conflicting_nonce_run_issue) ... ok
++test_crash_claim_never_reexecutes (test_daemon.Tests.test_crash_claim_never_reexecutes) ... ok
++test_every_field_tamper (test_daemon.Tests.test_every_field_tamper) ... ok
++test_expired_future_and_window (test_daemon.Tests.test_expired_future_and_window) ... ok
++test_false_missing_forged_true_wrong_signature (test_daemon.Tests.test_false_missing_forged_true_wrong_signature) ... ok
++test_legacy_and_protected_task (test_daemon.Tests.test_legacy_and_protected_task) ... ok
++test_legal_restart_duplicate_and_result (test_daemon.Tests.test_legal_restart_duplicate_and_result) ... ok
++test_post_timeout_no_retry (test_daemon.Tests.test_post_timeout_no_retry) ... ok
++test_principal_and_issue_binding (test_daemon.Tests.test_principal_and_issue_binding) ... ok
++test_scan_only_refreshes_simulation (test_daemon.Tests.test_scan_only_refreshes_simulation) ... ok
++
++----------------------------------------------------------------------
++Ran 20 tests in 0.515s
++
++OK
+--- /dev/null
++++ b/experiments/mozi-v2-cut1-20261014/green-entry.log
+@@ -0,0 +1,18 @@
++test_audit_digest_tamper (test_entrypoint.EntryTests.test_audit_digest_tamper) ... ok
++test_audit_failure_stops (test_entrypoint.EntryTests.test_audit_failure_stops) ... ok
++test_broker_paths_and_zero_post (test_entrypoint.EntryTests.test_broker_paths_and_zero_post) ... ok
++test_cli_offline_and_path_denial (test_entrypoint.EntryTests.test_cli_offline_and_path_denial) ... ok
++test_clock_replay_conflict (test_entrypoint.EntryTests.test_clock_replay_conflict) ... ok
++test_default_and_live_deny (test_entrypoint.EntryTests.test_default_and_live_deny) ... ok
++test_fixture_size_and_schema (test_entrypoint.EntryTests.test_fixture_size_and_schema) ... ok
++test_good_duplicate_restart_audit (test_entrypoint.EntryTests.test_good_duplicate_restart_audit) ... ok
++test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) ... ok
++test_no_network_or_scan (test_entrypoint.EntryTests.test_no_network_or_scan) ... ok
++test_path_alias_and_hardlink (test_entrypoint.EntryTests.test_path_alias_and_hardlink) ... ok
++test_payload_boundary (test_entrypoint.EntryTests.test_payload_boundary) ... ok
++test_source_digest_before_import (test_entrypoint.EntryTests.test_source_digest_before_import) ... ok
++
++----------------------------------------------------------------------
++Ran 13 tests in 1.291s
++
++OK
+--- /dev/null
++++ b/experiments/mozi-v2-cut1-20261014/red-entry.log
+@@ -0,0 +1,19 @@
++test_entrypoint (unittest.loader._FailedTest.test_entrypoint) ... ERROR
++
++======================================================================
++ERROR: test_entrypoint (unittest.loader._FailedTest.test_entrypoint)
++----------------------------------------------------------------------
++ImportError: Failed to import test module: test_entrypoint
++Traceback (most recent call last):
++  File "C:\Users\59605\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\unittest\loader.py", line 137, in loadTestsFromName
++    module = __import__(module_name)
++             ^^^^^^^^^^^^^^^^^^^^^^^
++  File "C:\Users\59605\.codex\.chatgpt-projects\g-p-6a8437c626508191bcc3bde036554c2b\mozi-v2-cut1-20261014\test_entrypoint.py", line 11, in <module>
++    import entrypoint as e
++ModuleNotFoundError: No module named 'entrypoint'
++
++
++----------------------------------------------------------------------
++Ran 1 test in 0.000s
++
++FAILED (errors=1)
+--- /dev/null
++++ b/experiments/mozi-v2-cut1-20261014/red-audit.log
+@@ -0,0 +1,24 @@
++test_audit_failure_stops (test_entrypoint.EntryTests.test_audit_failure_stops) ... FAIL
++test_broker_paths_and_zero_post (test_entrypoint.EntryTests.test_broker_paths_and_zero_post) ... ok
++test_clock_replay_conflict (test_entrypoint.EntryTests.test_clock_replay_conflict) ... ok
++test_default_and_live_deny (test_entrypoint.EntryTests.test_default_and_live_deny) ... ok
++test_fixture_size_and_schema (test_entrypoint.EntryTests.test_fixture_size_and_schema) ... ok
++test_good_duplicate_restart_audit (test_entrypoint.EntryTests.test_good_duplicate_restart_audit) ... ok
++test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) ... ok
++test_path_alias_and_hardlink (test_entrypoint.EntryTests.test_path_alias_and_hardlink) ... ok
++test_payload_boundary (test_entrypoint.EntryTests.test_payload_boundary) ... ok
++test_source_digest_before_import (test_entrypoint.EntryTests.test_source_digest_before_import) ... ok
++
++======================================================================
++FAIL: test_audit_failure_stops (test_entrypoint.EntryTests.test_audit_failure_stops)
++----------------------------------------------------------------------
++Traceback (most recent call last):
++  File "C:\Users\59605\.codex\.chatgpt-projects\g-p-6a8437c626508191bcc3bde036554c2b\mozi-v2-cut1-20261014\test_entrypoint.py", line 89, in test_audit_failure_stops
++    with self.assertRaises(Exception): e.offline_once(self.issue,self.root,NOW)
++         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++AssertionError: Exception not raised
++
++----------------------------------------------------------------------
++Ran 10 tests in 0.845s
++
++FAILED (failures=1)
+--- /dev/null
++++ b/experiments/mozi-v2-cut1-20261014/red-mutant-identity.log
+@@ -0,0 +1,106 @@
++test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) ... 
++  test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) (field='number', value=20) ... FAIL
++  test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) (field='number', value=998) ... FAIL
++  test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) (field='number', value=True) ... FAIL
++  test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) (field='id', value=9002) ... FAIL
++  test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) (field='user', value=None) ... FAIL
++  test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) (field='user', value={'id': True}) ... FAIL
++  test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) (field='user', value={'id': 259898029}) ... FAIL
++  test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) (field='url', value='https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/20') ... FAIL
++  test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) (field='repository_url', value='https://evil.invalid') ... FAIL
++  test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) (field='pull_request', value={}) ... FAIL
++
++======================================================================
++FAIL: test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) (field='number', value=20)
++----------------------------------------------------------------------
++Traceback (most recent call last):
++  File "C:\Users\59605\AppData\Local\Temp\tmpnjaebj8b\test_entrypoint.py", line 51, in test_issue_metadata_and_principal
++    with self.assertRaises(e.Denied): e.offline_once(i,self.root,NOW)
++         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
++AssertionError: Denied not raised
++
++======================================================================
++FAIL: test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) (field='number', value=998)
++----------------------------------------------------------------------
++Traceback (most recent call last):
++  File "C:\Users\59605\AppData\Local\Temp\tmpnjaebj8b\test_entrypoint.py", line 51, in test_issue_metadata_and_principal
++    with self.assertRaises(e.Denied): e.offline_once(i,self.root,NOW)
++         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
++AssertionError: Denied not raised
++
++======================================================================
++FAIL: test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) (field='number', value=True)
++----------------------------------------------------------------------
++Traceback (most recent call last):
++  File "C:\Users\59605\AppData\Local\Temp\tmpnjaebj8b\test_entrypoint.py", line 51, in test_issue_metadata_and_principal
++    with self.assertRaises(e.Denied): e.offline_once(i,self.root,NOW)
++         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
++AssertionError: Denied not raised
++
++======================================================================
++FAIL: test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) (field='id', value=9002)
++----------------------------------------------------------------------
++Traceback (most recent call last):
++  File "C:\Users\59605\AppData\Local\Temp\tmpnjaebj8b\test_entrypoint.py", line 51, in test_issue_metadata_and_principal
++    with self.assertRaises(e.Denied): e.offline_once(i,self.root,NOW)
++         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
++AssertionError: Denied not raised
++
++======================================================================
++FAIL: test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) (field='user', value=None)
++----------------------------------------------------------------------
++Traceback (most recent call last):
++  File "C:\Users\59605\AppData\Local\Temp\tmpnjaebj8b\test_entrypoint.py", line 51, in test_issue_metadata_and_principal
++    with self.assertRaises(e.Denied): e.offline_once(i,self.root,NOW)
++         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
++AssertionError: Denied not raised
++
++======================================================================
++FAIL: test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) (field='user', value={'id': True})
++----------------------------------------------------------------------
++Traceback (most recent call last):
++  File "C:\Users\59605\AppData\Local\Temp\tmpnjaebj8b\test_entrypoint.py", line 51, in test_issue_metadata_and_principal
++    with self.assertRaises(e.Denied): e.offline_once(i,self.root,NOW)
++         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
++AssertionError: Denied not raised
++
++======================================================================
++FAIL: test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) (field='user', value={'id': 259898029})
++----------------------------------------------------------------------
++Traceback (most recent call last):
++  File "C:\Users\59605\AppData\Local\Temp\tmpnjaebj8b\test_entrypoint.py", line 51, in test_issue_metadata_and_principal
++    with self.assertRaises(e.Denied): e.offline_once(i,self.root,NOW)
++         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
++AssertionError: Denied not raised
++
++======================================================================
++FAIL: test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) (field='url', value='https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/20')
++----------------------------------------------------------------------
++Traceback (most recent call last):
++  File "C:\Users\59605\AppData\Local\Temp\tmpnjaebj8b\test_entrypoint.py", line 51, in test_issue_metadata_and_principal
++    with self.assertRaises(e.Denied): e.offline_once(i,self.root,NOW)
++         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
++AssertionError: Denied not raised
++
++======================================================================
++FAIL: test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) (field='repository_url', value='https://evil.invalid')
++----------------------------------------------------------------------
++Traceback (most recent call last):
++  File "C:\Users\59605\AppData\Local\Temp\tmpnjaebj8b\test_entrypoint.py", line 51, in test_issue_metadata_and_principal
++    with self.assertRaises(e.Denied): e.offline_once(i,self.root,NOW)
++         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
++AssertionError: Denied not raised
++
++======================================================================
++FAIL: test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) (field='pull_request', value={})
++----------------------------------------------------------------------
++Traceback (most recent call last):
++  File "C:\Users\59605\AppData\Local\Temp\tmpnjaebj8b\test_entrypoint.py", line 51, in test_issue_metadata_and_principal
++    with self.assertRaises(e.Denied): e.offline_once(i,self.root,NOW)
++         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
++AssertionError: Denied not raised
++
++----------------------------------------------------------------------
++Ran 1 test in 0.189s
++
++FAILED (failures=10)
+--- /dev/null
++++ b/experiments/mozi-v2-cut1-20261014/red-mutant-digest.log
+@@ -0,0 +1,20 @@
++test_source_digest_before_import (test_entrypoint.EntryTests.test_source_digest_before_import) ... ERROR
++
++======================================================================
++ERROR: test_source_digest_before_import (test_entrypoint.EntryTests.test_source_digest_before_import)
++----------------------------------------------------------------------
++Traceback (most recent call last):
++  File "C:\Users\59605\AppData\Local\Temp\tmpow444xcy\test_entrypoint.py", line 73, in test_source_digest_before_import
++    with self.assertRaises(e.Denied): e.offline_once(self.issue,self.root,NOW)
++                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++  File "C:\Users\59605\AppData\Local\Temp\tmpow444xcy\entrypoint.py", line 102, in offline_once
++    d=core.Daemon(state,{'sim':(ISSUER_ID,MOCK_KEY)},expected_sha256=DAEMON_SHA,
++      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++  File "C:\Users\59605\AppData\Local\Temp\tmpow444xcy\daemon.py", line 55, in __init__
++    raise Hold('executor measurement mismatch')
++mozi_cut1_pinned.Hold: executor measurement mismatch
++
++----------------------------------------------------------------------
++Ran 1 test in 0.022s
++
++FAILED (errors=1)
+--- /dev/null
++++ b/experiments/mozi-v2-cut1-20261014/red-mutant-audit.log
+@@ -0,0 +1,15 @@
++test_audit_digest_tamper (test_entrypoint.EntryTests.test_audit_digest_tamper) ... FAIL
++
++======================================================================
++FAIL: test_audit_digest_tamper (test_entrypoint.EntryTests.test_audit_digest_tamper)
++----------------------------------------------------------------------
++Traceback (most recent call last):
++  File "C:\Users\59605\AppData\Local\Temp\tmp6pxgl07o\test_entrypoint.py", line 122, in test_audit_digest_tamper
++    with self.assertRaises(e.Denied): e.offline_once(self.issue,self.root,NOW)
++         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
++AssertionError: Denied not raised
++
++----------------------------------------------------------------------
++Ran 1 test in 0.055s
++
++FAILED (failures=1)

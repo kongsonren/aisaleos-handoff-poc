@@ -1,0 +1,106 @@
+test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) ... 
+  test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) (field='number', value=20) ... FAIL
+  test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) (field='number', value=998) ... FAIL
+  test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) (field='number', value=True) ... FAIL
+  test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) (field='id', value=9002) ... FAIL
+  test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) (field='user', value=None) ... FAIL
+  test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) (field='user', value={'id': True}) ... FAIL
+  test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) (field='user', value={'id': 259898029}) ... FAIL
+  test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) (field='url', value='https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/20') ... FAIL
+  test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) (field='repository_url', value='https://evil.invalid') ... FAIL
+  test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) (field='pull_request', value={}) ... FAIL
+
+======================================================================
+FAIL: test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) (field='number', value=20)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\59605\AppData\Local\Temp\tmpnjaebj8b\test_entrypoint.py", line 51, in test_issue_metadata_and_principal
+    with self.assertRaises(e.Denied): e.offline_once(i,self.root,NOW)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Denied not raised
+
+======================================================================
+FAIL: test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) (field='number', value=998)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\59605\AppData\Local\Temp\tmpnjaebj8b\test_entrypoint.py", line 51, in test_issue_metadata_and_principal
+    with self.assertRaises(e.Denied): e.offline_once(i,self.root,NOW)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Denied not raised
+
+======================================================================
+FAIL: test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) (field='number', value=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\59605\AppData\Local\Temp\tmpnjaebj8b\test_entrypoint.py", line 51, in test_issue_metadata_and_principal
+    with self.assertRaises(e.Denied): e.offline_once(i,self.root,NOW)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Denied not raised
+
+======================================================================
+FAIL: test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) (field='id', value=9002)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\59605\AppData\Local\Temp\tmpnjaebj8b\test_entrypoint.py", line 51, in test_issue_metadata_and_principal
+    with self.assertRaises(e.Denied): e.offline_once(i,self.root,NOW)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Denied not raised
+
+======================================================================
+FAIL: test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) (field='user', value=None)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\59605\AppData\Local\Temp\tmpnjaebj8b\test_entrypoint.py", line 51, in test_issue_metadata_and_principal
+    with self.assertRaises(e.Denied): e.offline_once(i,self.root,NOW)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Denied not raised
+
+======================================================================
+FAIL: test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) (field='user', value={'id': True})
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\59605\AppData\Local\Temp\tmpnjaebj8b\test_entrypoint.py", line 51, in test_issue_metadata_and_principal
+    with self.assertRaises(e.Denied): e.offline_once(i,self.root,NOW)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Denied not raised
+
+======================================================================
+FAIL: test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) (field='user', value={'id': 259898029})
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\59605\AppData\Local\Temp\tmpnjaebj8b\test_entrypoint.py", line 51, in test_issue_metadata_and_principal
+    with self.assertRaises(e.Denied): e.offline_once(i,self.root,NOW)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Denied not raised
+
+======================================================================
+FAIL: test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) (field='url', value='https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/20')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\59605\AppData\Local\Temp\tmpnjaebj8b\test_entrypoint.py", line 51, in test_issue_metadata_and_principal
+    with self.assertRaises(e.Denied): e.offline_once(i,self.root,NOW)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Denied not raised
+
+======================================================================
+FAIL: test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) (field='repository_url', value='https://evil.invalid')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\59605\AppData\Local\Temp\tmpnjaebj8b\test_entrypoint.py", line 51, in test_issue_metadata_and_principal
+    with self.assertRaises(e.Denied): e.offline_once(i,self.root,NOW)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Denied not raised
+
+======================================================================
+FAIL: test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) (field='pull_request', value={})
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\59605\AppData\Local\Temp\tmpnjaebj8b\test_entrypoint.py", line 51, in test_issue_metadata_and_principal
+    with self.assertRaises(e.Denied): e.offline_once(i,self.root,NOW)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Denied not raised
+
+----------------------------------------------------------------------
+Ran 1 test in 0.189s
+
+FAILED (failures=10)

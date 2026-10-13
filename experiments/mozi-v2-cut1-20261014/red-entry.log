@@ -1,0 +1,19 @@
+test_entrypoint (unittest.loader._FailedTest.test_entrypoint) ... ERROR
+
+======================================================================
+ERROR: test_entrypoint (unittest.loader._FailedTest.test_entrypoint)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_entrypoint
+Traceback (most recent call last):
+  File "C:\Users\59605\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\unittest\loader.py", line 137, in loadTestsFromName
+    module = __import__(module_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\59605\.codex\.chatgpt-projects\g-p-6a8437c626508191bcc3bde036554c2b\mozi-v2-cut1-20261014\test_entrypoint.py", line 11, in <module>
+    import entrypoint as e
+ModuleNotFoundError: No module named 'entrypoint'
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+FAILED (errors=1)
