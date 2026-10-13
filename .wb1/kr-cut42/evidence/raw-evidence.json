@@ -1,0 +1,166 @@
+{
+  "task": {
+    "protocol": "kr-task-real-v1",
+    "task_id": "TASK-REAL-042",
+    "run_id": "KR-CUT42-20261014-01",
+    "state": "BLOCKED_HOST_ACCESS",
+    "execution_authorized": false,
+    "scope": "isolated-only",
+    "code_sha": "f54edaa0d41833940361f273cee4fbc4c4315c47",
+    "baseline_report_sha": "e1866b4c3d3ba17c5477d6f6ce963c2302bf4db8",
+    "executor": "independent-cloud-daemon-only",
+    "action": "write_read_hash",
+    "filename": "test_cut42.txt",
+    "content": "TASK-REAL-042\nrun_id=KR-CUT42-20261014-01\nscope=isolated-only\n",
+    "constraints": {
+      "no_actions_substitute": true,
+      "no_main_changes": true,
+      "no_production_changes": true,
+      "no_permission_changes": true,
+      "no_unreviewed_code_pull": true,
+      "strict_host_key_checking": true,
+      "production_gate": "KR_GATE"
+    },
+    "result_required": [
+      "task_id",
+      "run_id",
+      "host",
+      "pid",
+      "uptime_seconds",
+      "executor_code_sha",
+      "path",
+      "bytes",
+      "sha256",
+      "started_at",
+      "completed_at"
+    ],
+    "independent_verification": {
+      "required": true,
+      "read_raw_file_via_trusted_host_channel": true,
+      "recompute_sha256": true,
+      "daemon_hash_is_claim_only": true,
+      "require_content_equals_task": true,
+      "exclude_issue16_history": true
+    },
+    "closure": "VERIFIED_CLOSED only after independent raw-byte readback and hash/content correlation; otherwise remain open",
+    "blocker": "Existing SSH identity inaccessible and connection denied. No trusted host readback. Hold execution until existing authorized host access is restored and isolated deployment is reviewed."
+  },
+  "ssh_probe": {
+    "status": "fulfilled",
+    "value": {
+      "chunk_id": "a0354a",
+      "wall_time_seconds": 0,
+      "exit_code": 1,
+      "original_token_count": 41,
+      "output": "Warning: Identity file C:/Users/59605/.ssh/id_ed25519_mozi_1wb not accessible: Permission denied.\r\nssh: connect to host 8.141.104.58 port 22: Permission denied\r\n"
+    }
+  },
+  "issue_readback": {
+    "status": "fulfilled",
+    "value": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Action completed."
+        }
+      ],
+      "structuredContent": {
+        "issue": {
+          "url": "https://github.com/kongsonren/aisaleos-handoff-poc/issues/20",
+          "title": "[KR-ISOLATED-HOLD] TASK-REAL-042",
+          "issue_number": 20,
+          "body": "第42刀；BLOCKED_HOST_ACCESS。禁止Actions替代、历史Issue #16替代；保持open。旧Daemon前缀不匹配，暂停执行。\n\n```json\n{\n  \"protocol\": \"kr-task-real-v1\",\n  \"task_id\": \"TASK-REAL-042\",\n  \"run_id\": \"KR-CUT42-20261014-01\",\n  \"state\": \"BLOCKED_HOST_ACCESS\",\n  \"execution_authorized\": false,\n  \"scope\": \"isolated-only\",\n  \"code_sha\": \"f54edaa0d41833940361f273cee4fbc4c4315c47\",\n  \"baseline_report_sha\": \"e1866b4c3d3ba17c5477d6f6ce963c2302bf4db8\",\n  \"executor\": \"independent-cloud-daemon-only\",\n  \"action\": \"write_read_hash\",\n  \"filename\": \"test_cut42.txt\",\n  \"content\": \"TASK-REAL-042\\nrun_id=KR-CUT42-20261014-01\\nscope=isolated-only\\n\",\n  \"constraints\": {\n    \"no_actions_substitute\": true,\n    \"no_main_changes\": true,\n    \"no_production_changes\": true,\n    \"no_permission_changes\": true,\n    \"no_unreviewed_code_pull\": true,\n    \"strict_host_key_checking\": true,\n    \"production_gate\": \"KR_GATE\"\n  },\n  \"result_required\": [\n    \"task_id\",\n    \"run_id\",\n    \"host\",\n    \"pid\",\n    \"uptime_seconds\",\n    \"executor_code_sha\",\n    \"path\",\n    \"bytes\",\n    \"sha256\",\n    \"started_at\",\n    \"completed_at\"\n  ],\n  \"independent_verification\": {\n    \"required\": true,\n    \"read_raw_file_via_trusted_host_channel\": true,\n    \"recompute_sha256\": true,\n    \"daemon_hash_is_claim_only\": true,\n    \"require_content_equals_task\": true,\n    \"exclude_issue16_history\": true\n  },\n  \"closure\": \"VERIFIED_CLOSED only after independent raw-byte readback and hash/content correlation; otherwise remain open\",\n  \"blocker\": \"Existing SSH identity inaccessible and connection denied. No trusted host readback. Hold execution until existing authorized host access is restored and isolated deployment is reviewed.\"\n}\n```",
+          "state": "open",
+          "user": {
+            "login": "kongsonren",
+            "name": "kongsonren",
+            "email": null,
+            "avatar_url": "https://avatars.githubusercontent.com/u/259898029?v=4",
+            "id": 259898029
+          },
+          "assignees": null,
+          "labels": null,
+          "milestone": null,
+          "state_reason": null,
+          "comments": 0,
+          "created_at": "2026-10-13T19:22:56Z",
+          "updated_at": "2026-10-13T19:22:56Z",
+          "closed_at": null,
+          "display_url": "https://github.com/kongsonren/aisaleos-handoff-poc/issues/20",
+          "display_title": "[KR-ISOLATED-HOLD] TASK-REAL-042"
+        },
+        "url": "https://github.com/kongsonren/aisaleos-handoff-poc/issues/20",
+        "title": "[KR-ISOLATED-HOLD] TASK-REAL-042",
+        "display_url": "https://github.com/kongsonren/aisaleos-handoff-poc/issues/20",
+        "display_title": "[KR-ISOLATED-HOLD] TASK-REAL-042"
+      },
+      "isError": false
+    }
+  },
+  "issue_comments": {
+    "status": "fulfilled",
+    "value": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Action completed."
+        }
+      ],
+      "structuredContent": {
+        "comments": [],
+        "url": "https://github.com/kongsonren/aisaleos-handoff-poc/issues/20",
+        "title": "kongsonren/aisaleos-handoff-poc Issue #20 comments",
+        "display_url": "https://github.com/kongsonren/aisaleos-handoff-poc/issues/20",
+        "display_title": "kongsonren/aisaleos-handoff-poc Issue #20 comments"
+      },
+      "isError": false
+    }
+  },
+  "issue16_historical_excluded": {
+    "status": "fulfilled",
+    "value": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Action completed."
+        }
+      ],
+      "structuredContent": {
+        "comments": [
+          {
+            "url": "https://github.com/kongsonren/aisaleos-handoff-poc/issues/16#issuecomment-6150325513",
+            "body": "[ISOLATED-DAEMON-RESULT]\n{\"at\": \"2026-10-13T16:33:44.831790+00:00\", \"bytes\": 59, \"host\": \"iZ2ze52oib051k0nvntbvkZ\", \"issue\": 16, \"path\": \"/var/lib/kr-isolated-daemon-20261013/issue-16-CLOUD-DAEMON-20261013-02/test.txt\", \"payload_sha256\": \"0d2e586666b7360cd9e66e05c95e54fe84e5b3b0736b1b5609f463b2cf2b606b\", \"pid\": 2054598, \"run_id\": \"CLOUD-DAEMON-20261013-02\", \"scope\": \"isolated-file-operation-only\", \"sha256\": \"9ac1941c2c26d738666c5c45ba26edf587c32fe40fe5e88ac383409b318ef5e9\", \"status\": \"PASS\", \"type\": \"RESULT\", \"uid\": 61396}",
+            "user": {
+              "login": "kongsonren",
+              "name": "kongsonren",
+              "email": null,
+              "avatar_url": "https://avatars.githubusercontent.com/u/259898029?v=4",
+              "id": 259898029
+            },
+            "id": 6150325513,
+            "pull_request_review_id": null,
+            "in_reply_to_id": null,
+            "created_at": null,
+            "updated_at": null,
+            "review": null,
+            "side": null,
+            "line": null,
+            "start_line": null,
+            "path": null,
+            "body_html": "<p dir=\"auto\">[ISOLATED-DAEMON-RESULT]<br>\n{\"at\": \"2026-10-13T16:33:44.831790+00:00\", \"bytes\": 59, \"host\": \"iZ2ze52oib051k0nvntbvkZ\", \"issue\": 16, \"path\": \"/var/lib/kr-isolated-daemon-20261013/issue-16-CLOUD-DAEMON-20261013-02/test.txt\", \"payload_sha256\": \"0d2e586666b7360cd9e66e05c95e54fe84e5b3b0736b1b5609f463b2cf2b606b\", \"pid\": 2054598, \"run_id\": \"CLOUD-DAEMON-20261013-02\", \"scope\": \"isolated-file-operation-only\", \"sha256\": \"9ac1941c2c26d738666c5c45ba26edf587c32fe40fe5e88ac383409b318ef5e9\", \"status\": \"PASS\", \"type\": \"RESULT\", \"uid\": 61396}</p>"
+          }
+        ],
+        "url": "https://github.com/kongsonren/aisaleos-handoff-poc/issues/16",
+        "title": "kongsonren/aisaleos-handoff-poc Issue #16 comments",
+        "display_url": "https://github.com/kongsonren/aisaleos-handoff-poc/issues/16",
+        "display_title": "kongsonren/aisaleos-handoff-poc Issue #16 comments"
+      },
+      "isError": false
+    }
+  },
+  "actual_daemon_run": null,
+  "daemon_claim_sha256": null,
+  "independent_file_sha256": null,
+  "actual_file_bytes": null,
+  "report_commit": "015f690adaba4ed161081c0a07425dff88f3dc5b"
+}
