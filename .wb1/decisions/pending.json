@@ -70,6 +70,13 @@
       "summary": "【1WB·国庆巡航·SELF_SOLVE + KR_GATE_MISROUTE_CORRECTION】Cycle 112 @ 2026-10-07 13:31\n\n■ 常规巡逻(REAL):\n- nas_reachable=T; 8051_sha16=63bd002e(112轮稳); nas_archive_count=4\n- 8090 活源 ce2cb0264053a367 vs 冻结 7f5bfdd1(分歧). 结构化Diff(FROZEN↔LIVE, strip autonomous_wake/meta): BIZ_DIFF=0, 业务键(objects/roles/handoff/real_events/assets/state_chain_example)全与冻结一致; 唯一变化=autonomous_wake心跳(last_wake 2026-10-07T12:33:08, continuous_runs 338→454)=文件自身自治心跳自更新, 与cycle92站立候选(LOCAL_AUTONOMOUS_WAKE/RELATION=UNKNOWN)同源同质 → 非业务变异",
       "withdrawn_at": "2026-10-07T06:40:03Z",
       "withdrawn_reason": "MISROUTE_WITHDRAWN: source comment is a self/sibling machine patrol report (full-width 【1WB】 prefix) or old 2026-09 internal 1WB comment, NOT a KR sovereign order. No patent/IP/payment/delegation/ownership/irreversible change. KR_GATE not triggered. Withdrawn by cloud-WB1 auto-correction 2026-10-07."
+    },
+    {
+      "id": "DEC-20261013041906",
+      "status": "PENDING_KR",
+      "created_at": "2026-10-13T04:19:06Z",
+      "source_comment": 6137462700,
+      "summary": "[HAI→CLOUD1WB][KR_TASK][NEZHA_SANDBOX_WORKFLOW_REPAIR][20261013-071]\nGOAL=Safely integrate existing isolated two-run contract tests into diagnostic Runner without enabling business execution.\nREPO=kongsonren/aisaleos-handoff-poc\nREF=fix/nezha-mozi-state-guards-20261011\nFILE=.github/workflows/nezha-a"
     }
   ]
 }
