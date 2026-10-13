@@ -1,0 +1,16 @@
+{
+  "key": "kr-cut39-isolated-20261014:241",
+  "exit": 4,
+  "ledger": {
+    "kr-cut39-isolated-20261014:241": {
+      "attempts": 1,
+      "branch": "kr-cut39-isolated-20261014",
+      "due": 1791914937.5594995,
+      "http": 204,
+      "key": "kr-cut39-isolated-20261014:241",
+      "seq": 241,
+      "status": "SENT",
+      "workflow": "nezha-auto.yml"
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{"case": "cumulative boundary + receiver ACK", "dispatches": 1, "seq": 239, "status": "ACK", "submitted_exit": 4}
+{"case": "cumulative boundary + receiver ACK", "dispatches": 1, "seq": 240, "status": "ACK", "submitted_exit": 4}
+{"case": "cumulative boundary + receiver ACK", "dispatches": 1, "seq": 241, "status": "ACK", "submitted_exit": 4}
+{"case": "cumulative boundary + receiver ACK", "dispatches": 1, "seq": 1000, "status": "ACK", "submitted_exit": 4}
+{"case": "fresh process resumed durable intent", "dispatches": ["kr-cut39-isolated-20261014:2001"]}
+{"attempts": 3, "case": "bounded retries", "status": "BLOCKED"}
+{"case": "response loss no blind resend", "posts": 1, "status": "UNKNOWN"}
+{"case": "crash after durable claim", "status": "ACK"}
+{"case": "stale CAS", "rejected": true}
+{"case": "production branch guard", "rejected": true}
+PASS isolated durable scheduler tests; remote recovery cadence is separately required

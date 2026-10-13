@@ -1,0 +1,55 @@
+--- a/.wb1/nezha/loop.py
++++ b/.wb1/nezha/loop.py
+@@ -288,30 +288,30 @@
+ 
+ 
+ def wait_and_schedule():
+-    """云自起拍：睡到下一个 5 分钟边界后，由**云端自己** dispatch 下一拍。
+-
+-    说明：GitHub 的 schedule cron 在本仓库实测长期不自行触发（历史 0 条 event=schedule）。
+-    这条链是减损方案 —— 第一推动力仍在黑武士关机前由 LOCAL 搬到云端一次，
+-    此后**每一拍的发起请求都由上一个云端 runner 自己发出**，LOCAL 零参与。
++    """Isolated migration candidate: durable intent; never gates on total seq.
++
++    A separate periodic pump is required for recovery if this process dies.
++    Exit 4 means submitted/unconfirmed, never successful next execution.
+     """
+-    store = GitHubStore(TOKEN, REPO)
+-    hb, _, _, _ = store.read_json(HEARTBEAT_PATH, default={})
++    branch = os.environ.get("NEZHA_SCHEDULE_BRANCH", "")
++    if not branch.startswith("kr-cut39-isolated-"):
++        log("BLOCKED: isolated scheduling branch required")
++        return 3
++    sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "../kr-cut39"))
++    from durable_schedule import GitHubLedger, wait_and_schedule as durable_wait
++    from cloud_accept import api, dispatch
++    store = GitHubStore(TOKEN, REPO, branch=branch)
++    hb, _, _, code = store.read_json(HEARTBEAT_PATH, default={})
++    if code != 200:
++        log("BLOCKED: heartbeat read failed", code)
++        return 3
+     seq = int((hb or {}).get("round_seq", 0))
+-    if seq >= MAX_BEATS:
+-        log("MAX_BEATS=%d reached; self-schedule chain stops here" % MAX_BEATS)
+-        return 0
+-    now = datetime.now(timezone.utc).replace(second=0, microsecond=0)
+-    add = BEAT_MIN - (now.minute % BEAT_MIN)
+-    nxt = now + timedelta(minutes=add)
+-    sleep_s = (nxt - datetime.now(timezone.utc)).total_seconds() + 5
+-    log("sleep %.0fs until next beat boundary %s" % (max(sleep_s, 0), nxt.isoformat()))
+-    if sleep_s > 0:
+-        time.sleep(sleep_s)
+-    s, d = store._req("POST", "/repos/%s/actions/workflows/nezha-auto.yml/dispatches" % REPO, {"ref": "main"})
+-    log("self-scheduled next beat -> HTTP %s (seq was %d)" % (s, seq))
+-    print(json.dumps({"self_scheduled": s in (204, 201, 200), "http": s, "detail": str(d)[:160]},
+-                     ensure_ascii=False))
+-    return 0
++    ledger = GitHubLedger(api, branch)
++    def reconcile(key):
++        row = ledger.load()[0].get(key, {})
++        return row.get("run_id") if row.get("status") == "ACK" else None
++    return durable_wait(ledger, seq, "nezha-auto.yml", branch, dispatch, reconcile)
++
+ 
+ 
+ def main():
