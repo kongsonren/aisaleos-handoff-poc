@@ -1,17 +1,22 @@
-name: KR-CUT39-ISOLATED-ACCEPTANCE
+name: KR-CUT41-ISOLATED-REGRESSION
 on:
+  push:
+    branches: [kr-cut41-isolated-20261014]
+    paths: ['.wb1/kr-cut39/durable_schedule.py', '.wb1/kr-cut39/cloud_accept.py', '.wb1/kr-cut39/test_schedule.py', '.github/workflows/nezha-auto.yml']
   workflow_dispatch:
     inputs:
       schedule_key:
-        description: Durable isolated outbox key
         required: true
         type: string
 permissions:
   contents: write
   actions: write
+concurrency:
+  group: kr-cut41-isolated
+  cancel-in-progress: false
 jobs:
   isolated:
-    if: github.ref == 'refs/heads/kr-cut39-isolated-20261014'
+    if: github.ref == 'refs/heads/kr-cut41-isolated-20261014'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -19,7 +24,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Execute durable scheduler regression and next runner ACK
+      - name: CUT41 regression and correlated execution
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SCHEDULE_KEY: ${{ inputs.schedule_key }}
