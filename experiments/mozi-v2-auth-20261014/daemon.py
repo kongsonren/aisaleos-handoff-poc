@@ -6,10 +6,22 @@ import os
 import pathlib
 import re
 import sqlite3
+import sys
 import time
 import urllib.request
 
 REPO = 'kongsonren/aisaleos-handoff-poc'
+API_BASE = 'https://api.github.com/repos/' + REPO
+
+def positive(value):
+    return type(value) is int and value > 0
+
+def sync_directory(path):
+    # Windows has no portable directory fsync; Linux durability is gated separately.
+    if os.name == 'posix':
+        fd = os.open(path, os.O_RDONLY | os.O_DIRECTORY)
+        try: os.fsync(fd)
+        finally: os.close(fd)
 FIELDS = set('protocol repository issue_id issue_number issuer_id key_id task_id run_id state execution_authorized scope executor action filename content issued_at expires_at nonce executor_sha256'.split())
 
 class Hold(Exception):
@@ -35,25 +47,59 @@ def parse(body):
         raise Hold('invalid JSON') from exc
 
 class Daemon:
-    def __init__(self, root, keys, executor_sha256=None):
+    def __init__(self, root, keys, *, expected_sha256=None, result_author_id=None):
+        if sys.version_info < (3, 12):
+            raise Hold('Python 3.12+ required')
+        self.code = hashlib.sha256(pathlib.Path(__file__).read_bytes()).hexdigest()
+        if expected_sha256 is not None and expected_sha256 != self.code:
+            raise Hold('executor measurement mismatch')
+        if result_author_id is not None and not positive(result_author_id):
+            raise Hold('invalid RESULT principal')
+        self.result_author_id = result_author_id
+        self.audit_failed = False
         # root must be a dedicated, trusted, private directory; never a legacy state directory.
         self.root = pathlib.Path(root).absolute()
         if self.root.is_symlink() or self.root.is_junction():
             raise Hold('unsafe state root')
-        self.root.mkdir(mode=0o700, parents=True, exist_ok=True)
+        if not self.root.parent.is_dir():
+            raise Hold('state parent must exist')
+        self.root.mkdir(mode=0o700, exist_ok=True)
+        sync_directory(self.root.parent)
         for name in ('ledger.sqlite', 'ledger.sqlite-wal', 'ledger.sqlite-shm'):
             p = self.root / name
             if p.is_symlink() or p.is_junction():
                 raise Hold('unsafe ledger')
         self.keys = keys  # key_id -> (trusted numeric GitHub author id, secret bytes)
-        self.code = executor_sha256 or hashlib.sha256(pathlib.Path(__file__).read_bytes()).hexdigest()
         self.db = sqlite3.connect(self.root / 'ledger.sqlite', timeout=10)
         self.db.execute('PRAGMA journal_mode=WAL')
         self.db.execute('PRAGMA synchronous=FULL')
         self.db.execute('CREATE TABLE IF NOT EXISTS jobs(task TEXT PRIMARY KEY, run TEXT UNIQUE, nonce TEXT UNIQUE, issue INTEGER UNIQUE, fingerprint TEXT, status TEXT, result TEXT)')
+        self.db.execute('CREATE TABLE IF NOT EXISTS audit(id INTEGER PRIMARY KEY, event TEXT NOT NULL, event_hash TEXT NOT NULL)')
         self.db.commit()
+        sync_directory(self.root)
+
+    def audit(self, issue, reason, execution_state):
+        if self.audit_failed:
+            raise Hold('audit unavailable; execution blocked')
+        # Never persist input text, exception messages, signatures, tokens or keys.
+        try:
+            raw = canonical(issue)
+        except (ValueError, TypeError, RecursionError):
+            raw = b'unserializable-input'
+        source = issue if type(issue) is dict else {}
+        event = canonical(dict(time_ns=time.time_ns(), repository=REPO,
+            api_endpoint=API_BASE, issue_number=source.get('number') if positive(source.get('number')) else None,
+            input_sha256=hashlib.sha256(raw).hexdigest(), reason=reason, execution_state=execution_state)).decode()
+        try:
+            with self.db:
+                self.db.execute('INSERT INTO audit(event,event_hash) VALUES(?,?)', (event,hashlib.sha256(event.encode()).hexdigest()))
+        except Exception:
+            self.audit_failed = True
+            raise Hold('audit unavailable; execution blocked') from None
 
     def validate(self, issue, current):
+        if type(issue) is not dict or not positive(issue.get('id')) or not positive(issue.get('number')) or type(issue.get('user')) is not dict or not positive(issue['user'].get('id')) or type(issue.get('title')) is not str:
+            raise Hold('malformed metadata')
         if issue.get('number') == 20 or 'pull_request' in issue or issue.get('state') != 'open':
             raise Hold('protected or non-task issue')
         p = parse(issue.get('body'))
@@ -63,7 +109,7 @@ class Daemon:
         if p['execution_authorized'] is not True or p['state'] != 'READY':
             raise Hold('authorization/HOLD')
         for k in ('issue_id', 'issue_number', 'issuer_id', 'issued_at', 'expires_at'):
-            if type(p[k]) is not int:
+            if type(p[k]) is not int or p[k] <= 0:
                 raise Hold('integer required')
         for k in FIELDS - {'issue_id', 'issue_number', 'issuer_id', 'issued_at', 'expires_at', 'execution_authorized'}:
             if type(p[k]) is not str:
@@ -86,8 +132,10 @@ class Daemon:
         return p, hashlib.sha256(canonical(p)).hexdigest()
 
     def consume(self, issue, current=None):
+        execution_state = 'NOT_STARTED'
         try:
             p, fingerprint = self.validate(issue, int(time.time()) if current is None else current)
+            self.audit(issue, 'AUTHORIZED', execution_state)
             # Atomic reservation is committed BEFORE any file effect. Ambiguous claims never rerun.
             try:
                 with self.db:
@@ -98,8 +146,10 @@ class Daemon:
                     return {'status': 'DUPLICATE', 'result': json.loads(row[2])}
                 raise Hold('replay/conflict/ambiguous claim')
             started = time.time()
+            execution_state = 'CLAIMED'
             folder = self.root / hashlib.sha256(p['task_id'].encode()).hexdigest()
             folder.mkdir(mode=0o700)  # existing directory fails closed
+            sync_directory(self.root)
             target = folder / 'test.txt'
             content = p['content'].encode()
             flags = os.O_CREAT | os.O_EXCL | os.O_WRONLY | getattr(os, 'O_NOFOLLOW', 0)
@@ -108,6 +158,7 @@ class Daemon:
                 f.write(content)
                 f.flush()
                 os.fsync(f.fileno())
+            sync_directory(folder)
             actual = target.read_bytes()
             if actual != content:
                 raise Hold('readback mismatch')
@@ -115,8 +166,10 @@ class Daemon:
             with self.db:
                 self.db.execute('UPDATE jobs SET status=?,result=? WHERE task=?', ('DONE', canonical(result).decode(), p['task_id']))
             return result
-        except (Hold, ValueError, TypeError, OSError, sqlite3.Error) as exc:
-            return {'status': 'HOLD_PENDING_KR', 'reason': str(exc)}
+        except Exception as exc:
+            reason = str(exc) if isinstance(exc, Hold) else 'task processing failure'
+            self.audit(issue, reason if isinstance(exc, Hold) else type(exc).__name__, execution_state)
+            return {'status': 'HOLD_PENDING_KR', 'reason': reason}
 
     def publish(self, result, api):
         """Durable at-most-once POST; ambiguity is HOLD, never blind retry."""
@@ -124,6 +177,8 @@ class Daemon:
             result = result['result']
         if result.get('status') != 'PASS':
             return result
+        if not positive(self.result_author_id):
+            raise Hold('RESULT principal not configured')
         task = result['task_id']
         row = self.db.execute('SELECT status,result FROM jobs WHERE task=?', (task,)).fetchone()
         if not row or json.loads(row[1]) != result:
@@ -138,8 +193,18 @@ class Daemon:
             raise Hold('concurrent POST')
         body = '[MOZI-V2-SIM-RESULT]\n' + canonical(result).decode()
         posted = api('POST', '/issues/' + str(result['issue_number']) + '/comments', {'body': body})
+        if type(posted) is not dict or not positive(posted.get('id')):
+            raise Hold('RESULT POST metadata')
+        comment_id = posted['id']
         readback = api('GET', '/issues/comments/' + str(posted['id']))
-        if readback.get('body') != body:
+        def bound(comment):
+            return (type(comment) is dict and positive(comment.get('id')) and comment['id'] == comment_id
+                and type(comment.get('user')) is dict and positive(comment['user'].get('id'))
+                and comment['user']['id'] == self.result_author_id
+                and comment.get('issue_url') == API_BASE + '/issues/' + str(result['issue_number'])
+                and comment.get('url') == API_BASE + '/issues/comments/' + str(comment_id)
+                and comment.get('body') == body)
+        if not bound(posted) or not bound(readback):
             raise Hold('RESULT readback')
         with self.db:
             self.db.execute('UPDATE jobs SET status=? WHERE task=?', ('VERIFIED', task))
@@ -148,13 +213,22 @@ class Daemon:
 def scan(daemon, api):
     for page in range(1, 101):
         issues = api('GET', '/issues?state=open&per_page=100&page=' + str(page))
+        if type(issues) is not list:
+            raise Hold('global API list failure')
         for issue in issues:
-            if issue.get('number') == 20 or not issue.get('title', '').startswith('[MOZI-V2-SIM] '):
-                continue
-            # Refresh immediately before validation; payload author comes from API metadata.
-            fresh = api('GET', '/issues/' + str(issue['number']))
-            result = daemon.consume(fresh)
-            print(json.dumps(daemon.publish(result, api)), flush=True)
+            try:
+                if type(issue) is not dict or not positive(issue.get('number')) or type(issue.get('title')) is not str:
+                    raise Hold('malformed scan metadata')
+                if issue['number'] == 20 or not issue['title'].startswith('[MOZI-V2-SIM] '):
+                    continue
+                fresh = api('GET', '/issues/' + str(issue['number']))
+                if type(fresh) is not dict or fresh.get('number') != issue['number']:
+                    raise Hold('refresh source mismatch')
+                result = daemon.consume(fresh)
+                print(json.dumps(daemon.publish(result, api)), flush=True)
+            except Exception:
+                daemon.audit(issue, 'SCAN_TASK_FAILURE', 'UNKNOWN')
+                print(json.dumps({'status':'HOLD_PENDING_KR','reason':'scan task failure'}), flush=True)
         if len(issues) < 100:
             return
     raise Hold('pagination limit')
@@ -167,7 +241,7 @@ class GitHubAPI:
         self.token = token
 
     def __call__(self, method, path, data=None):
-        if method not in ('GET', 'POST') or not path.startswith('/issues') or '..' in path or '#' in path:
+        if method not in ('GET', 'POST') or not re.fullmatch(r'/issues(?:/[1-9][0-9]*(?:/comments)?|/comments/[1-9][0-9]*|\?state=open&per_page=100&page=[1-9][0-9]*)', path):
             raise Hold('API policy')
         if method == 'POST' and not re.fullmatch(r'/issues/[0-9]+/comments', path):
             raise Hold('write policy')
@@ -182,8 +256,9 @@ class GitHubAPI:
             def redirect_request(self, *args, **kwargs):
                 raise Hold('API redirect rejected')
         with urllib.request.build_opener(NoRedirect()).open(req, timeout=20) as response:
+            if response.geturl() != API_BASE + path:
+                raise Hold('untrusted API endpoint')
             return json.load(response)
 
 # Deliberately no executable network entrypoint in this non-deployment candidate.
 # Cloud lifecycle, secret provisioning and enabling live API writes require KR_GATE.
-

@@ -16,7 +16,7 @@ class Tests(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
-        self.d = Daemon(self.tmp.name, {'sim': (123, KEY)})
+        self.d = Daemon(self.tmp.name, {'sim': (123, KEY)}, result_author_id=123)
         self.addCleanup(self.d.db.close)
         self.p = dict(protocol='mozi-v2-auth', repository=REPO, issue_id=9001, issue_number=999,
                       issuer_id=123, key_id='sim', task_id='SIM-001', run_id='SIM-RUN-001',
@@ -75,7 +75,7 @@ class Tests(unittest.TestCase):
         target=pathlib.Path(result['path']); before=target.stat().st_mtime_ns
         self.assertEqual(target.read_bytes(),self.p['content'].encode())
         self.assertEqual(hashlib.sha256(target.read_bytes()).hexdigest(),result['sha256'])
-        other=Daemon(self.tmp.name,{'sim':(123,KEY)})
+        other=Daemon(self.tmp.name,{'sim':(123,KEY)},result_author_id=123)
         try:
             duplicate=other.consume(self.issue(),NOW+1)
             self.assertEqual(duplicate['status'],'DUPLICATE')
@@ -83,7 +83,9 @@ class Tests(unittest.TestCase):
             calls=[]
             def api(method,path,data=None):
                 calls.append((method,path,data))
-                return {'id':12} if method=='POST' else {'body':calls[0][2]['body']}
+                return dict(id=12,user={'id':123},body=calls[0][2]['body'],
+                    issue_url='https://api.github.com/repos/'+REPO+'/issues/999',
+                    url='https://api.github.com/repos/'+REPO+'/issues/comments/12')
             self.assertEqual(other.publish(duplicate,api)['status'],'RESULT_VERIFIED')
             self.assertEqual(other.publish(other.consume(self.issue(),NOW+2),api)['status'],'ALREADY_VERIFIED')
             self.assertEqual(len(calls),2)
@@ -138,4 +140,3 @@ class Tests(unittest.TestCase):
         print('concurrent statuses:',statuses,'new process:',result.stdout.strip())
 
 if __name__=='__main__': unittest.main(verbosity=2)
-

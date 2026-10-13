@@ -1,0 +1,11 @@
+{
+  "daemon.py": "0afef212dc11f0cd6a12f4281891883694047371c850a8b80819cb131d195971",
+  "test_daemon.py": "cc74c1a906183a235e33fb0d767a68e136a93ccfc365af7c4ab13f8d96c9213d",
+  "test_security.py": "c73f1cfc39bddfb4f07ce8a580a26a91ff0c37d1522b94fd1f9fa30a61fa9470",
+  "run_tests.py": "77fe192f24fc512927fff6dd9facd21ce7eeaef8407294f113423f4d9bd9cebc",
+  "red.log": "1b42ea4b5e72db86172e586eaa323803c4bf1c1d480cc924254c711df4305be2",
+  "red-final.log": "298f8ea77e58dda8d2d7d2a71fb4cce4b8f0ea21efd196cc2fe3b115e66fc022",
+  "green.log": "03d62f3e7d107dce3c48fafe4f6bd2fb0fbb7cae81cfab6d7494a1fa841da1bc",
+  "FIX_REPORT.md": "eef1592772ea5e3718d8b3bc535f2a01f28b6416b0e0a095d66d1d038fe86edd",
+  "changes.diff": "6d1599a1ac4381969073b67e3942cdbe0e9be63f078f302ec0fc64bce3ceecb2"
+}
