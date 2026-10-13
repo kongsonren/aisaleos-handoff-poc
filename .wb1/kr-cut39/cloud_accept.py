@@ -20,7 +20,10 @@ def dispatch(item):
 
 def execute(store,key,run_id,sha,executor):
     load(store)
-    if not ack(store,key,run_id): return 'REPLAY_SKIPPED'
+    if not ack(store,key,run_id):
+        status=load(store)[0][key]['status']
+        if status=='EXECUTION_COMPLETE': return 'REPLAY_SKIPPED'
+        raise RuntimeError('REPLAY_'+status) # unresolved ACK and failed work cannot exit successfully
     print(json.dumps({'event':'ACK','key':key,'run_id':str(run_id)}),flush=True)
     try: code=executor()
     except Exception:
@@ -39,9 +42,13 @@ def run(key):
         lambda:subprocess.run([sys.executable,str(pathlib.Path(__file__).with_name('test_schedule.py'))]).returncode)
 
 if __name__=='__main__':
+    if os.environ['GITHUB_REF']!='refs/heads/'+BRANCH: raise ValueError('SCOPE_REJECTED')
     store=GitHubLedger(api,BRANCH)
     key=os.environ.get('SCHEDULE_KEY')
     if not key:
+        if load(store)[0]:
+            # Later code pushes verify regression only; never re-bootstrap existing tasks.
+            sys.exit(subprocess.run([sys.executable,str(pathlib.Path(__file__).with_name('test_schedule.py'))]).returncode)
         key=enqueue(store,242,0,WORKFLOW,BRANCH)
         run(key)
         nxt=enqueue(store,243,0,WORKFLOW,BRANCH)

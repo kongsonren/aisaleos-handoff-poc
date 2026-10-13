@@ -49,6 +49,8 @@ class Tests(unittest.TestCase):
         s,k=seed(); D.ack(s,k,'run')
         self.assertEqual(D.pump(s,k,lambda r:self.fail('resend'),lambda k:None),4)
         self.assertEqual(s.state[k]['status'],'ACK')
+        with self.assertRaisesRegex(RuntimeError,'REPLAY_ACK'):
+            C.execute(s,k,'run','sha',lambda:self.fail('repeat unknown work'))
     def test_duplicate_and_conflicting_result(self):
         s,k=seed(); effects=[]; executor=lambda:effects.append(k) or 0
         C.execute(s,k,'run','sha',executor)
@@ -64,6 +66,8 @@ class Tests(unittest.TestCase):
                 return 7
             with self.assertRaises(RuntimeError): C.execute(s,k,'run','sha',executor)
             self.assertEqual(s.state[k]['status'],'EXECUTION_FAILED')
+            with self.assertRaisesRegex(RuntimeError,'REPLAY_EXECUTION_FAILED'):
+                C.execute(s,k,'run','sha',lambda:self.fail('repeat failed work'))
             self.assertEqual(D.pump(s,k,lambda r:self.fail('resend'),lambda k:None),3)
     def test_ambiguous_restart_no_resend(self):
         for response in (204,500,0):
