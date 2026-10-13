@@ -46,6 +46,7 @@ jobs:
         run: |
           set -e
           python -m unittest discover -s .wb1/nezha/tests -p 'test_self_schedule_cap_contract.py'
+          python -m unittest discover -s .wb1/nezha/tests -p 'test_isolated_two_run_contract.py'
 
       - name: One beat of NEZHA continuous loop
         env:
