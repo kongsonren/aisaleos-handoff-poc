@@ -1,0 +1,21 @@
+{
+  "daemon.py": "0afef212dc11f0cd6a12f4281891883694047371c850a8b80819cb131d195971",
+  "entrypoint.py": "57958ec26104d4e0059113d4da6c1261d06a75274abd3dfd83daf7c1962ae549",
+  "test_daemon.py": "cc74c1a906183a235e33fb0d767a68e136a93ccfc365af7c4ab13f8d96c9213d",
+  "test_security.py": "c73f1cfc39bddfb4f07ce8a580a26a91ff0c37d1522b94fd1f9fa30a61fa9470",
+  "test_entrypoint.py": "e665ffe46c6dbc929a4e3f3dab67239e390527c09c49bd3103e4756e3aaad8e2",
+  "proxy.py": "6ace053e1eaa1434fa47c62ec807d2e8492cff2cc70b356eb84bc9c8cd8205c5",
+  "test_proxy.py": "9c8d6b41ed420dae108462c162110c27ff775ab431b93ffdd61596695aae9883",
+  "validate.py": "a433bdb6fc444b7ce7d136d68defdd81d8706e2c984d0285473009fe59d68e7b",
+  "package.py": "25a6df97c420e03c6eede0df34de535cae6a166b379722f901b1c6049aadc1eb",
+  "REPORT.md": "392b3c7dc861c2957ae8867b439d71de393ce532afb8b29df22c056352ba9e74",
+  "KR_GATE.md": "106d4755e4af8989666f6a223edccab9fb03ad836c4dd78a6067439601c0ada6",
+  "identity-verification.json": "048c53b6c82e591b63149b2b9477ac7f1082d140378965f0faacfd619e515ad7",
+  "green-all.log": "9bfdb981ec9cbd80e2bc181e6e4e9b96d65316d27227834135608d8c715f0fd4",
+  "initial-failure.log": "9e8bd693800c939068026e301fb45959335d48b577f32394ab9d2ef10c5a66c7",
+  "mutation-results.json": "39de68d1d3fda8ea1187a9b06f3d3890bd387078899fcb9fe679a9580390bfd6",
+  "red-mutant-issue.log": "e42e17d59f80881efa74d1ec3fbe0b3d3d259170990700a5f94da52b2c6e9805",
+  "red-mutant-attempt.log": "b776d4a8f3834d8ada4513dee0e7bf4f7d53d471d762cfd561e55d394ebbbd3d",
+  "red-mutant-readback.log": "142e80ee74a07095dc72a0d87e0df28db997320cbb9fcf0badff66ee2147a877",
+  "changes.diff": "e87298d8f65fbf287dbdd3e08e9878b0a0390ae1f5626c5d2920f7fe9eee0069"
+}

@@ -1,0 +1,15 @@
+test_success_and_restart (test_proxy.Tests.test_success_and_restart) ... FAIL
+
+======================================================================
+FAIL: test_success_and_restart (test_proxy.Tests.test_success_and_restart)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\59605\AppData\Local\Temp\tmpkhy0d4us\test_proxy.py", line 64, in test_success_and_restart
+    with self.assertRaises(Exception): self.run_once()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Exception not raised
+
+----------------------------------------------------------------------
+Ran 1 test in 0.563s
+
+FAILED (failures=1)

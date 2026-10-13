@@ -1,0 +1,1730 @@
+--- /dev/null
++++ b/experiments/mozi-v2-cut2-20261014/daemon.py
+@@ -0,0 +1,264 @@
++"""Isolated v2 candidate. No production protocol, shell, SSH, or self-update."""
++import hashlib
++import hmac
++import json
++import os
++import pathlib
++import re
++import sqlite3
++import sys
++import time
++import urllib.request
++
++REPO = 'kongsonren/aisaleos-handoff-poc'
++API_BASE = 'https://api.github.com/repos/' + REPO
++
++def positive(value):
++    return type(value) is int and value > 0
++
++def sync_directory(path):
++    # Windows has no portable directory fsync; Linux durability is gated separately.
++    if os.name == 'posix':
++        fd = os.open(path, os.O_RDONLY | os.O_DIRECTORY)
++        try: os.fsync(fd)
++        finally: os.close(fd)
++FIELDS = set('protocol repository issue_id issue_number issuer_id key_id task_id run_id state execution_authorized scope executor action filename content issued_at expires_at nonce executor_sha256'.split())
++
++class Hold(Exception):
++    pass
++
++def canonical(payload):
++    return json.dumps(payload, sort_keys=True, separators=(',', ':'), ensure_ascii=True, allow_nan=False).encode('ascii')
++
++def digest(payload, key):
++    return hmac.new(key, b'mozi-v2-auth\0' + canonical(payload), hashlib.sha256).hexdigest()
++
++def parse(body):
++    def unique(pairs):
++        result = {}
++        for k, v in pairs:
++            if k in result:
++                raise Hold('duplicate JSON key')
++            result[k] = v
++        return result
++    try:
++        return json.loads(body, object_pairs_hook=unique)
++    except (ValueError, TypeError) as exc:
++        raise Hold('invalid JSON') from exc
++
++class Daemon:
++    def __init__(self, root, keys, *, expected_sha256=None, result_author_id=None):
++        if sys.version_info < (3, 12):
++            raise Hold('Python 3.12+ required')
++        self.code = hashlib.sha256(pathlib.Path(__file__).read_bytes()).hexdigest()
++        if expected_sha256 is not None and expected_sha256 != self.code:
++            raise Hold('executor measurement mismatch')
++        if result_author_id is not None and not positive(result_author_id):
++            raise Hold('invalid RESULT principal')
++        self.result_author_id = result_author_id
++        self.audit_failed = False
++        # root must be a dedicated, trusted, private directory; never a legacy state directory.
++        self.root = pathlib.Path(root).absolute()
++        if self.root.is_symlink() or self.root.is_junction():
++            raise Hold('unsafe state root')
++        if not self.root.parent.is_dir():
++            raise Hold('state parent must exist')
++        self.root.mkdir(mode=0o700, exist_ok=True)
++        sync_directory(self.root.parent)
++        for name in ('ledger.sqlite', 'ledger.sqlite-wal', 'ledger.sqlite-shm'):
++            p = self.root / name
++            if p.is_symlink() or p.is_junction():
++                raise Hold('unsafe ledger')
++        self.keys = keys  # key_id -> (trusted numeric GitHub author id, secret bytes)
++        self.db = sqlite3.connect(self.root / 'ledger.sqlite', timeout=10)
++        self.db.execute('PRAGMA journal_mode=WAL')
++        self.db.execute('PRAGMA synchronous=FULL')
++        self.db.execute('CREATE TABLE IF NOT EXISTS jobs(task TEXT PRIMARY KEY, run TEXT UNIQUE, nonce TEXT UNIQUE, issue INTEGER UNIQUE, fingerprint TEXT, status TEXT, result TEXT)')
++        self.db.execute('CREATE TABLE IF NOT EXISTS audit(id INTEGER PRIMARY KEY, event TEXT NOT NULL, event_hash TEXT NOT NULL)')
++        self.db.commit()
++        sync_directory(self.root)
++
++    def audit(self, issue, reason, execution_state):
++        if self.audit_failed:
++            raise Hold('audit unavailable; execution blocked')
++        # Never persist input text, exception messages, signatures, tokens or keys.
++        try:
++            raw = canonical(issue)
++        except (ValueError, TypeError, RecursionError):
++            raw = b'unserializable-input'
++        source = issue if type(issue) is dict else {}
++        event = canonical(dict(time_ns=time.time_ns(), repository=REPO,
++            api_endpoint=API_BASE, issue_number=source.get('number') if positive(source.get('number')) else None,
++            input_sha256=hashlib.sha256(raw).hexdigest(), reason=reason, execution_state=execution_state)).decode()
++        try:
++            with self.db:
++                self.db.execute('INSERT INTO audit(event,event_hash) VALUES(?,?)', (event,hashlib.sha256(event.encode()).hexdigest()))
++        except Exception:
++            self.audit_failed = True
++            raise Hold('audit unavailable; execution blocked') from None
++
++    def validate(self, issue, current):
++        if type(issue) is not dict or not positive(issue.get('id')) or not positive(issue.get('number')) or type(issue.get('user')) is not dict or not positive(issue['user'].get('id')) or type(issue.get('title')) is not str:
++            raise Hold('malformed metadata')
++        if issue.get('number') == 20 or 'pull_request' in issue or issue.get('state') != 'open':
++            raise Hold('protected or non-task issue')
++        p = parse(issue.get('body'))
++        if not isinstance(p, dict) or set(p) != FIELDS | {'auth_digest'}:
++            raise Hold('schema/legacy rejected')
++        signature = p.pop('auth_digest')
++        if p['execution_authorized'] is not True or p['state'] != 'READY':
++            raise Hold('authorization/HOLD')
++        for k in ('issue_id', 'issue_number', 'issuer_id', 'issued_at', 'expires_at'):
++            if type(p[k]) is not int or p[k] <= 0:
++                raise Hold('integer required')
++        for k in FIELDS - {'issue_id', 'issue_number', 'issuer_id', 'issued_at', 'expires_at', 'execution_authorized'}:
++            if type(p[k]) is not str:
++                raise Hold('string required')
++        trusted = self.keys.get(p['key_id'])
++        if not trusted or len(trusted[1]) < 32 or trusted[0] != p['issuer_id'] or issue.get('user', {}).get('id') != trusted[0]:
++            raise Hold('untrusted principal/key')
++        if p['repository'] != REPO or p['issue_id'] != issue.get('id') or p['issue_number'] != issue.get('number'):
++            raise Hold('source binding')
++        if p['protocol'] != 'mozi-v2-auth' or p['scope'] != 'simulation-only' or p['executor'] != 'isolated-file-v2' or p['action'] != 'write_read_hash' or p['filename'] != 'test.txt' or p['executor_sha256'] != self.code:
++            raise Hold('execution policy')
++        if not re.fullmatch(r'SIM-[A-Za-z0-9-]{1,64}', p['task_id']) or not re.fullmatch(r'SIM-[A-Za-z0-9-]{1,64}', p['run_id']) or not re.fullmatch(r'[a-f0-9]{32,64}', p['nonce']):
++            raise Hold('simulation identity')
++        if issue.get('title') != '[MOZI-V2-SIM] ' + p['task_id'] or len(p['content'].encode()) > 4096:
++            raise Hold('title/content policy')
++        if not 0 < p['expires_at'] - p['issued_at'] <= 300 or not p['issued_at'] <= current < p['expires_at']:
++            raise Hold('expired/future authorization')
++        if type(signature) is not str or not hmac.compare_digest(digest(p, trusted[1]), signature):
++            raise Hold('signature')
++        return p, hashlib.sha256(canonical(p)).hexdigest()
++
++    def consume(self, issue, current=None):
++        execution_state = 'NOT_STARTED'
++        try:
++            p, fingerprint = self.validate(issue, int(time.time()) if current is None else current)
++            self.audit(issue, 'AUTHORIZED', execution_state)
++            # Atomic reservation is committed BEFORE any file effect. Ambiguous claims never rerun.
++            try:
++                with self.db:
++                    self.db.execute('INSERT INTO jobs VALUES(?,?,?,?,?,?,?)', (p['task_id'], p['run_id'], p['nonce'], p['issue_id'], fingerprint, 'CLAIMED', None))
++            except sqlite3.IntegrityError:
++                row = self.db.execute('SELECT fingerprint,status,result FROM jobs WHERE task=?', (p['task_id'],)).fetchone()
++                if row and row[0] == fingerprint and row[1] in ('DONE', 'POST_ATTEMPT', 'VERIFIED'):
++                    return {'status': 'DUPLICATE', 'result': json.loads(row[2])}
++                raise Hold('replay/conflict/ambiguous claim')
++            started = time.time()
++            execution_state = 'CLAIMED'
++            folder = self.root / hashlib.sha256(p['task_id'].encode()).hexdigest()
++            folder.mkdir(mode=0o700)  # existing directory fails closed
++            sync_directory(self.root)
++            target = folder / 'test.txt'
++            content = p['content'].encode()
++            flags = os.O_CREAT | os.O_EXCL | os.O_WRONLY | getattr(os, 'O_NOFOLLOW', 0)
++            fd = os.open(target, flags, 0o600)
++            with os.fdopen(fd, 'wb') as f:
++                f.write(content)
++                f.flush()
++                os.fsync(f.fileno())
++            sync_directory(folder)
++            actual = target.read_bytes()
++            if actual != content:
++                raise Hold('readback mismatch')
++            result = dict(type='RESULT', status='PASS', scope='simulation-only', task_id=p['task_id'], run_id=p['run_id'], issue_id=p['issue_id'], issue_number=p['issue_number'], payload_sha256=fingerprint, executor_sha256=self.code, path=str(target), bytes=len(actual), sha256=hashlib.sha256(actual).hexdigest(), started_at=started, completed_at=time.time(), pid=os.getpid())
++            with self.db:
++                self.db.execute('UPDATE jobs SET status=?,result=? WHERE task=?', ('DONE', canonical(result).decode(), p['task_id']))
++            return result
++        except Exception as exc:
++            reason = str(exc) if isinstance(exc, Hold) else 'task processing failure'
++            self.audit(issue, reason if isinstance(exc, Hold) else type(exc).__name__, execution_state)
++            return {'status': 'HOLD_PENDING_KR', 'reason': reason}
++
++    def publish(self, result, api):
++        """Durable at-most-once POST; ambiguity is HOLD, never blind retry."""
++        if result.get('status') == 'DUPLICATE':
++            result = result['result']
++        if result.get('status') != 'PASS':
++            return result
++        if not positive(self.result_author_id):
++            raise Hold('RESULT principal not configured')
++        task = result['task_id']
++        row = self.db.execute('SELECT status,result FROM jobs WHERE task=?', (task,)).fetchone()
++        if not row or json.loads(row[1]) != result:
++            raise Hold('result binding')
++        if row[0] == 'VERIFIED':
++            return {'status': 'ALREADY_VERIFIED'}
++        if row[0] != 'DONE':
++            return {'status': 'HOLD_PENDING_KR', 'reason': 'POST ambiguous'}
++        with self.db:
++            changed = self.db.execute('UPDATE jobs SET status=? WHERE task=? AND status=?', ('POST_ATTEMPT', task, 'DONE')).rowcount
++        if changed != 1:
++            raise Hold('concurrent POST')
++        body = '[MOZI-V2-SIM-RESULT]\n' + canonical(result).decode()
++        posted = api('POST', '/issues/' + str(result['issue_number']) + '/comments', {'body': body})
++        if type(posted) is not dict or not positive(posted.get('id')):
++            raise Hold('RESULT POST metadata')
++        comment_id = posted['id']
++        readback = api('GET', '/issues/comments/' + str(posted['id']))
++        def bound(comment):
++            return (type(comment) is dict and positive(comment.get('id')) and comment['id'] == comment_id
++                and type(comment.get('user')) is dict and positive(comment['user'].get('id'))
++                and comment['user']['id'] == self.result_author_id
++                and comment.get('issue_url') == API_BASE + '/issues/' + str(result['issue_number'])
++                and comment.get('url') == API_BASE + '/issues/comments/' + str(comment_id)
++                and comment.get('body') == body)
++        if not bound(posted) or not bound(readback):
++            raise Hold('RESULT readback')
++        with self.db:
++            self.db.execute('UPDATE jobs SET status=? WHERE task=?', ('VERIFIED', task))
++        return {'status': 'RESULT_VERIFIED', 'comment_id': posted['id']}
++
++def scan(daemon, api):
++    for page in range(1, 101):
++        issues = api('GET', '/issues?state=open&per_page=100&page=' + str(page))
++        if type(issues) is not list:
++            raise Hold('global API list failure')
++        for issue in issues:
++            try:
++                if type(issue) is not dict or not positive(issue.get('number')) or type(issue.get('title')) is not str:
++                    raise Hold('malformed scan metadata')
++                if issue['number'] == 20 or not issue['title'].startswith('[MOZI-V2-SIM] '):
++                    continue
++                fresh = api('GET', '/issues/' + str(issue['number']))
++                if type(fresh) is not dict or fresh.get('number') != issue['number']:
++                    raise Hold('refresh source mismatch')
++                result = daemon.consume(fresh)
++                print(json.dumps(daemon.publish(result, api)), flush=True)
++            except Exception:
++                daemon.audit(issue, 'SCAN_TASK_FAILURE', 'UNKNOWN')
++                print(json.dumps({'status':'HOLD_PENDING_KR','reason':'scan task failure'}), flush=True)
++        if len(issues) < 100:
++            return
++    raise Hold('pagination limit')
++
++class GitHubAPI:
++    """Injected only after KR_GATE; token never stored in ledger/results."""
++    def __init__(self, token):
++        if not token:
++            raise Hold('missing GitHub credential')
++        self.token = token
++
++    def __call__(self, method, path, data=None):
++        if method not in ('GET', 'POST') or not re.fullmatch(r'/issues(?:/[1-9][0-9]*(?:/comments)?|/comments/[1-9][0-9]*|\?state=open&per_page=100&page=[1-9][0-9]*)', path):
++            raise Hold('API policy')
++        if method == 'POST' and not re.fullmatch(r'/issues/[0-9]+/comments', path):
++            raise Hold('write policy')
++        if re.match(r'/issues/20(?:/|$|\?)', path):
++            raise Hold('protected issue')
++        req = urllib.request.Request('https://api.github.com/repos/' + REPO + path,
++            method=method, data=None if data is None else canonical(data),
++            headers={'Authorization': 'Bearer ' + self.token, 'Accept': 'application/vnd.github+json',
++                     'Content-Type': 'application/json', 'User-Agent': 'mozi-v2-isolated-candidate'})
++        # Redirects are rejected so bearer credentials never follow another host.
++        class NoRedirect(urllib.request.HTTPRedirectHandler):
++            def redirect_request(self, *args, **kwargs):
++                raise Hold('API redirect rejected')
++        with urllib.request.build_opener(NoRedirect()).open(req, timeout=20) as response:
++            if response.geturl() != API_BASE + path:
++                raise Hold('untrusted API endpoint')
++            return json.load(response)
++
++# Deliberately no executable network entrypoint in this non-deployment candidate.
++# Cloud lifecycle, secret provisioning and enabling live API writes require KR_GATE.
+--- /dev/null
++++ b/experiments/mozi-v2-cut2-20261014/entrypoint.py
+@@ -0,0 +1,138 @@
++"""One-shot OFFLINE launcher. Live mode has no implementation or credential path.
++
++Local fixtures are untrusted data. Synthetic IDs/key never authorize GitHub.
++OS sandboxing and trusted read-only installation are separate Linux gates.
++"""
++import argparse
++import copy
++import hashlib
++import json
++import os
++import pathlib
++import stat
++import sqlite3
++import sys
++import types
++
++PARENT = 'bf7eec65af9a65da065a781a5ed91b8f8038f61c'
++DAEMON_SHA = '0afef212dc11f0cd6a12f4281891883694047371c850a8b80819cb131d195971'
++BASE = 'https://api.github.com/repos/kongsonren/aisaleos-handoff-poc'
++TASK = 'SIM-MOZI-V2-20261014-01'
++TITLE = '[MOZI-V2-SIM] '+TASK
++MOCK_KEY = b'local-simulation-only-key-00000000'
++ISSUE_ID, ISSUE_NUMBER, ISSUER_ID = 9001, 999, 123  # MOCK ONLY; never real identity evidence
++
++class Denied(Exception):
++    pass
++
++def safe_path(path):
++    path=pathlib.Path(path)
++    if not path.is_absolute() or '..' in path.parts:
++        raise Denied('absolute non-traversing path required')
++    for part in (*reversed(path.parents),path):
++        if part.is_symlink() or part.is_junction():
++            raise Denied('path alias refused')
++        if part.exists():
++            st=part.lstat()
++            if not stat.S_ISDIR(st.st_mode) and not stat.S_ISREG(st.st_mode):
++                raise Denied('special file refused')
++            if stat.S_ISREG(st.st_mode) and st.st_nlink != 1:
++                raise Denied('hardlink refused')
++    return path
++
++def load_pinned():
++    path=safe_path(pathlib.Path(__file__).absolute().with_name('daemon.py'))
++    raw=path.read_bytes()
++    if hashlib.sha256(raw).hexdigest()!=DAEMON_SHA:
++        raise Denied('pinned source mismatch')
++    # Compile the measured bytes, avoiding a second file read/import-cache race.
++    module=types.ModuleType('mozi_cut1_pinned'); module.__file__=str(path)
++    exec(compile(raw,str(path),'exec'),module.__dict__)
++    return module
++
++def bound_issue(issue):
++    if type(issue) is not dict:
++        raise Denied('fixture object required')
++    try: encoded=json.dumps(issue,allow_nan=False).encode()
++    except (ValueError,TypeError,RecursionError): raise Denied('invalid fixture') from None
++    if len(encoded)>16384: raise Denied('fixture size limit')
++    if (type(issue.get('id')) is not int or issue['id']!=ISSUE_ID
++        or type(issue.get('number')) is not int or issue['number']!=ISSUE_NUMBER
++        or type(issue.get('user')) is not dict
++        or type(issue['user'].get('id')) is not int or issue['user']['id']!=ISSUER_ID
++        or issue.get('title')!=TITLE or issue.get('state')!='open'
++        or 'pull_request' in issue or issue.get('repository_url')!=BASE
++        or issue.get('url')!=BASE+'/issues/999'):
++        raise Denied('single MOCK issue binding refused')
++    return copy.deepcopy(issue)
++
++class OfflineIssue:
++    """No HTTP client, token, POST, pagination, redirect, or list endpoint."""
++    def __init__(self,issue):
++        self.issue=bound_issue(issue); self.calls=[]
++    def __call__(self,method,path,data=None):
++        if method!='GET' or path!='/issues/999' or data is not None:
++            raise Denied('offline single issue GET only')
++        self.calls.append((method,path))
++        return copy.deepcopy(self.issue)
++
++def offline_once(issue,scratch,current):
++    if type(current) is not int or current<=0: raise Denied('integer mock time required')
++    core=load_pinned()
++    api=OfflineIssue(issue)  # rejects before state/ledger creation
++    scratch=safe_path(scratch)
++    if not scratch.is_dir(): raise Denied('existing dedicated scratch required')
++    # Caller must provide a private, exclusively owned scratch. Never a deployment path.
++    state=safe_path(scratch/'mozi-v2-cut1-state')
++    if state.exists():
++        for p in state.rglob('*'): safe_path(p)
++        ledger=state/'ledger.sqlite'
++        if not ledger.is_file(): raise Denied('existing state without ledger')
++        # Read-only preflight: never silently repair a missing/corrupt audit table.
++        db=sqlite3.connect(ledger.as_uri()+'?mode=ro',uri=True)
++        try:
++            if db.execute('PRAGMA integrity_check').fetchone()!=('ok',):
++                raise Denied('ledger integrity')
++            for event,event_hash in db.execute('SELECT event,event_hash FROM audit'):
++                if hashlib.sha256(event.encode()).hexdigest()!=event_hash:
++                    raise Denied('audit digest')
++            db.execute('SELECT task,status FROM jobs LIMIT 1').fetchall()
++        finally: db.close()
++    fresh=api('GET','/issues/999')
++    d=core.Daemon(state,{'sim':(ISSUER_ID,MOCK_KEY)},expected_sha256=DAEMON_SHA,
++                  result_author_id=ISSUER_ID)
++    try:
++        d.audit(fresh,'OFFLINE_SINGLE_ISSUE_ENTER','NOT_STARTED')
++        payload=core.parse(fresh.get('body'))
++        if type(payload) is not dict or payload.get('task_id')!=TASK:
++            d.audit(fresh,'FIXED_TASK_DENIED','NOT_STARTED')
++            return {'status':'HOLD_PENDING_KR','reason':'fixed simulation task required'}
++        result=d.consume(fresh,current)
++        d.audit(fresh,'OFFLINE_SINGLE_ISSUE_EXIT',result['status'])
++        return result  # deliberately no publish call
++    finally: d.db.close()
++
++def main(argv=None):
++    parser=argparse.ArgumentParser(description='MOCK-only single issue launcher; live denied')
++    parser.add_argument('--offline-fixture',required=True)
++    parser.add_argument('--scratch',required=True)
++    parser.add_argument('--mock-time',required=True,type=int)
++    args=parser.parse_args(argv)
++    try:
++        scratch=safe_path(pathlib.Path(args.scratch))
++        allowed=pathlib.Path(__file__).absolute().parent/'offline-workspaces'
++        if scratch.parent!=allowed or scratch.name in ('','.', '..'):
++            raise Denied('CLI scratch outside local offline workspaces')
++        fixture=safe_path(args.offline_fixture)
++        if fixture.stat().st_size>16384: raise Denied('fixture size limit')
++        # Duplicate JSON keys are rejected even in the outer fixture.
++        core=load_pinned(); issue=core.parse(fixture.read_text(encoding='utf-8'))
++        result=offline_once(issue,scratch,args.mock_time)
++        print(json.dumps({'mode':'OFFLINE_MOCK','parent':PARENT,'result':result}))
++        return 0 if result['status'] in ('PASS','DUPLICATE') else 2
++    except Exception:
++        # No raw payloads, credentials, exception text, or fake live success.
++        print(json.dumps({'mode':'OFFLINE_MOCK','status':'HOLD_PENDING_KR','reason':'entry denied'}))
++        return 2
++
++if __name__=='__main__': sys.exit(main())
+--- /dev/null
++++ b/experiments/mozi-v2-cut2-20261014/test_daemon.py
+@@ -0,0 +1,142 @@
++import copy
++import hashlib
++import json
++import pathlib
++import tempfile
++import unittest
++import concurrent.futures
++import subprocess
++import sys
++from daemon import Daemon, REPO, digest, scan
++
++KEY = b'local-simulation-only-key-00000000'
++NOW = 1791936000
++
++class Tests(unittest.TestCase):
++    def setUp(self):
++        self.tmp = tempfile.TemporaryDirectory()
++        self.addCleanup(self.tmp.cleanup)
++        self.d = Daemon(self.tmp.name, {'sim': (123, KEY)}, result_author_id=123)
++        self.addCleanup(self.d.db.close)
++        self.p = dict(protocol='mozi-v2-auth', repository=REPO, issue_id=9001, issue_number=999,
++                      issuer_id=123, key_id='sim', task_id='SIM-001', run_id='SIM-RUN-001',
++                      state='READY', execution_authorized=True, scope='simulation-only',
++                      executor='isolated-file-v2', action='write_read_hash', filename='test.txt',
++                      content='simulation bytes\n', issued_at=NOW, expires_at=NOW+300,
++                      nonce='a'*32, executor_sha256=self.d.code)
++
++    def issue(self, p=None, signed=True):
++        p = copy.deepcopy(self.p if p is None else p)
++        p['auth_digest'] = digest(p, KEY) if signed else '0'*64
++        return dict(id=9001, number=999, user={'id':123}, title='[MOZI-V2-SIM] SIM-001', state='open', body=json.dumps(p))
++
++    def reject(self, issue, now=NOW):
++        result = self.d.consume(issue, now)
++        print(json.dumps(result))
++        self.assertEqual(result['status'], 'HOLD_PENDING_KR')
++        self.assertEqual(list(pathlib.Path(self.tmp.name).rglob('test.txt')), [])
++        self.assertEqual(self.d.db.execute('SELECT COUNT(*) FROM jobs').fetchone()[0], 0)
++
++    def test_false_missing_forged_true_wrong_signature(self):
++        for value in (False, 'true', 1, None):
++            p=copy.deepcopy(self.p); p['execution_authorized']=value
++            self.reject(self.issue(p))
++        p=copy.deepcopy(self.p); del p['execution_authorized']; self.reject(self.issue(p))
++        self.reject(self.issue(signed=False))
++
++    def test_every_field_tamper(self):
++        issue=self.issue()
++        for field in self.p:
++            with self.subTest(field=field):
++                q=json.loads(issue['body'])
++                q[field] = q[field]+1 if type(q[field]) is int else (False if type(q[field]) is bool else q[field]+'X')
++                changed=copy.deepcopy(issue); changed['body']=json.dumps(q)
++                self.reject(changed)
++
++    def test_expired_future_and_window(self):
++        self.reject(self.issue(), NOW+300)
++        self.reject(self.issue(), NOW-1)
++        p=copy.deepcopy(self.p); p['expires_at']=NOW+301; self.reject(self.issue(p))
++
++    def test_principal_and_issue_binding(self):
++        for field,value in [('user',{'id':456}),('id',9002),('number',998),('state','closed'),('title','[KR-ISOLATED-HOLD] SIM-001'),('pull_request',{})]:
++            i=self.issue(); i[field]=value; self.reject(i)
++
++    def test_legacy_and_protected_task(self):
++        i=self.issue(); i['body']=json.dumps(dict(protocol='isolated-file-v1',action='write_read_hash',content='x',run_id='CLOUD-DAEMON-20261013-02')); self.reject(i)
++        i=self.issue(); i['number']=20; self.reject(i)
++        p=copy.deepcopy(self.p); p['task_id']='TASK-REAL-042'; self.reject(self.issue(p))
++        i=self.issue(); i['body']=i['body'][:-1]+',"execution_authorized":true}'; self.reject(i)
++
++    def test_legal_restart_duplicate_and_result(self):
++        result=self.d.consume(self.issue(), NOW)
++        print(json.dumps(result))
++        self.assertEqual(result['status'],'PASS')
++        target=pathlib.Path(result['path']); before=target.stat().st_mtime_ns
++        self.assertEqual(target.read_bytes(),self.p['content'].encode())
++        self.assertEqual(hashlib.sha256(target.read_bytes()).hexdigest(),result['sha256'])
++        other=Daemon(self.tmp.name,{'sim':(123,KEY)},result_author_id=123)
++        try:
++            duplicate=other.consume(self.issue(),NOW+1)
++            self.assertEqual(duplicate['status'],'DUPLICATE')
++            self.assertEqual(target.stat().st_mtime_ns,before)
++            calls=[]
++            def api(method,path,data=None):
++                calls.append((method,path,data))
++                return dict(id=12,user={'id':123},body=calls[0][2]['body'],
++                    issue_url='https://api.github.com/repos/'+REPO+'/issues/999',
++                    url='https://api.github.com/repos/'+REPO+'/issues/comments/12')
++            self.assertEqual(other.publish(duplicate,api)['status'],'RESULT_VERIFIED')
++            self.assertEqual(other.publish(other.consume(self.issue(),NOW+2),api)['status'],'ALREADY_VERIFIED')
++            self.assertEqual(len(calls),2)
++            self.assertEqual(other.consume(self.issue(),NOW+301)['status'],'HOLD_PENDING_KR')
++        finally: other.db.close()
++
++    def test_crash_claim_never_reexecutes(self):
++        p,fp=self.d.validate(self.issue(),NOW)
++        with self.d.db:
++            self.d.db.execute('INSERT INTO jobs VALUES(?,?,?,?,?,?,?)',(p['task_id'],p['run_id'],p['nonce'],p['issue_id'],fp,'CLAIMED',None))
++        self.assertEqual(self.d.consume(self.issue(),NOW)['status'],'HOLD_PENDING_KR')
++        self.assertEqual(list(pathlib.Path(self.tmp.name).rglob('test.txt')),[])
++
++    def test_post_timeout_no_retry(self):
++        result=self.d.consume(self.issue(),NOW)
++        calls=[]
++        def fail(*args):
++            calls.append(args); raise TimeoutError('simulated ambiguous POST')
++        with self.assertRaises(TimeoutError): self.d.publish(result,fail)
++        self.assertEqual(self.d.publish(self.d.consume(self.issue(),NOW),fail)['status'],'HOLD_PENDING_KR')
++        self.assertEqual(len(calls),1)
++
++    def test_conflicting_nonce_run_issue(self):
++        self.assertEqual(self.d.consume(self.issue(),NOW)['status'],'PASS')
++        for field in ('task_id','run_id','nonce','content'):
++            p=copy.deepcopy(self.p); p[field]+='b'
++            i=self.issue(p); i['title']='[MOZI-V2-SIM] '+p['task_id']
++            self.assertEqual(self.d.consume(i,NOW)['status'],'HOLD_PENDING_KR')
++        self.assertEqual(len(list(pathlib.Path(self.tmp.name).rglob('test.txt'))),1)
++
++    def test_scan_only_refreshes_simulation(self):
++        calls=[]
++        def api(method,path,data=None):
++            calls.append((method,path))
++            return [{'number':20,'title':'[MOZI-V2-SIM] SIM-X'}, {'number':1,'title':'[ISOLATED-DAEMON-POC] old'}]
++        scan(self.d,api)
++        self.assertEqual(len(calls),1)
++
++    def test_concurrent_claim_and_process_restart(self):
++        issue=self.issue()
++        def work(_):
++            d=Daemon(self.tmp.name,{'sim':(123,KEY)})
++            try: return d.consume(issue,NOW)['status']
++            finally: d.db.close()
++        with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
++            statuses=list(pool.map(work,range(4)))
++        self.assertEqual(statuses.count('PASS'),1)
++        self.assertEqual(len(list(pathlib.Path(self.tmp.name).rglob('test.txt'))),1)
++        script='from daemon import *; import sys; d=Daemon(sys.argv[1], {"sim":(123,bytes.fromhex(sys.argv[2]))}); print(d.consume(json.loads(sys.argv[3]),int(sys.argv[4]))["status"]); d.db.close()'
++        result=subprocess.run([sys.executable,'-c',script,self.tmp.name,KEY.hex(),json.dumps(issue),str(NOW)],capture_output=True,text=True,check=True)
++        self.assertEqual(result.stdout.strip(),'DUPLICATE')
++        print('concurrent statuses:',statuses,'new process:',result.stdout.strip())
++
++if __name__=='__main__': unittest.main(verbosity=2)
+--- /dev/null
++++ b/experiments/mozi-v2-cut2-20261014/test_security.py
+@@ -0,0 +1,96 @@
++import copy
++import hashlib
++import json
++import pathlib
++import sqlite3
++import tempfile
++import unittest
++from unittest.mock import patch
++from test_daemon import Tests, KEY, NOW
++from daemon import Daemon, GitHubAPI, Hold, REPO, scan
++
++BASE = 'https://api.github.com/repos/' + REPO
++
++class Security(unittest.TestCase):
++    def setUp(self):
++        self.t = Tests(); self.t.setUp(); self.addCleanup(self.t.doCleanups)
++
++    def test_R1_wrong_result_metadata(self):
++        for field, value in [('id',999),('id',True),('user',None),('user',{'id':True}),('user',{'id':666}),('issue_url',BASE+'/issues/1'),('url','https://evil.invalid/comments/12')]:
++            with self.subTest(field=field,value=value):
++                t=Tests(); t.setUp()
++                try:
++                    t.d.result_author_id=123
++                    result=t.d.consume(t.issue(),NOW)
++                    def api(method,path,data=None):
++                        if method=='POST':
++                            api.body=data['body']
++                        meta=dict(id=12,user={'id':123},issue_url=BASE+'/issues/999',url=BASE+'/issues/comments/12',body=api.body)
++                        if method=='GET': meta[field]=value
++                        return meta
++                    try: t.d.publish(result,api)
++                    except Hold: pass
++                    self.assertEqual(t.d.db.execute("SELECT count(*) FROM jobs WHERE status='VERIFIED'").fetchone()[0],0)
++                finally: t.doCleanups()
++
++    def test_R2_malformed(self):
++        for field,value in [('user',None),('user',[]),('user',{'id':True}),('id',True),('number','999'),('title',None)]:
++            i=self.t.issue(); i[field]=value
++            self.assertEqual(self.t.d.consume(i,NOW)['status'],'HOLD_PENDING_KR')
++        self.assertEqual(self.t.d.db.execute('SELECT count(*) FROM jobs').fetchone()[0],0)
++
++    def test_R2_scan_continues(self):
++        bad=self.t.issue(); bad['user']=None; bad['number']=998
++        good=self.t.issue()
++        def api(method,path,data=None):
++            if '?' in path: return [dict(number=998,title='[MOZI-V2-SIM] bad'),dict(number=999,title=good['title'])]
++            if path=='/issues/998': return bad
++            if path=='/issues/999': return good
++            raise TimeoutError('local-only')
++        with patch('daemon.time.time',return_value=NOW): scan(self.t.d,api)
++        self.assertEqual(self.t.d.db.execute('SELECT count(*) FROM jobs').fetchone()[0],1)
++
++    def test_R2_global_failure(self):
++        with self.assertRaises(Exception): scan(self.t.d,lambda *a: None)
++        with self.assertRaises(TimeoutError): scan(self.t.d,lambda *a: (_ for _ in ()).throw(TimeoutError('local outage')))
++
++    def test_R1_transport_endpoint(self):
++        class Response:
++            def __enter__(self): return self
++            def __exit__(self,*args): pass
++            def geturl(self): return 'https://evil.invalid/'
++        class Opener:
++            def open(self,*args,**kwargs): return Response()
++        with patch('daemon.urllib.request.build_opener',return_value=Opener()):
++            with self.assertRaises(Hold): GitHubAPI('local-fake-token')('GET','/issues/999')
++        for path in ['/issues/20','/issues/20/comments','/issues/../secrets','/issues@evil.invalid']:
++            with self.assertRaises(Hold): GitHubAPI('local-fake-token')('GET',path)
++
++    def test_R3_no_override(self):
++        with tempfile.TemporaryDirectory() as root:
++            with self.assertRaises(TypeError):
++                d=Daemon(root,{'sim':(123,KEY)},executor_sha256='0'*64)
++                d.db.close()
++
++    def test_R3_expected_mismatch(self):
++        with tempfile.TemporaryDirectory() as root:
++            with self.assertRaises(Hold): Daemon(root,{'sim':(123,KEY)},expected_sha256='0'*64)
++            self.assertEqual(list(pathlib.Path(root).iterdir()),[])
++
++    def test_R4_persistent_secret_free(self):
++        issue=self.t.issue(signed=False)
++        self.t.d.consume(issue,NOW)
++        db=sqlite3.connect(pathlib.Path(self.t.tmp.name)/'ledger.sqlite')
++        try: rows=db.execute('SELECT event,event_hash FROM audit').fetchall()
++        finally: db.close()
++        self.assertEqual(len(rows),1)
++        event=json.loads(rows[0][0]); self.assertEqual(event['execution_state'],'NOT_STARTED')
++        self.assertEqual(hashlib.sha256(rows[0][0].encode()).hexdigest(),rows[0][1])
++        self.assertNotIn(KEY.decode(),rows[0][0]); self.assertNotIn(issue['body'],rows[0][0])
++
++    def test_R4_audit_failure_zero_execution(self):
++        self.t.d.db.execute('DROP TABLE audit'); self.t.d.db.commit()
++        with self.assertRaises(Hold): self.t.d.consume(self.t.issue(),NOW)
++        self.assertEqual(list(pathlib.Path(self.t.tmp.name).rglob('test.txt')),[])
++
++if __name__=='__main__': unittest.main(verbosity=2)
+--- /dev/null
++++ b/experiments/mozi-v2-cut2-20261014/test_entrypoint.py
+@@ -0,0 +1,129 @@
++"""Cut 1 contracts: synthetic IDs, synthetic key, no network."""
++import copy
++import hashlib
++import json
++import pathlib
++import subprocess
++import sys
++import tempfile
++import unittest
++from unittest.mock import patch
++import entrypoint as e
++from test_daemon import Tests as Fixture, NOW
++
++class EntryTests(unittest.TestCase):
++    def setUp(self):
++        self.f = Fixture(); self.f.setUp(); self.addCleanup(self.f.doCleanups)
++        self.issue = self.f.issue()
++        p = json.loads(self.issue['body'])
++        p['task_id'] = e.TASK
++        from daemon import digest
++        p.pop('auth_digest'); p['auth_digest'] = digest(p, e.MOCK_KEY)
++        self.issue.update(title=e.TITLE, body=json.dumps(p), url=e.BASE+'/issues/999',
++                          repository_url=e.BASE)
++        self.tmp = tempfile.TemporaryDirectory(); self.addCleanup(self.tmp.cleanup)
++        self.root = pathlib.Path(self.tmp.name)
++
++    def test_default_and_live_deny(self):
++        for args in ([], ['--live'], ['--token','fake'], ['--issue','20']):
++            p = subprocess.run([sys.executable, 'entrypoint.py', *args], capture_output=True)
++            self.assertNotEqual(p.returncode, 0)
++            self.assertNotIn(b'PASS', p.stdout)
++
++    def test_good_duplicate_restart_audit(self):
++        a=e.offline_once(self.issue,self.root,NOW)
++        b=e.offline_once(self.issue,self.root,NOW+1)
++        self.assertEqual(a['status'],'PASS'); self.assertEqual(b['status'],'DUPLICATE')
++        files=list(self.root.rglob('test.txt')); self.assertEqual(len(files),1)
++        self.assertEqual(files[0].read_bytes(),b'simulation bytes\n')
++        import sqlite3
++        db=sqlite3.connect(self.root/'mozi-v2-cut1-state'/'ledger.sqlite')
++        try:
++            rows=db.execute('SELECT event,event_hash FROM audit').fetchall()
++            self.assertGreaterEqual(len(rows),4)
++            for raw,h in rows: self.assertEqual(hashlib.sha256(raw.encode()).hexdigest(),h)
++        finally: db.close()
++
++    def test_issue_metadata_and_principal(self):
++        for field,value in [('number',20),('number',998),('number',True),('id',9002),('user',None),('user',{'id':True}),('user',{'id':259898029}),('url',e.BASE+'/issues/20'),('repository_url','https://evil.invalid'),('pull_request',{})]:
++            with self.subTest(field=field,value=value):
++                i=copy.deepcopy(self.issue); i[field]=value
++                with self.assertRaises(e.Denied): e.offline_once(i,self.root,NOW)
++                self.assertFalse((self.root/'mozi-v2-cut1-state').exists())
++
++    def test_payload_boundary(self):
++        for field,value in [('task_id','TASK-REAL-042'),('task_id','SIM-other'),('repository','evil/repo'),('filename','../test.txt'),('action','shell'),('issuer_id',True),('execution_authorized',False),('auth_digest','0'*64),('content','x'*4097)]:
++            i=copy.deepcopy(self.issue); p=json.loads(i['body']); p[field]=value; i['body']=json.dumps(p)
++            with self.subTest(field=field):
++                result=e.offline_once(i,self.root,NOW)
++                self.assertEqual(result['status'],'HOLD_PENDING_KR')
++                self.assertEqual(list(self.root.rglob('test.txt')),[])
++
++    def test_clock_replay_conflict(self):
++        self.assertEqual(e.offline_once(self.issue,self.root,NOW+300)['status'],'HOLD_PENDING_KR')
++        self.assertEqual(e.offline_once(self.issue,self.root,NOW-1)['status'],'HOLD_PENDING_KR')
++        self.assertEqual(e.offline_once(self.issue,self.root,NOW)['status'],'PASS')
++        i=copy.deepcopy(self.issue); p=json.loads(i['body']); p['content']='changed'
++        from daemon import digest
++        p.pop('auth_digest'); p['auth_digest']=digest(p,e.MOCK_KEY); i['body']=json.dumps(p)
++        self.assertEqual(e.offline_once(i,self.root,NOW)['status'],'HOLD_PENDING_KR')
++
++    def test_source_digest_before_import(self):
++        with patch.object(e,'DAEMON_SHA','0'*64):
++            with self.assertRaises(e.Denied): e.offline_once(self.issue,self.root,NOW)
++        self.assertEqual(list(self.root.iterdir()),[])
++
++    def test_path_alias_and_hardlink(self):
++        state=self.root/'mozi-v2-cut1-state'; state.mkdir()
++        import os
++        target=self.root/'other'; target.write_bytes(b'untouched')
++        os.link(target,state/'ledger.sqlite')
++        with self.assertRaises(e.Denied): e.offline_once(self.issue,self.root,NOW)
++        self.assertEqual(target.read_bytes(),b'untouched')
++
++    def test_audit_failure_stops(self):
++        e.offline_once(self.issue,self.root,NOW+300)
++        import sqlite3
++        db=sqlite3.connect(self.root/'mozi-v2-cut1-state'/'ledger.sqlite')
++        db.execute('DROP TABLE audit'); db.commit(); db.close()
++        with self.assertRaises(Exception): e.offline_once(self.issue,self.root,NOW)
++        self.assertEqual(list(self.root.rglob('test.txt')),[])
++
++    def test_broker_paths_and_zero_post(self):
++        api=e.OfflineIssue(self.issue)
++        for method,path in [('GET','/issues'),('GET','/issues?state=open'),('GET','/issues/20'),('GET','/issues/998'),('GET','/issues/999/comments'),('POST','/issues/999/comments'),('PATCH','/issues/999'),('GET','/issues/999?x=1'),('GET','/issues/../999')]:
++            with self.assertRaises(e.Denied): api(method,path)
++        self.assertEqual(api('GET','/issues/999'),self.issue)
++        self.assertEqual(api.calls,[('GET','/issues/999')])
++
++    def test_fixture_size_and_schema(self):
++        for i in (None,[],{'body':'x'*20000}):
++            with self.assertRaises(e.Denied): e.offline_once(i,self.root,NOW)
++
++    def test_cli_offline_and_path_denial(self):
++        fixture=self.root/'issue.json'; fixture.write_text(json.dumps(self.issue),encoding='utf-8')
++        args=[sys.executable,'entrypoint.py','--offline-fixture',str(fixture),'--mock-time',str(NOW),'--scratch']
++        p=subprocess.run(args+[str(self.root)],capture_output=True)
++        self.assertEqual(p.returncode,2)
++        allowed=pathlib.Path(e.__file__).absolute().parent/'offline-workspaces'
++        allowed.mkdir(exist_ok=True)
++        with tempfile.TemporaryDirectory(dir=allowed) as scratch:
++            for status in ('PASS','DUPLICATE'):
++                p=subprocess.run(args+[scratch],capture_output=True)
++                self.assertEqual(p.returncode,0,p.stderr)
++                data=json.loads(p.stdout); self.assertEqual(data['mode'],'OFFLINE_MOCK')
++                self.assertEqual(data['result']['status'],status)
++
++    def test_audit_digest_tamper(self):
++        e.offline_once(self.issue,self.root,NOW+300)
++        import sqlite3
++        db=sqlite3.connect(self.root/'mozi-v2-cut1-state'/'ledger.sqlite')
++        db.execute("UPDATE audit SET event_hash='forged'"); db.commit(); db.close()
++        with self.assertRaises(e.Denied): e.offline_once(self.issue,self.root,NOW)
++        self.assertEqual(list(self.root.rglob('test.txt')),[])
++
++    def test_no_network_or_scan(self):
++        with patch('socket.socket',side_effect=AssertionError('network forbidden')), patch('daemon.scan',side_effect=AssertionError('scan forbidden')):
++            self.assertEqual(e.offline_once(self.issue,self.root,NOW)['status'],'PASS')
++
++if __name__=='__main__': unittest.main(verbosity=2)
+--- /dev/null
++++ b/experiments/mozi-v2-cut2-20261014/proxy.py
+@@ -0,0 +1,149 @@
++"""One-shot restricted broker library; no CLI, credential discovery or daemon.
++
++Policy must be supplied by a trusted, separately approved supervisor. This module
++does not authenticate KR approval. Writable policy/state invalidates deployment.
++"""
++import hashlib
++import http.client
++import json
++import os
++import sqlite3
++import ssl
++import time
++from dataclasses import dataclass
++from entrypoint import safe_path
++
++REPO = 'kongsonren/aisaleos-handoff-poc'
++BASE = 'https://api.github.com/repos/' + REPO
++TITLE = '[MOZI-V2-SIM] SIM-MOZI-V2-20261014-01'
++
++class Denied(Exception): pass
++def require(ok):
++    if not ok: raise Denied('binding or state refused')
++def digest(b): return hashlib.sha256(b).hexdigest()
++def numeric(n): return type(n) is int and n > 0
++def decode(raw):
++    def pairs(items):
++        d = {}
++        for k,v in items:
++            require(k not in d); d[k] = v
++        return d
++    return json.loads(raw, object_pairs_hook=pairs,
++                      parse_constant=lambda _: require(False))
++
++@dataclass(frozen=True)
++class Policy:
++    repo: str
++    number: int
++    issue_id: int
++    issuer_id: int
++    bot_id: int
++    bot_login: str
++    issue_body: str
++    issue_sha256: str
++    result: str
++    result_sha256: str
++    start: int
++    end: int
++    def validate(self):
++        require(self.repo == REPO and numeric(self.number) and self.number != 20)
++        require(numeric(self.issue_id) and self.issuer_id == 259898029
++                and type(self.issuer_id) is int and numeric(self.bot_id)
++                and self.bot_id != self.issuer_id and bool(self.bot_login))
++        require(type(self.start) is int and type(self.end) is int
++                and 0 < self.end-self.start <= 900)
++        require(digest(self.issue_body.encode()) == self.issue_sha256)
++        require(self.result.startswith('RESULT\n') and 'TASK-REAL-042' not in self.result
++                and 'TASK-REAL-042' not in self.issue_body)
++        require(digest(self.result.encode()) == self.result_sha256)
++        require(len(self.issue_body.encode()) <= 16384
++                and len(json.dumps({'body':self.result},ensure_ascii=False).encode()) <= 4096)
++
++class Wire:
++    """Fixed origin, system TLS verification, no redirects/proxies/retries."""
++    def __init__(self, token):
++        require(isinstance(token,str) and token and '\r' not in token and '\n' not in token)
++        self._token = token
++    def request(self, method, path, body=None):
++        require(not any(k.lower() in ('http_proxy','https_proxy','all_proxy','no_proxy')
++                        and v for k,v in os.environ.items()))
++        conn = http.client.HTTPSConnection('api.github.com', timeout=20,
++                                           context=ssl.create_default_context())
++        deadline = time.monotonic()+20
++        try:
++            conn.request(method,path,body,{'Authorization':'Bearer '+self._token,
++                         'Accept':'application/vnd.github+json',
++                         'X-GitHub-Api-Version':'2022-11-28','Content-Type':'application/json',
++                         'User-Agent':'mozi-v2-isolated-broker'})
++            response = conn.getresponse()
++            raw = bytearray()
++            while True:
++                require(time.monotonic()<deadline)
++                if conn.sock is not None:
++                    conn.sock.settimeout(max(0.001,deadline-time.monotonic()))
++                chunk = response.read1(min(65536,1048577-len(raw)))
++                raw.extend(chunk); require(len(raw)<=1048576)
++                if not chunk: break
++            require(response.status == (201 if method == 'POST' else 200))
++            return decode(raw)
++        finally: conn.close()
++
++class Broker:
++    def __init__(self, policy, ledger, wire, clock=time.time):
++        policy.validate(); self.p=policy; self.wire=wire; self.clock=clock
++        ledger=safe_path(ledger); require(ledger.parent.is_dir())
++        self.db=sqlite3.connect(ledger, isolation_level=None, timeout=1)
++        self.db.execute('PRAGMA synchronous=FULL')
++        self.db.execute('CREATE TABLE IF NOT EXISTS once (id INTEGER PRIMARY KEY CHECK(id=1), policy TEXT NOT NULL, status TEXT NOT NULL, comment INTEGER)')
++        require(self.db.execute('PRAGMA integrity_check').fetchone()==('ok',))
++        self.binding=digest(json.dumps(policy.__dict__,sort_keys=True).encode())
++    def close(self): self.db.close()
++    def window(self): require(self.p.start <= self.clock() < self.p.end)
++    def issue(self,i):
++        p=self.p; url=BASE+'/issues/'+str(p.number)
++        require(type(i) is dict and 'pull_request' not in i)
++        require(type(i.get('id')) is int and i['id']==p.issue_id
++                and type(i.get('number')) is int and i['number']==p.number)
++        require(i.get('url')==url and i.get('repository_url')==BASE
++                and i.get('html_url')=='https://github.com/'+REPO+'/issues/'+str(p.number)
++                and i.get('state')=='open' and i.get('title')==TITLE)
++        require(type(i.get('user')) is dict and type(i['user'].get('id')) is int
++                and i['user']['id']==p.issuer_id and i['user'].get('login')=='kongsonren')
++        require(i.get('body')==p.issue_body and digest(i['body'].encode())==p.issue_sha256)
++    def comment(self,c,cid=None):
++        p=self.p
++        require(type(c) is dict and numeric(c.get('id')) and (cid is None or c['id']==cid))
++        require(c.get('url')==BASE+'/issues/comments/'+str(c['id'])
++                and c.get('issue_url')==BASE+'/issues/'+str(p.number))
++        require(type(c.get('user')) is dict and type(c['user'].get('id')) is int
++                and c['user']['id']==p.bot_id and c['user'].get('login')==p.bot_login
++                and c['user'].get('type')=='Bot')
++        require(c.get('body')==p.result and digest(c['body'].encode())==p.result_sha256)
++        return c['id']
++    def run(self):
++        # Existing/unknown attempts are terminal, including a changed policy.
++        require(self.db.execute('SELECT count(*) FROM once').fetchone()==(0,))
++        self.window()
++        path='/repos/'+REPO+'/issues/'+str(self.p.number)
++        self.issue(self.wire.request('GET',path))
++        self.window()
++        # Unique singleton and FULL synchronous COMMIT precede any network POST.
++        self.db.execute('BEGIN IMMEDIATE')
++        try:
++            self.db.execute('INSERT INTO once VALUES(1,?,\'POST_ATTEMPT\',NULL)',(self.binding,))
++            self.db.execute('COMMIT')
++        except BaseException:
++            self.db.execute('ROLLBACK'); raise
++        try:
++            self.window()
++            raw=json.dumps({'body':self.p.result},ensure_ascii=False).encode()
++            c=self.wire.request('POST',path+'/comments',raw)
++            cid=self.comment(c)
++            self.db.execute('UPDATE once SET comment=? WHERE id=1',(cid,))
++            self.window()
++            self.comment(self.wire.request('GET','/repos/'+REPO+'/issues/comments/'+str(cid)),cid)
++            self.db.execute("UPDATE once SET status='VERIFIED' WHERE id=1")
++            return 'VERIFIED'
++        except BaseException:
++            # Never retry; POST_ATTEMPT plus optional ID survives uncertain outcome.
++            raise Denied('HOLD: attempt consumed; independent reconciliation required') from None
+--- /dev/null
++++ b/experiments/mozi-v2-cut2-20261014/test_proxy.py
+@@ -0,0 +1,130 @@
++import dataclasses
++import http.client
++import http.server
++import json
++import pathlib
++import tempfile
++import threading
++import unittest
++from unittest.mock import patch
++import proxy as m
++
++class Tests(unittest.TestCase):
++    def setUp(self):
++        self.tmp=tempfile.TemporaryDirectory(); self.path=pathlib.Path(self.tmp.name)/'ledger.db'
++        self.p=m.Policy(m.REPO,999,9001,259898029,888,'result-test[bot]',
++                        'SIM ONLY',m.digest(b'SIM ONLY'),'RESULT\nSIM PASS',m.digest(b'RESULT\nSIM PASS'),100,200)
++        self.i=dict(id=9001,number=999,user=dict(id=259898029,login='kongsonren'),
++                    url=m.BASE+'/issues/999',repository_url=m.BASE,
++                    html_url='https://github.com/'+m.REPO+'/issues/999',state='open',title=m.TITLE,body='SIM ONLY')
++        self.c=dict(id=777,user=dict(id=888,login='result-test[bot]',type='Bot'),
++                    url=m.BASE+'/issues/comments/777',issue_url=m.BASE+'/issues/999',body=self.p.result)
++        self.calls=[]; self.mode='ok'; outer=self
++        class Handler(http.server.BaseHTTPRequestHandler):
++            def log_message(self,*a): pass
++            def do_GET(self): self.handle_call()
++            def do_POST(self): self.handle_call()
++            def handle_call(self):
++                body=self.rfile.read(int(self.headers.get('Content-Length','0')))
++                outer.calls.append((self.command,self.path,body))
++                post=self.command=='POST'; comment='/comments/' in self.path
++                if post and outer.mode=='disconnect': self.connection.close(); return
++                value=dict(outer.c if post or comment else outer.i)
++                if outer.mode=='wrong_id' and comment: value['id']=778
++                if outer.mode=='wrong_bot' and post: value['user']=dict(id=259898029,login='kongsonren',type='User')
++                status=302 if outer.mode=='redirect' else 201 if post else 200
++                self.send_response(status); self.send_header('Location','http://127.0.0.1:1/issues/20'); self.end_headers()
++                raw=b'x'*1048577 if outer.mode=='oversize' else json.dumps(value).encode()
++                try: self.wfile.write(raw)
++                except (BrokenPipeError,ConnectionResetError): pass
++        self.server=http.server.ThreadingHTTPServer(('127.0.0.1',0),Handler)
++        self.thread=threading.Thread(target=self.server.serve_forever,daemon=True); self.thread.start()
++        port=self.server.server_port
++        class Local(http.client.HTTPConnection):
++            def __init__(self,host,timeout,context):
++                assert host=='api.github.com' and timeout==20
++                super().__init__('127.0.0.1',port,timeout=timeout)
++        self.patch=patch.object(m.http.client,'HTTPSConnection',Local); self.patch.start()
++        self.tls=patch.object(m.ssl,'create_default_context',return_value=None); self.tls.start()
++        self.env=patch.dict(m.os.environ,{},clear=True); self.env.start()
++    def tearDown(self):
++        for b in getattr(self,'brokers',[]): b.close()
++        self.env.stop(); self.tls.stop(); self.patch.stop(); self.server.shutdown(); self.server.server_close(); self.tmp.cleanup()
++    def broker(self,p=None):
++        b=m.Broker(p or self.p,self.path,m.Wire('synthetic-test-only'),lambda:150)
++        if not hasattr(self,'brokers'): self.brokers=[]
++        self.brokers.append(b)
++        return b
++    def run_once(self):
++        b=self.broker()
++        try: return b.run()
++        finally: b.close()
++    def test_success_and_restart(self):
++        self.assertEqual(self.run_once(),'VERIFIED')
++        with self.assertRaises(Exception): self.run_once()
++        self.assertEqual([(x[0],x[1]) for x in self.calls],[('GET','/repos/'+m.REPO+'/issues/999'),('POST','/repos/'+m.REPO+'/issues/999/comments'),('GET','/repos/'+m.REPO+'/issues/comments/777')])
++        self.assertEqual(json.loads(self.calls[1][2]),{'body':self.p.result})
++    def test_issue_binding(self):
++        for key,value in [('id',1),('number',20),('url',m.BASE+'/issues/20'),('repository_url','https://evil'),('body','altered'),('title','other'),('state','closed'),('pull_request',{})]:
++            with self.subTest(key=key):
++                b=self.broker(); obj=dict(self.i); obj[key]=value
++                with self.assertRaises(Exception): b.issue(obj)
++                b.close()
++        self.assertEqual(self.calls,[])
++    def test_policy_binding(self):
++        for key,value in [('number',20),('repo','evil/repo'),('issuer_id',True),('bot_id',259898029),('result','altered'),('issue_sha256','0'*64),('end',1001),('issue_body','TASK-REAL-042')]:
++            with self.subTest(key=key),self.assertRaises(Exception): dataclasses.replace(self.p,**{key:value}).validate()
++        self.assertEqual(self.calls,[])
++    def test_disconnect_consumes_attempt(self):
++        self.mode='disconnect'
++        with self.assertRaises(Exception): self.run_once()
++        b=self.broker(); self.assertEqual(b.db.execute('SELECT status FROM once').fetchone(),('POST_ATTEMPT',)); b.close()
++        with self.assertRaises(Exception): self.run_once()
++        self.assertEqual(len(self.calls),2)
++    def test_wrong_readback_no_retry(self):
++        self.mode='wrong_id'
++        with self.assertRaises(Exception): self.run_once()
++        with self.assertRaises(Exception): self.run_once()
++        self.assertEqual(len(self.calls),3)
++    def test_wrong_bot_no_readback(self):
++        self.mode='wrong_bot'
++        with self.assertRaises(Exception): self.run_once()
++        self.assertEqual(len(self.calls),2)
++    def test_redirect(self):
++        self.mode='redirect'
++        with self.assertRaises(Exception): self.run_once()
++        self.assertEqual(len(self.calls),1)
++    def test_oversize(self):
++        self.mode='oversize'
++        with self.assertRaises(Exception): self.run_once()
++        self.assertEqual(len(self.calls),1)
++    def test_proxy_environment(self):
++        m.os.environ['HTTPS_PROXY']='http://127.0.0.1:1'
++        with self.assertRaises(Exception): self.run_once()
++        self.assertEqual(self.calls,[])
++    def test_expired(self):
++        b=self.broker(); b.clock=lambda:200
++        with self.assertRaises(Exception): b.run()
++        b.close(); self.assertEqual(self.calls,[])
++    def test_disk_failure_before_post(self):
++        b=self.broker(); b.db.execute('PRAGMA query_only=ON')
++        with self.assertRaises(Exception): b.run()
++        b.close(); self.assertEqual(len(self.calls),1)
++    def test_timeout_consumes_attempt(self):
++        b=self.broker(); original=b.wire.request
++        def fault(method,path,body=None):
++            if method=='POST': raise TimeoutError()
++            return original(method,path,body)
++        b.wire.request=fault
++        with self.assertRaises(Exception): b.run()
++        b.close()
++        with self.assertRaises(Exception): self.run_once()
++        self.assertEqual(len(self.calls),1)
++    def test_duplicate_json(self):
++        with self.assertRaises(Exception): m.decode(b'{"id":1,"id":2}')
++    def test_concurrent_reservation(self):
++        a=self.broker(); b=self.broker(); self.assertEqual(a.run(),'VERIFIED')
++        with self.assertRaises(Exception): b.run()
++        a.close(); b.close(); self.assertEqual(len(self.calls),3)
++
++if __name__=='__main__': unittest.main()
+--- /dev/null
++++ b/experiments/mozi-v2-cut2-20261014/validate.py
+@@ -0,0 +1,20 @@
++"""Real guard-removal mutations, isolated copies; synthetic network only."""
++import pathlib, shutil, subprocess, sys, tempfile, json
++root=pathlib.Path(__file__).resolve().parent
++mutants={
++ 'issue':("        require(i.get('body')==p.issue_body and digest(i['body'].encode())==p.issue_sha256)","        pass",'test_proxy.Tests.test_issue_binding'),
++ 'attempt':("        require(self.db.execute('SELECT count(*) FROM once').fetchone()==(0,))","        self.db.execute('DELETE FROM once')",'test_proxy.Tests.test_success_and_restart'),
++ 'readback':("            self.comment(self.wire.request('GET','/repos/'+REPO+'/issues/comments/'+str(cid)),cid)","            self.wire.request('GET','/repos/'+REPO+'/issues/comments/'+str(cid))",'test_proxy.Tests.test_wrong_readback_no_retry')}
++results={}
++for name,(old,new,test) in mutants.items():
++    with tempfile.TemporaryDirectory() as tmp:
++        dst=pathlib.Path(tmp)
++        for f in ('proxy.py','entrypoint.py','test_proxy.py'): shutil.copyfile(root/f,dst/f)
++        source=(dst/'proxy.py').read_text(); assert old in source
++        (dst/'proxy.py').write_text(source.replace(old,new),encoding='utf-8')
++        p=subprocess.run([sys.executable,'-m','unittest',test,'-v'],cwd=dst,capture_output=True)
++        (root/('red-mutant-'+name+'.log')).write_bytes(p.stdout+p.stderr)
++        results[name]=p.returncode
++(root/'mutation-results.json').write_text(json.dumps(results,indent=2)+'\n')
++assert all(results.values()),results
++print(results)
+--- /dev/null
++++ b/experiments/mozi-v2-cut2-20261014/package.py
+@@ -0,0 +1,10 @@
++import pathlib,json,hashlib,difflib
++r=pathlib.Path(__file__).resolve().parent
++names=['daemon.py','entrypoint.py','test_daemon.py','test_security.py','test_entrypoint.py','proxy.py','test_proxy.py','validate.py','package.py','REPORT.md','KR_GATE.md','identity-verification.json','green-all.log','initial-failure.log','mutation-results.json','red-mutant-issue.log','red-mutant-attempt.log','red-mutant-readback.log']
++prefix='experiments/mozi-v2-cut2-20261014/'
++diff=''.join(''.join(difflib.unified_diff([], (r/n).read_bytes().decode('utf-8',errors='replace').splitlines(True),fromfile='/dev/null',tofile='b/'+prefix+n)) for n in names)
++(r/'changes.diff').write_bytes(diff.encode()); names.append('changes.diff')
++(r/'SHA256SUMS.json').write_text(json.dumps({n:hashlib.sha256((r/n).read_bytes()).hexdigest() for n in names},indent=2)+'\n',encoding='utf-8'); names.append('SHA256SUMS.json')
++# Git blob upload is base64 to preserve exact bytes, including native log encoding.
++(r/'upload.json').write_text(json.dumps(names),encoding='utf-8')
++print(len(names))
+--- /dev/null
++++ b/experiments/mozi-v2-cut2-20261014/REPORT.md
+@@ -0,0 +1,13 @@
++# 第2刀前置施工
++
++PASS：受限在线代理库 proxy.py 已实现，未接入生产或修改离线 entrypoint。
++固定仓库/精确Issue number+id/issuer数字ID/login/来源URL/title/open/非PR/body原字节摘要；固定RESULT及摘要、独立Bot数字ID/login/type；单次POST后只GET返回的同一comment ID并校验完整绑定。拒绝Issue20与TASK-REAL-042，无列表/扫描接口、无重试/重定向/环境代理。TLS系统证书验证，20秒限时、响应1MiB、请求4096字节上限。SQLite FULL synchronous唯一全局槽POST_ATTEMPT提交先于POST，成功后VERIFIED；未知结果保留尝试与已知ID，重启或换policy均拒绝再发。
++
++PASS：原20+13组，新增14组，共47组。green-all.log为修复后完整验收；initial-failure.log保留首次测试环境错误（系统Python不完整及本地假HTTP不需真实TLS上下文）。测试只替换连接到127.0.0.1假API及TLS上下文，真实Wire解析/大小/HTTP状态/代理检查代码执行。测试身份与token均为synthetic。超时与数据库只读为故障注入；disconnect为真实本地HTTP断连。没有真实GitHub代理网络调用。
++PASS：三个真实guard-removal mutation均以AssertionError红测失败，日志分别保留；不是用运行环境错误冒充红测。
++
++UNKNOWN：真实在线闭环、签发密钥控制关系、专用RESULT Bot及权限/凭据引用、真实模拟Issue ID/number、Linux隔离与磁盘掉电持久性。当前库仅接受可信监督器传入的policy，不验证KR签名；无CLI/凭据发现/Daemon集成/部署入口，不能当作已上线Daemon。部署前必须把policy/代码/ledger置于分别授权、只读及独占边界中；同机任意代码或ledger删除不属于本库防护边界。不可把synthetic值带入真实票。
++
++只读GitHub：main为875d6fa4238c58388320d18edc1b1e67da19ca60；owner kongsonren数字ID259898029，权限admin。精确模拟任务标题搜索无结果，仅支持“未找到”，不证明全库不存在。未猜测bot身份或使用admin连接为运行凭据。
++
++Issue20本轮完全未访问，历史open/HOLD/execution_authorized=false不冒充新鲜读回。未访问云主机、生产Daemon或任何真实凭据，未真实Issue POST/创建Issue，未部署/重启/自动pull。GitHub写入范围仅授权的隔离开发分支代码交付。
+--- /dev/null
++++ b/experiments/mozi-v2-cut2-20261014/KR_GATE.md
+@@ -0,0 +1,14 @@
++# KR_GATE CUT2→隔离验收（STOP，未批准）
++
++本票绑定本目录SHA256SUMS.json、从69a2c3743974138e3a53fe3b60d891085daa745b派生的kr/mozi-v2-cut2-20261014交付commit（见提交后DELIVERY.md）。当前授权已完成代码开发/本地测试/只读核查/隔离分支提交。本票不激活任何真实操作。
++
++可集中批准以下施工范围，但UNKNOWN需取得精确实证并封版，不能以笼统“开”替代数字ID、时间窗和凭据引用：
++
++1. 专用模拟Issue：仅允许创建一次标题 `[MOZI-V2-SIM] SIM-MOZI-V2-20261014-01`，仓库kongsonren/aisaleos-handoff-poc，作者kongsonren/259898029，正文固定为 `SIM ONLY`（UTF-8，无末尾换行）。创建前精确搜索复查；如已有候选，先绑定真实id/number，不重复创建。创建响应未知即HOLD，禁止重试。当前真实number/id UNKNOWN，未创建。
++2. 专用RESULT bot：先提供精确login/id/type=Bot与单仓库Metadata read+Issues write权限实证、≤24h凭据的安全引用/注入/撤销入口（只记录引用，不读取/复制内容到证据）。禁止admin连接充当运行凭据。签发密钥归kongsonren控制的独立实证、授权签名验证监督器及撤销机制须PASS；目前全部UNKNOWN。
++3. Linux前置：批准只读核对后，独立UID/GID62042、无附加组；/opt/mozi-v2-isolated/releases/<封版manifest SHA>/只读，/var/lib/mozi-v2-isolated/data/{state,log,evidence}独占；1GiB专用镜像，代码≤256MiB、日志≤64MiB、根余量≥20GiB/inode≥500000；MemoryMax201326592、CPUQuota20%、TasksMax32、无swap；A无网络，broker与Daemon分离，Daemon不持token。目录/配额/unit/监督器尚未实现或核实，均UNKNOWN，不允许临场放宽。保持旧服务和全机防火墙原状。
++4. A离线安装和故障验收：新候选unit，Restart=no，不enable，≤900秒；真实Linux ENOSPC/kill/restart/审计与ledger独立读取验收，保留原33+新增14回归；生产完整基线/OOB/ACL/cgroup/mount隔离验证PASS。安装/启动脚本与unit须独立逐字节审核封版后才可执行。
++5. B单次在线：取得真实repo=1357322725、Issue id/number、issuer=259898029、RESULT bot id/login及签发控制关系后，生成不可改policy。固定RESULT为 `RESULT\nSIM PASS`（此处表示一个LF，无末尾换行），其UTF-8摘要由proxy.digest计算并写入最终票；精确UTC起止≤15分钟、时钟偏差≤5秒、最终policy及所有执行文件SHA清单必须在运行前另行封版。仅GET该Issue、至多一次POST其comments、GET返回同一comment ID；任一未知/超时/绑定差异即HOLD，人工独立精确ID回查，不扫描不盲重试。
++6. 回滚：仅停候选unit并核对其cgroup、撤销专用凭据，保留ledger/日志。不得删除尝试记录、修复或重启生产。生产基线差异立即停止。
++
++永久排除：main变更、Issue20任何访问/写入、现有云服务、生产Daemon、TASK-REAL-042、Actions代替Linux验收、自动git pull/自更新/自重启。当前STOP等待KR单独批准上述精确施工；UNKNOWN不得被批准措辞自动变为PASS。
+--- /dev/null
++++ b/experiments/mozi-v2-cut2-20261014/identity-verification.json
+@@ -0,0 +1,71 @@
++{
++  "checked": "2026-10-14",
++  "results": [
++    {
++      "status": "fulfilled",
++      "value": {
++        "content": [
++          {
++            "type": "text",
++            "text": "Action completed."
++          }
++        ],
++        "structuredContent": {
++          "content": "{\"ref\":\"refs/heads/main\",\"node_id\":\"REF_kwDOUOcZ5a9yZWZzL2hlYWRzL21haW4\",\"url\":\"https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/refs/heads/main\",\"object\":{\"sha\":\"875d6fa4238c58388320d18edc1b1e67da19ca60\",\"type\":\"commit\",\"url\":\"https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/commits/875d6fa4238c58388320d18edc1b1e67da19ca60\"}}",
++          "title": "main",
++          "modified_date": null,
++          "url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/ref/heads/main",
++          "display_url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/ref/heads/main",
++          "display_title": "main",
++          "structuredContent": {
++            "title": "main",
++            "content": "{\"ref\":\"refs/heads/main\",\"node_id\":\"REF_kwDOUOcZ5a9yZWZzL2hlYWRzL21haW4\",\"url\":\"https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/refs/heads/main\",\"object\":{\"sha\":\"875d6fa4238c58388320d18edc1b1e67da19ca60\",\"type\":\"commit\",\"url\":\"https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/commits/875d6fa4238c58388320d18edc1b1e67da19ca60\"}}",
++            "display_url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/git/ref/heads/main"
++          }
++        },
++        "isError": false
++      }
++    },
++    {
++      "status": "fulfilled",
++      "value": {
++        "content": [
++          {
++            "type": "text",
++            "text": "Action completed."
++          }
++        ],
++        "structuredContent": {
++          "permission": "admin"
++        },
++        "isError": false
++      }
++    },
++    {
++      "status": "fulfilled",
++      "value": {
++        "content": [
++          {
++            "type": "text",
++            "text": "Action completed."
++          }
++        ],
++        "structuredContent": {
++          "issues": []
++        },
++        "isError": false
++      }
++    }
++  ],
++  "issuer": {
++    "login": "kongsonren",
++    "id": 259898029,
++    "permission": "admin",
++    "source": "repository owner and collaborator permission GET"
++  },
++  "simulation": "Exact title task search returned empty; existence UNKNOWN, no authorized real number/id",
++  "result_bot": "UNKNOWN: no exact bot login/id provided; no credentials inspected",
++  "key_control": "UNKNOWN",
++  "credential_reference": "UNKNOWN",
++  "issue20": "Not accessed in cut2 by explicit prohibition. Prior cut1 evidence open/HOLD/execution_authorized=false is historical, not fresh verification."
++}
+--- /dev/null
++++ b/experiments/mozi-v2-cut2-20261014/green-all.log
+@@ -0,0 +1,94 @@
++test_concurrent_claim_and_process_restart (test_daemon.Tests.test_concurrent_claim_and_process_restart) ... ok
++test_conflicting_nonce_run_issue (test_daemon.Tests.test_conflicting_nonce_run_issue) ... ok
++test_crash_claim_never_reexecutes (test_daemon.Tests.test_crash_claim_never_reexecutes) ... ok
++test_every_field_tamper (test_daemon.Tests.test_every_field_tamper) ... ok
++test_expired_future_and_window (test_daemon.Tests.test_expired_future_and_window) ... ok
++test_false_missing_forged_true_wrong_signature (test_daemon.Tests.test_false_missing_forged_true_wrong_signature) ... ok
++test_legacy_and_protected_task (test_daemon.Tests.test_legacy_and_protected_task) ... ok
++test_legal_restart_duplicate_and_result (test_daemon.Tests.test_legal_restart_duplicate_and_result) ... ok
++test_post_timeout_no_retry (test_daemon.Tests.test_post_timeout_no_retry) ... ok
++test_principal_and_issue_binding (test_daemon.Tests.test_principal_and_issue_binding) ... ok
++test_scan_only_refreshes_simulation (test_daemon.Tests.test_scan_only_refreshes_simulation) ... ok
++test_R1_transport_endpoint (test_security.Security.test_R1_transport_endpoint) ... ok
++test_R1_wrong_result_metadata (test_security.Security.test_R1_wrong_result_metadata) ... ok
++test_R2_global_failure (test_security.Security.test_R2_global_failure) ... ok
++test_R2_malformed (test_security.Security.test_R2_malformed) ... ok
++concurrent statuses: ['PASS', 'DUPLICATE', 'DUPLICATE', 'DUPLICATE'] new process: DUPLICATE
++{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
++{"status": "HOLD_PENDING_KR", "reason": "source binding"}
++{"status": "HOLD_PENDING_KR", "reason": "source binding"}
++{"status": "HOLD_PENDING_KR", "reason": "source binding"}
++{"status": "HOLD_PENDING_KR", "reason": "untrusted principal/key"}
++{"status": "HOLD_PENDING_KR", "reason": "untrusted principal/key"}
++{"status": "HOLD_PENDING_KR", "reason": "title/content policy"}
++{"status": "HOLD_PENDING_KR", "reason": "signature"}
++{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
++{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
++{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
++{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
++{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
++{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
++{"status": "HOLD_PENDING_KR", "reason": "signature"}
++{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
++{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
++{"status": "HOLD_PENDING_KR", "reason": "simulation identity"}
++{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
++{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
++{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
++{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
++{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
++{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
++{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
++{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
++{"status": "HOLD_PENDING_KR", "reason": "schema/legacy rejected"}
++{"status": "HOLD_PENDING_KR", "reason": "signature"}
++{"status": "HOLD_PENDING_KR", "reason": "schema/legacy rejected"}
++{"status": "HOLD_PENDING_KR", "reason": "protected or non-task issue"}
++{"status": "HOLD_PENDING_KR", "reason": "simulation identity"}
++{"status": "HOLD_PENDING_KR", "reason": "duplicate JSON key"}
++{"type": "RESULT", "status": "PASS", "scope": "simulation-only", "task_id": "SIM-001", "run_id": "SIM-RUN-001", "issue_id": 9001, "issue_number": 999, "payload_sha256": "77a8c656cc0f5d9ca6cf2600305b6550ed904d4a83d01f380c1d866732b80b3c", "executor_sha256": "0afef212dc11f0cd6a12f4281891883694047371c850a8b80819cb131d195971", "path": "C:\\Users\\59605\\AppData\\Local\\Temp\\tmp4bvhzsp8\\bd295747d58f49260aebfffbca6a4861418c851546b97363a6e322ad570334ed\\test.txt", "bytes": 17, "sha256": "ffab9aac57e7a50d1e29c6bec89176a15c6c38d27c6f7ca48b757618b0ebe090", "started_at": 1791930641.2039003, "completed_at": 1791930641.205901, "pid": 63104}
++{"status": "HOLD_PENDING_KR", "reason": "untrusted principal/key"}
++{"status": "HOLD_PENDING_KR", "reason": "source binding"}
++{"status": "HOLD_PENDING_KR", "reason": "source binding"}
++{"status": "HOLD_PENDING_KR", "reason": "protected or non-task issue"}
++{"status": "HOLD_PENDING_KR", "reason": "title/content policy"}
++{"status": "HOLD_PENDING_KR", "reason": "protected or non-task issue"}
++{"status": "HOLD_PENDING_KR", "reason": "malformed metadata"}
++{"status": "HOLD_PENDING_KR", "reason": "scan task failure"}
++test_R2_scan_continues (test_security.Security.test_R2_scan_continues) ... ok
++test_R3_expected_mismatch (test_security.Security.test_R3_expected_mismatch) ... ok
++test_R3_no_override (test_security.Security.test_R3_no_override) ... ok
++test_R4_audit_failure_zero_execution (test_security.Security.test_R4_audit_failure_zero_execution) ... ok
++test_R4_persistent_secret_free (test_security.Security.test_R4_persistent_secret_free) ... ok
++test_audit_digest_tamper (test_entrypoint.EntryTests.test_audit_digest_tamper) ... ok
++test_audit_failure_stops (test_entrypoint.EntryTests.test_audit_failure_stops) ... ok
++test_broker_paths_and_zero_post (test_entrypoint.EntryTests.test_broker_paths_and_zero_post) ... ok
++test_cli_offline_and_path_denial (test_entrypoint.EntryTests.test_cli_offline_and_path_denial) ... ok
++test_clock_replay_conflict (test_entrypoint.EntryTests.test_clock_replay_conflict) ... ok
++test_default_and_live_deny (test_entrypoint.EntryTests.test_default_and_live_deny) ... ok
++test_fixture_size_and_schema (test_entrypoint.EntryTests.test_fixture_size_and_schema) ... ok
++test_good_duplicate_restart_audit (test_entrypoint.EntryTests.test_good_duplicate_restart_audit) ... ok
++test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) ... ok
++test_no_network_or_scan (test_entrypoint.EntryTests.test_no_network_or_scan) ... ok
++test_path_alias_and_hardlink (test_entrypoint.EntryTests.test_path_alias_and_hardlink) ... ok
++test_payload_boundary (test_entrypoint.EntryTests.test_payload_boundary) ... ok
++test_source_digest_before_import (test_entrypoint.EntryTests.test_source_digest_before_import) ... ok
++test_concurrent_reservation (test_proxy.Tests.test_concurrent_reservation) ... ok
++test_disconnect_consumes_attempt (test_proxy.Tests.test_disconnect_consumes_attempt) ... ok
++test_disk_failure_before_post (test_proxy.Tests.test_disk_failure_before_post) ... ok
++test_duplicate_json (test_proxy.Tests.test_duplicate_json) ... ok
++test_expired (test_proxy.Tests.test_expired) ... ok
++test_issue_binding (test_proxy.Tests.test_issue_binding) ... ok
++test_oversize (test_proxy.Tests.test_oversize) ... ok
++test_policy_binding (test_proxy.Tests.test_policy_binding) ... ok
++test_proxy_environment (test_proxy.Tests.test_proxy_environment) ... ok
++test_redirect (test_proxy.Tests.test_redirect) ... ok
++test_success_and_restart (test_proxy.Tests.test_success_and_restart) ... ok
++test_timeout_consumes_attempt (test_proxy.Tests.test_timeout_consumes_attempt) ... ok
++test_wrong_bot_no_readback (test_proxy.Tests.test_wrong_bot_no_readback) ... ok
++test_wrong_readback_no_retry (test_proxy.Tests.test_wrong_readback_no_retry) ... ok
++
++----------------------------------------------------------------------
++Ran 47 tests in 9.494s
++
++OK
+--- /dev/null
++++ b/experiments/mozi-v2-cut2-20261014/initial-failure.log
+@@ -0,0 +1,355 @@
++test_concurrent_claim_and_process_restart (test_daemon.Tests.test_concurrent_claim_and_process_restart) ... ok
++test_conflicting_nonce_run_issue (test_daemon.Tests.test_conflicting_nonce_run_issue) ... ok
++test_crash_claim_never_reexecutes (test_daemon.Tests.test_crash_claim_never_reexecutes) ... ok
++test_every_field_tamper (test_daemon.Tests.test_every_field_tamper) ... ok
++test_expired_future_and_window (test_daemon.Tests.test_expired_future_and_window) ... ok
++test_false_missing_forged_true_wrong_signature (test_daemon.Tests.test_false_missing_forged_true_wrong_signature) ... ok
++test_legacy_and_protected_task (test_daemon.Tests.test_legacy_and_protected_task) ... ok
++test_legal_restart_duplicate_and_result (test_daemon.Tests.test_legal_restart_duplicate_and_result) ... ok
++test_post_timeout_no_retry (test_daemon.Tests.test_post_timeout_no_retry) ... ok
++test_principal_and_issue_binding (test_daemon.Tests.test_principal_and_issue_binding) ... ok
++test_scan_only_refreshes_simulation (test_daemon.Tests.test_scan_only_refreshes_simulation) ... ok
++test_R1_transport_endpoint (test_security.Security.test_R1_transport_endpoint) ... ok
++test_R1_wrong_result_metadata (test_security.Security.test_R1_wrong_result_metadata) ... ok
++test_R2_global_failure (test_security.Security.test_R2_global_failure) ... ok
++test_R2_malformed (test_security.Security.test_R2_malformed) ... ok
++concurrent statuses: ['DUPLICATE', 'PASS', 'DUPLICATE', 'DUPLICATE'] new process: DUPLICATE
++{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
++{"status": "HOLD_PENDING_KR", "reason": "source binding"}
++{"status": "HOLD_PENDING_KR", "reason": "source binding"}
++{"status": "HOLD_PENDING_KR", "reason": "source binding"}
++{"status": "HOLD_PENDING_KR", "reason": "untrusted principal/key"}
++{"status": "HOLD_PENDING_KR", "reason": "untrusted principal/key"}
++{"status": "HOLD_PENDING_KR", "reason": "title/content policy"}
++{"status": "HOLD_PENDING_KR", "reason": "signature"}
++{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
++{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
++{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
++{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
++{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
++{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
++{"status": "HOLD_PENDING_KR", "reason": "signature"}
++{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
++{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
++{"status": "HOLD_PENDING_KR", "reason": "simulation identity"}
++{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
++{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
++{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
++{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
++{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
++{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
++{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
++{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
++{"status": "HOLD_PENDING_KR", "reason": "schema/legacy rejected"}
++{"status": "HOLD_PENDING_KR", "reason": "signature"}
++{"status": "HOLD_PENDING_KR", "reason": "schema/legacy rejected"}
++{"status": "HOLD_PENDING_KR", "reason": "protected or non-task issue"}
++{"status": "HOLD_PENDING_KR", "reason": "simulation identity"}
++{"status": "HOLD_PENDING_KR", "reason": "duplicate JSON key"}
++{"type": "RESULT", "status": "PASS", "scope": "simulation-only", "task_id": "SIM-001", "run_id": "SIM-RUN-001", "issue_id": 9001, "issue_number": 999, "payload_sha256": "77a8c656cc0f5d9ca6cf2600305b6550ed904d4a83d01f380c1d866732b80b3c", "executor_sha256": "0afef212dc11f0cd6a12f4281891883694047371c850a8b80819cb131d195971", "path": "C:\\Users\\59605\\AppData\\Local\\Temp\\tmp4uvdg6an\\bd295747d58f49260aebfffbca6a4861418c851546b97363a6e322ad570334ed\\test.txt", "bytes": 17, "sha256": "ffab9aac57e7a50d1e29c6bec89176a15c6c38d27c6f7ca48b757618b0ebe090", "started_at": 1791930534.4265025, "completed_at": 1791930534.429056, "pid": 37108}
++{"status": "HOLD_PENDING_KR", "reason": "untrusted principal/key"}
++{"status": "HOLD_PENDING_KR", "reason": "source binding"}
++{"status": "HOLD_PENDING_KR", "reason": "source binding"}
++{"status": "HOLD_PENDING_KR", "reason": "protected or non-task issue"}
++{"status": "HOLD_PENDING_KR", "reason": "title/content policy"}
++{"status": "HOLD_PENDING_KR", "reason": "protected or non-task issue"}
++{"status": "HOLD_PENDING_KR", "reason": "malformed metadata"}
++{"status": "HOLD_PENDING_KR", "reason": "scan task failure"}
++test_R2_scan_continues (test_security.Security.test_R2_scan_continues) ... ok
++test_R3_expected_mismatch (test_security.Security.test_R3_expected_mismatch) ... ok
++test_R3_no_override (test_security.Security.test_R3_no_override) ... ok
++test_R4_audit_failure_zero_execution (test_security.Security.test_R4_audit_failure_zero_execution) ... ok
++test_R4_persistent_secret_free (test_security.Security.test_R4_persistent_secret_free) ... ok
++test_concurrent_claim_and_process_restart (test_daemon.Tests.test_concurrent_claim_and_process_restart) ... ok
++test_conflicting_nonce_run_issue (test_daemon.Tests.test_conflicting_nonce_run_issue) ... ok
++test_crash_claim_never_reexecutes (test_daemon.Tests.test_crash_claim_never_reexecutes) ... ok
++test_every_field_tamper (test_daemon.Tests.test_every_field_tamper) ... ok
++test_expired_future_and_window (test_daemon.Tests.test_expired_future_and_window) ... ok
++test_false_missing_forged_true_wrong_signature (test_daemon.Tests.test_false_missing_forged_true_wrong_signature) ... ok
++test_legacy_and_protected_task (test_daemon.Tests.test_legacy_and_protected_task) ... ok
++test_legal_restart_duplicate_and_result (test_daemon.Tests.test_legal_restart_duplicate_and_result) ... ok
++test_post_timeout_no_retry (test_daemon.Tests.test_post_timeout_no_retry) ... ok
++test_principal_and_issue_binding (test_daemon.Tests.test_principal_and_issue_binding) ... ok
++test_scan_only_refreshes_simulation (test_daemon.Tests.test_scan_only_refreshes_simulation) ... ok
++test_audit_digest_tamper (test_entrypoint.EntryTests.test_audit_digest_tamper) ... ok
++test_audit_failure_stops (test_entrypoint.EntryTests.test_audit_failure_stops) ... ok
++test_broker_paths_and_zero_post (test_entrypoint.EntryTests.test_broker_paths_and_zero_post) ... ok
++test_cli_offline_and_path_denial (test_entrypoint.EntryTests.test_cli_offline_and_path_denial) ... ok
++test_clock_replay_conflict (test_entrypoint.EntryTests.test_clock_replay_conflict) ... ok
++test_default_and_live_deny (test_entrypoint.EntryTests.test_default_and_live_deny) ... ok
++test_fixture_size_and_schema (test_entrypoint.EntryTests.test_fixture_size_and_schema) ... ok
++test_good_duplicate_restart_audit (test_entrypoint.EntryTests.test_good_duplicate_restart_audit) ... ok
++test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) ... ok
++test_no_network_or_scan (test_entrypoint.EntryTests.test_no_network_or_scan) ... ok
++test_path_alias_and_hardlink (test_entrypoint.EntryTests.test_path_alias_and_hardlink) ... ok
++test_payload_boundary (test_entrypoint.EntryTests.test_payload_boundary) ... ok
++test_source_digest_before_import (test_entrypoint.EntryTests.test_source_digest_before_import) ... ok
++test_concurrent_claim_and_process_restart (test_daemon.Tests.test_concurrent_claim_and_process_restart) ... ok
++test_conflicting_nonce_run_issue (test_daemon.Tests.test_conflicting_nonce_run_issue) ... ok
++test_crash_claim_never_reexecutes (test_daemon.Tests.test_crash_claim_never_reexecutes) ... ok
++test_every_field_tamper (test_daemon.Tests.test_every_field_tamper) ... ok
++test_expired_future_and_window (test_daemon.Tests.test_expired_future_and_window) ... ok
++test_false_missing_forged_true_wrong_signature (test_daemon.Tests.test_false_missing_forged_true_wrong_signature) ... ok
++test_legacy_and_protected_task (test_daemon.Tests.test_legacy_and_protected_task) ... ok
++test_legal_restart_duplicate_and_result (test_daemon.Tests.test_legal_restart_duplicate_and_result) ... ok
++test_post_timeout_no_retry (test_daemon.Tests.test_post_timeout_no_retry) ... ok
++test_principal_and_issue_binding (test_daemon.Tests.test_principal_and_issue_binding) ... ok
++test_scan_only_refreshes_simulation (test_daemon.Tests.test_scan_only_refreshes_simulation) ... ok
++test_concurrent_reservation (test_proxy.Tests.test_concurrent_reservation) ... ERROR
++test_concurrent_reservation (test_proxy.Tests.test_concurrent_reservation) ... ERROR
++test_disconnect_consumes_attempt (test_proxy.Tests.test_disconnect_consumes_attempt) ... FAIL
++test_disconnect_consumes_attempt (test_proxy.Tests.test_disconnect_consumes_attempt) ... ERROR
++test_disk_failure_before_post (test_proxy.Tests.test_disk_failure_before_post) ... FAIL
++test_duplicate_json (test_proxy.Tests.test_duplicate_json) ... ok
++test_expired (test_proxy.Tests.test_expired) ... ok
++test_issue_binding (test_proxy.Tests.test_issue_binding) ... ok
++test_oversize (test_proxy.Tests.test_oversize) ... FAIL
++test_policy_binding (test_proxy.Tests.test_policy_binding) ... ok
++test_proxy_environment (test_proxy.Tests.test_proxy_environment) ... ok
++test_redirect (test_proxy.Tests.test_redirect) ... FAIL
++test_success_and_restart (test_proxy.Tests.test_success_and_restart) ... ERROR
++test_timeout_consumes_attempt (test_proxy.Tests.test_timeout_consumes_attempt) ... FAIL
++test_wrong_bot_no_readback (test_proxy.Tests.test_wrong_bot_no_readback) ... FAIL
++test_wrong_readback_no_retry (test_proxy.Tests.test_wrong_readback_no_retry) ... FAIL
++
++======================================================================
++ERROR: test_concurrent_reservation (test_proxy.Tests.test_concurrent_reservation)
++----------------------------------------------------------------------
++Traceback (most recent call last):
++  File "C:\Users\59605\.codex\.chatgpt-projects\g-p-6a8437c626508191bcc3bde036554c2b\mozi-v2-cut2-20261014\test_proxy.py", line 120, in test_concurrent_reservation
++    a=self.broker(); b=self.broker(); self.assertEqual(a.run(),'VERIFIED')
++                                                       ^^^^^^^
++  File "C:\Users\59605\.codex\.chatgpt-projects\g-p-6a8437c626508191bcc3bde036554c2b\mozi-v2-cut2-20261014\proxy.py", line 126, in run
++    self.issue(self.wire.request('GET',path))
++               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++  File "C:\Users\59605\.codex\.chatgpt-projects\g-p-6a8437c626508191bcc3bde036554c2b\mozi-v2-cut2-20261014\proxy.py", line 71, in request
++    context=ssl.create_default_context())
++            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++  File "C:\Users\59605\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\ssl.py", line 698, in create_default_context
++    context = SSLContext(PROTOCOL_TLS_CLIENT)
++              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++  File "C:\Users\59605\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\ssl.py", line 438, in __new__
++    self = _SSLContext.__new__(cls, protocol)
++           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++ssl.SSLError: [SSL] unknown error (_ssl.c:3036)
++
++======================================================================
++ERROR: test_concurrent_reservation (test_proxy.Tests.test_concurrent_reservation)
++----------------------------------------------------------------------
++Traceback (most recent call last):
++  File "C:\Users\59605\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 633, in _rmtree_unsafe
++    os.unlink(fullname)
++PermissionError: [WinError 32] ��һ����������ʹ�ô��ļ��������޷����ʡ�: 'C:\\Users\\59605\\AppData\\Local\\Temp\\tmpxt1p3cfq\\ledger.db'
++
++During handling of the above exception, another exception occurred:
++
++Traceback (most recent call last):
++  File "C:\Users\59605\.codex\.chatgpt-projects\g-p-6a8437c626508191bcc3bde036554c2b\mozi-v2-cut2-20261014\test_proxy.py", line 50, in tearDown
++    self.env.stop(); self.patch.stop(); self.server.shutdown(); self.server.server_close(); self.tmp.cleanup()
++                                                                                            ^^^^^^^^^^^^^^^^^^
++  File "C:\Users\59605\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 954, in cleanup
++    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
++  File "C:\Users\59605\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 934, in _rmtree
++    _shutil.rmtree(name, onexc=onexc)
++  File "C:\Users\59605\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 781, in rmtree
++    return _rmtree_unsafe(path, onexc)
++           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
++  File "C:\Users\59605\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 635, in _rmtree_unsafe
++    onexc(os.unlink, fullname, err)
++  File "C:\Users\59605\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 909, in onexc
++    _os.unlink(path)
++PermissionError: [WinError 32] ��һ����������ʹ�ô��ļ��������޷����ʡ�: 'C:\\Users\\59605\\AppData\\Local\\Temp\\tmpxt1p3cfq\\ledger.db'
++
++======================================================================
++ERROR: test_disconnect_consumes_attempt (test_proxy.Tests.test_disconnect_consumes_attempt)
++----------------------------------------------------------------------
++Traceback (most recent call last):
++  File "C:\Users\59605\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 633, in _rmtree_unsafe
++    os.unlink(fullname)
++PermissionError: [WinError 32] ��һ����������ʹ�ô��ļ��������޷����ʡ�: 'C:\\Users\\59605\\AppData\\Local\\Temp\\tmpokdaec0v\\ledger.db'
++
++During handling of the above exception, another exception occurred:
++
++Traceback (most recent call last):
++  File "C:\Users\59605\.codex\.chatgpt-projects\g-p-6a8437c626508191bcc3bde036554c2b\mozi-v2-cut2-20261014\test_proxy.py", line 50, in tearDown
++    self.env.stop(); self.patch.stop(); self.server.shutdown(); self.server.server_close(); self.tmp.cleanup()
++                                                                                            ^^^^^^^^^^^^^^^^^^
++  File "C:\Users\59605\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 954, in cleanup
++    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
++  File "C:\Users\59605\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 934, in _rmtree
++    _shutil.rmtree(name, onexc=onexc)
++  File "C:\Users\59605\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 781, in rmtree
++    return _rmtree_unsafe(path, onexc)
++           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
++  File "C:\Users\59605\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 635, in _rmtree_unsafe
++    onexc(os.unlink, fullname, err)
++  File "C:\Users\59605\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 909, in onexc
++    _os.unlink(path)
++PermissionError: [WinError 32] ��һ����������ʹ�ô��ļ��������޷����ʡ�: 'C:\\Users\\59605\\AppData\\Local\\Temp\\tmpokdaec0v\\ledger.db'
++
++======================================================================
++ERROR: test_success_and_restart (test_proxy.Tests.test_success_and_restart)
++----------------------------------------------------------------------
++Traceback (most recent call last):
++  File "C:\Users\59605\.codex\.chatgpt-projects\g-p-6a8437c626508191bcc3bde036554c2b\mozi-v2-cut2-20261014\test_proxy.py", line 57, in test_success_and_restart
++    self.assertEqual(self.run_once(),'VERIFIED')
++                     ^^^^^^^^^^^^^^^
++  File "C:\Users\59605\.codex\.chatgpt-projects\g-p-6a8437c626508191bcc3bde036554c2b\mozi-v2-cut2-20261014\test_proxy.py", line 54, in run_once
++    try: return b.run()
++                ^^^^^^^
++  File "C:\Users\59605\.codex\.chatgpt-projects\g-p-6a8437c626508191bcc3bde036554c2b\mozi-v2-cut2-20261014\proxy.py", line 126, in run
++    self.issue(self.wire.request('GET',path))
++               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++  File "C:\Users\59605\.codex\.chatgpt-projects\g-p-6a8437c626508191bcc3bde036554c2b\mozi-v2-cut2-20261014\proxy.py", line 71, in request
++    context=ssl.create_default_context())
++            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++  File "C:\Users\59605\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\ssl.py", line 698, in create_default_context
++    context = SSLContext(PROTOCOL_TLS_CLIENT)
++              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++  File "C:\Users\59605\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\ssl.py", line 438, in __new__
++    self = _SSLContext.__new__(cls, protocol)
++           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++ssl.SSLError: [SSL] unknown error (_ssl.c:3036)
++
++======================================================================
++FAIL: test_disconnect_consumes_attempt (test_proxy.Tests.test_disconnect_consumes_attempt)
++----------------------------------------------------------------------
++Traceback (most recent call last):
++  File "C:\Users\59605\.codex\.chatgpt-projects\g-p-6a8437c626508191bcc3bde036554c2b\mozi-v2-cut2-20261014\test_proxy.py", line 75, in test_disconnect_consumes_attempt
++    b=self.broker(); self.assertEqual(b.db.execute('SELECT status FROM once').fetchone(),('POST_ATTEMPT',)); b.close()
++                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++AssertionError: None != ('POST_ATTEMPT',)
++
++======================================================================
++FAIL: test_disk_failure_before_post (test_proxy.Tests.test_disk_failure_before_post)
++----------------------------------------------------------------------
++Traceback (most recent call last):
++  File "C:\Users\59605\.codex\.chatgpt-projects\g-p-6a8437c626508191bcc3bde036554c2b\mozi-v2-cut2-20261014\test_proxy.py", line 106, in test_disk_failure_before_post
++    b.close(); self.assertEqual(len(self.calls),1)
++               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++AssertionError: 0 != 1
++
++======================================================================
++FAIL: test_oversize (test_proxy.Tests.test_oversize)
++----------------------------------------------------------------------
++Traceback (most recent call last):
++  File "C:\Users\59605\.codex\.chatgpt-projects\g-p-6a8437c626508191bcc3bde036554c2b\mozi-v2-cut2-20261014\test_proxy.py", line 94, in test_oversize
++    self.assertEqual(len(self.calls),1)
++AssertionError: 0 != 1
++
++======================================================================
++FAIL: test_redirect (test_proxy.Tests.test_redirect)
++----------------------------------------------------------------------
++Traceback (most recent call last):
++  File "C:\Users\59605\.codex\.chatgpt-projects\g-p-6a8437c626508191bcc3bde036554c2b\mozi-v2-cut2-20261014\test_proxy.py", line 90, in test_redirect
++    self.assertEqual(len(self.calls),1)
++AssertionError: 0 != 1
++
++======================================================================
++FAIL: test_timeout_consumes_attempt (test_proxy.Tests.test_timeout_consumes_attempt)
++----------------------------------------------------------------------
++Traceback (most recent call last):
++  File "C:\Users\59605\.codex\.chatgpt-projects\g-p-6a8437c626508191bcc3bde036554c2b\mozi-v2-cut2-20261014\test_proxy.py", line 116, in test_timeout_consumes_attempt
++    self.assertEqual(len(self.calls),1)
++AssertionError: 0 != 1
++
++======================================================================
++FAIL: test_wrong_bot_no_readback (test_proxy.Tests.test_wrong_bot_no_readback)
++----------------------------------------------------------------------
++Traceback (most recent call last):
++  File "C:\Users\59605\.codex\.chatgpt-projects\g-p-6a8437c626508191bcc3bde036554c2b\mozi-v2-cut2-20261014\test_proxy.py", line 86, in test_wrong_bot_no_readback
++    self.assertEqual(len(self.calls),2)
++AssertionError: 0 != 2
++
++======================================================================
++FAIL: test_wrong_readback_no_retry (test_proxy.Tests.test_wrong_readback_no_retry)
++----------------------------------------------------------------------
++Traceback (most recent call last):
++  File "C:\Users\59605\.codex\.chatgpt-projects\g-p-6a8437c626508191bcc3bde036554c2b\mozi-v2-cut2-20261014\test_proxy.py", line 82, in test_wrong_readback_no_retry
++    self.assertEqual(len(self.calls),3)
++AssertionError: 0 != 3
++
++----------------------------------------------------------------------
++Ran 69 tests in 9.935s
++
++FAILED (failures=7, errors=4)
++concurrent statuses: ['PASS', 'DUPLICATE', 'DUPLICATE', 'DUPLICATE'] new process: DUPLICATE
++{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
++{"status": "HOLD_PENDING_KR", "reason": "source binding"}
++{"status": "HOLD_PENDING_KR", "reason": "source binding"}
++{"status": "HOLD_PENDING_KR", "reason": "source binding"}
++{"status": "HOLD_PENDING_KR", "reason": "untrusted principal/key"}
++{"status": "HOLD_PENDING_KR", "reason": "untrusted principal/key"}
++{"status": "HOLD_PENDING_KR", "reason": "title/content policy"}
++{"status": "HOLD_PENDING_KR", "reason": "signature"}
++{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
++{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
++{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
++{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
++{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
++{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
++{"status": "HOLD_PENDING_KR", "reason": "signature"}
++{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
++{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
++{"status": "HOLD_PENDING_KR", "reason": "simulation identity"}
++{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
++{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
++{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
++{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
++{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
++{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
++{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
++{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
++{"status": "HOLD_PENDING_KR", "reason": "schema/legacy rejected"}
++{"status": "HOLD_PENDING_KR", "reason": "signature"}
++{"status": "HOLD_PENDING_KR", "reason": "schema/legacy rejected"}
++{"status": "HOLD_PENDING_KR", "reason": "protected or non-task issue"}
++{"status": "HOLD_PENDING_KR", "reason": "simulation identity"}
++{"status": "HOLD_PENDING_KR", "reason": "duplicate JSON key"}
++{"type": "RESULT", "status": "PASS", "scope": "simulation-only", "task_id": "SIM-001", "run_id": "SIM-RUN-001", "issue_id": 9001, "issue_number": 999, "payload_sha256": "77a8c656cc0f5d9ca6cf2600305b6550ed904d4a83d01f380c1d866732b80b3c", "executor_sha256": "0afef212dc11f0cd6a12f4281891883694047371c850a8b80819cb131d195971", "path": "C:\\Users\\59605\\AppData\\Local\\Temp\\tmpn5aus84k\\bd295747d58f49260aebfffbca6a4861418c851546b97363a6e322ad570334ed\\test.txt", "bytes": 17, "sha256": "ffab9aac57e7a50d1e29c6bec89176a15c6c38d27c6f7ca48b757618b0ebe090", "started_at": 1791930534.9702406, "completed_at": 1791930534.9722412, "pid": 37108}
++{"status": "HOLD_PENDING_KR", "reason": "untrusted principal/key"}
++{"status": "HOLD_PENDING_KR", "reason": "source binding"}
++{"status": "HOLD_PENDING_KR", "reason": "source binding"}
++{"status": "HOLD_PENDING_KR", "reason": "protected or non-task issue"}
++{"status": "HOLD_PENDING_KR", "reason": "title/content policy"}
++{"status": "HOLD_PENDING_KR", "reason": "protected or non-task issue"}
++concurrent statuses: ['PASS', 'DUPLICATE', 'DUPLICATE', 'DUPLICATE'] new process: DUPLICATE
++{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
++{"status": "HOLD_PENDING_KR", "reason": "source binding"}
++{"status": "HOLD_PENDING_KR", "reason": "source binding"}
++{"status": "HOLD_PENDING_KR", "reason": "source binding"}
++{"status": "HOLD_PENDING_KR", "reason": "untrusted principal/key"}
++{"status": "HOLD_PENDING_KR", "reason": "untrusted principal/key"}
++{"status": "HOLD_PENDING_KR", "reason": "title/content policy"}
++{"status": "HOLD_PENDING_KR", "reason": "signature"}
++{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
++{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
++{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
++{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
++{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
++{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
++{"status": "HOLD_PENDING_KR", "reason": "signature"}
++{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
++{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
++{"status": "HOLD_PENDING_KR", "reason": "simulation identity"}
++{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
++{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
++{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
++{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
++{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
++{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
++{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
++{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
++{"status": "HOLD_PENDING_KR", "reason": "schema/legacy rejected"}
++{"status": "HOLD_PENDING_KR", "reason": "signature"}
++{"status": "HOLD_PENDING_KR", "reason": "schema/legacy rejected"}
++{"status": "HOLD_PENDING_KR", "reason": "protected or non-task issue"}
++{"status": "HOLD_PENDING_KR", "reason": "simulation identity"}
++{"status": "HOLD_PENDING_KR", "reason": "duplicate JSON key"}
++{"type": "RESULT", "status": "PASS", "scope": "simulation-only", "task_id": "SIM-001", "run_id": "SIM-RUN-001", "issue_id": 9001, "issue_number": 999, "payload_sha256": "77a8c656cc0f5d9ca6cf2600305b6550ed904d4a83d01f380c1d866732b80b3c", "executor_sha256": "0afef212dc11f0cd6a12f4281891883694047371c850a8b80819cb131d195971", "path": "C:\\Users\\59605\\AppData\\Local\\Temp\\tmp2u4sipx0\\bd295747d58f49260aebfffbca6a4861418c851546b97363a6e322ad570334ed\\test.txt", "bytes": 17, "sha256": "ffab9aac57e7a50d1e29c6bec89176a15c6c38d27c6f7ca48b757618b0ebe090", "started_at": 1791930536.7547464, "completed_at": 1791930536.7572494, "pid": 37108}
++{"status": "HOLD_PENDING_KR", "reason": "untrusted principal/key"}
++{"status": "HOLD_PENDING_KR", "reason": "source binding"}
++{"status": "HOLD_PENDING_KR", "reason": "source binding"}
++{"status": "HOLD_PENDING_KR", "reason": "protected or non-task issue"}
++{"status": "HOLD_PENDING_KR", "reason": "title/content policy"}
++{"status": "HOLD_PENDING_KR", "reason": "protected or non-task issue"}
+--- /dev/null
++++ b/experiments/mozi-v2-cut2-20261014/mutation-results.json
+@@ -0,0 +1,5 @@
++{
++  "issue": 1,
++  "attempt": 1,
++  "readback": 1
++}
+--- /dev/null
++++ b/experiments/mozi-v2-cut2-20261014/red-mutant-issue.log
+@@ -0,0 +1,16 @@
++test_issue_binding (test_proxy.Tests.test_issue_binding) ... 
++  test_issue_binding (test_proxy.Tests.test_issue_binding) (key='body') ... FAIL
++
++======================================================================
++FAIL: test_issue_binding (test_proxy.Tests.test_issue_binding) (key='body')
++----------------------------------------------------------------------
++Traceback (most recent call last):
++  File "C:\Users\59605\AppData\Local\Temp\tmp9qaok01h\test_proxy.py", line 71, in test_issue_binding
++    with self.assertRaises(Exception): b.issue(obj)
++         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++AssertionError: Exception not raised
++
++----------------------------------------------------------------------
++Ran 1 test in 0.516s
++
++FAILED (failures=1)
+--- /dev/null
++++ b/experiments/mozi-v2-cut2-20261014/red-mutant-attempt.log
+@@ -0,0 +1,15 @@
++test_success_and_restart (test_proxy.Tests.test_success_and_restart) ... FAIL
++
++======================================================================
++FAIL: test_success_and_restart (test_proxy.Tests.test_success_and_restart)
++----------------------------------------------------------------------
++Traceback (most recent call last):
++  File "C:\Users\59605\AppData\Local\Temp\tmpkhy0d4us\test_proxy.py", line 64, in test_success_and_restart
++    with self.assertRaises(Exception): self.run_once()
++         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++AssertionError: Exception not raised
++
++----------------------------------------------------------------------
++Ran 1 test in 0.563s
++
++FAILED (failures=1)
+--- /dev/null
++++ b/experiments/mozi-v2-cut2-20261014/red-mutant-readback.log
+@@ -0,0 +1,15 @@
++test_wrong_readback_no_retry (test_proxy.Tests.test_wrong_readback_no_retry) ... FAIL
++
++======================================================================
++FAIL: test_wrong_readback_no_retry (test_proxy.Tests.test_wrong_readback_no_retry)
++----------------------------------------------------------------------
++Traceback (most recent call last):
++  File "C:\Users\59605\AppData\Local\Temp\tmpx4lu3clc\test_proxy.py", line 86, in test_wrong_readback_no_retry
++    with self.assertRaises(Exception): self.run_once()
++         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++AssertionError: Exception not raised
++
++----------------------------------------------------------------------
++Ran 1 test in 0.531s
++
++FAILED (failures=1)

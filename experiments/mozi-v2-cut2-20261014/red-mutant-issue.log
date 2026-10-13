@@ -1,0 +1,16 @@
+test_issue_binding (test_proxy.Tests.test_issue_binding) ... 
+  test_issue_binding (test_proxy.Tests.test_issue_binding) (key='body') ... FAIL
+
+======================================================================
+FAIL: test_issue_binding (test_proxy.Tests.test_issue_binding) (key='body')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\59605\AppData\Local\Temp\tmp9qaok01h\test_proxy.py", line 71, in test_issue_binding
+    with self.assertRaises(Exception): b.issue(obj)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Exception not raised
+
+----------------------------------------------------------------------
+Ran 1 test in 0.516s
+
+FAILED (failures=1)

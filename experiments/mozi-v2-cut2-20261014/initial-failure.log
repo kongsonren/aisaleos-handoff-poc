@@ -1,0 +1,355 @@
+test_concurrent_claim_and_process_restart (test_daemon.Tests.test_concurrent_claim_and_process_restart) ... ok
+test_conflicting_nonce_run_issue (test_daemon.Tests.test_conflicting_nonce_run_issue) ... ok
+test_crash_claim_never_reexecutes (test_daemon.Tests.test_crash_claim_never_reexecutes) ... ok
+test_every_field_tamper (test_daemon.Tests.test_every_field_tamper) ... ok
+test_expired_future_and_window (test_daemon.Tests.test_expired_future_and_window) ... ok
+test_false_missing_forged_true_wrong_signature (test_daemon.Tests.test_false_missing_forged_true_wrong_signature) ... ok
+test_legacy_and_protected_task (test_daemon.Tests.test_legacy_and_protected_task) ... ok
+test_legal_restart_duplicate_and_result (test_daemon.Tests.test_legal_restart_duplicate_and_result) ... ok
+test_post_timeout_no_retry (test_daemon.Tests.test_post_timeout_no_retry) ... ok
+test_principal_and_issue_binding (test_daemon.Tests.test_principal_and_issue_binding) ... ok
+test_scan_only_refreshes_simulation (test_daemon.Tests.test_scan_only_refreshes_simulation) ... ok
+test_R1_transport_endpoint (test_security.Security.test_R1_transport_endpoint) ... ok
+test_R1_wrong_result_metadata (test_security.Security.test_R1_wrong_result_metadata) ... ok
+test_R2_global_failure (test_security.Security.test_R2_global_failure) ... ok
+test_R2_malformed (test_security.Security.test_R2_malformed) ... ok
+concurrent statuses: ['DUPLICATE', 'PASS', 'DUPLICATE', 'DUPLICATE'] new process: DUPLICATE
+{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
+{"status": "HOLD_PENDING_KR", "reason": "source binding"}
+{"status": "HOLD_PENDING_KR", "reason": "source binding"}
+{"status": "HOLD_PENDING_KR", "reason": "source binding"}
+{"status": "HOLD_PENDING_KR", "reason": "untrusted principal/key"}
+{"status": "HOLD_PENDING_KR", "reason": "untrusted principal/key"}
+{"status": "HOLD_PENDING_KR", "reason": "title/content policy"}
+{"status": "HOLD_PENDING_KR", "reason": "signature"}
+{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
+{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
+{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
+{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
+{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
+{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
+{"status": "HOLD_PENDING_KR", "reason": "signature"}
+{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
+{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
+{"status": "HOLD_PENDING_KR", "reason": "simulation identity"}
+{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
+{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
+{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
+{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
+{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
+{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
+{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
+{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
+{"status": "HOLD_PENDING_KR", "reason": "schema/legacy rejected"}
+{"status": "HOLD_PENDING_KR", "reason": "signature"}
+{"status": "HOLD_PENDING_KR", "reason": "schema/legacy rejected"}
+{"status": "HOLD_PENDING_KR", "reason": "protected or non-task issue"}
+{"status": "HOLD_PENDING_KR", "reason": "simulation identity"}
+{"status": "HOLD_PENDING_KR", "reason": "duplicate JSON key"}
+{"type": "RESULT", "status": "PASS", "scope": "simulation-only", "task_id": "SIM-001", "run_id": "SIM-RUN-001", "issue_id": 9001, "issue_number": 999, "payload_sha256": "77a8c656cc0f5d9ca6cf2600305b6550ed904d4a83d01f380c1d866732b80b3c", "executor_sha256": "0afef212dc11f0cd6a12f4281891883694047371c850a8b80819cb131d195971", "path": "C:\\Users\\59605\\AppData\\Local\\Temp\\tmp4uvdg6an\\bd295747d58f49260aebfffbca6a4861418c851546b97363a6e322ad570334ed\\test.txt", "bytes": 17, "sha256": "ffab9aac57e7a50d1e29c6bec89176a15c6c38d27c6f7ca48b757618b0ebe090", "started_at": 1791930534.4265025, "completed_at": 1791930534.429056, "pid": 37108}
+{"status": "HOLD_PENDING_KR", "reason": "untrusted principal/key"}
+{"status": "HOLD_PENDING_KR", "reason": "source binding"}
+{"status": "HOLD_PENDING_KR", "reason": "source binding"}
+{"status": "HOLD_PENDING_KR", "reason": "protected or non-task issue"}
+{"status": "HOLD_PENDING_KR", "reason": "title/content policy"}
+{"status": "HOLD_PENDING_KR", "reason": "protected or non-task issue"}
+{"status": "HOLD_PENDING_KR", "reason": "malformed metadata"}
+{"status": "HOLD_PENDING_KR", "reason": "scan task failure"}
+test_R2_scan_continues (test_security.Security.test_R2_scan_continues) ... ok
+test_R3_expected_mismatch (test_security.Security.test_R3_expected_mismatch) ... ok
+test_R3_no_override (test_security.Security.test_R3_no_override) ... ok
+test_R4_audit_failure_zero_execution (test_security.Security.test_R4_audit_failure_zero_execution) ... ok
+test_R4_persistent_secret_free (test_security.Security.test_R4_persistent_secret_free) ... ok
+test_concurrent_claim_and_process_restart (test_daemon.Tests.test_concurrent_claim_and_process_restart) ... ok
+test_conflicting_nonce_run_issue (test_daemon.Tests.test_conflicting_nonce_run_issue) ... ok
+test_crash_claim_never_reexecutes (test_daemon.Tests.test_crash_claim_never_reexecutes) ... ok
+test_every_field_tamper (test_daemon.Tests.test_every_field_tamper) ... ok
+test_expired_future_and_window (test_daemon.Tests.test_expired_future_and_window) ... ok
+test_false_missing_forged_true_wrong_signature (test_daemon.Tests.test_false_missing_forged_true_wrong_signature) ... ok
+test_legacy_and_protected_task (test_daemon.Tests.test_legacy_and_protected_task) ... ok
+test_legal_restart_duplicate_and_result (test_daemon.Tests.test_legal_restart_duplicate_and_result) ... ok
+test_post_timeout_no_retry (test_daemon.Tests.test_post_timeout_no_retry) ... ok
+test_principal_and_issue_binding (test_daemon.Tests.test_principal_and_issue_binding) ... ok
+test_scan_only_refreshes_simulation (test_daemon.Tests.test_scan_only_refreshes_simulation) ... ok
+test_audit_digest_tamper (test_entrypoint.EntryTests.test_audit_digest_tamper) ... ok
+test_audit_failure_stops (test_entrypoint.EntryTests.test_audit_failure_stops) ... ok
+test_broker_paths_and_zero_post (test_entrypoint.EntryTests.test_broker_paths_and_zero_post) ... ok
+test_cli_offline_and_path_denial (test_entrypoint.EntryTests.test_cli_offline_and_path_denial) ... ok
+test_clock_replay_conflict (test_entrypoint.EntryTests.test_clock_replay_conflict) ... ok
+test_default_and_live_deny (test_entrypoint.EntryTests.test_default_and_live_deny) ... ok
+test_fixture_size_and_schema (test_entrypoint.EntryTests.test_fixture_size_and_schema) ... ok
+test_good_duplicate_restart_audit (test_entrypoint.EntryTests.test_good_duplicate_restart_audit) ... ok
+test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) ... ok
+test_no_network_or_scan (test_entrypoint.EntryTests.test_no_network_or_scan) ... ok
+test_path_alias_and_hardlink (test_entrypoint.EntryTests.test_path_alias_and_hardlink) ... ok
+test_payload_boundary (test_entrypoint.EntryTests.test_payload_boundary) ... ok
+test_source_digest_before_import (test_entrypoint.EntryTests.test_source_digest_before_import) ... ok
+test_concurrent_claim_and_process_restart (test_daemon.Tests.test_concurrent_claim_and_process_restart) ... ok
+test_conflicting_nonce_run_issue (test_daemon.Tests.test_conflicting_nonce_run_issue) ... ok
+test_crash_claim_never_reexecutes (test_daemon.Tests.test_crash_claim_never_reexecutes) ... ok
+test_every_field_tamper (test_daemon.Tests.test_every_field_tamper) ... ok
+test_expired_future_and_window (test_daemon.Tests.test_expired_future_and_window) ... ok
+test_false_missing_forged_true_wrong_signature (test_daemon.Tests.test_false_missing_forged_true_wrong_signature) ... ok
+test_legacy_and_protected_task (test_daemon.Tests.test_legacy_and_protected_task) ... ok
+test_legal_restart_duplicate_and_result (test_daemon.Tests.test_legal_restart_duplicate_and_result) ... ok
+test_post_timeout_no_retry (test_daemon.Tests.test_post_timeout_no_retry) ... ok
+test_principal_and_issue_binding (test_daemon.Tests.test_principal_and_issue_binding) ... ok
+test_scan_only_refreshes_simulation (test_daemon.Tests.test_scan_only_refreshes_simulation) ... ok
+test_concurrent_reservation (test_proxy.Tests.test_concurrent_reservation) ... ERROR
+test_concurrent_reservation (test_proxy.Tests.test_concurrent_reservation) ... ERROR
+test_disconnect_consumes_attempt (test_proxy.Tests.test_disconnect_consumes_attempt) ... FAIL
+test_disconnect_consumes_attempt (test_proxy.Tests.test_disconnect_consumes_attempt) ... ERROR
+test_disk_failure_before_post (test_proxy.Tests.test_disk_failure_before_post) ... FAIL
+test_duplicate_json (test_proxy.Tests.test_duplicate_json) ... ok
+test_expired (test_proxy.Tests.test_expired) ... ok
+test_issue_binding (test_proxy.Tests.test_issue_binding) ... ok
+test_oversize (test_proxy.Tests.test_oversize) ... FAIL
+test_policy_binding (test_proxy.Tests.test_policy_binding) ... ok
+test_proxy_environment (test_proxy.Tests.test_proxy_environment) ... ok
+test_redirect (test_proxy.Tests.test_redirect) ... FAIL
+test_success_and_restart (test_proxy.Tests.test_success_and_restart) ... ERROR
+test_timeout_consumes_attempt (test_proxy.Tests.test_timeout_consumes_attempt) ... FAIL
+test_wrong_bot_no_readback (test_proxy.Tests.test_wrong_bot_no_readback) ... FAIL
+test_wrong_readback_no_retry (test_proxy.Tests.test_wrong_readback_no_retry) ... FAIL
+
+======================================================================
+ERROR: test_concurrent_reservation (test_proxy.Tests.test_concurrent_reservation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\59605\.codex\.chatgpt-projects\g-p-6a8437c626508191bcc3bde036554c2b\mozi-v2-cut2-20261014\test_proxy.py", line 120, in test_concurrent_reservation
+    a=self.broker(); b=self.broker(); self.assertEqual(a.run(),'VERIFIED')
+                                                       ^^^^^^^
+  File "C:\Users\59605\.codex\.chatgpt-projects\g-p-6a8437c626508191bcc3bde036554c2b\mozi-v2-cut2-20261014\proxy.py", line 126, in run
+    self.issue(self.wire.request('GET',path))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\59605\.codex\.chatgpt-projects\g-p-6a8437c626508191bcc3bde036554c2b\mozi-v2-cut2-20261014\proxy.py", line 71, in request
+    context=ssl.create_default_context())
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\59605\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\ssl.py", line 698, in create_default_context
+    context = SSLContext(PROTOCOL_TLS_CLIENT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\59605\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\ssl.py", line 438, in __new__
+    self = _SSLContext.__new__(cls, protocol)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ssl.SSLError: [SSL] unknown error (_ssl.c:3036)
+
+======================================================================
+ERROR: test_concurrent_reservation (test_proxy.Tests.test_concurrent_reservation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\59605\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 633, in _rmtree_unsafe
+    os.unlink(fullname)
+PermissionError: [WinError 32] ��һ����������ʹ�ô��ļ��������޷����ʡ�: 'C:\\Users\\59605\\AppData\\Local\\Temp\\tmpxt1p3cfq\\ledger.db'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\59605\.codex\.chatgpt-projects\g-p-6a8437c626508191bcc3bde036554c2b\mozi-v2-cut2-20261014\test_proxy.py", line 50, in tearDown
+    self.env.stop(); self.patch.stop(); self.server.shutdown(); self.server.server_close(); self.tmp.cleanup()
+                                                                                            ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\59605\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 954, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+  File "C:\Users\59605\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "C:\Users\59605\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\59605\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 635, in _rmtree_unsafe
+    onexc(os.unlink, fullname, err)
+  File "C:\Users\59605\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 909, in onexc
+    _os.unlink(path)
+PermissionError: [WinError 32] ��һ����������ʹ�ô��ļ��������޷����ʡ�: 'C:\\Users\\59605\\AppData\\Local\\Temp\\tmpxt1p3cfq\\ledger.db'
+
+======================================================================
+ERROR: test_disconnect_consumes_attempt (test_proxy.Tests.test_disconnect_consumes_attempt)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\59605\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 633, in _rmtree_unsafe
+    os.unlink(fullname)
+PermissionError: [WinError 32] ��һ����������ʹ�ô��ļ��������޷����ʡ�: 'C:\\Users\\59605\\AppData\\Local\\Temp\\tmpokdaec0v\\ledger.db'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\59605\.codex\.chatgpt-projects\g-p-6a8437c626508191bcc3bde036554c2b\mozi-v2-cut2-20261014\test_proxy.py", line 50, in tearDown
+    self.env.stop(); self.patch.stop(); self.server.shutdown(); self.server.server_close(); self.tmp.cleanup()
+                                                                                            ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\59605\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 954, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+  File "C:\Users\59605\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "C:\Users\59605\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\59605\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 635, in _rmtree_unsafe
+    onexc(os.unlink, fullname, err)
+  File "C:\Users\59605\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 909, in onexc
+    _os.unlink(path)
+PermissionError: [WinError 32] ��һ����������ʹ�ô��ļ��������޷����ʡ�: 'C:\\Users\\59605\\AppData\\Local\\Temp\\tmpokdaec0v\\ledger.db'
+
+======================================================================
+ERROR: test_success_and_restart (test_proxy.Tests.test_success_and_restart)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\59605\.codex\.chatgpt-projects\g-p-6a8437c626508191bcc3bde036554c2b\mozi-v2-cut2-20261014\test_proxy.py", line 57, in test_success_and_restart
+    self.assertEqual(self.run_once(),'VERIFIED')
+                     ^^^^^^^^^^^^^^^
+  File "C:\Users\59605\.codex\.chatgpt-projects\g-p-6a8437c626508191bcc3bde036554c2b\mozi-v2-cut2-20261014\test_proxy.py", line 54, in run_once
+    try: return b.run()
+                ^^^^^^^
+  File "C:\Users\59605\.codex\.chatgpt-projects\g-p-6a8437c626508191bcc3bde036554c2b\mozi-v2-cut2-20261014\proxy.py", line 126, in run
+    self.issue(self.wire.request('GET',path))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\59605\.codex\.chatgpt-projects\g-p-6a8437c626508191bcc3bde036554c2b\mozi-v2-cut2-20261014\proxy.py", line 71, in request
+    context=ssl.create_default_context())
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\59605\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\ssl.py", line 698, in create_default_context
+    context = SSLContext(PROTOCOL_TLS_CLIENT)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\59605\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\ssl.py", line 438, in __new__
+    self = _SSLContext.__new__(cls, protocol)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ssl.SSLError: [SSL] unknown error (_ssl.c:3036)
+
+======================================================================
+FAIL: test_disconnect_consumes_attempt (test_proxy.Tests.test_disconnect_consumes_attempt)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\59605\.codex\.chatgpt-projects\g-p-6a8437c626508191bcc3bde036554c2b\mozi-v2-cut2-20261014\test_proxy.py", line 75, in test_disconnect_consumes_attempt
+    b=self.broker(); self.assertEqual(b.db.execute('SELECT status FROM once').fetchone(),('POST_ATTEMPT',)); b.close()
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: None != ('POST_ATTEMPT',)
+
+======================================================================
+FAIL: test_disk_failure_before_post (test_proxy.Tests.test_disk_failure_before_post)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\59605\.codex\.chatgpt-projects\g-p-6a8437c626508191bcc3bde036554c2b\mozi-v2-cut2-20261014\test_proxy.py", line 106, in test_disk_failure_before_post
+    b.close(); self.assertEqual(len(self.calls),1)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_oversize (test_proxy.Tests.test_oversize)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\59605\.codex\.chatgpt-projects\g-p-6a8437c626508191bcc3bde036554c2b\mozi-v2-cut2-20261014\test_proxy.py", line 94, in test_oversize
+    self.assertEqual(len(self.calls),1)
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_redirect (test_proxy.Tests.test_redirect)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\59605\.codex\.chatgpt-projects\g-p-6a8437c626508191bcc3bde036554c2b\mozi-v2-cut2-20261014\test_proxy.py", line 90, in test_redirect
+    self.assertEqual(len(self.calls),1)
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_timeout_consumes_attempt (test_proxy.Tests.test_timeout_consumes_attempt)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\59605\.codex\.chatgpt-projects\g-p-6a8437c626508191bcc3bde036554c2b\mozi-v2-cut2-20261014\test_proxy.py", line 116, in test_timeout_consumes_attempt
+    self.assertEqual(len(self.calls),1)
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_wrong_bot_no_readback (test_proxy.Tests.test_wrong_bot_no_readback)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\59605\.codex\.chatgpt-projects\g-p-6a8437c626508191bcc3bde036554c2b\mozi-v2-cut2-20261014\test_proxy.py", line 86, in test_wrong_bot_no_readback
+    self.assertEqual(len(self.calls),2)
+AssertionError: 0 != 2
+
+======================================================================
+FAIL: test_wrong_readback_no_retry (test_proxy.Tests.test_wrong_readback_no_retry)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\59605\.codex\.chatgpt-projects\g-p-6a8437c626508191bcc3bde036554c2b\mozi-v2-cut2-20261014\test_proxy.py", line 82, in test_wrong_readback_no_retry
+    self.assertEqual(len(self.calls),3)
+AssertionError: 0 != 3
+
+----------------------------------------------------------------------
+Ran 69 tests in 9.935s
+
+FAILED (failures=7, errors=4)
+concurrent statuses: ['PASS', 'DUPLICATE', 'DUPLICATE', 'DUPLICATE'] new process: DUPLICATE
+{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
+{"status": "HOLD_PENDING_KR", "reason": "source binding"}
+{"status": "HOLD_PENDING_KR", "reason": "source binding"}
+{"status": "HOLD_PENDING_KR", "reason": "source binding"}
+{"status": "HOLD_PENDING_KR", "reason": "untrusted principal/key"}
+{"status": "HOLD_PENDING_KR", "reason": "untrusted principal/key"}
+{"status": "HOLD_PENDING_KR", "reason": "title/content policy"}
+{"status": "HOLD_PENDING_KR", "reason": "signature"}
+{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
+{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
+{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
+{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
+{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
+{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
+{"status": "HOLD_PENDING_KR", "reason": "signature"}
+{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
+{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
+{"status": "HOLD_PENDING_KR", "reason": "simulation identity"}
+{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
+{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
+{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
+{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
+{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
+{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
+{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
+{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
+{"status": "HOLD_PENDING_KR", "reason": "schema/legacy rejected"}
+{"status": "HOLD_PENDING_KR", "reason": "signature"}
+{"status": "HOLD_PENDING_KR", "reason": "schema/legacy rejected"}
+{"status": "HOLD_PENDING_KR", "reason": "protected or non-task issue"}
+{"status": "HOLD_PENDING_KR", "reason": "simulation identity"}
+{"status": "HOLD_PENDING_KR", "reason": "duplicate JSON key"}
+{"type": "RESULT", "status": "PASS", "scope": "simulation-only", "task_id": "SIM-001", "run_id": "SIM-RUN-001", "issue_id": 9001, "issue_number": 999, "payload_sha256": "77a8c656cc0f5d9ca6cf2600305b6550ed904d4a83d01f380c1d866732b80b3c", "executor_sha256": "0afef212dc11f0cd6a12f4281891883694047371c850a8b80819cb131d195971", "path": "C:\\Users\\59605\\AppData\\Local\\Temp\\tmpn5aus84k\\bd295747d58f49260aebfffbca6a4861418c851546b97363a6e322ad570334ed\\test.txt", "bytes": 17, "sha256": "ffab9aac57e7a50d1e29c6bec89176a15c6c38d27c6f7ca48b757618b0ebe090", "started_at": 1791930534.9702406, "completed_at": 1791930534.9722412, "pid": 37108}
+{"status": "HOLD_PENDING_KR", "reason": "untrusted principal/key"}
+{"status": "HOLD_PENDING_KR", "reason": "source binding"}
+{"status": "HOLD_PENDING_KR", "reason": "source binding"}
+{"status": "HOLD_PENDING_KR", "reason": "protected or non-task issue"}
+{"status": "HOLD_PENDING_KR", "reason": "title/content policy"}
+{"status": "HOLD_PENDING_KR", "reason": "protected or non-task issue"}
+concurrent statuses: ['PASS', 'DUPLICATE', 'DUPLICATE', 'DUPLICATE'] new process: DUPLICATE
+{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
+{"status": "HOLD_PENDING_KR", "reason": "source binding"}
+{"status": "HOLD_PENDING_KR", "reason": "source binding"}
+{"status": "HOLD_PENDING_KR", "reason": "source binding"}
+{"status": "HOLD_PENDING_KR", "reason": "untrusted principal/key"}
+{"status": "HOLD_PENDING_KR", "reason": "untrusted principal/key"}
+{"status": "HOLD_PENDING_KR", "reason": "title/content policy"}
+{"status": "HOLD_PENDING_KR", "reason": "signature"}
+{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
+{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
+{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
+{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
+{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
+{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
+{"status": "HOLD_PENDING_KR", "reason": "signature"}
+{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
+{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
+{"status": "HOLD_PENDING_KR", "reason": "simulation identity"}
+{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
+{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
+{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
+{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
+{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
+{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
+{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
+{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
+{"status": "HOLD_PENDING_KR", "reason": "schema/legacy rejected"}
+{"status": "HOLD_PENDING_KR", "reason": "signature"}
+{"status": "HOLD_PENDING_KR", "reason": "schema/legacy rejected"}
+{"status": "HOLD_PENDING_KR", "reason": "protected or non-task issue"}
+{"status": "HOLD_PENDING_KR", "reason": "simulation identity"}
+{"status": "HOLD_PENDING_KR", "reason": "duplicate JSON key"}
+{"type": "RESULT", "status": "PASS", "scope": "simulation-only", "task_id": "SIM-001", "run_id": "SIM-RUN-001", "issue_id": 9001, "issue_number": 999, "payload_sha256": "77a8c656cc0f5d9ca6cf2600305b6550ed904d4a83d01f380c1d866732b80b3c", "executor_sha256": "0afef212dc11f0cd6a12f4281891883694047371c850a8b80819cb131d195971", "path": "C:\\Users\\59605\\AppData\\Local\\Temp\\tmp2u4sipx0\\bd295747d58f49260aebfffbca6a4861418c851546b97363a6e322ad570334ed\\test.txt", "bytes": 17, "sha256": "ffab9aac57e7a50d1e29c6bec89176a15c6c38d27c6f7ca48b757618b0ebe090", "started_at": 1791930536.7547464, "completed_at": 1791930536.7572494, "pid": 37108}
+{"status": "HOLD_PENDING_KR", "reason": "untrusted principal/key"}
+{"status": "HOLD_PENDING_KR", "reason": "source binding"}
+{"status": "HOLD_PENDING_KR", "reason": "source binding"}
+{"status": "HOLD_PENDING_KR", "reason": "protected or non-task issue"}
+{"status": "HOLD_PENDING_KR", "reason": "title/content policy"}
+{"status": "HOLD_PENDING_KR", "reason": "protected or non-task issue"}

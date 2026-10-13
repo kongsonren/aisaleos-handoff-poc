@@ -1,0 +1,15 @@
+test_wrong_readback_no_retry (test_proxy.Tests.test_wrong_readback_no_retry) ... FAIL
+
+======================================================================
+FAIL: test_wrong_readback_no_retry (test_proxy.Tests.test_wrong_readback_no_retry)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\59605\AppData\Local\Temp\tmpx4lu3clc\test_proxy.py", line 86, in test_wrong_readback_no_retry
+    with self.assertRaises(Exception): self.run_once()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Exception not raised
+
+----------------------------------------------------------------------
+Ran 1 test in 0.531s
+
+FAILED (failures=1)

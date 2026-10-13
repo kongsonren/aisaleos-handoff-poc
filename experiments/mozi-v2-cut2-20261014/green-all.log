@@ -1,0 +1,94 @@
+test_concurrent_claim_and_process_restart (test_daemon.Tests.test_concurrent_claim_and_process_restart) ... ok
+test_conflicting_nonce_run_issue (test_daemon.Tests.test_conflicting_nonce_run_issue) ... ok
+test_crash_claim_never_reexecutes (test_daemon.Tests.test_crash_claim_never_reexecutes) ... ok
+test_every_field_tamper (test_daemon.Tests.test_every_field_tamper) ... ok
+test_expired_future_and_window (test_daemon.Tests.test_expired_future_and_window) ... ok
+test_false_missing_forged_true_wrong_signature (test_daemon.Tests.test_false_missing_forged_true_wrong_signature) ... ok
+test_legacy_and_protected_task (test_daemon.Tests.test_legacy_and_protected_task) ... ok
+test_legal_restart_duplicate_and_result (test_daemon.Tests.test_legal_restart_duplicate_and_result) ... ok
+test_post_timeout_no_retry (test_daemon.Tests.test_post_timeout_no_retry) ... ok
+test_principal_and_issue_binding (test_daemon.Tests.test_principal_and_issue_binding) ... ok
+test_scan_only_refreshes_simulation (test_daemon.Tests.test_scan_only_refreshes_simulation) ... ok
+test_R1_transport_endpoint (test_security.Security.test_R1_transport_endpoint) ... ok
+test_R1_wrong_result_metadata (test_security.Security.test_R1_wrong_result_metadata) ... ok
+test_R2_global_failure (test_security.Security.test_R2_global_failure) ... ok
+test_R2_malformed (test_security.Security.test_R2_malformed) ... ok
+concurrent statuses: ['PASS', 'DUPLICATE', 'DUPLICATE', 'DUPLICATE'] new process: DUPLICATE
+{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
+{"status": "HOLD_PENDING_KR", "reason": "source binding"}
+{"status": "HOLD_PENDING_KR", "reason": "source binding"}
+{"status": "HOLD_PENDING_KR", "reason": "source binding"}
+{"status": "HOLD_PENDING_KR", "reason": "untrusted principal/key"}
+{"status": "HOLD_PENDING_KR", "reason": "untrusted principal/key"}
+{"status": "HOLD_PENDING_KR", "reason": "title/content policy"}
+{"status": "HOLD_PENDING_KR", "reason": "signature"}
+{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
+{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
+{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
+{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
+{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
+{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
+{"status": "HOLD_PENDING_KR", "reason": "signature"}
+{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
+{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
+{"status": "HOLD_PENDING_KR", "reason": "simulation identity"}
+{"status": "HOLD_PENDING_KR", "reason": "execution policy"}
+{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
+{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
+{"status": "HOLD_PENDING_KR", "reason": "expired/future authorization"}
+{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
+{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
+{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
+{"status": "HOLD_PENDING_KR", "reason": "authorization/HOLD"}
+{"status": "HOLD_PENDING_KR", "reason": "schema/legacy rejected"}
+{"status": "HOLD_PENDING_KR", "reason": "signature"}
+{"status": "HOLD_PENDING_KR", "reason": "schema/legacy rejected"}
+{"status": "HOLD_PENDING_KR", "reason": "protected or non-task issue"}
+{"status": "HOLD_PENDING_KR", "reason": "simulation identity"}
+{"status": "HOLD_PENDING_KR", "reason": "duplicate JSON key"}
+{"type": "RESULT", "status": "PASS", "scope": "simulation-only", "task_id": "SIM-001", "run_id": "SIM-RUN-001", "issue_id": 9001, "issue_number": 999, "payload_sha256": "77a8c656cc0f5d9ca6cf2600305b6550ed904d4a83d01f380c1d866732b80b3c", "executor_sha256": "0afef212dc11f0cd6a12f4281891883694047371c850a8b80819cb131d195971", "path": "C:\\Users\\59605\\AppData\\Local\\Temp\\tmp4bvhzsp8\\bd295747d58f49260aebfffbca6a4861418c851546b97363a6e322ad570334ed\\test.txt", "bytes": 17, "sha256": "ffab9aac57e7a50d1e29c6bec89176a15c6c38d27c6f7ca48b757618b0ebe090", "started_at": 1791930641.2039003, "completed_at": 1791930641.205901, "pid": 63104}
+{"status": "HOLD_PENDING_KR", "reason": "untrusted principal/key"}
+{"status": "HOLD_PENDING_KR", "reason": "source binding"}
+{"status": "HOLD_PENDING_KR", "reason": "source binding"}
+{"status": "HOLD_PENDING_KR", "reason": "protected or non-task issue"}
+{"status": "HOLD_PENDING_KR", "reason": "title/content policy"}
+{"status": "HOLD_PENDING_KR", "reason": "protected or non-task issue"}
+{"status": "HOLD_PENDING_KR", "reason": "malformed metadata"}
+{"status": "HOLD_PENDING_KR", "reason": "scan task failure"}
+test_R2_scan_continues (test_security.Security.test_R2_scan_continues) ... ok
+test_R3_expected_mismatch (test_security.Security.test_R3_expected_mismatch) ... ok
+test_R3_no_override (test_security.Security.test_R3_no_override) ... ok
+test_R4_audit_failure_zero_execution (test_security.Security.test_R4_audit_failure_zero_execution) ... ok
+test_R4_persistent_secret_free (test_security.Security.test_R4_persistent_secret_free) ... ok
+test_audit_digest_tamper (test_entrypoint.EntryTests.test_audit_digest_tamper) ... ok
+test_audit_failure_stops (test_entrypoint.EntryTests.test_audit_failure_stops) ... ok
+test_broker_paths_and_zero_post (test_entrypoint.EntryTests.test_broker_paths_and_zero_post) ... ok
+test_cli_offline_and_path_denial (test_entrypoint.EntryTests.test_cli_offline_and_path_denial) ... ok
+test_clock_replay_conflict (test_entrypoint.EntryTests.test_clock_replay_conflict) ... ok
+test_default_and_live_deny (test_entrypoint.EntryTests.test_default_and_live_deny) ... ok
+test_fixture_size_and_schema (test_entrypoint.EntryTests.test_fixture_size_and_schema) ... ok
+test_good_duplicate_restart_audit (test_entrypoint.EntryTests.test_good_duplicate_restart_audit) ... ok
+test_issue_metadata_and_principal (test_entrypoint.EntryTests.test_issue_metadata_and_principal) ... ok
+test_no_network_or_scan (test_entrypoint.EntryTests.test_no_network_or_scan) ... ok
+test_path_alias_and_hardlink (test_entrypoint.EntryTests.test_path_alias_and_hardlink) ... ok
+test_payload_boundary (test_entrypoint.EntryTests.test_payload_boundary) ... ok
+test_source_digest_before_import (test_entrypoint.EntryTests.test_source_digest_before_import) ... ok
+test_concurrent_reservation (test_proxy.Tests.test_concurrent_reservation) ... ok
+test_disconnect_consumes_attempt (test_proxy.Tests.test_disconnect_consumes_attempt) ... ok
+test_disk_failure_before_post (test_proxy.Tests.test_disk_failure_before_post) ... ok
+test_duplicate_json (test_proxy.Tests.test_duplicate_json) ... ok
+test_expired (test_proxy.Tests.test_expired) ... ok
+test_issue_binding (test_proxy.Tests.test_issue_binding) ... ok
+test_oversize (test_proxy.Tests.test_oversize) ... ok
+test_policy_binding (test_proxy.Tests.test_policy_binding) ... ok
+test_proxy_environment (test_proxy.Tests.test_proxy_environment) ... ok
+test_redirect (test_proxy.Tests.test_redirect) ... ok
+test_success_and_restart (test_proxy.Tests.test_success_and_restart) ... ok
+test_timeout_consumes_attempt (test_proxy.Tests.test_timeout_consumes_attempt) ... ok
+test_wrong_bot_no_readback (test_proxy.Tests.test_wrong_bot_no_readback) ... ok
+test_wrong_readback_no_retry (test_proxy.Tests.test_wrong_readback_no_retry) ... ok
+
+----------------------------------------------------------------------
+Ran 47 tests in 9.494s
+
+OK
