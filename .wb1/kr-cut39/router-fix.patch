@@ -1,0 +1,22 @@
+--- baseline.py
++++ candidate.py
+@@ -876,7 +876,9 @@
+     _ident = None
+     if not is_hai:
+         _ident = detect_identity_tag(fl, r)
+-        if not _ident:
++        if _ident:
++            subtype = _ident["SUBTYPE"]
++        else:
+             _krenv = detect_kr_envelope(fl)
+             if _krenv[0]:
+                 subtype = "KR_DIRECTIVE"
+@@ -1033,7 +1035,7 @@
+             elif detect_identity_tag(fl):
+                 # 身份标签（KR_DECISION / JUDGE）：走【同一】dispatch 决策点（只登记不执行）。
+                 r = dispatch(c, L)
+-            elif detect_kr_envelope(fl):
++            elif detect_kr_envelope(fl)[0]:
+                 # KR 全角命令信封：进入 dispatch（自动回 WAKE 收件回执）-> QUEUE_KR_DIRECTIVE（仅登记）。
+                 r = dispatch(c, L)
+             else:
