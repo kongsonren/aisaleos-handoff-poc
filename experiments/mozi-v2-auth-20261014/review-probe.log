@@ -1,0 +1,34 @@
+{
+  "candidate": "0cec724f29455e5bf14c7efe0bf605eca0fd9c29",
+  "scope": "local adversarial mocks only",
+  "decision": "HOLD_NOT_READY_FOR_CLOUD_ACCEPTANCE",
+  "reproduced": [
+    {
+      "id": "R1",
+      "severity": "P1",
+      "observed": {
+        "status": "RESULT_VERIFIED",
+        "comment_id": 12
+      },
+      "problem": "RESULT readback validates body only; wrong comment ID, author and repository/issue accepted as VERIFIED"
+    },
+    {
+      "id": "R2",
+      "severity": "P2",
+      "observed": "AttributeError",
+      "problem": "malformed metadata escapes HOLD handling; scan has no per-issue exception boundary"
+    },
+    {
+      "id": "R3",
+      "severity": "P2",
+      "observed": "0000000000000000000000000000000000000000000000000000000000000000",
+      "problem": "caller can override measured executor hash; signed executor_sha256 does not necessarily identify running bytes"
+    },
+    {
+      "id": "R4",
+      "severity": "P2",
+      "observed": "no durable rejection record",
+      "problem": "authorization rejection is returned/printed only; no persistent audit event with trusted source and reason"
+    }
+  ]
+}
