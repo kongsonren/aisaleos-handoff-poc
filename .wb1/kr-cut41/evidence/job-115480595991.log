@@ -1,0 +1,182 @@
+﻿2026-10-13T18:55:46.1721610Z Current runner version: '2.337.0'
+2026-10-13T18:55:46.1745251Z ##[group]Runner Image Provisioner
+2026-10-13T18:55:46.1746108Z Hosted Compute Agent
+2026-10-13T18:55:46.1746703Z Version: 20261002.596
+2026-10-13T18:55:46.1747380Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+2026-10-13T18:55:46.1748078Z Build Date: 2026-10-02T22:28:27Z
+2026-10-13T18:55:46.1748728Z Worker ID: {0f360f16-7933-4670-b21f-f3a37cebdeaa}
+2026-10-13T18:55:46.1749411Z Region: centralus
+2026-10-13T18:55:46.1749969Z Cloud: Azure
+2026-10-13T18:55:46.1750509Z ##[endgroup]
+2026-10-13T18:55:46.1751716Z ##[group]Operating System
+2026-10-13T18:55:46.1752279Z Ubuntu
+2026-10-13T18:55:46.1752878Z 24.04.5
+2026-10-13T18:55:46.1753569Z LTS
+2026-10-13T18:55:46.1754115Z ##[endgroup]
+2026-10-13T18:55:46.1754641Z ##[group]Runner Image
+2026-10-13T18:55:46.1755198Z Image: ubuntu-24.04
+2026-10-13T18:55:46.1755765Z Version: 20261004.327.1
+2026-10-13T18:55:46.1756957Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-13T18:55:46.1758462Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+2026-10-13T18:55:46.1759357Z ##[endgroup]
+2026-10-13T18:55:46.1760489Z ##[group]GITHUB_TOKEN Permissions
+2026-10-13T18:55:46.1762462Z Actions: write
+2026-10-13T18:55:46.1763192Z Contents: write
+2026-10-13T18:55:46.1763757Z Metadata: read
+2026-10-13T18:55:46.1764287Z ##[endgroup]
+2026-10-13T18:55:46.1766234Z Secret source: Actions
+2026-10-13T18:55:46.1767500Z Cache mode: write
+2026-10-13T18:55:46.1768220Z Prepare workflow directory
+2026-10-13T18:55:46.2097205Z Prepare all required actions
+2026-10-13T18:55:46.2166540Z Getting action download info
+2026-10-13T18:55:46.5122488Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-10-13T18:55:46.5948694Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+2026-10-13T18:55:46.8624237Z Complete job name: isolated
+2026-10-13T18:55:46.9298045Z ##[group]Run actions/checkout@v4
+2026-10-13T18:55:46.9298849Z with:
+2026-10-13T18:55:46.9299492Z   repository: kongsonren/aisaleos-handoff-poc
+2026-10-13T18:55:46.9303459Z   token: ***
+2026-10-13T18:55:46.9303991Z   ssh-strict: true
+2026-10-13T18:55:46.9304507Z   ssh-user: git
+2026-10-13T18:55:46.9305019Z   persist-credentials: true
+2026-10-13T18:55:46.9305582Z   clean: true
+2026-10-13T18:55:46.9306123Z   sparse-checkout-cone-mode: true
+2026-10-13T18:55:46.9306683Z   fetch-depth: 1
+2026-10-13T18:55:46.9307209Z   fetch-tags: false
+2026-10-13T18:55:46.9307712Z   show-progress: true
+2026-10-13T18:55:46.9308223Z   lfs: false
+2026-10-13T18:55:46.9308766Z   submodules: false
+2026-10-13T18:55:46.9309262Z   set-safe-directory: true
+2026-10-13T18:55:46.9309856Z   allow-unsafe-pr-checkout: false
+2026-10-13T18:55:46.9310600Z ##[endgroup]
+2026-10-13T18:55:47.0324764Z Syncing repository: kongsonren/aisaleos-handoff-poc
+2026-10-13T18:55:47.0327726Z ##[group]Getting Git version info
+2026-10-13T18:55:47.0329280Z Working directory is '/home/runner/work/aisaleos-handoff-poc/aisaleos-handoff-poc'
+2026-10-13T18:55:47.0330986Z [command]/usr/bin/git version
+2026-10-13T18:55:47.0360560Z git version 2.55.0
+2026-10-13T18:55:47.0379724Z ##[endgroup]
+2026-10-13T18:55:47.0392438Z Temporarily overriding HOME='/home/runner/work/_temp/c9237e6f-9aeb-4173-9685-7e7a09bff519' before making global git config changes
+2026-10-13T18:55:47.0394844Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-13T18:55:47.0397923Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/aisaleos-handoff-poc/aisaleos-handoff-poc
+2026-10-13T18:55:47.0453757Z Deleting the contents of '/home/runner/work/aisaleos-handoff-poc/aisaleos-handoff-poc'
+2026-10-13T18:55:47.0457239Z ##[group]Initializing the repository
+2026-10-13T18:55:47.0458890Z [command]/usr/bin/git init /home/runner/work/aisaleos-handoff-poc/aisaleos-handoff-poc
+2026-10-13T18:55:47.0543059Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-13T18:55:47.0544979Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-13T18:55:47.0546381Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-13T18:55:47.0547563Z hint: call:
+2026-10-13T18:55:47.0548196Z hint:
+2026-10-13T18:55:47.0549013Z hint: 	git config --global init.defaultBranch <name>
+2026-10-13T18:55:47.0549956Z hint:
+2026-10-13T18:55:47.0550829Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-13T18:55:47.0552284Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-13T18:55:47.0553600Z hint:
+2026-10-13T18:55:47.0554285Z hint: 	git branch -m <name>
+2026-10-13T18:55:47.0555105Z hint:
+2026-10-13T18:55:47.0556158Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-13T18:55:47.0557766Z Initialized empty Git repository in /home/runner/work/aisaleos-handoff-poc/aisaleos-handoff-poc/.git/
+2026-10-13T18:55:47.0561051Z [command]/usr/bin/git remote add origin https://github.com/kongsonren/aisaleos-handoff-poc
+2026-10-13T18:55:47.0600472Z ##[endgroup]
+2026-10-13T18:55:47.0601979Z ##[group]Disabling automatic garbage collection
+2026-10-13T18:55:47.0603323Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-13T18:55:47.0635184Z ##[endgroup]
+2026-10-13T18:55:47.0636669Z ##[group]Setting up auth
+2026-10-13T18:55:47.0640628Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-13T18:55:47.0668762Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-13T18:55:47.0972541Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-13T18:55:47.1014769Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-13T18:55:47.1216853Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-13T18:55:47.1253548Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-13T18:55:47.1445862Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-13T18:55:47.1492515Z ##[endgroup]
+2026-10-13T18:55:47.1493619Z ##[group]Fetching the repository
+2026-10-13T18:55:47.1502153Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +cf5bb07028cfb3f3f6dc1e81ee566d947264e50d:refs/remotes/origin/kr-cut41-isolated-20261014
+2026-10-13T18:55:48.2433635Z From https://github.com/kongsonren/aisaleos-handoff-poc
+2026-10-13T18:55:48.2437070Z  * [new ref]         cf5bb07028cfb3f3f6dc1e81ee566d947264e50d -> origin/kr-cut41-isolated-20261014
+2026-10-13T18:55:48.2443800Z ##[endgroup]
+2026-10-13T18:55:48.2446564Z ##[group]Determining the checkout info
+2026-10-13T18:55:48.2448518Z ##[endgroup]
+2026-10-13T18:55:48.2449551Z [command]/usr/bin/git sparse-checkout disable
+2026-10-13T18:55:48.3955944Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-13T18:55:48.4313943Z ##[group]Checking out the ref
+2026-10-13T18:55:48.4317895Z [command]/usr/bin/git checkout --progress --force -B kr-cut41-isolated-20261014 refs/remotes/origin/kr-cut41-isolated-20261014
+2026-10-13T18:55:48.5174041Z Switched to a new branch 'kr-cut41-isolated-20261014'
+2026-10-13T18:55:48.5180061Z branch 'kr-cut41-isolated-20261014' set up to track 'origin/kr-cut41-isolated-20261014'.
+2026-10-13T18:55:48.5184740Z ##[endgroup]
+2026-10-13T18:55:48.5228067Z [command]/usr/bin/git log -1 --format=%H
+2026-10-13T18:55:48.5251006Z cf5bb07028cfb3f3f6dc1e81ee566d947264e50d
+2026-10-13T18:55:48.5524762Z ##[group]Run actions/setup-python@v5
+2026-10-13T18:55:48.5525407Z with:
+2026-10-13T18:55:48.5525776Z   python-version: 3.11
+2026-10-13T18:55:48.5526143Z   check-latest: false
+2026-10-13T18:55:48.5528681Z   token: ***
+2026-10-13T18:55:48.5529032Z   update-environment: true
+2026-10-13T18:55:48.5529437Z   allow-prereleases: false
+2026-10-13T18:55:48.5529820Z   freethreaded: false
+2026-10-13T18:55:48.5530171Z ##[endgroup]
+2026-10-13T18:55:48.6844618Z ##[group]Installed versions
+2026-10-13T18:55:48.7578169Z (node:2296) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-13T18:55:48.7579497Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-13T18:55:48.7580254Z Successfully set up CPython (3.11.17)
+2026-10-13T18:55:48.7581297Z ##[endgroup]
+2026-10-13T18:55:48.7947360Z ##[group]Run python .wb1/kr-cut39/cloud_accept.py
+2026-10-13T18:55:48.7948844Z [36;1mpython .wb1/kr-cut39/cloud_accept.py[0m
+2026-10-13T18:55:48.8440676Z shell: /usr/bin/bash -e {0}
+2026-10-13T18:55:48.8441299Z env:
+2026-10-13T18:55:48.8442002Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.17/x64
+2026-10-13T18:55:48.8442690Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.17/x64/lib/pkgconfig
+2026-10-13T18:55:48.8443895Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.17/x64
+2026-10-13T18:55:48.8444523Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.17/x64
+2026-10-13T18:55:48.8445129Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.17/x64
+2026-10-13T18:55:48.8445756Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.17/x64/lib
+2026-10-13T18:55:48.8448486Z   GITHUB_TOKEN: ***
+2026-10-13T18:55:48.8448871Z   SCHEDULE_KEY: kr-cut41-isolated-20261014:244
+2026-10-13T18:55:48.8449324Z ##[endgroup]
+2026-10-13T18:55:53.2596828Z {"event": "ACK", "key": "kr-cut41-isolated-20261014:244", "run_id": "38450710846"}
+2026-10-13T18:55:53.5420447Z test_ack_is_not_complete (__main__.Tests.test_ack_is_not_complete) ... ok
+2026-10-13T18:55:53.5424708Z test_ambiguous_restart_no_resend (__main__.Tests.test_ambiguous_restart_no_resend) ... ok
+2026-10-13T18:55:53.6755312Z {"event": "RESTART_RECOVERY", "key": "kr-cut41-isolated-20261014:243", "status": "EXECUTION_COMPLETE", "source": "injected verified result; no inferred completion"}
+2026-10-13T18:55:53.6756264Z 
+2026-10-13T18:55:53.6759969Z test_cross_process_crash_recovery (__main__.Tests.test_cross_process_crash_recovery) ... ok
+2026-10-13T18:55:53.6762016Z test_dispatch_exact_and_post_guard (__main__.Tests.test_dispatch_exact_and_post_guard) ... ok
+2026-10-13T18:55:53.6764182Z {"event": "ACK", "key": "kr-cut41-isolated-20261014:243", "run_id": "run"}
+2026-10-13T18:55:53.6765618Z test_duplicate_and_conflicting_result (__main__.Tests.test_duplicate_and_conflicting_result) ... ok
+2026-10-13T18:55:53.6767193Z {"event": "EXECUTION_COMPLETE", "key": "kr-cut41-isolated-20261014:243", "run_id": "run", "sha": "sha", "exit_code": 0}
+2026-10-13T18:55:53.6768831Z test_every_row_rejected_before_any_write_or_dispatch (__main__.Tests.test_every_row_rejected_before_any_write_or_dispatch) ... ok
+2026-10-13T18:55:53.6770306Z {"event": "ACK", "key": "kr-cut41-isolated-20261014:243", "run_id": "run"}
+2026-10-13T18:55:53.6771592Z {"event": "EXECUTION_FAILED", "key": "kr-cut41-isolated-20261014:243", "run_id": "run", "sha": "sha", "exit_code": 7}
+2026-10-13T18:55:53.6772860Z {"event": "ACK", "key": "kr-cut41-isolated-20261014:243", "run_id": "run"}
+2026-10-13T18:55:53.6774298Z test_failures_never_complete (__main__.Tests.test_failures_never_complete) ... ok
+2026-10-13T18:55:53.6775544Z test_reconcile_wrong_task (__main__.Tests.test_reconcile_wrong_task) ... ok
+2026-10-13T18:55:53.6776667Z test_retry_budget_and_cas_exhaustion (__main__.Tests.test_retry_budget_and_cas_exhaustion) ... ok
+2026-10-13T18:55:53.6779594Z test_seq243_and_higher_execute (__main__.Tests.test_seq243_and_higher_execute) ... ok
+2026-10-13T18:55:53.6780502Z {"event": "ACK", "key": "kr-cut41-isolated-20261014:243", "run_id": "run"}
+2026-10-13T18:55:53.6781874Z test_store_validates_read_and_write (__main__.Tests.test_store_validates_read_and_write) ... ok
+2026-10-13T18:55:53.6783828Z {"event": "EXECUTION_COMPLETE", "key": "kr-cut41-isolated-20261014:243", "run_id": "run", "sha": "sha", "exit_code": 0}
+2026-10-13T18:55:53.6784721Z 
+2026-10-13T18:55:53.6785215Z ----------------------------------------------------------------------
+2026-10-13T18:55:53.6785845Z Ran 11 tests in 0.136s
+2026-10-13T18:55:53.6786168Z 
+2026-10-13T18:55:53.6786463Z OK
+2026-10-13T18:55:53.6786953Z {"event": "ACK", "key": "kr-cut41-isolated-20261014:10000", "run_id": "run"}
+2026-10-13T18:55:53.6787676Z {"event": "EXECUTION_COMPLETE", "key": "kr-cut41-isolated-20261014:10000", "run_id": "run", "sha": "sha", "exit_code": 0}
+2026-10-13T18:55:55.1599686Z {"event": "EXECUTION_COMPLETE", "key": "kr-cut41-isolated-20261014:244", "run_id": "38450710846", "sha": "cf5bb07028cfb3f3f6dc1e81ee566d947264e50d", "exit_code": 0}
+2026-10-13T18:55:55.1819497Z Post job cleanup.
+2026-10-13T18:55:55.2973130Z (node:2314) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-13T18:55:55.3048514Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-13T18:55:55.3167386Z Post job cleanup.
+2026-10-13T18:55:55.4023534Z [command]/usr/bin/git version
+2026-10-13T18:55:55.4065523Z git version 2.55.0
+2026-10-13T18:55:55.4100068Z Temporarily overriding HOME='/home/runner/work/_temp/2733e54e-7566-40cd-85d4-7a833c9c2088' before making global git config changes
+2026-10-13T18:55:55.4101650Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-13T18:55:55.4105433Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/aisaleos-handoff-poc/aisaleos-handoff-poc
+2026-10-13T18:55:55.4145850Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-13T18:55:55.4179980Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-13T18:55:55.4395046Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-13T18:55:55.4422320Z http.https://github.com/.extraheader
+2026-10-13T18:55:55.4464479Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-13T18:55:55.4505395Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-13T18:55:55.4720437Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-13T18:55:55.4750574Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-13T18:55:55.5108381Z Cleaning up orphan processes
+2026-10-13T18:55:55.5366268Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-python@v5. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

@@ -1,0 +1,66 @@
+{
+  "status": "fulfilled",
+  "value": {
+    "content": [
+      {
+        "type": "text",
+        "text": "Action completed."
+      }
+    ],
+    "structuredContent": {
+      "repository_full_name": "kongsonren/aisaleos-handoff-poc",
+      "base": "0ed23eee0ea84a3b8b2af4738ee201165045e80d",
+      "head": "a1868a25f9574fe66b4c7c67e7092b1f399eaaaa",
+      "status": "ahead",
+      "ahead_by": 1,
+      "behind_by": 0,
+      "total_commits": 1,
+      "too_large": null,
+      "base_commit": {
+        "sha": "0ed23eee0ea84a3b8b2af4738ee201165045e80d",
+        "url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/commits/0ed23eee0ea84a3b8b2af4738ee201165045e80d",
+        "html_url": "https://github.com/kongsonren/aisaleos-handoff-poc/commit/0ed23eee0ea84a3b8b2af4738ee201165045e80d"
+      },
+      "merge_base_commit": {
+        "sha": "0ed23eee0ea84a3b8b2af4738ee201165045e80d",
+        "url": "https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/commits/0ed23eee0ea84a3b8b2af4738ee201165045e80d",
+        "html_url": "https://github.com/kongsonren/aisaleos-handoff-poc/commit/0ed23eee0ea84a3b8b2af4738ee201165045e80d"
+      },
+      "files": [
+        {
+          "filename": ".github/workflows/nezha-auto.yml",
+          "status": "modified",
+          "additions": 9,
+          "deletions": 4,
+          "changes": 13,
+          "previous_filename": null
+        },
+        {
+          "filename": ".wb1/kr-cut39/cloud_accept.py",
+          "status": "modified",
+          "additions": 39,
+          "deletions": 29,
+          "changes": 68,
+          "previous_filename": null
+        },
+        {
+          "filename": ".wb1/kr-cut39/durable_schedule.py",
+          "status": "modified",
+          "additions": 89,
+          "deletions": 57,
+          "changes": 146,
+          "previous_filename": null
+        },
+        {
+          "filename": ".wb1/kr-cut39/test_schedule.py",
+          "status": "modified",
+          "additions": 112,
+          "deletions": 54,
+          "changes": 166,
+          "previous_filename": null
+        }
+      ]
+    },
+    "isError": false
+  }
+}

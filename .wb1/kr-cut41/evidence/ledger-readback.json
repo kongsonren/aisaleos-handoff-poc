@@ -1,0 +1,16 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "Action completed."
+    }
+  ],
+  "structuredContent": {
+    "content": "{\"kr-cut41-isolated-20261014:243\": {\"attempts\": 0, \"branch\": \"kr-cut41-isolated-20261014\", \"due\": 0, \"key\": \"kr-cut41-isolated-20261014:243\", \"result\": {\"branch\": \"kr-cut41-isolated-20261014\", \"exit_code\": 0, \"key\": \"kr-cut41-isolated-20261014:243\", \"run_id\": \"38450675509\", \"sha\": \"a1868a25f9574fe66b4c7c67e7092b1f399eaaaa\", \"workflow\": \"nezha-auto.yml\"}, \"run_id\": \"38450675509\", \"seq\": 243, \"status\": \"EXECUTION_COMPLETE\", \"workflow\": \"nezha-auto.yml\"}, \"kr-cut41-isolated-20261014:244\": {\"attempts\": 1, \"branch\": \"kr-cut41-isolated-20261014\", \"due\": 0, \"http\": 204, \"key\": \"kr-cut41-isolated-20261014:244\", \"result\": {\"branch\": \"kr-cut41-isolated-20261014\", \"exit_code\": 0, \"key\": \"kr-cut41-isolated-20261014:244\", \"run_id\": \"38450710846\", \"sha\": \"cf5bb07028cfb3f3f6dc1e81ee566d947264e50d\", \"workflow\": \"nezha-auto.yml\"}, \"run_id\": \"38450710846\", \"seq\": 244, \"status\": \"EXECUTION_COMPLETE\", \"workflow\": \"nezha-auto.yml\"}}",
+    "encoding": "utf-8",
+    "sha": "4c35f61d03fffd4b0fa87214c8de6e139623d12f",
+    "display_url": "https://github.com/kongsonren/aisaleos-handoff-poc/blob/kr-cut41-isolated-20261014/.wb1/kr-cut41/schedule.json",
+    "display_title": "schedule.json"
+  },
+  "isError": false
+}
