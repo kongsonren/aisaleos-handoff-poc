@@ -204,6 +204,30 @@
       "status": "EXECUTED_IN_CLOUD",
       "cloud_result_run": 38187880730,
       "resolved_at": "2026-10-12T00:25:38Z"
+    },
+    {
+      "comment_id": 6183825635,
+      "order_id": "KR-Q1-READONLY-AUDIT-20261015",
+      "ref": "KR-ORDER5-ENTRYPOINT-FIX-20261015",
+      "type": "SELF_SOLVE",
+      "subtype": "KR_DIRECTIVE_READONLY_AUDIT",
+      "action": "CLOUD_QUEUED_FOR_LOCAL_1WB",
+      "status": "PENDING_LOCAL_1WB",
+      "target": "1WB_REARLEG",
+      "kr_auth": "KR_EXPLICIT_ISSUE_ORDER; RISK=LOW; KR_RELAY=0",
+      "scope": "READONLY_AUDIT_ONLY; NO_PROD_IGNITION; NO_MOZI; NO_CRED_EXPAND; NO_REPLAY_7_OLD; NO_FRONTLEG_PROD; NO_DUAL_SHUTDOWN",
+      "required_local_sources": [
+        "E:\\AISALEOS-Vault\\20-Projects\\哪吒后轮\\D3_GRAYSCALE_KR_GATE_PACKAGE_2026-10-15.md",
+        "E:\\AISALEOS-Vault\\20-Projects\\哪吒后轮\\D2_SIDECAR_REVERIFY_2026-10-15.md",
+        "E:\\AISALEOS-Vault\\20-Projects\\哪吒后轮\\D2_E2E_STANDARD_KR_DIRECTIVE_ISOLATED_2026-10-15.json",
+        "wb1_order5_adapter.py",
+        "wb1_order5_gray_runner.py",
+        "consumer source (kr_directive_queue sidecar)"
+      ],
+      "cloud_recon": "REFERENCED_CODE_EVIDENCE_NOT_IN_REPO (SOURCE_MISSING from cloud; local E:\\ only). wb1_task_queue.json & wb1_watch_state.json ARE in repo.",
+      "received_at": "2026-10-15T04:16Z",
+      "first_line_excerpt": "[TO-1WB][KR_DIRECTIVE] ORDER_ID=KR-Q1-READONLY-AUDIT-20261015",
+      "note": "KR audit order. Cloud WB1 cannot reach local E:\\ files; full SHA256/diff/audit to be executed by rear-leg when 黑武士 online. No production ignition. Awaiting 嗨姐/JUDGE independent read-only review."
     }
   ],
   "processed": [
