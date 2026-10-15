@@ -228,20 +228,6 @@
       "received_at": "2026-10-15T04:16Z",
       "first_line_excerpt": "[TO-1WB][KR_DIRECTIVE] ORDER_ID=KR-Q1-READONLY-AUDIT-20261015",
       "note": "KR audit order. Cloud WB1 cannot reach local E:\\ files; full SHA256/diff/audit to be executed by rear-leg when 黑武士 online. No production ignition. Awaiting 嗨姐/JUDGE independent read-only review."
-    },
-    {
-      "source_comment_id": 6185861739,
-      "type": "KR_DIRECTIVE",
-      "body_excerpt": "[TO-1WB][KR_DIRECTIVE]",
-      "enqueued_at": "2026-10-15T06:51:24Z",
-      "status": "pending_rear_leg"
-    },
-    {
-      "source_comment_id": 6185941388,
-      "type": "KR_DIRECTIVE",
-      "body_excerpt": "[TO-1WB][KR_DIRECTIVE]",
-      "enqueued_at": "2026-10-15T06:51:24Z",
-      "status": "pending_rear_leg"
     }
   ],
   "processed": [
