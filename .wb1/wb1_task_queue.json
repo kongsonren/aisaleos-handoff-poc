@@ -235,6 +235,13 @@
       "body_excerpt": "[TO-1WB][KR_DIRECTIVE]",
       "enqueued_at": "2026-10-15T06:51:24Z",
       "status": "pending_rear_leg"
+    },
+    {
+      "source_comment_id": 6185941388,
+      "type": "KR_DIRECTIVE",
+      "body_excerpt": "[TO-1WB][KR_DIRECTIVE]",
+      "enqueued_at": "2026-10-15T06:51:24Z",
+      "status": "pending_rear_leg"
     }
   ],
   "processed": [
