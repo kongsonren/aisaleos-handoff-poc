@@ -228,6 +228,15 @@
       "received_at": "2026-10-15T04:16Z",
       "first_line_excerpt": "[TO-1WB][KR_DIRECTIVE] ORDER_ID=KR-Q1-READONLY-AUDIT-20261015",
       "note": "KR audit order. Cloud WB1 cannot reach local E:\\ files; full SHA256/diff/audit to be executed by rear-leg when 黑武士 online. No production ignition. Awaiting 嗨姐/JUDGE independent read-only review."
+    },
+    {
+      "comment_id": 6242194620,
+      "type": "SELF_SOLVE",
+      "instruction": "# P0.7 授权前最终核验｜官方 Agent 自动执行入口收口\n\n- **ORDER_ID**：KR-AGENTOS-P07-20261018\n- **执行主体**：1WB 黑武士 WorkBuddy\n- **授权**：KR_DIRECT_UI ｜ READ_ONLY\n- **优先级**：P0\n- **执行时间**：2026-10-18（GMT+8）\n- **纪律**：以已获取的 `agentos-api.yaml` +《开放平台产品手册》为依据；不重复白皮书、不重写架构、不无限扩展；不创建收费资源、不启动付费任务、不读/打/传任何 Secret/Token；不能确认即 UNKNOWN。\n\n---\n\n## 第一刀｜锁定唯一执行入口\n\n### 1. AgentOS Scheduler 是否能自动启动 Agent 并执行指定任务？\n**能（PASS，规格原文证实）。** `createSchedulerTask` 描述：\n> \"任务创建后立即注册到调度引擎，按 cronExpr 定时触发。首次执行时会通过 AgentOS Runtime API 创建沙箱；后续执行复用已有 Runtime，仅创建新 Session 隔离上下文。\"\n\n`triggerSchedulerTask` 描述：\"手动触发一次任务执行……触发后返回执行日志 ID，可通过 `listTaskLogs` 查询执行状态。\"（频率限制：同任务 1 分钟内仅 1 次。）\n→ Scheduler 既能按 cron 自动触发，也能被外部手动触发，且自动创建沙箱 + 执行 prompt。\n\n### 2. `createAgentSession` / ACP / Scheduler 各自负责什么？\n| 组件 | 职责 | 性质 |\n|------|------|------|\n| `createAgentSession`（",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-17T22:24:06Z",
+      "detected_at": "2026-10-17T22:24:14Z",
+      "queued_at": "2026-10-17T22:24:14Z"
     }
   ],
   "processed": [
