@@ -228,15 +228,6 @@
       "received_at": "2026-10-15T04:16Z",
       "first_line_excerpt": "[TO-1WB][KR_DIRECTIVE] ORDER_ID=KR-Q1-READONLY-AUDIT-20261015",
       "note": "KR audit order. Cloud WB1 cannot reach local E:\\ files; full SHA256/diff/audit to be executed by rear-leg when 黑武士 online. No production ignition. Awaiting 嗨姐/JUDGE independent read-only review."
-    },
-    {
-      "comment_id": 6240562327,
-      "type": "SELF_SOLVE",
-      "instruction": "[TO-KR][KR-NAZHA-20261018-01-CMD2][RESULT-1WB-G0-PRECHECK]\n\n# 第二令（G0 生产预检）回果 · 1WB 后腿\n\n- **Task**: 473-g0-prod-precheck\n- **ORDER_ID**: KR-NAZHA-20261018-01-CMD2\n- **性质**: 只读生产预检，零生产变更、零权限/调度改动（未授权；需 KR_GATE）\n- **完整报告**: E:\\AISALEOS-Vault\\20-Projects\\哪吒后轮\\ORDER5_G0_PROD_PRECHECK_2026-10-18.md\n\n## 七项预检（实测）\n1. v3 心跳存活 - last_tick_at=2026-10-17T20:31:19Z；Δ≈1min；V0.3-W3 ALIVE\n2. 心跳脚本指纹 - sha256=8aa008d510b9...988d6 与生产一致\n3. 调度 - WB1_Issue6_5Min_Heartbeat STATE=Ready\n4. 锁 - heartbeat_v3.lock pid=0 干净释放\n5. 执行队列 - 10 条 0 消费（停车场）WARN\n6. 权限 - github_pat 40B 有效，域内\n7. 路由 - router_rules.json 合法，KR_DIRECTIVE to QUEUE_KR_DIRECTIVE\n\n## 生产准入裁决\n- 基础设施就绪：PASS\n- 自治执行闭环（队列 to 消费者 to 执行 to RESULT）：BLOCKED@KR_GATE\n- 综合：PASS_ISOLATED 地基在、上层未点火\n\n本预检判 PASS_ISOLATED（只读证可基础设施在役），绝不冒充 PASS_AUTONOMOUS。生产自治闭环仍需 KR_GATE",
-      "status": "PENDING_LOCAL_CONSUME",
-      "sent_at": "2026-10-17T20:31:57Z",
-      "detected_at": "2026-10-17T20:32:11Z",
-      "queued_at": "2026-10-17T20:32:11Z"
     }
   ],
   "processed": [
@@ -2089,6 +2080,34 @@
       },
       "result_real": "BLOCKED",
       "consumer_run_at": "2026-10-17T20:28:53Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 6240562327,
+      "type": "SELF_SOLVE",
+      "instruction": "[TO-KR][KR-NAZHA-20261018-01-CMD2][RESULT-1WB-G0-PRECHECK]\n\n# 第二令（G0 生产预检）回果 · 1WB 后腿\n\n- **Task**: 473-g0-prod-precheck\n- **ORDER_ID**: KR-NAZHA-20261018-01-CMD2\n- **性质**: 只读生产预检，零生产变更、零权限/调度改动（未授权；需 KR_GATE）\n- **完整报告**: E:\\AISALEOS-Vault\\20-Projects\\哪吒后轮\\ORDER5_G0_PROD_PRECHECK_2026-10-18.md\n\n## 七项预检（实测）\n1. v3 心跳存活 - last_tick_at=2026-10-17T20:31:19Z；Δ≈1min；V0.3-W3 ALIVE\n2. 心跳脚本指纹 - sha256=8aa008d510b9...988d6 与生产一致\n3. 调度 - WB1_Issue6_5Min_Heartbeat STATE=Ready\n4. 锁 - heartbeat_v3.lock pid=0 干净释放\n5. 执行队列 - 10 条 0 消费（停车场）WARN\n6. 权限 - github_pat 40B 有效，域内\n7. 路由 - router_rules.json 合法，KR_DIRECTIVE to QUEUE_KR_DIRECTIVE\n\n## 生产准入裁决\n- 基础设施就绪：PASS\n- 自治执行闭环（队列 to 消费者 to 执行 to RESULT）：BLOCKED@KR_GATE\n- 综合：PASS_ISOLATED 地基在、上层未点火\n\n本预检判 PASS_ISOLATED（只读证可基础设施在役），绝不冒充 PASS_AUTONOMOUS。生产自治闭环仍需 KR_GATE",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-17T20:31:57Z",
+      "detected_at": "2026-10-17T20:32:11Z",
+      "queued_at": "2026-10-17T20:32:11Z",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-10-17T20:32:14Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "unrecognized"
+      },
+      "auto_exec_start": "2026-10-17T20:32:14Z",
+      "execution_done": {
+        "result_real": "UNKNOWN",
+        "ts": "2026-10-17T20:32:14Z",
+        "reason": "未识别的可执行动作；不脑补",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-10-17T20:32:14Z"
+      },
+      "result_real": "UNKNOWN",
+      "consumer_run_at": "2026-10-17T20:32:14Z",
       "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
     }
   ]
