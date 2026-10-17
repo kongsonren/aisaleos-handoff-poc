@@ -228,15 +228,6 @@
       "received_at": "2026-10-15T04:16Z",
       "first_line_excerpt": "[TO-1WB][KR_DIRECTIVE] ORDER_ID=KR-Q1-READONLY-AUDIT-20261015",
       "note": "KR audit order. Cloud WB1 cannot reach local E:\\ files; full SHA256/diff/audit to be executed by rear-leg when 黑武士 online. No production ignition. Awaiting 嗨姐/JUDGE independent read-only review."
-    },
-    {
-      "comment_id": 6242482080,
-      "type": "SELF_SOLVE",
-      "instruction": "# P0.9 管理员授权入口核验\n\n- **ORDER_ID**：KR-AGENTOS-P09-20261018\n- **执行主体**：1WB 黑武士 WorkBuddy\n- **授权**：KR_DIRECT_UI ｜ READ_ONLY\n- **优先级**：P0\n- **执行时间**：2026-10-18（GMT+8）\n- **纪律**：只确认冠辰科技企业账号是否具备 AgentOS/WMA 合法调用入口、KR 是否必须管理员操作；停止重复 API/白皮书/架构研究；不创建应用、不生成凭据、不充值、不建云资源、不调用付费 Agent、不改生产、不碰 2WB；不把 GitHub 回帖成功冒充 Agent 执行成功。\n\n---\n\n## 第一刀｜真实后台核验（结果：本会话无法执行）\n\n本令要求\"使用当前已授权的官方登录会话，检查企业控制台\"。经核查，1WB 代理运行环境（工具面：Bash / Python / WebFetch）**没有任何已认证的 CodeBuddy / 企业控制台登录会话**：\n\n- **本地凭据盘点（只读，仅文件名，未读内容）**：`~/.wb1` 下唯一真实凭据是 `github_pat`（GitHub，40B）。命中 `agentos-api.yaml`、`codebuddy_manual_extracted.txt` 两项，但二者是**官方文档文件（规格/手册），非凭据**。\n- **无任何 AgentOS / CodeBuddy / OAuth 应用凭据文件**，无企业控制台会话令牌。\n- **工具面不携带企业控制台 Cookie / 令牌**，无可用浏览器企业会话；WebFetch 仅能做未认证访问（企业控制台需登录，未认证访问只能见登录墙，按本令\"不得绕过登录\"不强行探测）。\n\n→ 因此 knife 1 要求的 6 项控制台核验（入口是否存在 ",
-      "status": "PENDING_LOCAL_CONSUME",
-      "sent_at": "2026-10-17T22:41:38Z",
-      "detected_at": "2026-10-17T22:41:46Z",
-      "queued_at": "2026-10-17T22:41:46Z"
     }
   ],
   "processed": [
@@ -2537,6 +2528,34 @@
       },
       "result_real": "BLOCKED",
       "consumer_run_at": "2026-10-17T22:35:16Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 6242482080,
+      "type": "SELF_SOLVE",
+      "instruction": "# P0.9 管理员授权入口核验\n\n- **ORDER_ID**：KR-AGENTOS-P09-20261018\n- **执行主体**：1WB 黑武士 WorkBuddy\n- **授权**：KR_DIRECT_UI ｜ READ_ONLY\n- **优先级**：P0\n- **执行时间**：2026-10-18（GMT+8）\n- **纪律**：只确认冠辰科技企业账号是否具备 AgentOS/WMA 合法调用入口、KR 是否必须管理员操作；停止重复 API/白皮书/架构研究；不创建应用、不生成凭据、不充值、不建云资源、不调用付费 Agent、不改生产、不碰 2WB；不把 GitHub 回帖成功冒充 Agent 执行成功。\n\n---\n\n## 第一刀｜真实后台核验（结果：本会话无法执行）\n\n本令要求\"使用当前已授权的官方登录会话，检查企业控制台\"。经核查，1WB 代理运行环境（工具面：Bash / Python / WebFetch）**没有任何已认证的 CodeBuddy / 企业控制台登录会话**：\n\n- **本地凭据盘点（只读，仅文件名，未读内容）**：`~/.wb1` 下唯一真实凭据是 `github_pat`（GitHub，40B）。命中 `agentos-api.yaml`、`codebuddy_manual_extracted.txt` 两项，但二者是**官方文档文件（规格/手册），非凭据**。\n- **无任何 AgentOS / CodeBuddy / OAuth 应用凭据文件**，无企业控制台会话令牌。\n- **工具面不携带企业控制台 Cookie / 令牌**，无可用浏览器企业会话；WebFetch 仅能做未认证访问（企业控制台需登录，未认证访问只能见登录墙，按本令\"不得绕过登录\"不强行探测）。\n\n→ 因此 knife 1 要求的 6 项控制台核验（入口是否存在 ",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-17T22:41:38Z",
+      "detected_at": "2026-10-17T22:41:46Z",
+      "queued_at": "2026-10-17T22:41:46Z",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-10-17T22:41:49Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "block_out_of_scope"
+      },
+      "auto_exec_start": "2026-10-17T22:41:49Z",
+      "execution_done": {
+        "result_real": "BLOCKED",
+        "ts": "2026-10-17T22:41:49Z",
+        "reason": "涉及 2WB 接件/消费链或墨子技术链，1WB 依纪律不跨 WB 代执行；需 2WB 自主或 KR 授权",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-10-17T22:41:49Z"
+      },
+      "result_real": "BLOCKED",
+      "consumer_run_at": "2026-10-17T22:41:49Z",
       "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
     }
   ]
