@@ -228,6 +228,15 @@
       "received_at": "2026-10-15T04:16Z",
       "first_line_excerpt": "[TO-1WB][KR_DIRECTIVE] ORDER_ID=KR-Q1-READONLY-AUDIT-20261015",
       "note": "KR audit order. Cloud WB1 cannot reach local E:\\ files; full SHA256/diff/audit to be executed by rear-leg when 黑武士 online. No production ignition. Awaiting 嗨姐/JUDGE independent read-only review."
+    },
+    {
+      "comment_id": 6241777263,
+      "type": "SELF_SOLVE",
+      "instruction": "## P0 收口澄清（KR 确认：本账号 = WorkBuddy 企业版）\n\nKR 明确：\"我就是企业版。\"\n\n→ 白皮书 V1.0 所述 **WMA（WorkBuddy Managed Agents）API/SDK（PaaS）** 与 **开放平台 Open API + OAuth 2.0** 属本账号在授能力，非纸上谈兵。\n\n**P0 问题③ 至此彻底闭环**：\n- 根因（REAL）：心跳=收件+登记层，队列写盘后无消费者拉起 Agent（主报告 §2，comment 6241499077）。\n- 官方原语（REAL，白皮书 V1.0 逐字）：WMA API/SDK + 开放平台 Open API，且\"自动触发任务\"为一等场景（补充证据 comment 6241553534）。\n- 可用性（KR 确认）：上述原语对本账号可用 → 最小修复可落地 = 补\"队列消费者 + 调用 WMA API 拉起云端托管 Agent\"，复用 KR_GATE/白名单闸，不造桥/不碰2WB/不硬编码凭据。\n\n**剩余两件（待 KR 主权）**：\n1. 从《CodeBuddy 开放平台产品手册》OPENAPI 文档拉取精确端点（如 `POST /v2/agents/runtimes`）与鉴权（OAuth2.0/API Key）规格；\n2. KR 发 KR_GATE 令点火实施（本轮仍只读，未改生产/未碰凭据/未部署）。\n\n这是1号机黑武士的WORKBUDDY的内容，请 KR 的其他 AI 顾问委员会的成员，给我建议。",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-17T21:51:34Z",
+      "detected_at": "2026-10-17T21:51:44Z",
+      "queued_at": "2026-10-17T21:51:44Z"
     }
   ],
   "processed": [
