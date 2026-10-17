@@ -228,15 +228,6 @@
       "received_at": "2026-10-15T04:16Z",
       "first_line_excerpt": "[TO-1WB][KR_DIRECTIVE] ORDER_ID=KR-Q1-READONLY-AUDIT-20261015",
       "note": "KR audit order. Cloud WB1 cannot reach local E:\\ files; full SHA256/diff/audit to be executed by rear-leg when 黑武士 online. No production ignition. Awaiting 嗨姐/JUDGE independent read-only review."
-    },
-    {
-      "comment_id": 6241896806,
-      "type": "SELF_SOLVE",
-      "instruction": "# P0.5 官方 Agent 执行入口验证报告（KR-WMA-P05-20261018）\n\n> 执行主体：1WB 黑武士 WorkBuddy ｜ 授权：KR_DIRECT_UI ｜ 优先级 P0\n> 原则：先查官方能力、再做隔离验证；**不改生产、不充值、不部署、不暴露密钥、不写架构建议书**\n> 纪律红线：**本验证未做任何 API 实测**（无调用、无充值）。所有\"支持\"结论=文档声明，非实测成功；精确端点/鉴权/权限/费用四项正确性均标 UNKNOWN。\n\n---\n\n## 第一刀｜WMA 真实调用能力（逐条，附官方出处+读取证据）\n\n**文档来源与可读性实证**\n- 文档③《WorkBuddy 企业版产品白皮书 V1.0》：文本型 PDF，pypdf 抽取 15,941 字符，已逐字读取（`whitepaper_text_full.txt`，行号见下）。\n- 文档②《CodeBuddy 开放平台产品手册 / OPENAPI 文档》：白皮书指向其给出精确端点（L747-749），**但本会话两次 WebFetch（/docs/openapi、/docs/）均只返回产品落地页，无任何 API 参考**。→ 该手册本会话**不可读**，精确端点/方法/鉴权无法核实。\n\n| # | 核查项 | 结论 | 官方出处 / 读取证据 |\n|---|---|---|---|\n| 1 | WMA API/SDK 真实端点、调用方法、鉴权、运行环境 | **UNKNOWN（端点/方法/鉴权未知）** | 白皮书 L779 仅称「API 地址：WorkBuddy Managed Agents API」，**未给 URL/方法/鉴权**；精确规格载于不可读的《CodeBuddy 开放平台产品手册》。运行环境确证：L789「云端沙箱、7x24、自动触发任务」 |\n| 2 | 当前企业账号是否",
-      "status": "PENDING_LOCAL_CONSUME",
-      "sent_at": "2026-10-17T22:03:03Z",
-      "detected_at": "2026-10-17T22:03:34Z",
-      "queued_at": "2026-10-17T22:03:34Z"
     }
   ],
   "processed": [
@@ -2397,6 +2388,34 @@
       },
       "result_real": "UNKNOWN",
       "consumer_run_at": "2026-10-17T21:55:19Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 6241896806,
+      "type": "SELF_SOLVE",
+      "instruction": "# P0.5 官方 Agent 执行入口验证报告（KR-WMA-P05-20261018）\n\n> 执行主体：1WB 黑武士 WorkBuddy ｜ 授权：KR_DIRECT_UI ｜ 优先级 P0\n> 原则：先查官方能力、再做隔离验证；**不改生产、不充值、不部署、不暴露密钥、不写架构建议书**\n> 纪律红线：**本验证未做任何 API 实测**（无调用、无充值）。所有\"支持\"结论=文档声明，非实测成功；精确端点/鉴权/权限/费用四项正确性均标 UNKNOWN。\n\n---\n\n## 第一刀｜WMA 真实调用能力（逐条，附官方出处+读取证据）\n\n**文档来源与可读性实证**\n- 文档③《WorkBuddy 企业版产品白皮书 V1.0》：文本型 PDF，pypdf 抽取 15,941 字符，已逐字读取（`whitepaper_text_full.txt`，行号见下）。\n- 文档②《CodeBuddy 开放平台产品手册 / OPENAPI 文档》：白皮书指向其给出精确端点（L747-749），**但本会话两次 WebFetch（/docs/openapi、/docs/）均只返回产品落地页，无任何 API 参考**。→ 该手册本会话**不可读**，精确端点/方法/鉴权无法核实。\n\n| # | 核查项 | 结论 | 官方出处 / 读取证据 |\n|---|---|---|---|\n| 1 | WMA API/SDK 真实端点、调用方法、鉴权、运行环境 | **UNKNOWN（端点/方法/鉴权未知）** | 白皮书 L779 仅称「API 地址：WorkBuddy Managed Agents API」，**未给 URL/方法/鉴权**；精确规格载于不可读的《CodeBuddy 开放平台产品手册》。运行环境确证：L789「云端沙箱、7x24、自动触发任务」 |\n| 2 | 当前企业账号是否",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-17T22:03:03Z",
+      "detected_at": "2026-10-17T22:03:34Z",
+      "queued_at": "2026-10-17T22:03:34Z",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-10-17T22:03:37Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "unrecognized"
+      },
+      "auto_exec_start": "2026-10-17T22:03:37Z",
+      "execution_done": {
+        "result_real": "UNKNOWN",
+        "ts": "2026-10-17T22:03:37Z",
+        "reason": "未识别的可执行动作；不脑补",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-10-17T22:03:37Z"
+      },
+      "result_real": "UNKNOWN",
+      "consumer_run_at": "2026-10-17T22:03:37Z",
       "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
     }
   ]
