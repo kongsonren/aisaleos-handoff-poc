@@ -228,6 +228,15 @@
       "received_at": "2026-10-15T04:16Z",
       "first_line_excerpt": "[TO-1WB][KR_DIRECTIVE] ORDER_ID=KR-Q1-READONLY-AUDIT-20261015",
       "note": "KR audit order. Cloud WB1 cannot reach local E:\\ files; full SHA256/diff/audit to be executed by rear-leg when 黑武士 online. No production ignition. Awaiting 嗨姐/JUDGE independent read-only review."
+    },
+    {
+      "comment_id": 6241499077,
+      "type": "SELF_SOLVE",
+      "instruction": "# P0 根因诊断报告：KR 指令收到 ACK 却未启动 WorkBuddy Agent 执行\n\n> 点火人：KR（任光成）本人直接点火，不经 GitHub watcher / inbox / SELF_SOLVE 路由\n> 执行体：1号机黑武士 / 1WB 后腿\n> 纪律：本轮**只读诊断**，不改生产 / 不动凭据 / 不部署\n> 执行时间：2026-10-18（续跑，跨 compaction）\n> 范围：GitHub Issue #6 → 后腿心跳脚本 → 队列 → WorkBuddy Agent 执行断点\n\n---\n\n## 0. 一句话结论\n\n**心跳脚本是\"收件 + 登记\"层，不是\"执行\"层。** 它收到指令后立刻回 ACK（收件回执），再把指令写进 `wb1_business_queue.json` 就结束；**整个 1WB 代码库没有任何消费者去读取该队列并启动一个 WorkBuddy Agent 执行指令**，而 WorkBuddy 官方模型也只支持 UI 会话启动 Agent、没有 GitHub 队列 → Agent 的自动触发器。于是\"收到 ACK 却无执行\"成为必然。\n\n---\n\n## 1. 两份原始技术文档（名称 / 版本 / 路径 / 官方出处）\n\n### 文档A：WorkBuddy 简介 / Overview —— ✅ REAL，已实读（可机读文本）\n- **名称**：WorkBuddy 简介（Overview）\n- **官方出处**：https://www.workbuddy.cn/docs/workbuddy/Overview （腾讯出品 WorkBuddy 官方文档站）\n- **版本**：在线 live docs，无单一版本号；本次抓取 2026-10-18\n- **关键内容（REAL，逐字要点）**：\n  - 核心能力：自然语言交互、自主",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-17T21:36:02Z",
+      "detected_at": "2026-10-17T21:36:18Z",
+      "queued_at": "2026-10-17T21:36:18Z"
     }
   ],
   "processed": [
