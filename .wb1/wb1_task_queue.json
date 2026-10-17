@@ -228,15 +228,6 @@
       "received_at": "2026-10-15T04:16Z",
       "first_line_excerpt": "[TO-1WB][KR_DIRECTIVE] ORDER_ID=KR-Q1-READONLY-AUDIT-20261015",
       "note": "KR audit order. Cloud WB1 cannot reach local E:\\ files; full SHA256/diff/audit to be executed by rear-leg when 黑武士 online. No production ignition. Awaiting 嗨姐/JUDGE independent read-only review."
-    },
-    {
-      "comment_id": 6241553534,
-      "type": "SELF_SOLVE",
-      "instruction": "# P0 补充证据（白皮书 V1.0）：官方确认支持程序化 / 自动启动 Agent\n\n> 接续 P0 主报告（GitHub #6 comment 6241499077）\n> 触发：KR 指向第三份文档《WorkBuddy 企业版产品白皮书 V1.0》\n> 纪律：仍属只读诊断，未改生产 / 未碰凭据 / 未部署\n\n---\n\n## 文档C：WorkBuddy 企业版产品白皮书 V1.0 —— ✅ REAL，已实读（文本型）\n\n- **名称**：WorkBuddy 企业版产品白皮书 V1.0\n- **路径**：`D:\\Desktop\\（已压缩）WorkBuddy 企业版产品白皮书V1.0-PDF版本.pdf`\n- **规模**：76 页 / 5.95 MB；**文本型**（pypdf 抽取 15,941 字符，全页可读）\n- **元数据**：Creator=Microsoft® Word 365；CreationDate=D:20260810；ModDate=D:20261018；Producer=Word 365\n- **官方出处**：腾讯云 WorkBuddy 企业版产品白皮书 V1.0（产品官方白皮书，V1.0）\n\n> 注：此件为文本型 PDF，与前份《CodeBuddy 企业管理后台-用户操作手册》（68 页纯图像、本环境不可读）不同，本件可直接机读核验，结论可逐字溯源。\n\n---\n\n## 关键结论：P0 问题③ 由\"UNVERIFIED / 缺失\"升级为\"官方确认存在\"\n\n主报告因「WorkBuddy Overview 仅描述 UI 启动、CodeBuddy 企业 API 手册为图像不可读」曾下结论：当前已验证通道里没有 GitHub→Agent 自动触发器，修复依赖一个待核实的官方原语。\n\n**白皮书 V1.0 明确给出了该官方原语**，以下均逐字取自白皮书正文（行",
-      "status": "PENDING_LOCAL_CONSUME",
-      "sent_at": "2026-10-17T21:38:59Z",
-      "detected_at": "2026-10-17T21:39:16Z",
-      "queued_at": "2026-10-17T21:39:16Z"
     }
   ],
   "processed": [
@@ -2285,6 +2276,34 @@
       },
       "result_real": "UNKNOWN",
       "consumer_run_at": "2026-10-17T21:36:21Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 6241553534,
+      "type": "SELF_SOLVE",
+      "instruction": "# P0 补充证据（白皮书 V1.0）：官方确认支持程序化 / 自动启动 Agent\n\n> 接续 P0 主报告（GitHub #6 comment 6241499077）\n> 触发：KR 指向第三份文档《WorkBuddy 企业版产品白皮书 V1.0》\n> 纪律：仍属只读诊断，未改生产 / 未碰凭据 / 未部署\n\n---\n\n## 文档C：WorkBuddy 企业版产品白皮书 V1.0 —— ✅ REAL，已实读（文本型）\n\n- **名称**：WorkBuddy 企业版产品白皮书 V1.0\n- **路径**：`D:\\Desktop\\（已压缩）WorkBuddy 企业版产品白皮书V1.0-PDF版本.pdf`\n- **规模**：76 页 / 5.95 MB；**文本型**（pypdf 抽取 15,941 字符，全页可读）\n- **元数据**：Creator=Microsoft® Word 365；CreationDate=D:20260810；ModDate=D:20261018；Producer=Word 365\n- **官方出处**：腾讯云 WorkBuddy 企业版产品白皮书 V1.0（产品官方白皮书，V1.0）\n\n> 注：此件为文本型 PDF，与前份《CodeBuddy 企业管理后台-用户操作手册》（68 页纯图像、本环境不可读）不同，本件可直接机读核验，结论可逐字溯源。\n\n---\n\n## 关键结论：P0 问题③ 由\"UNVERIFIED / 缺失\"升级为\"官方确认存在\"\n\n主报告因「WorkBuddy Overview 仅描述 UI 启动、CodeBuddy 企业 API 手册为图像不可读」曾下结论：当前已验证通道里没有 GitHub→Agent 自动触发器，修复依赖一个待核实的官方原语。\n\n**白皮书 V1.0 明确给出了该官方原语**，以下均逐字取自白皮书正文（行",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-17T21:38:59Z",
+      "detected_at": "2026-10-17T21:39:16Z",
+      "queued_at": "2026-10-17T21:39:16Z",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-10-17T21:39:19Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "unrecognized"
+      },
+      "auto_exec_start": "2026-10-17T21:39:19Z",
+      "execution_done": {
+        "result_real": "UNKNOWN",
+        "ts": "2026-10-17T21:39:19Z",
+        "reason": "未识别的可执行动作；不脑补",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-10-17T21:39:19Z"
+      },
+      "result_real": "UNKNOWN",
+      "consumer_run_at": "2026-10-17T21:39:19Z",
       "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
     }
   ]
