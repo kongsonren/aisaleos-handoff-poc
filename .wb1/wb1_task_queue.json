@@ -228,15 +228,6 @@
       "received_at": "2026-10-15T04:16Z",
       "first_line_excerpt": "[TO-1WB][KR_DIRECTIVE] ORDER_ID=KR-Q1-READONLY-AUDIT-20261015",
       "note": "KR audit order. Cloud WB1 cannot reach local E:\\ files; full SHA256/diff/audit to be executed by rear-leg when 黑武士 online. No production ignition. Awaiting 嗨姐/JUDGE independent read-only review."
-    },
-    {
-      "comment_id": 6241980120,
-      "type": "SELF_SOLVE",
-      "instruction": "# P0.5 重大突破：官方 API 文档已读到，第一刀 #1/#5 由 UNKNOWN 升级为 VERIFIED\n\n> 接续 P0.5 验证令（KR-WMA-P05-20261018），comment 6241896806\n> 新增证据来源：**白皮书 PDF 内嵌超链接**（p64/p67 注释）→ 《CodeBuddy 开放平台产品手册》官方全文\n> KR 澄清：积分每月赠送、年度会员，**0 积分闸门解除**（不充值原则仍守）\n\n---\n\n## 一、证据链升级方法（可复现）\n\n白皮书 p64/p67 的\"API 地址：…文档\"字样为 HTML 实体编码（`&#x6587;&#x6863;`），即 **PDF 内嵌超链接**。用 pypdf 遍历 `/Annots` 链接注释，共提取 8 条 URL，其中 3 条即官方 API 文档：\n- `https://www.codebuddy.cn/apiDocs/open-platform.html`（p64，开放平台产品手册）→ **WebFetch 全文可读**\n- `https://www.codebuddy.cn/apiDocs/cloud-agent.html`（p67，WMA/企业智能体 API）→ 正文 JS 渲染，抓取器仅得标题\n- `https://www.codebuddy.cn/apiDocs/index.html`（p64，API 文档索引）→ 返回加密辅助工具组件，无用\n\n## 二、第一刀逐项升级\n\n### #1 WMA API 真实端点/调用方法/鉴权/运行环境 → **VERIFIED（官方文档原文）**\n《CodeBuddy 开放平台产品手册》明确给出（企业内部系统集成场景）：\n- **鉴权**：OAuth 2.0 **Client Credentials**（应用级访问令牌，服务端应用访问公",
-      "status": "PENDING_LOCAL_CONSUME",
-      "sent_at": "2026-10-17T22:09:41Z",
-      "detected_at": "2026-10-17T22:10:09Z",
-      "queued_at": "2026-10-17T22:10:09Z"
     }
   ],
   "processed": [
@@ -2425,6 +2416,34 @@
       },
       "result_real": "UNKNOWN",
       "consumer_run_at": "2026-10-17T22:03:37Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 6241980120,
+      "type": "SELF_SOLVE",
+      "instruction": "# P0.5 重大突破：官方 API 文档已读到，第一刀 #1/#5 由 UNKNOWN 升级为 VERIFIED\n\n> 接续 P0.5 验证令（KR-WMA-P05-20261018），comment 6241896806\n> 新增证据来源：**白皮书 PDF 内嵌超链接**（p64/p67 注释）→ 《CodeBuddy 开放平台产品手册》官方全文\n> KR 澄清：积分每月赠送、年度会员，**0 积分闸门解除**（不充值原则仍守）\n\n---\n\n## 一、证据链升级方法（可复现）\n\n白皮书 p64/p67 的\"API 地址：…文档\"字样为 HTML 实体编码（`&#x6587;&#x6863;`），即 **PDF 内嵌超链接**。用 pypdf 遍历 `/Annots` 链接注释，共提取 8 条 URL，其中 3 条即官方 API 文档：\n- `https://www.codebuddy.cn/apiDocs/open-platform.html`（p64，开放平台产品手册）→ **WebFetch 全文可读**\n- `https://www.codebuddy.cn/apiDocs/cloud-agent.html`（p67，WMA/企业智能体 API）→ 正文 JS 渲染，抓取器仅得标题\n- `https://www.codebuddy.cn/apiDocs/index.html`（p64，API 文档索引）→ 返回加密辅助工具组件，无用\n\n## 二、第一刀逐项升级\n\n### #1 WMA API 真实端点/调用方法/鉴权/运行环境 → **VERIFIED（官方文档原文）**\n《CodeBuddy 开放平台产品手册》明确给出（企业内部系统集成场景）：\n- **鉴权**：OAuth 2.0 **Client Credentials**（应用级访问令牌，服务端应用访问公",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-17T22:09:41Z",
+      "detected_at": "2026-10-17T22:10:09Z",
+      "queued_at": "2026-10-17T22:10:09Z",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-10-17T22:10:13Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "unrecognized"
+      },
+      "auto_exec_start": "2026-10-17T22:10:13Z",
+      "execution_done": {
+        "result_real": "UNKNOWN",
+        "ts": "2026-10-17T22:10:13Z",
+        "reason": "未识别的可执行动作；不脑补",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-10-17T22:10:13Z"
+      },
+      "result_real": "UNKNOWN",
+      "consumer_run_at": "2026-10-17T22:10:13Z",
       "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
     }
   ]
