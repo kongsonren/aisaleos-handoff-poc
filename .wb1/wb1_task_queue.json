@@ -228,6 +228,15 @@
       "received_at": "2026-10-15T04:16Z",
       "first_line_excerpt": "[TO-1WB][KR_DIRECTIVE] ORDER_ID=KR-Q1-READONLY-AUDIT-20261015",
       "note": "KR audit order. Cloud WB1 cannot reach local E:\\ files; full SHA256/diff/audit to be executed by rear-leg when 黑武士 online. No production ignition. Awaiting 嗨姐/JUDGE independent read-only review."
+    },
+    {
+      "comment_id": 6242116590,
+      "type": "SELF_SOLVE",
+      "instruction": "# P0.5 第四刀｜官方 API 真实性与权限核验报告\n\n- **ORDER_ID**：KR-WMA-P05-D4-20261018\n- **执行主体**：1WB 黑武士 WorkBuddy\n- **授权**：KR_DIRECT_UI ｜ READ_ONLY\n- **优先级**：P0\n- **执行时间**：2026-10-18（GMT+8）\n- **纪律**：先查官方能力、只读、不充值/不付费/不建云端资源/不改生产/不扩权限/不泄密/不碰 2WB；证据不足即 UNKNOWN，不脑补。\n\n---\n\n## 一、证据来源（官方原文 URL）\n\n| # | 文档 | 官方 URL | 取证方式 | 状态 |\n|---|------|----------|----------|------|\n| 1 | AgentOS OpenAPI 3.0.3 规格（`agentos-api.yaml`） | `https://www.codebuddy.cn/v2/agentos` | curl 抓取规格文件（193KB，机器可读） | ✅ 全文可读 |\n| 2 | CodeBuddy 开放平台产品手册 | `https://www.codebuddy.cn/apiDocs/open-platform.html` | WebFetch 抓取正文 | ✅ 全文可读 |\n| 3 | WMA（企业智能体）文档页 | `https://www.codebuddy.cn/.../cloud-agent.html` | curl 抓 HTML（JS 渲染，仅得标题+规格引用） | ⚠️ 仅规格引用 |\n\n- AgentOS 规格 `servers`：`https://www.codebuddy.cn/v2/agentos`；`securitySchemes`：`BearerAuth`（scheme=be",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-17T22:19:27Z",
+      "detected_at": "2026-10-17T22:19:34Z",
+      "queued_at": "2026-10-17T22:19:34Z"
     }
   ],
   "processed": [
