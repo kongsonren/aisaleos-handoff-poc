@@ -228,15 +228,6 @@
       "received_at": "2026-10-15T04:16Z",
       "first_line_excerpt": "[TO-1WB][KR_DIRECTIVE] ORDER_ID=KR-Q1-READONLY-AUDIT-20261015",
       "note": "KR audit order. Cloud WB1 cannot reach local E:\\ files; full SHA256/diff/audit to be executed by rear-leg when 黑武士 online. No production ignition. Awaiting 嗨姐/JUDGE independent read-only review."
-    },
-    {
-      "comment_id": 6243080983,
-      "type": "SELF_SOLVE",
-      "instruction": "# P0.9 收口更新｜凭据签发 + 零成本只读实测通过\n\n- **ORDER_ID**：KR-AGENTOS-P09-20261018（续 / 实测补充）\n- **执行主体**：1WB 黑武士 WorkBuddy\n- **时间**：2026-10-18 07:27 GMT+8\n\n## 关键进展\nKR 已完成主权动作：在 WorkBuddy 企业管理后台（`codebuddy.cn/admin`）「开放与集成 → API Keys」生成 **PAT（前缀 `pt_`，有效期至 2027/10/18）**，存入本地 `~/.wb1/agentos_cred`（参照 github_pat 模式，未进对话/GitHub）。\n\n## 零成本只读实测（不建资源、不耗额度）\n1WB 脚本从文件读入 PAT 注入 `Authorization: Bearer`，**全程不回显 key**，仅发只读 GET：\n\n| 探针 | 端点 | 结果 |\n|------|------|------|\n| 仅 Bearer | `GET /v2/agentos/agents` | **200** `{\"code\":0,\"msg\":\"OK\",\"total\":0,\"items\":[]}` |\n| Bearer + X-Source-App | `GET /v2/agentos/agents` | **200** |\n| Bearer + X-Source-App | `GET /v2/agentos/runtimes` | **200** `{\"items\":[],\"pagination\":...}` |\n\n## 结论\n- **P0.8 最大 UNKNOWN（token ↔ AgentOS 互通性）解决：YES。PAT 被 AgentOS `/v2/agentos` 接受，且免 `X-Source-App",
-      "status": "PENDING_LOCAL_CONSUME",
-      "sent_at": "2026-10-17T23:29:30Z",
-      "detected_at": "2026-10-17T23:29:55Z",
-      "queued_at": "2026-10-17T23:29:55Z"
     }
   ],
   "processed": [
@@ -2565,6 +2556,34 @@
       },
       "result_real": "BLOCKED",
       "consumer_run_at": "2026-10-17T22:41:49Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 6243080983,
+      "type": "SELF_SOLVE",
+      "instruction": "# P0.9 收口更新｜凭据签发 + 零成本只读实测通过\n\n- **ORDER_ID**：KR-AGENTOS-P09-20261018（续 / 实测补充）\n- **执行主体**：1WB 黑武士 WorkBuddy\n- **时间**：2026-10-18 07:27 GMT+8\n\n## 关键进展\nKR 已完成主权动作：在 WorkBuddy 企业管理后台（`codebuddy.cn/admin`）「开放与集成 → API Keys」生成 **PAT（前缀 `pt_`，有效期至 2027/10/18）**，存入本地 `~/.wb1/agentos_cred`（参照 github_pat 模式，未进对话/GitHub）。\n\n## 零成本只读实测（不建资源、不耗额度）\n1WB 脚本从文件读入 PAT 注入 `Authorization: Bearer`，**全程不回显 key**，仅发只读 GET：\n\n| 探针 | 端点 | 结果 |\n|------|------|------|\n| 仅 Bearer | `GET /v2/agentos/agents` | **200** `{\"code\":0,\"msg\":\"OK\",\"total\":0,\"items\":[]}` |\n| Bearer + X-Source-App | `GET /v2/agentos/agents` | **200** |\n| Bearer + X-Source-App | `GET /v2/agentos/runtimes` | **200** `{\"items\":[],\"pagination\":...}` |\n\n## 结论\n- **P0.8 最大 UNKNOWN（token ↔ AgentOS 互通性）解决：YES。PAT 被 AgentOS `/v2/agentos` 接受，且免 `X-Source-App",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-17T23:29:30Z",
+      "detected_at": "2026-10-17T23:29:55Z",
+      "queued_at": "2026-10-17T23:29:55Z",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-10-17T23:29:58Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "unrecognized"
+      },
+      "auto_exec_start": "2026-10-17T23:29:58Z",
+      "execution_done": {
+        "result_real": "UNKNOWN",
+        "ts": "2026-10-17T23:29:58Z",
+        "reason": "未识别的可执行动作；不脑补",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-10-17T23:29:58Z"
+      },
+      "result_real": "UNKNOWN",
+      "consumer_run_at": "2026-10-17T23:29:58Z",
       "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
     }
   ]
