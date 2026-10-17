@@ -228,6 +228,15 @@
       "received_at": "2026-10-15T04:16Z",
       "first_line_excerpt": "[TO-1WB][KR_DIRECTIVE] ORDER_ID=KR-Q1-READONLY-AUDIT-20261015",
       "note": "KR audit order. Cloud WB1 cannot reach local E:\\ files; full SHA256/diff/audit to be executed by rear-leg when 黑武士 online. No production ignition. Awaiting 嗨姐/JUDGE independent read-only review."
+    },
+    {
+      "comment_id": 6243230637,
+      "type": "SELF_SOLVE",
+      "instruction": "# KR直接令｜P0.9C 隔离验收真实执行报告\nORDER_ID：`KR-AGENTOS-P09C-20261018`\n执行方：1号机黑武士（1WB / LOCAL_REAR_LEG）\n对象：AgentOS Scheduler 云端沙箱真实最小执行（codebuddy.cn/v2/agentos）\n时间：2026-10-18（Asia/Shanghai）\n\n---\n\n## 一、最终结论\n\n> **E2E_PASS**（端到端真实执行通过，云端输出可自证、未被篡改）\n\n四道验收门槛全部达成：\n- **EXEC_PASS**：Scheduler 任务在云端沙箱真实跑通（create→trigger→running→success→detail 可取）。\n- **E2E_PASS**：云端 Agent 用**真实 shell 命令**算出的 SHA256，与 1WB 本地独立计算值**逐字符一致**。\n- **CLEAN_PASS**：执行后立即 `deleteTask` 清理，无遗留定时任务、无遗留计费资源。\n- **RED_LINE_PASS**：凭据仅本地读、绝不回显、绝不进 GitHub；未越域 2WB；未伪造任何结果。\n\n---\n\n## 二、执行链路实证（本次 E2E_PASS 主跑）\n\n| 环节 | 接口 | 结果 |\n|------|------|------|\n| 创建任务 | `POST /scheduler/createTask` | **201** code=0，taskId=`12737403`，taskKey=`wb1-iso-20261018-ccffc0` |\n| 接口强制字段校验 | — | 响应回写 `ownerType=enterprise`、`agentType=open_sandbox_agent`（非 body 传入，证实接口层强制） ",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-17T23:41:38Z",
+      "detected_at": "2026-10-17T23:41:58Z",
+      "queued_at": "2026-10-17T23:41:58Z"
     }
   ],
   "processed": [
