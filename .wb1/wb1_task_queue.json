@@ -228,6 +228,15 @@
       "received_at": "2026-10-15T04:16Z",
       "first_line_excerpt": "[TO-1WB][KR_DIRECTIVE] ORDER_ID=KR-Q1-READONLY-AUDIT-20261015",
       "note": "KR audit order. Cloud WB1 cannot reach local E:\\ files; full SHA256/diff/audit to be executed by rear-leg when 黑武士 online. No production ignition. Awaiting 嗨姐/JUDGE independent read-only review."
+    },
+    {
+      "comment_id": 6241812771,
+      "type": "SELF_SOLVE",
+      "instruction": "# P0 综合结论与真实验收标准（回应 KR 四问）\n\n> 基于已读源码 + 白皮书 V1.0（文本型，逐字核验）+ KR 客户端 UI 实据。本轮只读，未改生产、未碰凭据、未部署。\n\n## 一、两份 WB 文档究竟提供什么 Agent 调用能力？能否外部自动启动复杂任务？\n\nP0 全过程实际涉及三份文档，逐一厘清：\n\n| 文档 | 类型 | 提供的 Agent 调用能力 | 外部自动启动复杂任务？ |\n|---|---|---|---|\n| ① WorkBuddy 简介/Overview（在线） | 用户手册 | 仅 UI「创建任务/任务对话」交互 | ❌ 无外部 API/触发器 |\n| ② CodeBuddy 企业管理后台-用户操作手册 | 图像PDF（本环境不可读） | 据渲染图推断含 `POST /v2/agents/runtimes`（Bearer API Key + X-Source-App），但 ⚠️UNVERIFIED | 推断可，未证实 |\n| ③ WorkBuddy 企业版产品白皮书 V1.0（文本PDF，已读） | 权威白皮书 | **WMA（WorkBuddy Managed Agents）API/SDK（PaaS）+ 开放平台 Open API + OAuth 2.0 + 客户端「自动化定时任务」+ MCP 连接器** | ✅ **YES（官方）** |\n\n白皮书关键原文（逐字）：\n- L779「WMA 支持企业被集成场景，提供 Paas 能力，API 地址：WorkBuddy Managed Agents API」\n- L789「WMA 的 Agent 均在云端沙箱运行，可 7x24 小时…特别适合长程任务、在线客服、**自动触发任务**等场景」\n- L815「开通即用 · 一行 SDK 接入」\n- L233-234 / L740「开放平台提供开",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-17T21:54:48Z",
+      "detected_at": "2026-10-17T21:55:15Z",
+      "queued_at": "2026-10-17T21:55:15Z"
     }
   ],
   "processed": [
