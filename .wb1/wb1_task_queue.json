@@ -228,15 +228,6 @@
       "received_at": "2026-10-15T04:16Z",
       "first_line_excerpt": "[TO-1WB][KR_DIRECTIVE] ORDER_ID=KR-Q1-READONLY-AUDIT-20261015",
       "note": "KR audit order. Cloud WB1 cannot reach local E:\\ files; full SHA256/diff/audit to be executed by rear-leg when 黑武士 online. No production ignition. Awaiting 嗨姐/JUDGE independent read-only review."
-    },
-    {
-      "comment_id": 6240595809,
-      "type": "SELF_SOLVE",
-      "instruction": "[TO-KR][KR-NAZHA-20261018-01-CMD4][STATUS-1WB-RGBCW-DELIVERY]\n\n# 第四令（RGBCW 业务外攻）送达状态 · 1WB 后腿\n\n- **Task**: 475-rgbcw-biz-attack-to-2wb\n- **ORDER_ID**: KR-NAZHA-20261018-01-CMD4\n- **性质**: 1WB 代 KR 总令送达至 2WB 授权通道（#8），不代执行、不越域\n- **完整报告**: E:\\AISALEOS-Vault\\20-Projects\\哪吒后轮\\ORDER5_475_RGBCW_DELIVERY_2026-10-18.md\n\n## 送达事实（GET 回读核验）\n- 信封 `[TO-2WB][KR-NAZHA-20261018-01-CMD4][ORDER-RGBCW-BIZ-ATTACK]`\n- 落点 Issue #8 / comment **6240588819**，created 2026-10-17T20:34:16Z\n- 回读：id 匹配、信封 token 存在、ORDER-RGBCW 标记存在、5 问 MARKET_FACT 包含 ✅\n- 后腿 PRODUCT_FACT 基座已随令引用：`G2_REARLEG_PRODUCT_FACT_2026-10-15.md`\n\n## 令文要点（前腿外部核验 · G2 跨腿业务首枪）\n要求 2WB 对 MARKET_FACT 做独立外部核验，针对 G2 报告第三节 5 个 MARKET_FACT 问题\n（RGBCW 5CH 品类/供应商候选/SM1191 对外身份/60×1cm 标准规格/酬成驱动 IC）。\n成功判据：至少一项新可验证业务成果（附 Evidence：来源 URL / 截图 SHA256 / 检索式）。\n\n## 2WB 回",
-      "status": "PENDING_LOCAL_CONSUME",
-      "sent_at": "2026-10-17T20:34:43Z",
-      "detected_at": "2026-10-17T20:35:09Z",
-      "queued_at": "2026-10-17T20:35:09Z"
     }
   ],
   "processed": [
@@ -2145,6 +2136,34 @@
       },
       "result_real": "BLOCKED",
       "consumer_run_at": "2026-10-17T20:33:43Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 6240595809,
+      "type": "SELF_SOLVE",
+      "instruction": "[TO-KR][KR-NAZHA-20261018-01-CMD4][STATUS-1WB-RGBCW-DELIVERY]\n\n# 第四令（RGBCW 业务外攻）送达状态 · 1WB 后腿\n\n- **Task**: 475-rgbcw-biz-attack-to-2wb\n- **ORDER_ID**: KR-NAZHA-20261018-01-CMD4\n- **性质**: 1WB 代 KR 总令送达至 2WB 授权通道（#8），不代执行、不越域\n- **完整报告**: E:\\AISALEOS-Vault\\20-Projects\\哪吒后轮\\ORDER5_475_RGBCW_DELIVERY_2026-10-18.md\n\n## 送达事实（GET 回读核验）\n- 信封 `[TO-2WB][KR-NAZHA-20261018-01-CMD4][ORDER-RGBCW-BIZ-ATTACK]`\n- 落点 Issue #8 / comment **6240588819**，created 2026-10-17T20:34:16Z\n- 回读：id 匹配、信封 token 存在、ORDER-RGBCW 标记存在、5 问 MARKET_FACT 包含 ✅\n- 后腿 PRODUCT_FACT 基座已随令引用：`G2_REARLEG_PRODUCT_FACT_2026-10-15.md`\n\n## 令文要点（前腿外部核验 · G2 跨腿业务首枪）\n要求 2WB 对 MARKET_FACT 做独立外部核验，针对 G2 报告第三节 5 个 MARKET_FACT 问题\n（RGBCW 5CH 品类/供应商候选/SM1191 对外身份/60×1cm 标准规格/酬成驱动 IC）。\n成功判据：至少一项新可验证业务成果（附 Evidence：来源 URL / 截图 SHA256 / 检索式）。\n\n## 2WB 回",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-17T20:34:43Z",
+      "detected_at": "2026-10-17T20:35:09Z",
+      "queued_at": "2026-10-17T20:35:09Z",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-10-17T20:35:12Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "block_out_of_scope"
+      },
+      "auto_exec_start": "2026-10-17T20:35:12Z",
+      "execution_done": {
+        "result_real": "BLOCKED",
+        "ts": "2026-10-17T20:35:12Z",
+        "reason": "涉及 2WB 接件/消费链或墨子技术链，1WB 依纪律不跨 WB 代执行；需 2WB 自主或 KR 授权",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-10-17T20:35:12Z"
+      },
+      "result_real": "BLOCKED",
+      "consumer_run_at": "2026-10-17T20:35:12Z",
       "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
     }
   ]
