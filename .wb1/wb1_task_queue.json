@@ -228,6 +228,195 @@
       "received_at": "2026-10-15T04:16Z",
       "first_line_excerpt": "[TO-1WB][KR_DIRECTIVE] ORDER_ID=KR-Q1-READONLY-AUDIT-20261015",
       "note": "KR audit order. Cloud WB1 cannot reach local E:\\ files; full SHA256/diff/audit to be executed by rear-leg when 黑武士 online. No production ignition. Awaiting 嗨姐/JUDGE independent read-only review."
+    },
+    {
+      "comment_id": 6120054980,
+      "type": "SELF_SOLVE",
+      "instruction": "[KR_TASK][CLOUD_DISPATCH][ONE_TIME_APPROVED_20261012]\nKR_GATE=APPROVED_ONCE\nACTION=WORKFLOW_DISPATCH\nREPO=kongsonren/aisaleos-handoff-poc\nWORKFLOW=nezha-auto.yml\nREF=fix/nezha-mozi-state-guards-20261011\nINPUT=diag:true\nCOUNT=1\nAUTHORIZED_BY=KR in ChatGPT immediately before this instruction\nCHECK=Confirm branch includes commit ffd0a121 and diagnostic safeguards\nRESULT=Return GitHub HTTP status, new Run ID, job status and logs\nNO_PRODUCTION=true\nNO_BUSINESS_TASKS=true\nNO_RETRY=true\nIf no authorized executor, reply BLOCKED. Do not substitute CLOSEOUT_ARCHIVE.",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-12T07:51:40Z",
+      "detected_at": "2026-10-17T19:50:17Z",
+      "queued_at": "2026-10-17T19:50:17Z"
+    },
+    {
+      "comment_id": 6137462700,
+      "type": "SELF_SOLVE",
+      "instruction": "[HAI→CLOUD1WB][KR_TASK][NEZHA_SANDBOX_WORKFLOW_REPAIR][20261013-071]\nGOAL=Safely integrate existing isolated two-run contract tests into diagnostic Runner without enabling business execution.\nREPO=kongsonren/aisaleos-handoff-poc\nREF=fix/nezha-mozi-state-guards-20261011\nFILE=.github/workflows/nezha-auto.yml\nREQUIRED_CHANGE=In the existing \"Validate cap contract (diagnostic only)\" step, add execution of python -m unittest discover -s .wb1/nezha/tests -p 'test_isolated_two_run_contract.py' after existing cap test.\nPRESERVE=diag=true must skip MOZI patrol and self-schedule; no production branch edits, no secrets exposure, no business tasks.\nPRECHECK=Verify test_isolated_two_run_contract.py and isolated_two_run_contract.py exist on isolated ref. If absent STOP.\nAUTHORIZATION=This request author",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-13T03:21:18Z",
+      "detected_at": "2026-10-17T19:50:17Z",
+      "queued_at": "2026-10-17T19:50:17Z"
+    },
+    {
+      "comment_id": 6140815277,
+      "type": "SELF_SOLVE",
+      "instruction": "[HAI→CLOUD1WB][KR_TASK][NEZHA_CAP_SAFE_REPAIR][20261013-084]\nGOAL=Repair verified false-success 240-beat self-schedule cap in isolated branch, with safe finite budget and tests. This is code-repair only, NOT workflow_dispatch authorization.\nREPO=kongsonren/aisaleos-handoff-poc\nREF=fix/nezha-mozi-state-guards-20261011\nEVIDENCE=main run 38331455805 logs \"MAX_BEATS=240 reached; self-schedule chain stops here\" then \"nextexit=0\" and overall SUCCESS. Isolated .wb1/nezha/loop.py blob c4e2feda1912d31fccfe29458cf76faa2b108103 returns 6 at seq>=240; workflow blob 88752348f3d8c6b67e715e35ddcd3c5dae63278f still sets NEZHA_MAX_BEATS=240.\nACTION=PATCH_OWN_ROUTER\nTARGET=.wb1/nezha/loop.py\nSCOPE=Only isolated ref; change self-schedule cap semantics so historical round_seq is audit-only, while keeping a fi",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-13T07:44:36Z",
+      "detected_at": "2026-10-17T19:50:17Z",
+      "queued_at": "2026-10-17T19:50:17Z"
+    },
+    {
+      "comment_id": 6141254565,
+      "type": "SELF_SOLVE",
+      "instruction": "[HAI->CLOUD1WB][KR_TASK][RESULT_DEBT_REOPEN][20261013-086]\nACTION=REPROCESS_COMMENT\nTARGET=6140815277\nSOURCE=Issue #6 comment 6140815277, safe cap repair on isolated branch.\nOWNER=CLOUD1WB\nFACT=Issue #6 comment 6141051093 incorrectly treated local META_ACTION ACK 6140878215 as execution. Independent readback confirms .wb1/nezha/loop.py blob c4e2feda1912d31fccfe29458cf76faa2b108103 and workflow blob 88752348f3d8c6b67e715e35ddcd3c5dae63278f unchanged; cap persists.\nREQUIRED=Do not close or delegate away this RESULT debt. Cloud1WB must either implement narrowly scoped isolated-branch safe repair and provide actual commit SHA + blob SHA + diff + offline test evidence, OR report BLOCKED with precise cause. If original ACTION=PATCH_OWN_ROUTER is not valid for this file, select an authorized code",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-13T08:12:28Z",
+      "detected_at": "2026-10-17T19:50:17Z",
+      "queued_at": "2026-10-17T19:50:17Z"
+    },
+    {
+      "comment_id": 6151179552,
+      "type": "SELF_SOLVE",
+      "instruction": "CLOSEOUT_ARCHIVE 恢复验收（2026-10-14 测试母件）\nSOURCE_SHA256=56c1b466456e65e9eed30fb74e1c6d50c70f8adcf1b576595dbb945b19d8b396\nNAS=\\\\192.168.2.107\\AI-SalesOS 仓库\\AISALEOS_SHARED\\00_1WB_CLOCK\\CLOSEOUT_HAI-20261014_TEST.md\nOBSIDIAN=E:\\AISALEOS-Vault\\99-Archive\\1WB-CLOSEOUT\\CLOSEOUT_HAI-20261014_TEST.md\nNAS_MATCH=True\nOBS_MATCH=True\nVERDICT=PASS",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-13T17:20:51Z",
+      "detected_at": "2026-10-17T19:50:17Z",
+      "queued_at": "2026-10-17T19:50:17Z"
+    },
+    {
+      "comment_id": 6163909763,
+      "type": "SELF_SOLVE",
+      "instruction": "[HAI→1WB][DIAG]\nEVENT_ID=TEST-WB1-LOOP-DIAG-20261014\nNOTE=low-risk closed-loop self-diagnosis test (1WB takeover)",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-14T08:11:05Z",
+      "detected_at": "2026-10-17T19:50:17Z",
+      "queued_at": "2026-10-17T19:50:17Z"
+    },
+    {
+      "comment_id": 6163913757,
+      "type": "SELF_SOLVE",
+      "instruction": "[HAI→1WB][TASK]\nACTION=READ_FILE\nTARGET=C:\\Users\\59605/.wb1\\router_rules.json\nEVENT_ID=TEST-WB1-LOOP-READFILE-20261014\nNOTE=low-risk closed-loop local file read test (1WB takeover)",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-14T08:11:20Z",
+      "detected_at": "2026-10-17T19:50:17Z",
+      "queued_at": "2026-10-17T19:50:17Z"
+    },
+    {
+      "comment_id": 6170964720,
+      "type": "SELF_SOLVE",
+      "instruction": "[HAI→1WB][TASK]\nACTION=READ_FILE\nTARGET=C:\\Users\\59605\\希懋-SM1191-产品资产\\8090-REAL源.json\nEVENT_ID=BIZ-SM1191-REALSRC-PATROL-20261014-01\nNOTE=KR令业务开工首个REAL:SM1191经营真源(8090-REAL源.json)无人值守只读巡检存证,白名单XIMAO_DIR内;令由1WB应KR四刀令经#6发出,执行与回写须由60s正式计划任务自动完成,待嗨独立审果;KR_RELAY=0\n",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-14T14:40:38Z",
+      "detected_at": "2026-10-17T19:50:17Z",
+      "queued_at": "2026-10-17T19:50:17Z"
+    },
+    {
+      "comment_id": 6171132879,
+      "type": "SELF_SOLVE",
+      "instruction": "[HAI→1WB][TASK]\nACTION=REPROCESS_COMMENT\nTARGET=6170964720\nEVENT_ID=BIZ-SM1191-REALSRC-PATROL-20261014-01-RETRY1\nNOTE=第三刀REAL回写POST失败(post_comment静默返回None无重试,W3缺陷实证)的链路自带受控重试;READ_FILE只读幂等,重派补ACk+REAL;KR_RELAY=0\n",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-14T14:48:51Z",
+      "detected_at": "2026-10-17T19:50:17Z",
+      "queued_at": "2026-10-17T19:50:17Z"
+    },
+    {
+      "comment_id": 6173209209,
+      "type": "SELF_SOLVE",
+      "instruction": "[HAI→1WB][TASK]\nACTION=READ_FILE\nTARGET=C:\\Users\\59605\\希懋-SM1191-产品资产\\8090-REAL源.json\nEVENT_ID=BIZ-SM1191-8090REAL-PATROL-20261015-01\nNOTE=KR_GATE W3-v3 restricted deployment real acceptance: SM1191 business truth-source unattended read-only patrol; must be auto-claimed, executed and auto-delivered by the official scheduled task running heartbeat v3; HAI to independently review; KR_RELAY=0\n",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-14T16:32:08Z",
+      "detected_at": "2026-10-17T19:50:17Z",
+      "queued_at": "2026-10-17T19:50:17Z"
+    },
+    {
+      "comment_id": 6173277021,
+      "type": "SELF_SOLVE",
+      "instruction": "[HAI→1WB][TASK]\nACTION=READ_FILE\nTARGET=C:\\Users\\59605\\希懋-SM1191-产品资产\\8090-REAL源.json\nEVENT_ID=BIZ-SM1191-8090REAL-PATROL-20261015-02\nNOTE=KR_GATE W3-v3 controlled RESULT delivery fault-recovery acceptance: unattended read-only patrol; one controlled pre-POST network fault injected once; recovery must be completed automatically by the official scheduled task; KR_RELAY=0\n",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-14T16:35:38Z",
+      "detected_at": "2026-10-17T19:50:17Z",
+      "queued_at": "2026-10-17T19:50:17Z"
+    },
+    {
+      "comment_id": 6173305623,
+      "type": "SELF_SOLVE",
+      "instruction": "[HAI→1WB][TASK]\nACTION=READ_FILE\nTARGET=C:\\Users\\59605\\希懋-SM1191-产品资产\\8090-REAL源.json\nEVENT_ID=BIZ-SM1191-8090REAL-PATROL-20261015-03\nNOTE=KR_GATE W3-v3 controlled RESULT delivery fault-recovery acceptance: unattended read-only patrol; one controlled pre-POST network fault injected once; recovery must be completed automatically by the official scheduled task; KR_RELAY=0\n",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-14T16:37:07Z",
+      "detected_at": "2026-10-17T19:50:17Z",
+      "queued_at": "2026-10-17T19:50:17Z"
+    },
+    {
+      "comment_id": 6173941370,
+      "type": "SELF_SOLVE",
+      "instruction": "【KR正式执行令｜ARCHIVE-20261015-DOUBLE-LEGS-V1】\n发令：KR；执行：1WB黑武士；通道：GitHub Issue #6。\n任务：将本轮对话已经定稿的《KR总令｜双腿上云·30项事务归位·云端持续工作 V1.0》作为正式母件永久归档。\n母件必须完整覆盖：三阶段（①1WB云端基础、②KR开前腿迁移、③双腿匹配自治）；H01—H17与F01—F13各项名称、目标、交果；30项任务状态链；首批主攻；云端持续执行；KR_GATE安全边界；三阶段PASS条件；10分钟首REAL、30分钟阶段交果；原始证据优先与UNKNOWN不脑补。\n特别注意：不得仅用本条摘要替代原完整总令。如果1WB无法直接取得上轮完整正文，先报SOURCE_MISSING/BLOCKED，不能自行补写后冒充原文。\n执行步骤：1. 确认取得完整原文及其来源；2. GitHub独立归档文件（保留版本V1.0、文件SHA）；3. 按既有CLOSEOUT_ARCHIVE通道写入NAS与Obsidian；4. 分别回读计算SHA并核对原文一致；5. 在Issue #6回传RESULT，包括TASK_ID、GitHub路径/commit、NAS路径、Obsidian路径、各SHA、PASS/FAIL/BLOCKED及证据。\n权限边界：只使用现有已授权通道；不得改生产执行链、Issue #20、密钥、费用、外部敏感数据；遇权限问题申请KR_GATE。\n判定：GitHub发令ACK≠归档PASS；未取到完整原文≠PASS；NAS/Obsidian无真实回读证据则分别FAIL/BLOCKED。不要要求KR再次搬运，优先自行查已有历史与归档母件。",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-14T17:09:54Z",
+      "detected_at": "2026-10-17T19:50:17Z",
+      "queued_at": "2026-10-17T19:50:17Z"
+    },
+    {
+      "comment_id": 6174564179,
+      "type": "SELF_SOLVE",
+      "instruction": "【KR正式协同令②-A｜1WB后腿支持前腿第二阶段｜2026-10-15】\nAUTH=KR_EXPLICIT_APPROVAL; TARGET=1WB_REARLEG; INBOX=Issue#6; KR_RELAY=0; ORDER_ID=KR-PHASE2-1WB-SUPPORT-20261015\n配套前腿主令见Issue#8（KR-PHASE2-2WB-V2-20261015）。你只负责内守与云端基础，不得代2WB冒领RESULT。\n1 只读核验墨子云Daemon、24h连续观察证据、Issue#6消费者拓扑（v3/watchdog/Actions/Mozi），列出任务归属隔离方案；不得用GitHub label/comment假装原子锁，不让墨子争抢v3生产任务。\n2 在已有授权内准备2WB一次开机包：环境/依赖/调度/执行器盘点脚本、CLOUD/LOCAL/HYBRID/UNKNOWN矩阵模板、独立身份与账本设计、回滚、关机云端独立测试方案。前腿本地不可达则UNKNOWN；不得擅自开机、迁移凭据或部署生产。\n3 复核2WB外攻FACT与内部SM1191/RGBCW真源的交接边界，给出独立RECEIVED/VERIFIED证据；知产R2权威原件若未真实收到，不得宣称修复DEF-A~F。\n4 对历史旧债只做引用、去重、证据支持；不重开旧战、不进入2WB外攻域。\n5 首REAL与30分钟阶段交果（自机器实际接令算），交付PRE_FLIGHT_READY/EVIDENCE/OPEN_DEBT/KR_GATE_LIST；如仅排队QUEUED_AWAITING_AGENT，必须明示，不能当执行完成。\n权限边界：只读、既有授权、隔离准备；不改生产v3/Actions/watchdog/Mozi，不增云费，不移动密钥，不触发2WB开机。任何生产变更先KR_GATE。\n有令有果，原",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-14T17:42:43Z",
+      "detected_at": "2026-10-17T19:50:17Z",
+      "queued_at": "2026-10-17T19:50:17Z"
+    },
+    {
+      "comment_id": 6174795041,
+      "type": "SELF_SOLVE",
+      "instruction": "【KR正式总令③｜双腿30项归位·第三阶段收尾｜2026-10-15】\nAUTH=KR_EXPLICIT; ORDER_ID=KR-PHASE3-1WB-LEAD-20261015; TARGET=1WB_REARLEG; CHANNEL=ISSUE_6; KR_RELAY=0\nKR已批准发令，并明确：KR只肉后腿；前腿令由后腿通过既有授权机器通道发出，不由KR搬运。此授权仅限发出本令规定的前腿任务，不扩展生产变更、开机、密钥、付款或外部发布权限。\n\n【先决事实与硬边界】\n1. 本令不是第二阶段PASS声明。已知1WB上一令6174564179仅ACK并QUEUED_KR_DIRECTIVE；2WB上一令6174563494在Issue#8尚未发现ACK。先查真实执行链，不能用排队冒充完成。\n2. 先核对已归档《KR总令｜双腿上云·30项事务归位·云端持续工作 V1.0》完整原文，逐项恢复H01-H17/F01-F13原名称、目标、证据；找不到原文报SOURCE_MISSING，不得编造。\n3. 既有KR_GATE持续有效：2WB开机、云端新生产服务G1、凭据G2、正式生产变更、对外发布/付款等须单独批准。本令不授予G1/G2，不授权替KR开机。\n\n【1WB首要执行：不是再排队】\nA. 只读检查本令从Issue#6 ACK→kr_directive_queue.json→真实Agent消费→执行→RESULT的运行证据。10分钟内首REAL；如QUEUED_AWAITING_AGENT且无实际消费者，报告BLOCKED及准确缺口，禁止假PASS或无限重排。\nB. 恢复30项原始母账与近一月执行债，去重、原REF、OWNER、EVIDENCE、STATE、NEXT；已CLOSED不重干，未完成保留OPEN_DEBT。\nC. 后腿内守内攻：8051/8090 LIVE与SNAP",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-14T17:54:49Z",
+      "detected_at": "2026-10-17T19:50:17Z",
+      "queued_at": "2026-10-17T19:50:17Z"
+    },
+    {
+      "comment_id": 6175338026,
+      "type": "SELF_SOLVE",
+      "instruction": "[TO-1WB][KR-PHASE3A-CLOSEOUT-V11-20261015][KR_DIRECTIVE]\n【KR正式补充令③-A｜双腿上云执行闭环修复与双机关机放行 V1.1】\nAUTH=KR_EXPLICIT; TARGET=1WB_REARLEG; PARENT=KR-PHASE3-1WB-LEAD-20261015; SOURCE_REF=Issue#6 comment 6174795041; KR_RELAY=0; STATUS=ORDER_SENT_NOT_EXECUTED.\nKR本次“KR肉”授权发出本补充令，并不授权生产修改、2WB开机、云端部署、密钥迁移或双机关机。当前双机关机裁决NO-GO；不得宣称上云OK。\n【P0 后腿七令停车场】核验7条KR_DIRECTIVE的原ID、队列状态、实际消费者/唤醒/调度/权限与日志；KR_DIRECTIVE→QUEUE_KR_DIRECTIVE仅排队不算执行。设计隔离侧车消费者，要求单实例、持久领取、幂等、风险分级、KR_GATE、失败隔离、恢复、RESULT/EVIDENCE/READBACK。先只读和隔离无副作用E2E；生产变更另提最小KR_GATE，禁止擅自修改v3/router_rules/Actions或批量重放七令。\n【P0 前腿接令断点】1WB用既有已授权GitHub路径向Issue#8亲发独立前腿子令，带[TO-2WB][CONTINUE-EXECUTION]、本令ORDER_ID/PARENT/SOURCE_REF，回报真实comment ID。2WB核验第三阶段前令6174898456是否ACK、watcher信封识别、executor实际消费、定时器持久性及RESULT；若未启动/不支持，报SCHEDULER_MISSING/UNSUPPORTED_HANDLER/BLOCKED，不得拿A",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-14T18:23:50Z",
+      "detected_at": "2026-10-17T19:50:17Z",
+      "queued_at": "2026-10-17T19:50:17Z"
+    },
+    {
+      "comment_id": 6175738488,
+      "type": "SELF_SOLVE",
+      "instruction": "[KR_DIRECTIVE][TO-1WB][CONTINUE-EXECUTION]\nORDER_ID=KR-ORDER4-NAZHA-MOZI-NAS-AUTONOMY-20261015\nAUTH=KR_EXPLICIT; TARGET=1WB_REARLEG; KR_RELAY=0; PRIORITY=P0\nPARENT=KR-PHASE3A-CLOSEOUT-V11-20261015\n【KR第四令｜哪吒自治突破·墨子定时看护·嗨姐NAS归档收口 V1.0】\nKR已明确“赶紧摆出第四令，KR肉”。本令正式发出；仅授权只读诊断、隔离测试、现有权限内的低风险可逆动作和向2WB既有通道发子令；不授权生产代码切换/新增云服务/凭据扩权/墨子激活/关机。生产灰度需独立KR_GATE批准。\n\n【当前REAL基线】③-A comment 6175338026 机器回执6175347215=HELD_NON_EXECUTABLE、SUBTYPE_NOT_MAPPED；1WB WorkBuddy报告G0侧车隔离12/12 PASS（尚未独立验真）、2WB子令6175437985、2WB ACK 6175544475/6175544833（ACK不等于executor RESULT）。墨子定时看护缺最新定时日志，NAS归档缺NAS_PATH+BYTES+SHA256+READBACK。双机关机NO-GO。\n\n【P0 哪吒1WB自治】先查本令路由解析、实际subtype和消费者路径；禁止因自定义信封被识别为未映射subtype再次HELD后伪称执行。只读核对③-A及七条积压令原ID，侧车12/12原始日志、代码SHA、单实例、幂等、恢复、STOP/rollback、只读白名单。提交最小生产灰度KR_GATE申请（准确文件、diff、权限、回滚、一次新只读任务、无旧债重放），未获单独批准不得切",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-14T18:45:10Z",
+      "detected_at": "2026-10-17T19:50:17Z",
+      "queued_at": "2026-10-17T19:50:17Z"
+    },
+    {
+      "comment_id": 6184393530,
+      "type": "SELF_SOLVE",
+      "instruction": "[Q1_EVIDENCE_AUDIT][RESULT=VERIFIED][REARLEG=1WB]\nORDER_ID=KR-Q1-READONLY-AUDIT-20261015\nPARENT=KR-ORDER5-ENTRYPOINT-FIX-20261015\nAUTH=KR_EXPLICIT_ISSUE_ORDER | RISK=LOW | KR_RELAY=0\n\nLOCAL_READONLY_AUDIT (后腿本地机器执行；不动生产/不点火/不激活墨子/不扩凭据):\n- wb1_order5_adapter.py     5223B  SHA256=3b8fe32403a35859f3093ffc3dcf1b7f4972c64b9e3f1f76c991144725454beb\n- wb1_order5_gray_runner.py 3136B  SHA256=3fd86f85069bdb0ff54e4ce1f6dd90582bdd6ce9f4eff7f5127b619e668a3f3d\n- D2_E2E_STANDARD_KR_DIRECTIVE_ISOLATED_2026-10-15.json 2475B SHA256=de3707afefd2403326fcb080d62fc1d9fab71d82415b6cfa9186b7aea7591cd5\n- D2_SIDECAR_REVERIFY_2026-10-15.md 4984B SHA256=90b35629c3e1118b21948991c830ce5780760fc089d4d7c19b3563933132508a\n- D3_GRAYSCALE_KR_GATE_PACKAGE_2026-10-15.md 6313B SHA256=caccf9ae466099e53693f1855110b9fd7c0adc150c4",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-15T04:26:03Z",
+      "detected_at": "2026-10-17T19:50:17Z",
+      "queued_at": "2026-10-17T19:50:17Z"
+    },
+    {
+      "comment_id": 6185861739,
+      "type": "SELF_SOLVE",
+      "instruction": "[TO-1WB][KR_DIRECTIVE]\nORDER_ID=KR-Q1-AUDIT-EVIDENCE-COMPLETION-20261015\nTASK=Q1_EVIDENCE_COMPLETION\nAUTH=KR_EXPLICIT; TARGET=1WB_REARLEG; KR_RELAY=0; RISK=LOW\nPARENT=KR-Q1-READONLY-AUDIT-20261015\nSOURCE_REF=Issue#6 comment 6184393530\nSTATUS=ORDER_SENT_NOT_EXECUTED\n\n【KR正式补证令｜Q1源码、差异、权限、停止与回滚原证补齐｜只读，不批准生产灰度】\n\n现有交果6184393530已提供5件完整SHA，但没有可供嗨姐/JUDGE独立复核的源码、最小diff、11/11原始日志、实际启动/停止/回滚证据。不得把“已算SHA”冒充“已独立审计”。本令只补证，不重发第四令、不重放七条旧债。\n\n一｜原件与指纹\n在黑武士本地读取并核对 wb1_order5_adapter.py、wb1_order5_gray_runner.py、真正的侧车consumer源文件（不能把adapter/runner笼统称为consumer）、D3审批包、D2隔离E2E JSON、D2复验报告、11/11原始测试日志。逐件给绝对路径、BYTES、完整64位SHA256、mtime、版本/commit（若有）。此前消费者报告SHA前缀51eb3658fd33fb35，必须定位真实源码并给完整值；找不到报SOURCE_MISSING。\n\n二｜独立可审查材料\n输出精确最小diff/新增文件全文（含版本基线）、只读打开生产队列的代码位置、entries→tasks与status转换、handler/order_id/params/risk映射、旧七令隔",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-15T06:20:40Z",
+      "detected_at": "2026-10-17T19:50:17Z",
+      "queued_at": "2026-10-17T19:50:17Z"
+    },
+    {
+      "comment_id": 6185941388,
+      "type": "SELF_SOLVE",
+      "instruction": "[TO-1WB][KR_DIRECTIVE]\nORDER_ID=KR-GATE3-CONSUMER-UNBLOCK-20261015\nTASK=GATE3_CONSUMER_UNBLOCK\nTARGET=1WB_REARLEG\nRISK=LOW\nAUTH=KR_EXPLICIT_GATE3\nPARENT=KR-Q1-AUDIT-EVIDENCE-COMPLETION-20261015\nSOURCE_COMMENT=6185871505\nSTATUS=ORDER_SENT_NOT_EXECUTED\n\n【KR第三关攻坚令｜打通入队→消费者→真实执行；生产变更仍须KR_GATE】\n\n当前事实：#6 6185861739 已发；6185871133 ACK；6185871505 QUEUED_AWAITING_AGENT；没有对应实际消费者执行RESULT。不要把ACK、入队或WorkBuddy交互会话冒充无人执行。\n\nP0 只读查断点：定位活动生产接令器、队列真实路径与schema、消费者脚本、任务计划/服务/触发器、进程身份和最近3次日志。重点核对 entries vs tasks、QUEUED_AWAITING_AGENT vs QUEUED、handler/order_id/params/risk字段，证明是否有真实在役消费者以及为什么未领取本令。检查Q1补证令是否仍待执行；不要重发、不要人肉要求KR搬运。\n\nP1 允许隔离施工：在影子队列/隔离目录修复最小适配或消费者缺口，锁定完整SHA256，保留基线/最小diff，运行READONLY_SHA256白名单任务。不得改生产主链、生产队列、计划任务、云端部署、凭据或GitHub路由；不得重放历史七令。需要这些动作时提交精确KR_GATE审批包，不擅自执行。\n\nP2 第三关验收：新任务 GATE3-READONLY-001，",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-15T06:26:31Z",
+      "detected_at": "2026-10-17T19:50:17Z",
+      "queued_at": "2026-10-17T19:50:17Z"
+    },
+    {
+      "comment_id": 6186919384,
+      "type": "SELF_SOLVE",
+      "instruction": "[TO-KR][KR-NAZHA-WB1-DAILY-V2-20261015][SECTION-5-RESULT]\n\n# ③-A / KR第五刀 · 第五节 #6 十字段交果\n\n> 纪律：后腿主动报果，不代发 KR 令；人工点火只能判 PASS_ISOLATED，不判 PASS_AUTONOMOUS；不洗绿（不虚报可达、不虚报阻塞）。\n\n## ① FIRST_REAL（第一笔真实可读闭环）\n- 人工点火后第一笔真实只读闭环 = **KR-ISO-VERIFY-001** → **VERIFIED**（隔离全链：adapter→shadow tasks→consumer→VERIFIED）。\n- 读证对象 = `wb1_github_inbox_heartbeat.py`，sha256 `8aa008d510b9642909ba484e50ee921eaf20697b2b9cb61e3ab54727102988d6`（bytes=64500），**独立本地重算 SHA 匹配**。\n- 生产队列零写入证据：`order5_iso_verify_20261015_145915/gray_report_20261015T145915.json` → `prod_readonly_evidence.untouched=true` / `github_write=NONE`。\n- 时间锚：2026-10-15 14:59（隔离验证）；灰度隔离测试 11/12 项通过（D3）。\n\n## ② ROOT_CAUSE（第三关断点根因 = 契约三重 gap）\n- 生产队列→影子队列契约三重 gap（D1/D2 实证）：\n  1. 生产者 v3 `enqueue_identity()` 只写 `kr_directive_queue.json[\"entries\"]`（`comment_id`/`en",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-15T07:31:08Z",
+      "detected_at": "2026-10-17T19:50:17Z",
+      "queued_at": "2026-10-17T19:50:17Z"
     }
   ],
   "processed": [
