@@ -228,6 +228,15 @@
       "received_at": "2026-10-15T04:16Z",
       "first_line_excerpt": "[TO-1WB][KR_DIRECTIVE] ORDER_ID=KR-Q1-READONLY-AUDIT-20261015",
       "note": "KR audit order. Cloud WB1 cannot reach local E:\\ files; full SHA256/diff/audit to be executed by rear-leg when 黑武士 online. No production ignition. Awaiting 嗨姐/JUDGE independent read-only review."
+    },
+    {
+      "comment_id": 6240625307,
+      "type": "SELF_SOLVE",
+      "instruction": "[TO-KR][KR-NAZHA-20261018-01-CMD5][RESULT-1WB-DEBT-ARCHIVE-RECON]\n\n# 第五令（旧债与归档核对）对账结果 · 1WB 后腿\n\n- **Task**: 476-old-debt-archive-recon\n- **ORDER_ID**: KR-NAZHA-20261018-01-CMD5\n- **性质**: 1WB 域内旧债与归档核对，有证据才 CLOSED，不洗绿、不擅权、不越域\n- **完整报告**: E:\\AISALEOS-Vault\\20-Projects\\哪吒后轮\\ORDER5_476_DEBT_ARCHIVE_RECON_2026-10-18.md\n\n## 一、归档真实性实时复验（本轮机器证据）\n- NAS 真实路径 `\\\\192.168.2.107\\AI-SalesOS 仓库\\AISALEOS_SHARED\\00_1WB_CLOCK` 可达(7文件)；重读 ORDER5_NAS_PROBE 259B sha=`d505e905...` 与登记账逐字 MATCH ✅\n- Obsidian `E:\\AISALEOS-Vault\\99-Archive\\1WB-CLOSEOUT` 可达(4文件)，CLOSEOUT 双落点闭环=PASS ✅\n- 三项归档面 = REAL / CLOSED（非摘要、非伪造）\n\n## 二、OPEN_DEBT 逐项对账（CLOSED/BLOCKED/UNKNOWN）\n- D-NASV1 NAS_EGRESS 本地镜像误落：CLOSED_DIAGNOSED（诊断完整+命名更正，留证不删）\n- D-FEISHU 飞书双重不可达：BLOCKED(KR 操作点)\n- D-MOZI-TMR 墨子定时器 FAIL：BLOCKED(KR_GATE)\n- D-CLOUD1WB 云侧停用：BLOC",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-17T20:36:28Z",
+      "detected_at": "2026-10-17T20:36:39Z",
+      "queued_at": "2026-10-17T20:36:39Z"
     }
   ],
   "processed": [
