@@ -228,15 +228,6 @@
       "received_at": "2026-10-15T04:16Z",
       "first_line_excerpt": "[TO-1WB][KR_DIRECTIVE] ORDER_ID=KR-Q1-READONLY-AUDIT-20261015",
       "note": "KR audit order. Cloud WB1 cannot reach local E:\\ files; full SHA256/diff/audit to be executed by rear-leg when 黑武士 online. No production ignition. Awaiting 嗨姐/JUDGE independent read-only review."
-    },
-    {
-      "comment_id": 6240811322,
-      "type": "SELF_SOLVE",
-      "instruction": "[TO-1WB][KR-3MONTH-ROOT-AUDIT-REAR-20261018][KR_DIRECTIVE]\nORDER_ID=KR-3MONTH-ROOT-AUDIT-REAR-20261018\nTARGET=1WB_REARLEG\nAUTH=KR_EXPLICIT_IN_CHAT\nTASK=THREE_MONTH_RETROSPECTIVE_AUDIT\nRISK=LOW\nSTATUS=SENT_PENDING_MACHINE_RESULT\n【后腿三个月倒查令】\n审计窗口=2026-07-18至2026-10-18；性质=只读历史审计，不是生产施工。KR授权本次资料检索、只读盘点及审计报告回帖；禁止修改生产/调度/密钥、采购、付款、客户联系、外部发布。禁止把ACK/HEARTBEAT/QUEUED/人工隔离PASS冒充自主RESULT。对每个项目追溯：起始目标→转折/改令→实际执行→原始证据→终果→未结债；每项给日期、ORDER_ID/Issue/commit/本地路径、PASS/FAIL/BLOCKED/UNKNOWN及证据缺口。尤其区分事实、机器自报、推论；UNKNOWN不脑补。按7月、8月、9月、10月时间线和项目线双重索引，输出资产清单、失败与重复建设清单、尚未完成的原始目标、建议保留/冻结/合并/继续事项。交完整报告与SHA、可访问证据索引到本Issue，提供准确评论URL。KR_RELAY=0；无需KR转述；不得向对方复制结论，双方独立成稿。首REAL/完成/超时ETA若无法确定就报UNKNOWN。\n后腿专项：①9月初个人WB→企业1WB迁移，按源目录/目标目录/项目/技能/知识/会话/脚本/凭据边界核验清单与缺口；②企业双账号及1WB/2WB职责形成；③哪吒GitHub/Slack/云桥/watchers/executors/Daemon、50+30",
-      "status": "PENDING_LOCAL_CONSUME",
-      "sent_at": "2026-10-17T20:49:00Z",
-      "detected_at": "2026-10-17T20:49:25Z",
-      "queued_at": "2026-10-17T20:49:25Z"
     }
   ],
   "processed": [
@@ -2201,6 +2192,34 @@
       },
       "result_real": "BLOCKED",
       "consumer_run_at": "2026-10-17T20:36:42Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 6240811322,
+      "type": "SELF_SOLVE",
+      "instruction": "[TO-1WB][KR-3MONTH-ROOT-AUDIT-REAR-20261018][KR_DIRECTIVE]\nORDER_ID=KR-3MONTH-ROOT-AUDIT-REAR-20261018\nTARGET=1WB_REARLEG\nAUTH=KR_EXPLICIT_IN_CHAT\nTASK=THREE_MONTH_RETROSPECTIVE_AUDIT\nRISK=LOW\nSTATUS=SENT_PENDING_MACHINE_RESULT\n【后腿三个月倒查令】\n审计窗口=2026-07-18至2026-10-18；性质=只读历史审计，不是生产施工。KR授权本次资料检索、只读盘点及审计报告回帖；禁止修改生产/调度/密钥、采购、付款、客户联系、外部发布。禁止把ACK/HEARTBEAT/QUEUED/人工隔离PASS冒充自主RESULT。对每个项目追溯：起始目标→转折/改令→实际执行→原始证据→终果→未结债；每项给日期、ORDER_ID/Issue/commit/本地路径、PASS/FAIL/BLOCKED/UNKNOWN及证据缺口。尤其区分事实、机器自报、推论；UNKNOWN不脑补。按7月、8月、9月、10月时间线和项目线双重索引，输出资产清单、失败与重复建设清单、尚未完成的原始目标、建议保留/冻结/合并/继续事项。交完整报告与SHA、可访问证据索引到本Issue，提供准确评论URL。KR_RELAY=0；无需KR转述；不得向对方复制结论，双方独立成稿。首REAL/完成/超时ETA若无法确定就报UNKNOWN。\n后腿专项：①9月初个人WB→企业1WB迁移，按源目录/目标目录/项目/技能/知识/会话/脚本/凭据边界核验清单与缺口；②企业双账号及1WB/2WB职责形成；③哪吒GitHub/Slack/云桥/watchers/executors/Daemon、50+30",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-17T20:49:00Z",
+      "detected_at": "2026-10-17T20:49:25Z",
+      "queued_at": "2026-10-17T20:49:25Z",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-10-17T20:49:28Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "block_out_of_scope"
+      },
+      "auto_exec_start": "2026-10-17T20:49:28Z",
+      "execution_done": {
+        "result_real": "BLOCKED",
+        "ts": "2026-10-17T20:49:28Z",
+        "reason": "涉及 2WB 接件/消费链或墨子技术链，1WB 依纪律不跨 WB 代执行；需 2WB 自主或 KR 授权",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-10-17T20:49:28Z"
+      },
+      "result_real": "BLOCKED",
+      "consumer_run_at": "2026-10-17T20:49:28Z",
       "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
     }
   ]
