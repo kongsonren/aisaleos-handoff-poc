@@ -228,6 +228,15 @@
       "received_at": "2026-10-15T04:16Z",
       "first_line_excerpt": "[TO-1WB][KR_DIRECTIVE] ORDER_ID=KR-Q1-READONLY-AUDIT-20261015",
       "note": "KR audit order. Cloud WB1 cannot reach local E:\\ files; full SHA256/diff/audit to be executed by rear-leg when 黑武士 online. No production ignition. Awaiting 嗨姐/JUDGE independent read-only review."
+    },
+    {
+      "comment_id": 6241075144,
+      "type": "SELF_SOLVE",
+      "instruction": "[TO-1WB][KR-WB-DOC-ROOTCAUSE-20261018][KR_DIRECTIVE][MANUAL_AGENT_PICKUP_REQUIRED]\nORDER_ID=KR-WB-DOC-ROOTCAUSE-20261018\nAUTH=KR_EXPLICIT_IN_CHAT\nPRIORITY=P0\nRISK=LOW_READ_ONLY\nSTATUS=POSTED_NOT_EXECUTED\nTARGET=1WB_WORKBUDDY_AGENT_SESSION\nIMPORTANT: 已知GitHub普通inbox的SUBTYPE_NOT_MAPPED会HELD_NON_EXECUTABLE。本帖不声称机器自治启动；必须由真实WorkBuddy Agent会话或经核实的官方Agent执行入口接管。不得将watcher ACK或SELF_SOLVE EXEC_START当成任务执行。\n【目标】重新逐页核对KR所指两份WorkBuddy技术文档（先核验文档名称/版本/来源；找不到就报MISSING_DOC，不脑补），结合1WB/2WB现有真实代码与日志，定位“嗨发令→GitHub ACK→Agent未执行”的根因，并给出最小修复方案。\n【只读检查】1) 两份文档支持的API/ACP/CLI/Agent运行入口、会话创建/任务提交/异步运行/回调、授权与限制；逐条给官方章节和URL；2) 两台机实际watcher→dispatcher→executor→WB Agent的调用链，找出有无真正Agent invocation，列出路径/关键函数/日志证据；3) 核验后腿SUBTYPE_NOT_MAPPED、SELF_SOLVE的EXEC_START=PASS但RESULT_REAL=BLOCKED，以及前腿仅ACK的原因；4) 分清能人工启动、能本机无人值守、能关机云端运",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-17T21:06:32Z",
+      "detected_at": "2026-10-17T21:06:58Z",
+      "queued_at": "2026-10-17T21:06:58Z"
     }
   ],
   "processed": [
