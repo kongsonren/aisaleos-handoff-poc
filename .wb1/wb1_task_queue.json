@@ -228,6 +228,15 @@
       "received_at": "2026-10-15T04:16Z",
       "first_line_excerpt": "[TO-1WB][KR_DIRECTIVE] ORDER_ID=KR-Q1-READONLY-AUDIT-20261015",
       "note": "KR audit order. Cloud WB1 cannot reach local E:\\ files; full SHA256/diff/audit to be executed by rear-leg when 黑武士 online. No production ignition. Awaiting 嗨姐/JUDGE independent read-only review."
+    },
+    {
+      "comment_id": 6242371672,
+      "type": "SELF_SOLVE",
+      "instruction": "# P0.8 AgentOS 授权真相与最小点火准备\n\n- **ORDER_ID**：KR-AGENTOS-P08-20261018\n- **执行主体**：1WB 黑武士 WorkBuddy\n- **授权**：KR_DIRECT_UI ｜ READ_ONLY\n- **优先级**：P0\n- **执行时间**：2026-10-18（GMT+8）\n- **纪律**：只解决授权阻塞，不扩大技术调查；**严禁把 Bearer JWT/PAT 与 OAuth Client Credentials 混为一谈**；不充值/付费/建云资源/改生产/扩权限/部署执行桥/泄密/碰 2WB；无实际运行不报 EXEC_PASS/E2E_PASS。\n\n---\n\n## 第一刀｜真正的鉴权方式（以 `agentos-api.yaml` 为准）\n\n### 官方原文证据（agentos-api.yaml L6054-6062）\n```yaml\nsecuritySchemes:\n  BearerAuth:\n    type: http\n    scheme: bearer\n    bearerFormat: JWT          # ← 权威声明：Bearer JWT\n    description: JWT Token 认证\nsecurity:\n  - BearerAuth: []\n```\n补充证据（L989-999，`listRuntimes` 描述）：`source_app` 取自请求头 `X-Source-App`，`source_user_id` 由 token 中的 service-account userId 决定 → **token 自携带 claims（source_app / source_user_id）**，进一步证明它是 **JWT（声明型）**，而非不透明的 OAuth clie",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-17T22:34:52Z",
+      "detected_at": "2026-10-17T22:35:13Z",
+      "queued_at": "2026-10-17T22:35:13Z"
     }
   ],
   "processed": [
