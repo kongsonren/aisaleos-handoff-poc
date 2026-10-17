@@ -228,15 +228,6 @@
       "received_at": "2026-10-15T04:16Z",
       "first_line_excerpt": "[TO-1WB][KR_DIRECTIVE] ORDER_ID=KR-Q1-READONLY-AUDIT-20261015",
       "note": "KR audit order. Cloud WB1 cannot reach local E:\\ files; full SHA256/diff/audit to be executed by rear-leg when 黑武士 online. No production ignition. Awaiting 嗨姐/JUDGE independent read-only review."
-    },
-    {
-      "comment_id": 6241795712,
-      "type": "SELF_SOLVE",
-      "instruction": "## P0 证据补充：KR 客户端 UI REAL（旗舰版确认 + 一个真实约束）\n\nKR 提供客户端 UI 截图（本地存证：`~/.wb1/evidence_wb_flagship_ui_20261018.png`）：\n- 账号：OneID账号 04733004 / **深圳市冠辰科技有限公司**（KR 自家公司租户）\n- 套餐：**旗舰版**\n- **积分余额：0**\n- 侧边栏菜单含 **「定时任务」**（白皮书 5.2.8「自动化定时任务」确认为客户端真实在产功能，非纸面）\n\n**两点解读（不洗绿）：**\n1. **在授确认**：旗舰版 = 企业版档位，WMA API/SDK 与开放平台 Open API 为该档位能力 → P0 修复原语在账号侧可用（与 comment 6241777263 澄清互证）。\n2. ⚠️ **真实约束**：**积分余额 = 0**，而白皮书 3.2 记载 WMA 计费为「按 Runtime 活跃时长 + Credit 消耗」→ 实施前必须先确认积分/配额（或充值），否则队列消费者调 WMA 拉起 Agent 可能因余额为零被拒。此项列入待办。\n\n**剩余待办（待 KR 主权）：**\n1. 从《CodeBuddy 开放平台产品手册》OPENAPI 文档拉取精确端点与鉴权（OAuth2.0/API Key）规格；\n2. **确认 WMA 积分/配额余额与计费口径**（新增，本条截图触发）；\n3. KR 发 KR_GATE 令点火实施。本轮仍只读、未改生产、未碰凭据、未部署。\n\n这是1号机黑武士的WORKBUDDY的内容，请 KR 的其他 AI 顾问委员会的成员，给我建议。",
-      "status": "PENDING_LOCAL_CONSUME",
-      "sent_at": "2026-10-17T21:53:12Z",
-      "detected_at": "2026-10-17T21:53:15Z",
-      "queued_at": "2026-10-17T21:53:15Z"
     }
   ],
   "processed": [
@@ -2341,6 +2332,34 @@
       },
       "result_real": "BLOCKED",
       "consumer_run_at": "2026-10-17T21:51:47Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 6241795712,
+      "type": "SELF_SOLVE",
+      "instruction": "## P0 证据补充：KR 客户端 UI REAL（旗舰版确认 + 一个真实约束）\n\nKR 提供客户端 UI 截图（本地存证：`~/.wb1/evidence_wb_flagship_ui_20261018.png`）：\n- 账号：OneID账号 04733004 / **深圳市冠辰科技有限公司**（KR 自家公司租户）\n- 套餐：**旗舰版**\n- **积分余额：0**\n- 侧边栏菜单含 **「定时任务」**（白皮书 5.2.8「自动化定时任务」确认为客户端真实在产功能，非纸面）\n\n**两点解读（不洗绿）：**\n1. **在授确认**：旗舰版 = 企业版档位，WMA API/SDK 与开放平台 Open API 为该档位能力 → P0 修复原语在账号侧可用（与 comment 6241777263 澄清互证）。\n2. ⚠️ **真实约束**：**积分余额 = 0**，而白皮书 3.2 记载 WMA 计费为「按 Runtime 活跃时长 + Credit 消耗」→ 实施前必须先确认积分/配额（或充值），否则队列消费者调 WMA 拉起 Agent 可能因余额为零被拒。此项列入待办。\n\n**剩余待办（待 KR 主权）：**\n1. 从《CodeBuddy 开放平台产品手册》OPENAPI 文档拉取精确端点与鉴权（OAuth2.0/API Key）规格；\n2. **确认 WMA 积分/配额余额与计费口径**（新增，本条截图触发）；\n3. KR 发 KR_GATE 令点火实施。本轮仍只读、未改生产、未碰凭据、未部署。\n\n这是1号机黑武士的WORKBUDDY的内容，请 KR 的其他 AI 顾问委员会的成员，给我建议。",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-17T21:53:12Z",
+      "detected_at": "2026-10-17T21:53:15Z",
+      "queued_at": "2026-10-17T21:53:15Z",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-10-17T21:53:19Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "unrecognized"
+      },
+      "auto_exec_start": "2026-10-17T21:53:19Z",
+      "execution_done": {
+        "result_real": "UNKNOWN",
+        "ts": "2026-10-17T21:53:19Z",
+        "reason": "未识别的可执行动作；不脑补",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-10-17T21:53:19Z"
+      },
+      "result_real": "UNKNOWN",
+      "consumer_run_at": "2026-10-17T21:53:19Z",
       "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
     }
   ]
