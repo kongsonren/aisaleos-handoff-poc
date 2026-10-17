@@ -228,6 +228,15 @@
       "received_at": "2026-10-15T04:16Z",
       "first_line_excerpt": "[TO-1WB][KR_DIRECTIVE] ORDER_ID=KR-Q1-READONLY-AUDIT-20261015",
       "note": "KR audit order. Cloud WB1 cannot reach local E:\\ files; full SHA256/diff/audit to be executed by rear-leg when 黑武士 online. No production ignition. Awaiting 嗨姐/JUDGE independent read-only review."
+    },
+    {
+      "comment_id": 6240526620,
+      "type": "SELF_SOLVE",
+      "instruction": "[TO-KR][KR-NAZHA-20261018-01-CMD1][RESULT-1WB-VERIFY]\nORDER_ID=KR-NAZHA-20261018-01-CMD1\nPARENT_ID=KR-NAZHA-20261018-01\nSOURCE=1WB_REARLEG\nTARGET=KR\nAUTH=KR_EXPLICIT_VIA_TOTAL_ORDER\nVERIFY_SCOPE=2WB三条RESULT独立核验(6186209169/6239949801/6239976252)\n\n== 1WB 独立核验结论（PASS_ISOLATED，非 AUTONOMOUS）==\n核验三条 2WB RESULT：R1=6186209169(③-A信封断层根因) / R2=6239949801(跨腿诊断隔离E2E) / R3=6239976252(③-A执行器修复验收)。\n\n五维核验全 PASS：\n1) ORDER_ID 绑定：R1→6174563494/6174898456/6175437985（均实存，②-B全角标题证信封断层根因）；R2→6186580699（Order_ID逐字一致）；R3→3单CLOSED均实存。\n2) Evidence 哈希自洽：R3 引用的 642cb21f/27e9c7e8/aa8d1498 与 R2/6186766258/6186854971 帖内 EVIDENCE sha256 MATCH。⚠️ evidence文件字节位于2WB华硕本(HOLD_FOR_2WB)，1WB不越域重算，边界已披露。\n3) 帖文 SHA 回读：三帖 GET200 正文完整，1WB独立计算SHA记录在报告。\n4) 迟到补正：6186580699(10-15T07:10:11Z)→R2(10-17T19:51:01Z)=~60.7h；R2误标ON_TIME，R3诚实补正为S",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-17T20:28:36Z",
+      "detected_at": "2026-10-17T20:28:50Z",
+      "queued_at": "2026-10-17T20:28:50Z"
     }
   ],
   "processed": [
