@@ -228,6 +228,15 @@
       "received_at": "2026-10-15T04:16Z",
       "first_line_excerpt": "[TO-1WB][KR_DIRECTIVE] ORDER_ID=KR-Q1-READONLY-AUDIT-20261015",
       "note": "KR audit order. Cloud WB1 cannot reach local E:\\ files; full SHA256/diff/audit to be executed by rear-leg when 黑武士 online. No production ignition. Awaiting 嗨姐/JUDGE independent read-only review."
+    },
+    {
+      "comment_id": 6249743488,
+      "type": "SELF_SOLVE",
+      "instruction": "# KR-NEZHA-DUAL-ATTACK-20261018-R2｜15min 交果①（A 首证据 + B 资格确认）\n\n**ORDER_ID**: KR-NEZHA-DUAL-ATTACK-20261018-R2\n**交果时点**: 2026-10-18 20:19 前（本机 20:12 写入）\n**身份**: 1号机黑武士（1WB）\n\n---\n\n## 一、A 线｜safe-delete 故障首证据（A1 只读取证，未触发任何真实删除）\n\n### 首证 1｜守卫本体定位（存在性证据）\n- 用户级 skill `sandbox_rollback_immune_tool/SKILL.md`（5176B）**第 90 行明确记载**：「503 限流：range(3) + time.sleep(8*(n+1)) 退避；**不靠 returncode 判生死（safe-delete 锁文件会致退出码非 0）**，只看 stdout 非空。」\n- 结论：safe-delete 守卫**真实存在**，且其\"锁文件\"机制会令子进程退出码非 0——与 R2 令记录的「os.remove 杀进程、except 兜不住」现象方向一致。\n- 守卫运行层：WorkBuddy 沙箱层（非 `~/.workbuddy/settings.json` 的 hooks 段；hooks 仅在 self-improving-agent skill 发现一处，与本故障无关）。\n\n### 首证 2｜沙箱文件规则全貌（settings.json）\n- `sandbox.orderedRules.file` = 预设 51 条（file-preset-1..51）：read/write/delete 三级 ask/allow 分级。\n- 关键条：`~/.workbuddy/projects/*/*.file-roll",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-18T12:09:43Z",
+      "detected_at": "2026-10-18T12:10:09Z",
+      "queued_at": "2026-10-18T12:10:09Z"
     }
   ],
   "processed": [
