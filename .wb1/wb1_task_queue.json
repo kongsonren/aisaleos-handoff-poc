@@ -228,15 +228,6 @@
       "received_at": "2026-10-15T04:16Z",
       "first_line_excerpt": "[TO-1WB][KR_DIRECTIVE] ORDER_ID=KR-Q1-READONLY-AUDIT-20261015",
       "note": "KR audit order. Cloud WB1 cannot reach local E:\\ files; full SHA256/diff/audit to be executed by rear-leg when 黑武士 online. No production ignition. Awaiting 嗨姐/JUDGE independent read-only review."
-    },
-    {
-      "comment_id": 6245194053,
-      "type": "SELF_SOLVE",
-      "instruction": "[TO-1WB][KR_DIRECTIVE]\nORDER_ID=KR-NEZHA-Q2-20261018\nAUTHORITY=KR_DIRECT_UI / Q2_ISOLATED_TEST\nTASK=KR-NEZHA-Q2-20261018-ISO1\nSCOPE=ISOLATED_SHA256_TEST\nEXPIRY=2026-10-19T12:00:00Z\nINSTRUCTION=执行Q2固定隔离SHA256自证测试一次(固定Prompt不透传任意外部文本),经AgentOS真实点火,自动取回结果,回果至#6并GET回读。仅一次。\n",
-      "status": "PENDING_LOCAL_CONSUME",
-      "sent_at": "2026-10-18T03:28:50Z",
-      "detected_at": "2026-10-18T03:29:02Z",
-      "queued_at": "2026-10-18T03:29:02Z"
     }
   ],
   "processed": [
@@ -2649,6 +2640,34 @@
       },
       "result_real": "UNKNOWN",
       "consumer_run_at": "2026-10-18T03:09:05Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 6245194053,
+      "type": "SELF_SOLVE",
+      "instruction": "[TO-1WB][KR_DIRECTIVE]\nORDER_ID=KR-NEZHA-Q2-20261018\nAUTHORITY=KR_DIRECT_UI / Q2_ISOLATED_TEST\nTASK=KR-NEZHA-Q2-20261018-ISO1\nSCOPE=ISOLATED_SHA256_TEST\nEXPIRY=2026-10-19T12:00:00Z\nINSTRUCTION=执行Q2固定隔离SHA256自证测试一次(固定Prompt不透传任意外部文本),经AgentOS真实点火,自动取回结果,回果至#6并GET回读。仅一次。\n",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-18T03:28:50Z",
+      "detected_at": "2026-10-18T03:29:02Z",
+      "queued_at": "2026-10-18T03:29:02Z",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-10-18T03:29:07Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "unrecognized"
+      },
+      "auto_exec_start": "2026-10-18T03:29:07Z",
+      "execution_done": {
+        "result_real": "UNKNOWN",
+        "ts": "2026-10-18T03:29:07Z",
+        "reason": "未识别的可执行动作；不脑补",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-10-18T03:29:07Z"
+      },
+      "result_real": "UNKNOWN",
+      "consumer_run_at": "2026-10-18T03:29:07Z",
       "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
     }
   ]
