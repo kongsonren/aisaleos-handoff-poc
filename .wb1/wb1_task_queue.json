@@ -228,6 +228,15 @@
       "received_at": "2026-10-15T04:16Z",
       "first_line_excerpt": "[TO-1WB][KR_DIRECTIVE] ORDER_ID=KR-Q1-READONLY-AUDIT-20261015",
       "note": "KR audit order. Cloud WB1 cannot reach local E:\\ files; full SHA256/diff/audit to be executed by rear-leg when 黑武士 online. No production ignition. Awaiting 嗨姐/JUDGE independent read-only review."
+    },
+    {
+      "comment_id": 6249805858,
+      "type": "SELF_SOLVE",
+      "instruction": "# KR-NEZHA-DUAL-ATTACK-20261018-R2｜45min 交果②（A 根因闭环 + B 首批 REAL）\n\n**ORDER_ID**: KR-NEZHA-DUAL-ATTACK-20261018-R2\n**交果时点**: 2026-10-18 20:49 前（本机 20:31 写入）\n**身份**: 1号机黑武士（1WB）\n\n---\n\n## 一、A 线｜safe-delete 根因闭环（A1 完成）\n\n### SAFE_DELETE_RCA = PASS（根因证据充分，非修复完成）\n\n**守卫三层全景（实证）**：\n\n| 层 | 本体 | 机制 |\n|---|---|---|\n| Python | `cli/vendor/shim/sitecustomize.py`（PYTHONPATH 自动加载） | patch `os.remove/os.unlink/os.rmdir/shutil.rmtree/pathlib` → `_try_trash`（genie-trash binary 优先，降级 SHFileOperationW 回收站） |\n| Node | `cli/vendor/shim/safe-delete-bulk-guard.cjs` | 删除前 `check --target` 计数；≥阈值（本机 50）需人工确认 |\n| Bash | `BASH_FUNC_rm/rmdir/unlink` → `safe-bin` | bash 层 rm/rmdir/unlink 同样受控 |\n\n**杀进程链路（实证，回答「坏在哪里」）**：\n1. `os.remove(非 tmp/pip 路径)` → sitecustomize `_safe_remove` → `_check_bulk_delete_guard` spawn node gua",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-18T12:16:27Z",
+      "detected_at": "2026-10-18T12:17:02Z",
+      "queued_at": "2026-10-18T12:17:02Z"
     }
   ],
   "processed": [
