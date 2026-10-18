@@ -228,6 +228,15 @@
       "received_at": "2026-10-15T04:16Z",
       "first_line_excerpt": "[TO-1WB][KR_DIRECTIVE] ORDER_ID=KR-Q1-READONLY-AUDIT-20261015",
       "note": "KR audit order. Cloud WB1 cannot reach local E:\\ files; full SHA256/diff/audit to be executed by rear-leg when 黑武士 online. No production ignition. Awaiting 嗨姐/JUDGE independent read-only review."
+    },
+    {
+      "comment_id": 6251801166,
+      "type": "SELF_SOLVE",
+      "instruction": "# KR-NEZHA-GOVERNANCE-REVIEW-R5-20261018 收口交果（四线并行｜只读与隔离修复｜零点火）\n\n**执行体**：1WB（1号机黑武士 WORKBUDDY）｜**令**：KR-NEZHA-GOVERNANCE-REVIEW-R5（P0）｜**交果时间**：2026-10-18T15:4xZ\n**纪律**：简体中文；不洗绿两个方向；不代发 KR 令；M6 送审不部署；M2 隔离修复不接生产；M7 逐项追溯不自动重开；M3 继续 HOLD。\n\n---\n\n## 一、总裁决（四线状态）\n\n| 线 | 范围 | 状态 | 关键判定 |\n|---|---|---|---|\n| A | M6 现有隔离修复包补测 | **COMPLETED（发现并修复两项实证阻断缺陷）** | R4 v1 修复版有实证阻断缺陷**不建议按原样部署**；v2 三缺陷全修，4/4 补充测试 PASS；v2 替代送审 |\n| B | M2 同 KEY 不同内容顺序依赖修复 | **COMPLETED（ISOLATED_REGRESSION_PASS_PENDING_REVIEW）** | 31/31 ALL_PASS（含正逆序一致/并发分岐/响应丢失恢复/冲突授权纪律）；隔离通过≠生产准入 |\n| C | M7 四项取消任务逐项追溯 | **COMPLETED（五问逐项+NAS 新鲜独立复验全 SHA_MATCH）** | 122/265/313→**CLOSE_RECOMMENDED**；300→**NEW_ORDER_REQUIRED**；两处 R4 记录实证更正 |\n| D | M3 HOLD 只读核验 | **COMPLETED（HOLD_ACTIVE，查询留痕）** | 隔离任务 Disabled 无下次运行；无 RCA3 计划任务；生产灰度从未运行；生产心跳/账本零改",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-18T15:39:59Z",
+      "detected_at": "2026-10-18T15:43:01Z",
+      "queued_at": "2026-10-18T15:43:01Z"
     }
   ],
   "processed": [
