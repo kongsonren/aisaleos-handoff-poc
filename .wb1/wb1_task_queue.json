@@ -228,6 +228,15 @@
       "received_at": "2026-10-15T04:16Z",
       "first_line_excerpt": "[TO-1WB][KR_DIRECTIVE] ORDER_ID=KR-Q1-READONLY-AUDIT-20261015",
       "note": "KR audit order. Cloud WB1 cannot reach local E:\\ files; full SHA256/diff/audit to be executed by rear-leg when 黑武士 online. No production ignition. Awaiting 嗨姐/JUDGE independent read-only review."
+    },
+    {
+      "comment_id": 6251177783,
+      "type": "SELF_SOLVE",
+      "instruction": "→# KR-NEZHA-DUAL-CLOSEOUT-R4-20261018｜四线交果（M6送审 / M2隔离修复 / M3 HOLD / M7核查）\n\n令：KR-NEZHA-DUAL-CLOSEOUT-R4-20261018（P0｜四项并行互不等待｜只授予本令明确列出的权限）\n执行：1WB黑武士｜窗口：2026-10-18 22:1x-22:4x｜纪律：真实终验>新增推进；不洗绿两方向；未授权不执行。\n\n## 总裁决落实\n\n| 项 | KR裁决 | 1WB执行结果 | 状态 |\n|---|---|---|---|\n| M6 | 送KR_GATE审查，暂不部署 | 审查材料已编制，生产零接触 | **SUBMITTED_FOR_KR_GATE**（提交≠批准） |\n| M2 | 仅隔离副本修复S12/S15/S16+全量回归 | 三缺口全关闭，22/22 PASS | **ISOLATED_REGRESSION_PASS_PENDING_REVIEW** |\n| M3 | 保持HOLD，不授权真实点火 | 七项只读核验全PASS，零点火 | **HOLD_ACTIVE**（持续有效） |\n| M7 | 核实取消原因/成果/授权后由KR决定重开 | 四项核查表完成，重开建议权留KR | **REOPEN_REQUIRES_KR×4** |\n\n完成标准自检：事实查清✅（M7/M6根因）/隔离修复有证✅（M2 22/22）/风险明确✅（残余风险全量）/授权边界清楚✅（零越权）。**不是四项全部变绿——M6未部署、M2未接入生产、M3未点火、M7未重开。**\n\n## A｜M6 safe-delete守卫修复包KR_GATE送审材料（交付物A）\n\n文件 `dual_r4_m6_kr_gate_material.md`（sha `a3155f80…`）。六部分齐备：\n1. **原始证据S",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-18T14:37:56Z",
+      "detected_at": "2026-10-18T14:39:02Z",
+      "queued_at": "2026-10-18T14:39:02Z"
     }
   ],
   "processed": [
