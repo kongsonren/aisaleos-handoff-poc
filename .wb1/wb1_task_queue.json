@@ -228,15 +228,6 @@
       "received_at": "2026-10-15T04:16Z",
       "first_line_excerpt": "[TO-1WB][KR_DIRECTIVE] ORDER_ID=KR-Q1-READONLY-AUDIT-20261015",
       "note": "KR audit order. Cloud WB1 cannot reach local E:\\ files; full SHA256/diff/audit to be executed by rear-leg when 黑武士 online. No production ignition. Awaiting 嗨姐/JUDGE independent read-only review."
-    },
-    {
-      "comment_id": 6250761446,
-      "type": "SELF_SOLVE",
-      "instruction": "# KR-NEZHA-DUAL-CLOSEOUT-R3-20261018｜T+45 交果②（A1 根因闭环 + A2 隔离测试 + A3 复跑；B2/S11-S16 未完如实标注）\n\nT0=21:36:30｜本帖=T+45（死线 22:21:30，实际投递 22:2x）。接 T+15（comment_id=6250646938）。\n\n## A线｜A1 空状态文件根因追查 —— 完成（5/5 检查，零删除零重置零覆盖）\n\n**根因结论（FACT 级，源码+实测双证）**：\n- 当前安装版守卫（`shim/safe-delete-bulk-guard.cjs`，版本日期 2026-10-15 10:04，SHA `3c570a7b…`）**唯一写者** `writeState` = tmp+rename 原子写；`withLock` 只 mkdir 目录不建 state.json；node-safe-delete-shim / sitecustomize.py / safe-delete-common.sh 均只调用守卫、不直接碰 state.json → **现版本无任何代码路径可产生 0 字节 state.json**\n- 43 个 0 字节 100% 集中于 2026-10-09 08:01-08:03（42 个 08:03 同分钟 + 1 个 08:01）；样本 Birth=10-04/Modify=10-09 08:03:27（相隔 5 天）→ **存在 5 天后被批量截断，推翻 R2「先创建再写窗口」假设**（该假设预测 Birth≈Modify）\n- 当前会话正是那个 08:01 文件（hash `3d13a67b…`，10-07 出生、10-09 08:01:14 截断）→ 本会话任何删除都会触发 `readState` fail → 杀进程链（R2 已实锤）\n",
-      "status": "PENDING_LOCAL_CONSUME",
-      "sent_at": "2026-10-18T13:56:51Z",
-      "detected_at": "2026-10-18T13:58:21Z",
-      "queued_at": "2026-10-18T13:58:21Z"
     }
   ],
   "processed": [
@@ -2845,6 +2836,34 @@
       },
       "result_real": "UNKNOWN",
       "consumer_run_at": "2026-10-18T13:46:09Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 6250761446,
+      "type": "SELF_SOLVE",
+      "instruction": "# KR-NEZHA-DUAL-CLOSEOUT-R3-20261018｜T+45 交果②（A1 根因闭环 + A2 隔离测试 + A3 复跑；B2/S11-S16 未完如实标注）\n\nT0=21:36:30｜本帖=T+45（死线 22:21:30，实际投递 22:2x）。接 T+15（comment_id=6250646938）。\n\n## A线｜A1 空状态文件根因追查 —— 完成（5/5 检查，零删除零重置零覆盖）\n\n**根因结论（FACT 级，源码+实测双证）**：\n- 当前安装版守卫（`shim/safe-delete-bulk-guard.cjs`，版本日期 2026-10-15 10:04，SHA `3c570a7b…`）**唯一写者** `writeState` = tmp+rename 原子写；`withLock` 只 mkdir 目录不建 state.json；node-safe-delete-shim / sitecustomize.py / safe-delete-common.sh 均只调用守卫、不直接碰 state.json → **现版本无任何代码路径可产生 0 字节 state.json**\n- 43 个 0 字节 100% 集中于 2026-10-09 08:01-08:03（42 个 08:03 同分钟 + 1 个 08:01）；样本 Birth=10-04/Modify=10-09 08:03:27（相隔 5 天）→ **存在 5 天后被批量截断，推翻 R2「先创建再写窗口」假设**（该假设预测 Birth≈Modify）\n- 当前会话正是那个 08:01 文件（hash `3d13a67b…`，10-07 出生、10-09 08:01:14 截断）→ 本会话任何删除都会触发 `readState` fail → 杀进程链（R2 已实锤）\n",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-18T13:56:51Z",
+      "detected_at": "2026-10-18T13:58:21Z",
+      "queued_at": "2026-10-18T13:58:21Z",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-10-18T13:58:33Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "unrecognized"
+      },
+      "auto_exec_start": "2026-10-18T13:58:33Z",
+      "execution_done": {
+        "result_real": "UNKNOWN",
+        "ts": "2026-10-18T13:58:33Z",
+        "reason": "未识别的可执行动作；不脑补",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-10-18T13:58:33Z"
+      },
+      "result_real": "UNKNOWN",
+      "consumer_run_at": "2026-10-18T13:58:33Z",
       "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
     }
   ]
