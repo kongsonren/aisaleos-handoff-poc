@@ -228,15 +228,6 @@
       "received_at": "2026-10-15T04:16Z",
       "first_line_excerpt": "[TO-1WB][KR_DIRECTIVE] ORDER_ID=KR-Q1-READONLY-AUDIT-20261015",
       "note": "KR audit order. Cloud WB1 cannot reach local E:\\ files; full SHA256/diff/audit to be executed by rear-leg when 黑武士 online. No production ignition. Awaiting 嗨姐/JUDGE independent read-only review."
-    },
-    {
-      "comment_id": 6251429690,
-      "type": "SELF_SOLVE",
-      "instruction": "[TO-1WB][KR_DIRECTIVE]\nORDER_ID=KR-NEZHA-DISPATCH-CONSUME-20261018\nAUTHORITY=KR_DIRECT_UI / READONLY_DISPATCH_DIAGNOSTIC\nTASK=KR-NEZHA-DISPATCH-CONSUME-20261018-DIAG1\nSCOPE=READONLY_DISPATCH_AND_CONSUMER_DIAGNOSTIC\nEXPIRY=2026-10-19T12:00:00Z\nINSTRUCTION=只读诊断真实投递与消费链路。核对本令是否进入权威收令队列、消费器实际读取路径、SUBTYPE/CLASS 路由映射、ACK/RESULT 的状态转换及阻塞原因；复核近期多条评论被标记 SUBTYPE=None / HELD_NON_EXECUTABLE 的直接原因。只读读取代码、配置、队列和日志，给出路径与原始证据。不得修改任何代码/配置/队列，不得启用或触发计划任务，不得调用 AgentOS，不得真实点火/付费，不得执行 M6/M2/M7 修复，不得解除 M3 HOLD。若本令被消费，只回报诊断结果及证据；无法消费则报告 BLOCKED 并说明缺失的通道环节。",
-      "status": "PENDING_LOCAL_CONSUME",
-      "sent_at": "2026-10-18T15:03:26Z",
-      "detected_at": "2026-10-18T15:06:04Z",
-      "queued_at": "2026-10-18T15:06:04Z"
     }
   ],
   "processed": [
@@ -2929,6 +2920,34 @@
       },
       "result_real": "UNKNOWN",
       "consumer_run_at": "2026-10-18T14:39:19Z",
+      "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
+    },
+    {
+      "comment_id": 6251429690,
+      "type": "SELF_SOLVE",
+      "instruction": "[TO-1WB][KR_DIRECTIVE]\nORDER_ID=KR-NEZHA-DISPATCH-CONSUME-20261018\nAUTHORITY=KR_DIRECT_UI / READONLY_DISPATCH_DIAGNOSTIC\nTASK=KR-NEZHA-DISPATCH-CONSUME-20261018-DIAG1\nSCOPE=READONLY_DISPATCH_AND_CONSUMER_DIAGNOSTIC\nEXPIRY=2026-10-19T12:00:00Z\nINSTRUCTION=只读诊断真实投递与消费链路。核对本令是否进入权威收令队列、消费器实际读取路径、SUBTYPE/CLASS 路由映射、ACK/RESULT 的状态转换及阻塞原因；复核近期多条评论被标记 SUBTYPE=None / HELD_NON_EXECUTABLE 的直接原因。只读读取代码、配置、队列和日志，给出路径与原始证据。不得修改任何代码/配置/队列，不得启用或触发计划任务，不得调用 AgentOS，不得真实点火/付费，不得执行 M6/M2/M7 修复，不得解除 M3 HOLD。若本令被消费，只回报诊断结果及证据；无法消费则报告 BLOCKED 并说明缺失的通道环节。",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-18T15:03:26Z",
+      "detected_at": "2026-10-18T15:06:04Z",
+      "queued_at": "2026-10-18T15:06:04Z",
+      "execution_start": {
+        "status": "PASS",
+        "ts": "2026-10-18T15:06:15Z",
+        "worker": "1WB-SELF_SOLVE-consumer-daemon-v2",
+        "first_action": "unrecognized"
+      },
+      "auto_exec_start": "2026-10-18T15:06:15Z",
+      "execution_done": {
+        "result_real": "UNKNOWN",
+        "ts": "2026-10-18T15:06:15Z",
+        "reason": "未识别的可执行动作；不脑补",
+        "archive_path": null,
+        "sha256": null,
+        "readback": "N/A",
+        "auto_exec_start": "2026-10-18T15:06:15Z"
+      },
+      "result_real": "UNKNOWN",
+      "consumer_run_at": "2026-10-18T15:06:15Z",
       "consumer_worker": "1WB-SELF_SOLVE-consumer-daemon-v2"
     }
   ]
