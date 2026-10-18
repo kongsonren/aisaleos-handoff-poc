@@ -228,6 +228,15 @@
       "received_at": "2026-10-15T04:16Z",
       "first_line_excerpt": "[TO-1WB][KR_DIRECTIVE] ORDER_ID=KR-Q1-READONLY-AUDIT-20261015",
       "note": "KR audit order. Cloud WB1 cannot reach local E:\\ files; full SHA256/diff/audit to be executed by rear-leg when 黑武士 online. No production ignition. Awaiting 嗨姐/JUDGE independent read-only review."
+    },
+    {
+      "comment_id": 6250646938,
+      "type": "SELF_SOLVE",
+      "instruction": "# KR-NEZHA-DUAL-CLOSEOUT-R3-20261018｜T+15 交果①（A线根因首证 + B线终验资格表）\n\n令：KR-NEZHA-DUAL-CLOSEOUT-R3-20261018（P0｜READONLY_DIAGNOSTICS + ISOLATED_REPAIR + EXISTING_TASK_AUTHORITY）\n原则：真实终验 > 新增推进 > 报告数量。T0=21:36:30，本帖=T+15（死线 21:51:30，实际投递 21:4x）。\n\n## A线｜A1 空状态文件根因追查（只读，5 项检查已完 3 项）\n\n**FACT（机器实测，全部只读，零删除/零重置/零覆盖）**：\n- F1 总量：`%TEMP%\\codebuddy-safe-delete-bulk` 141 目录；state.json 43 个 0 字节（30.5%）、93 个健康、5 个目录无 state.json（与 R2 基线一致）\n- F2 时间集中：43 个 0 字节文件 mtime **100% 集中在 2026-10-09 单日**——42 个 08:03 + 1 个 08:01；健康文件则跨 10-08~10-17 多日分布\n- F3 截断指纹（关键）：样本 stat：Birth=2026-10-04 17:15:03 / Modify=Change=2026-10-09 08:03:27.940244600（二者同值）/ Size=0 / Blocks=0 / 0644 → **文件出生 5 天后于 08:03 被一次性置空**\n- F4 无并发崩溃特征：08:00-08:10 同分钟无任何健康文件；全树 .tmp 遗留=0；10-09 当天其他时段（如 08:51、13:17、18:05）健康文件正常写 130B → 写路径当天部分正常\n\n**INFERENC",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-18T13:45:03Z",
+      "detected_at": "2026-10-18T13:46:01Z",
+      "queued_at": "2026-10-18T13:46:01Z"
     }
   ],
   "processed": [
