@@ -228,6 +228,15 @@
       "received_at": "2026-10-15T04:16Z",
       "first_line_excerpt": "[TO-1WB][KR_DIRECTIVE] ORDER_ID=KR-Q1-READONLY-AUDIT-20261015",
       "note": "KR audit order. Cloud WB1 cannot reach local E:\\ files; full SHA256/diff/audit to be executed by rear-leg when 黑武士 online. No production ignition. Awaiting 嗨姐/JUDGE independent read-only review."
+    },
+    {
+      "comment_id": 6249945926,
+      "type": "SELF_SOLVE",
+      "instruction": "# KR-NEZHA-DUAL-ATTACK-20261018-R2｜90min 最终交果（A 线裁决 + B 累计 8 项 + 最终两问）\n\n**ORDER_ID**: KR-NEZHA-DUAL-ATTACK-20261018-R2\n**交果时点**: 2026-10-18 21:34 前（本机 20:35 写入）\n**身份**: 1号机黑武士（1WB）\n\n---\n\n## 一、A 线｜最终裁决（三项全裁）\n\n### A1｜SAFE_DELETE_RCA = **PASS**（根因证据充分；非修复完成）\n\n- 守卫三层：Python `sitecustomize.py`（patch 删除 API→回收站）/ Node `safe-delete-bulk-guard.cjs`（计数阈值 50）/ bash `BASH_FUNC_rm` 劫持\n- 杀进程链路：删除 → `_check_bulk_delete_guard` spawn node → `readState` 空/坏 JSON → `fail()` exit 1 → shim `raise SystemExit(1)` → **SystemExit 继承 BaseException，`except Exception` 兜不住**\n- 损坏实证：141 会话目录 **43 个 state.json 0 字节（30.5%），含当前会话**；Node 报 \"Unexpected end of JSON input\"\n- 证据：`dual_r2_a1_safe_delete_rca.json`（sha256 `e58aca37…`）\n\n### A3｜RESULT_IDEMPOTENCY_OFFLINE_PASS（隔离副本+替身回归 **10/10 ALL_PASS**）\n\n- 设计：RESULT_KEY = ORDER_",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-18T12:31:36Z",
+      "detected_at": "2026-10-18T12:33:12Z",
+      "queued_at": "2026-10-18T12:33:12Z"
     }
   ],
   "processed": [
