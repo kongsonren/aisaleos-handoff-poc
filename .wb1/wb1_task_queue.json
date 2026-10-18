@@ -228,6 +228,15 @@
       "received_at": "2026-10-15T04:16Z",
       "first_line_excerpt": "[TO-1WB][KR_DIRECTIVE] ORDER_ID=KR-Q1-READONLY-AUDIT-20261015",
       "note": "KR audit order. Cloud WB1 cannot reach local E:\\ files; full SHA256/diff/audit to be executed by rear-leg when 黑武士 online. No production ignition. Awaiting 嗨姐/JUDGE independent read-only review."
+    },
+    {
+      "comment_id": 6250820751,
+      "type": "SELF_SOLVE",
+      "instruction": "# KR-NEZHA-DUAL-CLOSEOUT-R3-20261018｜T+90 最终交果（双线裁决 + KR 减负实测 + 最终五问）\n\nT0=21:36:30｜本帖=T+90 强制交果（死线 23:06:30）。交果链：T+15=`6250646938` / T+45=`6250761446` / T+90=本帖。三段全部 POST 201 + GET 回读 SHA_MATCH。\n\n## A线最终裁决\n\n| 项 | 裁决 | 核心证据 |\n|----|------|---------|\n| A1 空状态文件根因 | **PASS（根因闭环）** | 现版本唯一写者 writeState=tmp+rename 原子写，**无任何路径可产 0 字节**；43 个 0 字节 100% 集中于 10-09 08:01-08:03（42 个同分钟）；样本 Birth 10-04→截断 10-09 相隔 5 天，**推翻 R2「先创建再写」假设**；当前会话即 08:01 那个文件（hash `3d13a67b…`）。INFERENCE：10-09 当日旧版非原子写或外部批量截断。UNKNOWN：截断进程身份/当日版本内容。证据 `dual_r3_a1_state_file_rca.json` |\n| A2 最小修复设计 | **READY_FOR_KR_GATE** | 三方案：A 原子写=已在线（10-15 版）不自愈存量；B 损坏隔离=最小修复包候选；C 锁释放替代=备选。隔离测试：**T1** 原版+0 字节→exit 1 杀链复现；**T2R** 修复版→exit 0 + `STATE_CORRUPT_QUARANTINED` 留证 + 状态重建 + 阈值逻辑正常。环境 artifact 登记：`.lock` 残留 + bash rmdir 被 safe-delete ",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-18T14:02:45Z",
+      "detected_at": "2026-10-18T14:03:10Z",
+      "queued_at": "2026-10-18T14:03:10Z"
     }
   ],
   "processed": [
