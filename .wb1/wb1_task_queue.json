@@ -228,6 +228,15 @@
       "received_at": "2026-10-15T04:16Z",
       "first_line_excerpt": "[TO-1WB][KR_DIRECTIVE] ORDER_ID=KR-Q1-READONLY-AUDIT-20261015",
       "note": "KR audit order. Cloud WB1 cannot reach local E:\\ files; full SHA256/diff/audit to be executed by rear-leg when 黑武士 online. No production ignition. Awaiting 嗨姐/JUDGE independent read-only review."
+    },
+    {
+      "comment_id": 6245535874,
+      "type": "SELF_SOLVE",
+      "instruction": "[TO-1WB][KR_DIRECTIVE]\nORDER_ID=KR-NEZHA-Q3-20261018\nTASK=KR-NEZHA-Q3-20261018-ISO1\nSCOPE=ISOLATED_SHA256_TEST\nAUTHORITY=KR_DIRECT_UI / Q3_CONTROLLED_ENGINEERING\nEXPIRY=2026-10-18T23:59:59Z\nINSTRUCTION=Q3_CUT5_ISOLATED_SINGLE_IGNITION\nNOTE=受控隔离测试令；仅允许 Q3 桥按 allowlist 消费并点火一次固定 SHA256 隔离任务；不执行真实业务；不扩权。\n",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-18T04:12:56Z",
+      "detected_at": "2026-10-18T04:13:10Z",
+      "queued_at": "2026-10-18T04:13:10Z"
     }
   ],
   "processed": [
