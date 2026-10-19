@@ -24,13 +24,21 @@
       ]
     },
     "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW3": {
-      "state": "DISPATCHED",
+      "state": "REJECTED",
       "dispatched_by": "CLOUD_1WB",
       "dispatched_at": "2026-10-20T02:14:14.154133+08:00",
       "dispatch_comment_id": 6274055911,
       "forged_field": "anchor",
       "expected_sha256": "70e74b1591ed967918e90ba673f8ec56fd3157966e5fdb8dec222c8775307a0e",
-      "target": ".wb1/nezha/k55/k55_sectest_target.dat"
+      "target": ".wb1/nezha/k55/k55_sectest_target.dat",
+      "rejections": [
+        {
+          "type": "ANCHOR_NOT_ALLOWLISTED",
+          "at": "2026-10-20T02:15:00.768998+08:00",
+          "consumer": "c1",
+          "detail": "anchor=6273318790 allow=6272173951"
+        }
+      ]
     },
     "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW4": {
       "state": "DISPATCHED",
@@ -51,6 +59,14 @@
       "consumer": "c1",
       "run": "39300890563",
       "detail": "issuer=CLOUD_9WB"
+    },
+    {
+      "type": "ANCHOR_NOT_ALLOWLISTED",
+      "order_id": "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW3",
+      "at": "2026-10-20T02:15:00.768992+08:00",
+      "consumer": "c1",
+      "run": "39300890563",
+      "detail": "anchor=6273318790 allow=6272173951"
     }
   ],
   "rejection_counts": {
@@ -59,6 +75,12 @@
       "last_at": "2026-10-20T02:14:58.472220+08:00",
       "last_consumer": "c1",
       "detail": "issuer=CLOUD_9WB"
+    },
+    "ANCHOR_NOT_ALLOWLISTED:KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW3": {
+      "count": 1,
+      "last_at": "2026-10-20T02:15:00.768978+08:00",
+      "last_consumer": "c1",
+      "detail": "anchor=6273318790 allow=6272173951"
     }
   },
   "history": [
@@ -94,6 +116,15 @@
       "run": "39300890563",
       "order_id": "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW2",
       "reject_type": "ISSUER_MISMATCH"
+    },
+    {
+      "at": "2026-10-20T02:15:00.769002+08:00",
+      "actor": "CLOUD_2WB",
+      "action": "auth_reject",
+      "consumer": "c1",
+      "run": "39300890563",
+      "order_id": "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW3",
+      "reject_type": "ANCHOR_NOT_ALLOWLISTED"
     }
   ]
 }
