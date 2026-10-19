@@ -103,14 +103,22 @@ def sha256_file(store, path):
 
 
 def read_dw(store):
+    # 注意：GitHubStore.read_json(default=None) 在文件缺失时返回 {}（非 None），故用 not d 判空
     d, _, head, _ = store.read_json(DW_LEDGER, default=None)
-    if d is None:
+    if not d:
         d = {"state": "IDLE", "order_seq": 0, "cycles_done": 0, "current_order": None,
              "tasks": {}, "executed_order_ids": [], "rejections": [], "rejection_counts": {},
              "circuit": {"consecutive_failures": 0, "open": False, "opened_at": None,
                          "reason": None},
              "history": []}
     d.setdefault("rejection_counts", {})
+    d.setdefault("circuit", {"consecutive_failures": 0, "open": False,
+                             "opened_at": None, "reason": None})
+    d.setdefault("tasks", {})
+    d.setdefault("executed_order_ids", [])
+    d.setdefault("state", "IDLE")
+    d.setdefault("order_seq", 0)
+    d.setdefault("cycles_done", 0)
     return d, head
 
 
@@ -257,9 +265,9 @@ def role_1wb_tick():
     led, head = read_dw(store)
     st = led.get("state", "IDLE")
     log("tick state=%s cycles_done=%s/%s circuit_open=%s" % (
-        st, led.get("cycles_done"), MAX_CYCLES, led["circuit"]["open"]))
+        st, led.get("cycles_done"), MAX_CYCLES, led.get("circuit", {}).get("open")))
 
-    if led["circuit"]["open"]:
+    if led.get("circuit", {}).get("open"):
         log("circuit OPEN (%s) -> 隔离待命，不动作" % led["circuit"].get("reason"))
         return 0
 
@@ -379,7 +387,7 @@ def role_2wb_exec():
     if not TOKEN:
         log("FATAL no token"); return 2
     led, head = read_dw(store)
-    if led["circuit"]["open"]:
+    if led.get("circuit", {}).get("open"):
         log("circuit OPEN (%s) -> 消费者隔离，不接令" % led["circuit"].get("reason"))
         return 0
 
