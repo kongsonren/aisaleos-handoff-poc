@@ -1,0 +1,56 @@
+name: K55-CLOUD-PROOF
+
+# 隔离云验证：双轮闭环（非生产 / 分支 k55-proof / K55-* 命名空间）
+# 仅 workflow_dispatch 触发（无 schedule、无自起拍 → 不干扰 main 上的 live 8051 循环）。
+on:
+  workflow_dispatch:
+    inputs:
+      note:
+        description: "K55 isolated cloud proof (non-prod, branch-isolated, CLOUD_READY tier)"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+jobs:
+  wb1_prep:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: "1WB cloud: 接令 + READONLY_SHA256 + 派令2WB"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          K55_BRANCH: k55-proof
+        run: python .wb1/nezha/k55/k55_proof.py prep
+
+  wb2_exec:
+    needs: wb1_prep
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: "2WB cloud: 真实执行 + 回 RESULT"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          K55_BRANCH: k55-proof
+        run: python .wb1/nezha/k55/k55_proof.py exec
+
+  wb1_close:
+    needs: wb2_exec
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: "1WB cloud: 核验 + 持久 CLOSED"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          K55_BRANCH: k55-proof
+        run: python .wb1/nezha/k55/k55_proof.py close
