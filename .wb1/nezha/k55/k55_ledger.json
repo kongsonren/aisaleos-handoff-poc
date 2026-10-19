@@ -3,7 +3,7 @@
     "K55-PROOF-2WB-001": {
       "order_id": "KR-NEZHA-CLOUD-K55-20261019-PROOF",
       "role": "2WB",
-      "state": "EXECUTED",
+      "state": "CLOSED",
       "assigned_to": "CLOUD_2WB",
       "target": ".wb1/nezha/k55/k55_test_target.dat",
       "expected_sha256": "b7e1850430dcea9ec58210ff7f1703e7c7a7bf02370bc350a7138a057ebc14d1",
@@ -22,7 +22,7 @@
   },
   "order": {
     "id": "KR-NEZHA-CLOUD-K55-20261019-PROOF",
-    "state": "1WB_PREP_DONE",
+    "state": "CLOSED",
     "target_sha16": "b7e1850430dcea9e",
     "prepared_at": "2026-10-20T00:20:01.034866+08:00"
   }

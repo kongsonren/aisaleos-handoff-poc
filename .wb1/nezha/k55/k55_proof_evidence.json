@@ -1,0 +1,18 @@
+{
+  "order_id": "KR-NEZHA-CLOUD-K55-20261019-PROOF",
+  "verdict": "CLOSED",
+  "tier": "CLOUD_READY",
+  "target": ".wb1/nezha/k55/k55_test_target.dat",
+  "expected_sha256": "b7e1850430dcea9ec58210ff7f1703e7c7a7bf02370bc350a7138a057ebc14d1",
+  "computed_sha256": "b7e1850430dcea9ec58210ff7f1703e7c7a7bf02370bc350a7138a057ebc14d1",
+  "match": true,
+  "executed_by": "CLOUD_2WB",
+  "completion_id": "K55-2WB-023659dba05b",
+  "closed_at": "2026-10-20T00:20:23.606924+08:00",
+  "dual_wheel": {
+    "wb1_cloud": "接令 + READONLY_SHA256 + 派令(ledger) + 核验 + CLOSED",
+    "wb2_cloud": "读派令 + 真实重算SHA + 回RESULT(独立runner)",
+    "mozi": "WATCH ONLY（本验证未改动 MOZI，复用其既有双链）"
+  },
+  "note": "CLOUD_READY 证明：双轮闭环在云端 ubuntu-latest 经 GITHUB_TOKEN 真实跑通（三 job 三 runner）。OFFLINE_PASS 仍需 KR 物理关闭 1WB(黑武士) 与 2WB(华硕) 后，由云端自起拍链独立完成同款闭环。"
+}
