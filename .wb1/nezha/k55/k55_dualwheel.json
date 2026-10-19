@@ -1,7 +1,7 @@
 {
-  "state": "DISPATCHED",
+  "state": "IDLE",
   "order_seq": 1,
-  "cycles_done": 0,
+  "cycles_done": 1,
   "current_order": {
     "order_id": "KR-NEZHA-CLOUD-K55-HARDEN-20261020-DW1",
     "task_id": "K55-HARDEN-2WB-DW1",
@@ -14,11 +14,13 @@
     "issued_at": "2026-10-20T01:26:22.275716+08:00",
     "ttl_seconds": 3600,
     "target_sha16": "b7e1850430dcea9e",
-    "dispatch_comment_id": 6273128544
+    "dispatch_comment_id": 6273128544,
+    "closed_at": "2026-10-20T01:37:58.326708+08:00",
+    "result_comment_id": 6273319031
   },
   "tasks": {
     "KR-NEZHA-CLOUD-K55-HARDEN-20261020-DW1": {
-      "state": "EXECUTED",
+      "state": "CLOSED",
       "dispatched_by": "CLOUD_1WB",
       "dispatched_at": "2026-10-20T01:26:23.338173+08:00",
       "dispatch_comment_id": 6273128544,
@@ -46,6 +48,29 @@
         "scope": "READONLY_SHA256",
         "order_format": true,
         "ttl_window": true
+      },
+      "verified_by": "CLOUD_1WB",
+      "verified_at": "2026-10-20T01:37:58.326690+08:00",
+      "verify_checks": {
+        "marker": true,
+        "order_id": true,
+        "computed_sha256": true,
+        "match": true,
+        "executed_by": true,
+        "completion_id": true
+      },
+      "result_kv": {
+        "ORDER_ID": "KR-NEZHA-CLOUD-K55-HARDEN-20261020-DW1",
+        "TASK_ID": "K55-HARDEN-2WB-DW1",
+        "COMPLETION_ID": "K55-2WB-a2488d8cd67c",
+        "RUN_ID": "39295428498",
+        "EXECUTED_BY": "CLOUD_2WB",
+        "TARGET": ".wb1/nezha/k55/k55_test_target.dat",
+        "COMPUTED_SHA256": "b7e1850430dcea9ec58210ff7f1703e7c7a7bf02370bc350a7138a057ebc14d1",
+        "EXPECTED_SHA256": "b7e1850430dcea9ec58210ff7f1703e7c7a7bf02370bc350a7138a057ebc14d1",
+        "MATCH": "true",
+        "EXECUTED_AT": "2026-10-20T01:35:45.697469+08:00",
+        "ACK_COMMENT_ID": "6273318790"
       }
     }
   },
@@ -95,6 +120,22 @@
       "match": true,
       "ack_comment_id": 6273318790,
       "result_comment_id": 6273319031
+    },
+    {
+      "at": "2026-10-20T01:37:58.326714+08:00",
+      "actor": "CLOUD_1WB",
+      "action": "verify_close",
+      "run": "39295757805",
+      "order_id": "KR-NEZHA-CLOUD-K55-HARDEN-20261020-DW1",
+      "result_comment_id": 6273319031,
+      "checks": {
+        "marker": true,
+        "order_id": true,
+        "computed_sha256": true,
+        "match": true,
+        "executed_by": true,
+        "completion_id": true
+      }
     }
   ]
 }
