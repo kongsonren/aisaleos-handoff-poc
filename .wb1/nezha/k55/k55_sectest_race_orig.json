@@ -5,17 +5,45 @@
   ],
   "tasks": {
     "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW1": {
-      "state": "DISPATCHED",
+      "state": "EXECUTED",
       "dispatched_by": "CLOUD_1WB",
       "dispatched_at": "2026-10-20T02:09:51.878307+08:00",
       "dispatch_comment_id": 6273976633,
       "race_start_at": "2026-10-20T02:12:51.878293+08:00",
       "variant": "orig",
       "expected_sha256": "70e74b1591ed967918e90ba673f8ec56fd3157966e5fdb8dec222c8775307a0e",
-      "target": ".wb1/nezha/k55/k55_sectest_target.dat"
+      "target": ".wb1/nezha/k55/k55_sectest_target.dat",
+      "exec_events": [
+        {
+          "at": "2026-10-20T02:12:52.460854+08:00",
+          "consumer": "c2",
+          "run": "39300268078"
+        }
+      ],
+      "result": {
+        "status": "PASS",
+        "computed_sha256": "70e74b1591ed967918e90ba673f8ec56fd3157966e5fdb8dec222c8775307a0e",
+        "match": true,
+        "executed_by": "CLOUD_2WB",
+        "completion_id": "K55-SECTEST-3f05ee8e6430",
+        "executed_at": "2026-10-20T02:12:53.135486+08:00",
+        "consumer": "c2"
+      },
+      "result_written_by": "CLOUD_2WB",
+      "ack_comment_id": 6274032184,
+      "result_comment_id": 6274032392,
+      "auth_checks": {
+        "anchor": "6272173951",
+        "issuer": "CLOUD_1WB",
+        "scope": "READONLY_SHA256",
+        "order_format": true,
+        "ttl_window": true
+      }
     }
   },
-  "executed_order_ids": [],
+  "executed_order_ids": [
+    "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW1"
+  ],
   "rejections": [],
   "rejection_counts": {},
   "history": [
@@ -27,6 +55,17 @@
       "comment_id": 6273976633,
       "race_start_at": "2026-10-20T02:12:51.878293+08:00",
       "variant": "orig"
+    },
+    {
+      "at": "2026-10-20T02:12:53.868206+08:00",
+      "actor": "CLOUD_2WB",
+      "action": "execute",
+      "consumer": "c2",
+      "run": "39300268078",
+      "order_id": "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW1",
+      "match": true,
+      "ack_comment_id": 6274032184,
+      "result_comment_id": 6274032392
     }
   ]
 }
