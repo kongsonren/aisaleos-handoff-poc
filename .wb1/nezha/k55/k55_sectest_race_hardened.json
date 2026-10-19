@@ -5,14 +5,16 @@
   ],
   "tasks": {
     "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW5": {
-      "state": "DISPATCHED",
+      "state": "CLAIMED",
       "dispatched_by": "CLOUD_1WB",
       "dispatched_at": "2026-10-20T02:13:31.911704+08:00",
       "dispatch_comment_id": 6274043763,
       "race_start_at": "2026-10-20T02:16:31.911691+08:00",
       "variant": "hardened",
       "expected_sha256": "70e74b1591ed967918e90ba673f8ec56fd3157966e5fdb8dec222c8775307a0e",
-      "target": ".wb1/nezha/k55/k55_sectest_target.dat"
+      "target": ".wb1/nezha/k55/k55_sectest_target.dat",
+      "claimer": "c1",
+      "claimed_at": "2026-10-20T02:16:35.197037+08:00"
     }
   },
   "executed_order_ids": [],
