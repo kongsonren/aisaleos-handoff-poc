@@ -5,7 +5,7 @@
   ],
   "tasks": {
     "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW10": {
-      "state": "CLAIMED",
+      "state": "EXECUTED_PENDING_POST",
       "dispatched_by": "CLOUD_1WB",
       "dispatched_at": "2026-10-20T02:34:44.044399+08:00",
       "dispatch_comment_id": 6274442487,
@@ -13,7 +13,24 @@
       "target": ".wb1/nezha/k55/k55_sectest_target.dat",
       "claimer": "c1",
       "claimed_at": "2026-10-20T02:35:08.114928+08:00",
-      "claim_attempt": 1
+      "claim_attempt": 1,
+      "exec_events": [
+        {
+          "at": "2026-10-20T02:35:10.404124+08:00",
+          "consumer": "c1",
+          "run": "39303681702"
+        }
+      ],
+      "pending_post": {
+        "result_body": "[RESULT][2WB]\nORDER_ID: KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW10\nTASK_ID: K55-SECTEST-2WB-DW10\nCOMPLETION_ID: K55-SECTEST-144b8e8a0a2f\nRUN_ID: 39303681702\nEXECUTED_BY: CLOUD_2WB\nTARGET: .wb1/nezha/k55/k55_sectest_target.dat\nCOMPUTED_SHA256: 70e74b1591ed967918e90ba673f8ec56fd3157966e5fdb8dec222c8775307a0e\nEXPECTED_SHA256: 70e74b1591ed967918e90ba673f8ec56fd3157966e5fdb8dec222c8775307a0e\nMATCH: true\nEXECUTED_AT: 2026-10-20T02:35:11.181639+08:00\nACK_COMMENT_ID: 6274451310\nSECTEST: 1",
+        "computed_sha256": "70e74b1591ed967918e90ba673f8ec56fd3157966e5fdb8dec222c8775307a0e",
+        "match": true,
+        "completion_id": "K55-SECTEST-144b8e8a0a2f",
+        "executed_at": "2026-10-20T02:35:11.181639+08:00",
+        "ack_comment_id": 6274451310,
+        "failed_at": "2026-10-20T02:35:11.181669+08:00",
+        "fail_reason": "SIMULATED_RESULT_POST_FAILURE"
+      }
     }
   },
   "executed_order_ids": [],
@@ -26,6 +43,15 @@
       "action": "dispatch",
       "order_id": "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW10",
       "comment_id": 6274442487
+    },
+    {
+      "at": "2026-10-20T02:35:11.181676+08:00",
+      "actor": "CLOUD_2WB",
+      "action": "exec_pending_post",
+      "consumer": "c1",
+      "run": "39303681702",
+      "order_id": "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW10",
+      "fail_reason": "SIMULATED"
     }
   ]
 }
