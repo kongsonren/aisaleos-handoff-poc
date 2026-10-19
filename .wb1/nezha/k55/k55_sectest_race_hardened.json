@@ -5,7 +5,7 @@
   ],
   "tasks": {
     "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW7": {
-      "state": "CLAIMED",
+      "state": "REJECTED",
       "dispatched_by": "CLOUD_1WB",
       "dispatched_at": "2026-10-20T02:21:11.456990+08:00",
       "dispatch_comment_id": 6274185224,
@@ -15,12 +15,36 @@
       "target": ".wb1/nezha/k55/k55_sectest_target.dat",
       "claimer": "c1",
       "claimed_at": "2026-10-20T02:24:11.732084+08:00",
-      "claim_attempt": 1
+      "claim_attempt": 1,
+      "rejections": [
+        {
+          "type": "REJECT_CLAIM_LOST",
+          "at": "2026-10-20T02:24:15.152059+08:00",
+          "consumer": "c2",
+          "detail": "outcome=CLAIMED_BY_OTHER"
+        }
+      ]
     }
   },
   "executed_order_ids": [],
-  "rejections": [],
-  "rejection_counts": {},
+  "rejections": [
+    {
+      "type": "REJECT_CLAIM_LOST",
+      "order_id": "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW7",
+      "at": "2026-10-20T02:24:15.152052+08:00",
+      "consumer": "c2",
+      "run": "39301798798",
+      "detail": "outcome=CLAIMED_BY_OTHER consumer=c2"
+    }
+  ],
+  "rejection_counts": {
+    "REJECT_CLAIM_LOST:KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW7": {
+      "count": 1,
+      "last_at": "2026-10-20T02:24:15.152034+08:00",
+      "last_consumer": "c2",
+      "detail": "outcome=CLAIMED_BY_OTHER consumer=c2"
+    }
+  },
   "history": [
     {
       "at": "2026-10-20T02:21:11.456993+08:00",
@@ -30,6 +54,15 @@
       "comment_id": 6274185224,
       "race_start_at": "2026-10-20T02:24:11.456976+08:00",
       "variant": "hardened"
+    },
+    {
+      "at": "2026-10-20T02:24:15.152062+08:00",
+      "actor": "CLOUD_2WB",
+      "action": "claim_not_won",
+      "consumer": "c2",
+      "run": "39301798798",
+      "order_id": "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW7",
+      "outcome": "CLAIMED_BY_OTHER"
     }
   ]
 }
