@@ -12,13 +12,19 @@ KR 最终令第二项三项安全测试的施工件（任务 #651/#652/#653）�
 与原 k55_proof.py 的关键差异（隔离副本，不碰 DW1 生产测试账本）：
   · 独立账本 SECTEST_LEDGER / 独立目标 SECTEST_TARGET / 独立 ORDER 家族；
   · known_orders 隔离：只处理本账本 dispatch 创建的 ORDER_ID；
-  · commit_cas()：单次 CAS（blob→tree→commit→PATCH force=false，409 即失败，
-    绝不复用 GitHubStore.commit_files 的 409 自动重试覆盖——那正是并行竞态根因）；
-  · claim 机制（SECTEST_CLAIM=1）：执行前 CAS 抢占，败者类型化 REJECT_CLAIM_LOST，
-    零执行零回传；SECTEST_CLAIM=0 = 原始行为（用于记录未加固竞态的真实后果）；
+  · commit_cas()：单次 CAS（blob→tree→commit→PATCH force=false；
+    409/422 均判 CAS_CONFLICT——GitHub 对 ref 被推进有两种返回码）；
+    绝不复用 GitHubStore.commit_files 的 409 自动重试覆盖（并行竞态根因）；
+  · claim 机制（SECTEST_CLAIM=1）：执行前 CAS 抢占（带 head 刷新 + 最多 3 次尝试），
+    败者类型化 REJECT_CLAIM_LOST / REJECT_CLAIM_CONTENDED，零执行零回传；
+    SECTEST_CLAIM=0 = 原始行为（用于记录未加固竞态的真实后果）；
   · EXECUTED_PENDING_POST 断点：RESULT POST 失败即持久化计算结果，恢复只补 POST；
   · 故障注入 SECTEST_FAIL_RESULT_POST=1：模拟 GitHub 回执失败（跳过真实 POST）。
 
+版本记录：
+  rev1：首次 hardened 竞态逮到两个自身 bug（claim 重试后 head 未刷新；
+        422 未按 CAS 处理）——执行层 exactly-once 当时已成立（1 ACK/1 RESULT/1 exec），
+        账本入账失败；本 rev2 修复后重跑（DW7）。
 铁律：只写分支 k55-proof 上的 K55-SECTEST-* 账本/目标文件；绝不碰 main 与 DW1 账本；
 只发 [ACK-2WB]/[RESULT][2WB] 标记（2WB 侧）；PAT/token 仅内存。
 """
@@ -59,7 +65,6 @@ ORDER_ID_RE = re.compile(os.environ.get(
     "K55_ORDER_ID_RE", r"^KR-NEZHA-CLOUD-K55-SECTEST-\d{8}-DW\d+$"))
 SECTEST_CLAIM = os.environ.get("SECTEST_CLAIM", "1") == "1"
 SECTEST_FAIL_RESULT_POST = os.environ.get("SECTEST_FAIL_RESULT_POST", "0") == "1"
-SECTEST_RACE_ORDER_ID = os.environ.get("SECTEST_RACE_ORDER_ID", "")
 BARRIER_MAX_WAIT = int(os.environ.get("SECTEST_BARRIER_MAX_WAIT", "240"))
 
 RUN_ID = os.environ.get("GITHUB_RUN_ID", "local")
@@ -94,12 +99,13 @@ def api(method, path, payload=None):
         return 0, {"error": repr(e)[:200]}
 
 
-# ---------- 单次 CAS 提交（核心：409 即失败，绝不重试覆盖） ----------
+# ---------- 单次 CAS 提交（核心：409/422 即冲突，绝不重试覆盖） ----------
 def commit_cas(store, files, message, expected_head):
     """blob→tree→commit→PATCH force=false，单次尝试。
 
     返回 {"ok": bool, "commit": sha|None, "error": ...}；
-    CAS 冲突（head 被他人推进）→ {"ok": False, "error": "CAS_CONFLICT"}。
+    CAS 冲突（head 被他人推进，GitHub 返回 409 或 422）→ CAS_CONFLICT。
+    expected_head 为空时先读当前 head（仅用于无并发场景，如恢复通道）。
     """
     import base64 as _b64
 
@@ -145,8 +151,9 @@ def commit_cas(store, files, message, expected_head):
                 {"sha": c["sha"], "force": False})
     if s == 200:
         return {"ok": True, "commit": c["sha"]}
-    if s == 409:
-        return {"ok": False, "error": "CAS_CONFLICT"}
+    if s in (409, 422):
+        # 409 = CAS 冲突；422 = not fast-forward（ref 被推进的另一种返回码）
+        return {"ok": False, "error": "CAS_CONFLICT", "code": s}
     return {"ok": False, "error": "REF_PATCH_FAILED", "code": s, "detail": r}
 
 
@@ -191,8 +198,10 @@ def read_led(store):
 
 
 def write_led(store, data, head, msg):
-    return commit_cas(store, {SECTEST_LEDGER: json.dumps(
+    """提交账本；成功返回 (ok, new_head)。head 在成功时刷新为新 commit。"""
+    r = commit_cas(store, {SECTEST_LEDGER: json.dumps(
         data, ensure_ascii=False, indent=2).encode()}, msg, head)
+    return r.get("ok"), (r.get("commit") if r.get("ok") else head), r
 
 
 def note_reject(led, rtype, oid, detail=""):
@@ -219,7 +228,7 @@ def note_hist(led, actor, action, **kw):
     led["history"] = led["history"][-80:]
 
 
-# ---------- Issue #8 扫描（复用 k55_proof 的末页二分 + 家族正则） ----------
+# ---------- Issue #8 扫描（末页二分 + 倒序，comments API 为旧→新排序） ----------
 def _get_page(p, per=100):
     s, j = api("GET", "/repos/%s/issues/%s/comments?per_page=%d&page=%d"
                % (REPO, ISSUE, per, p))
@@ -324,9 +333,9 @@ def recovery_pass(store, led, head):
                     {"body": p["result_body"]})
         if s != 201:
             note_reject(led, "RECOVERY_POST_FAILED", oid, "http=%s" % s)
-            r = write_led(store, led, head, "[K55-SECTEST] recovery post failed %s" % oid)
-            if r.get("ok"):
-                head = None  # 下次重读
+            ok, head, r = write_led(store, led, head,
+                                    "[K55-SECTEST] recovery post failed %s" % oid)
+            log("recovery POST failed", s, r)
             return n, head
         t["state"] = "EXECUTED"
         t["result_comment_id"] = rc.get("id")
@@ -337,17 +346,38 @@ def recovery_pass(store, led, head):
         note_hist(led, "CLOUD_2WB", "recover_receipt", order_id=oid,
                   result_comment_id=rc.get("id"),
                   stored_executed_at=p.get("executed_at"))
-        r = write_led(store, led, head,
-                      "[K55-SECTEST] RECOVERED receipt %s (comment %s, no re-exec)"
-                      % (oid, rc.get("id")))
-        log("RECOVERED", oid, "comment=%s" % rc.get("id"), "commit_ok=%s" % r.get("ok"))
+        ok, head, r = write_led(
+            store, led, head,
+            "[K55-SECTEST] RECOVERED receipt %s (comment %s, no re-exec)"
+            % (oid, rc.get("id")))
+        log("RECOVERED", oid, "comment=%s" % rc.get("id"), "commit_ok=%s" % ok)
         n += 1
-        if r.get("ok"):
+        if ok:
             led, head = read_led(store)
     return n, head
 
 
-# ---------- 消费者主流程 ----------
+# ---------- claim：单次 CAS 抢占（head 全程刷新；409/422 均重读） ----------
+def try_claim(store, led, head, oid, max_attempts=3):
+    """返回 (claimed: bool, led, head, outcome)。outcome:
+    CLAIMED / CLAIMED_BY_OTHER / CLAIM_CONTENDED"""
+    for attempt in range(max_attempts):
+        t = led["tasks"].setdefault(oid, {})
+        if t.get("state") == "CLAIMED" and t.get("claimer") != CONSUMER:
+            return False, led, head, "CLAIMED_BY_OTHER"
+        t.update({"state": "CLAIMED", "claimer": CONSUMER,
+                  "claimed_at": now_iso(), "claim_attempt": attempt + 1})
+        ok, head, r = write_led(
+            store, led, head, "[K55-SECTEST] CLAIM %s by %s (attempt %d)"
+            % (oid, CONSUMER, attempt + 1))
+        if ok:
+            return True, led, head, "CLAIMED"
+        log("claim attempt %d CAS_CONFLICT/err:" % (attempt + 1), r.get("error"))
+        led, head = read_led(store)
+    return False, led, head, "CLAIM_CONTENDED"
+
+
+# ---------- 授权校验 ----------
 def auth_checks(o):
     """五要素授权校验。返回 (ok, reject_type, detail)。"""
     if o.get("ANCHOR_COMMENT_ID") != ANCHOR_COMMENT_ID:
@@ -400,6 +430,7 @@ def barrier_wait(led, oid):
     return False
 
 
+# ---------- 消费者主流程 ----------
 def exec_all():
     store = GitHubStore(TOKEN, REPO, BRANCH)
     if not TOKEN:
@@ -459,14 +490,13 @@ def exec_all():
             note_task_reject(led, oid, rtype, detail)
             note_hist(led, "CLOUD_2WB", "auth_reject", order_id=oid,
                       reject_type=rtype)
-            r = write_led(store, led, head,
-                          "[K55-SECTEST] auth reject %s %s" % (rtype, oid))
+            okc, head, r = write_led(
+                store, led, head, "[K55-SECTEST] auth reject %s %s" % (rtype, oid))
             summary["rejected"].append({"order_id": oid, "type": rtype})
-            if r.get("ok"):
-                led, head = read_led(store)
-            else:
+            if not okc:
                 log("commit failed after reject", r)
                 return 1
+            led, head = read_led(store)
             continue
         # ---------- 授权通过：至多执行一条（幂等纪律）----------
         log("AUTH_OK", oid)
@@ -476,49 +506,29 @@ def exec_all():
 
         # claim：单次 CAS 抢占（SECTEST_CLAIM=0 时跳过=原始行为）
         if SECTEST_CLAIM:
-            t = led["tasks"].setdefault(oid, {})
-            t.update({"state": "CLAIMED", "claimer": CONSUMER,
-                      "claimed_at": now_iso()})
-            r = write_led(store, led, head,
-                          "[K55-SECTEST] CLAIM %s by %s" % (oid, CONSUMER))
-            if not r.get("ok"):
-                log("claim CAS failed:", r.get("error"), "-> re-read")
-                led2, head2 = read_led(store)
-                t2 = led2["tasks"].get(oid) or {}
-                if t2.get("state") == "CLAIMED" and t2.get("claimer") != CONSUMER:
-                    note_reject(led2, "REJECT_CLAIM_LOST", oid,
-                                "winner=%s" % t2.get("claimer"))
-                    note_task_reject(led2, oid, "REJECT_CLAIM_LOST",
-                                     "winner=%s" % t2.get("claimer"))
-                    note_hist(led2, "CLOUD_2WB", "claim_lost", order_id=oid,
-                              winner=t2.get("claimer"))
-                    r2 = write_led(store, led2, head2,
-                                   "[K55-SECTEST] claim lost %s (winner %s)"
-                                   % (oid, t2.get("claimer")))
-                    log("REJECT_CLAIM_LOST", oid, "winner=%s" % t2.get("claimer"),
-                        "commit_ok=%s" % r2.get("ok"))
-                    summary["claim_lost"] = True
-                    summary["verdict"] = "CLAIM_LOST_NO_EXEC"
-                    print("SECTEST_SUMMARY " + json.dumps(summary, ensure_ascii=False))
-                    return 0
-                log("claim retry once (no winner seen)")
-                led, head = led2, head2
-                t = led["tasks"].setdefault(oid, {})
-                t.update({"state": "CLAIMED", "claimer": CONSUMER,
-                          "claimed_at": now_iso()})
-                r = write_led(store, led, head,
-                              "[K55-SECTEST] CLAIM(retry) %s by %s" % (oid, CONSUMER))
-                if not r.get("ok"):
-                    log("claim retry failed", r)
-                    return 1
+            claimed, led, head, outcome = try_claim(store, led, head, oid)
+            if not claimed:
+                rtype = ("REJECT_CLAIM_LOST" if outcome == "CLAIMED_BY_OTHER"
+                         else "REJECT_CLAIM_CONTENDED")
+                log("CLAIM outcome:", outcome, "->", rtype)
+                note_reject(led, rtype, oid, "outcome=%s consumer=%s" % (outcome, CONSUMER))
+                note_task_reject(led, oid, rtype, "outcome=%s" % outcome)
+                note_hist(led, "CLOUD_2WB", "claim_not_won", order_id=oid,
+                          outcome=outcome)
+                okc, head, r = write_led(
+                    store, led, head, "[K55-SECTEST] %s %s" % (rtype, oid))
+                log(rtype, oid, "commit_ok=%s" % okc)
+                summary["claim_lost"] = True
+                summary["verdict"] = "CLAIM_NOT_WON_NO_EXEC"
+                print("SECTEST_SUMMARY " + json.dumps(summary, ensure_ascii=False))
+                return 0
             log("CLAIMED", oid, "by", CONSUMER)
 
         # ---------- 真实执行（本 runner 独立重算 SHA）----------
         h, code = sha256_file(store, o["TARGET"])
         if h is None:
             note_reject(led, "EXEC_TARGET_READ_FAILED", oid, "http=%s" % code)
-            r = write_led(store, led, head,
-                          "[K55-SECTEST] target read failed %s" % oid)
+            write_led(store, led, head, "[K55-SECTEST] target read failed %s" % oid)
             log("EXEC target read failed", code)
             return 1
         match = (h == o.get("EXPECTED_SHA256"))
@@ -573,10 +583,11 @@ def exec_all():
                 "fail_reason": "SIMULATED_RESULT_POST_FAILURE"}
             note_hist(led, "CLOUD_2WB", "exec_pending_post", order_id=oid,
                       fail_reason="SIMULATED")
-            r = write_led(store, led, head,
-                          "[K55-SECTEST] EXECUTED_PENDING_POST %s (result POST failed, "
-                          "receipt recoverable)" % oid)
-            log("EXECUTED_PENDING_POST", oid, "commit_ok=%s" % r.get("ok"))
+            okc, head, r = write_led(
+                store, led, head,
+                "[K55-SECTEST] EXECUTED_PENDING_POST %s (result POST failed, "
+                "receipt recoverable)" % oid)
+            log("EXECUTED_PENDING_POST", oid, "commit_ok=%s" % okc)
             summary["executed"] = {"order_id": oid, "state": "EXECUTED_PENDING_POST",
                                    "exec_events": len(t.get("exec_events", []))}
             summary["verdict"] = "EXECUTED_PENDING_POST"
@@ -609,18 +620,33 @@ def exec_all():
             led["executed_order_ids"].append(oid)
         note_hist(led, "CLOUD_2WB", "execute", order_id=oid, match=bool(match),
                   ack_comment_id=ack_id, result_comment_id=rc.get("id"))
-        r = write_led(store, led, head,
-                      "[K55-SECTEST] EXECUTED %s -> %s (ack=%s result=%s)"
-                      % (oid, "PASS" if match else "FAIL", ack_id, rc.get("id")))
-        log("RESULT posted", oid, "comment=%s" % rc.get("id"),
-            "commit_ok=%s" % r.get("ok"))
+        okc, head, r = write_led(
+            store, led, head,
+            "[K55-SECTEST] EXECUTED %s -> %s (ack=%s result=%s)"
+            % (oid, "PASS" if match else "FAIL", ack_id, rc.get("id")))
+        if not okc:
+            # 入账冲突：重读核对是否他人已入账（防双计），否则再试一次
+            log("EXECUTED commit conflict:", r.get("error"), "-> re-read check")
+            led2, head2 = read_led(store)
+            t2 = led2["tasks"].get(oid) or {}
+            if t2.get("state") == "EXECUTED" and t2.get("result", {}).get(
+                    "consumer") != CONSUMER:
+                log("another consumer already EXECUTED (no double count)", oid)
+                summary["executed"] = {"order_id": oid, "state": "EXECUTED_BY_OTHER"}
+                summary["verdict"] = "EXECUTED_BY_OTHER"
+                print("SECTEST_SUMMARY " + json.dumps(summary, ensure_ascii=False))
+                return 0
+            okc2, head2, r2 = write_led(
+                store, led2, head2, "[K55-SECTEST] EXECUTED(retry) %s" % oid)
+            log("EXECUTED retry commit_ok=%s" % okc2)
+        log("RESULT posted", oid, "comment=%s" % rc.get("id"))
         summary["executed"] = {
             "order_id": oid, "state": "EXECUTED", "result_comment_id": rc.get("id"),
             "ack_comment_id": ack_id, "completion_id": cid,
             "exec_events": len(t.get("exec_events", []))}
         summary["verdict"] = "EXECUTED_ONCE"
         print("SECTEST_SUMMARY " + json.dumps(summary, ensure_ascii=False))
-        return 0 if r.get("ok") else 1
+        return 0
 
     summary["verdict"] = "ALL_REJECTED_NO_EXEC"
     print("SECTEST_SUMMARY " + json.dumps(summary, ensure_ascii=False))
@@ -664,12 +690,13 @@ def verify():
             t["result_comment_id"] = res["id"]
             note_hist(led, "CLOUD_1WB", "verify_close", order_id=oid,
                       result_comment_id=res["id"], checks=checks)
-            r = write_led(store, led, head,
-                          "[K55-SECTEST-1WB] CLOSED %s (verified via GET %s)"
-                          % (oid, res["id"]))
-            log("CLOSED", oid, "comment=%s" % res["id"], "commit_ok=%s" % r.get("ok"))
+            okc, head, r = write_led(
+                store, led, head,
+                "[K55-SECTEST-1WB] CLOSED %s (verified via GET %s)"
+                % (oid, res["id"]))
+            log("CLOSED", oid, "comment=%s" % res["id"], "commit_ok=%s" % okc)
             out["closed"].append(oid)
-            if r.get("ok"):
+            if okc:
                 led, head = read_led(store)
         else:
             note_reject(led, "RESULT_VERIFY_FAILED", oid, json.dumps(checks))
