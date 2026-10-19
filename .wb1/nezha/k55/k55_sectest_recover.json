@@ -1,0 +1,28 @@
+{
+  "state": "DISPATCHED",
+  "known_orders": [
+    "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW10"
+  ],
+  "tasks": {
+    "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW10": {
+      "state": "DISPATCHED",
+      "dispatched_by": "CLOUD_1WB",
+      "dispatched_at": "2026-10-20T02:34:44.044399+08:00",
+      "dispatch_comment_id": 6274442487,
+      "expected_sha256": "70e74b1591ed967918e90ba673f8ec56fd3157966e5fdb8dec222c8775307a0e",
+      "target": ".wb1/nezha/k55/k55_sectest_target.dat"
+    }
+  },
+  "executed_order_ids": [],
+  "rejections": [],
+  "rejection_counts": {},
+  "history": [
+    {
+      "at": "2026-10-20T02:34:44.044409+08:00",
+      "actor": "CLOUD_1WB",
+      "action": "dispatch",
+      "order_id": "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW10",
+      "comment_id": 6274442487
+    }
+  ]
+}
