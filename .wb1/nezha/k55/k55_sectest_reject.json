@@ -41,13 +41,21 @@
       ]
     },
     "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW4": {
-      "state": "DISPATCHED",
+      "state": "REJECTED",
       "dispatched_by": "CLOUD_1WB",
       "dispatched_at": "2026-10-20T02:14:29.183164+08:00",
       "dispatch_comment_id": 6274060343,
       "forged_field": "ttl",
       "expected_sha256": "70e74b1591ed967918e90ba673f8ec56fd3157966e5fdb8dec222c8775307a0e",
-      "target": ".wb1/nezha/k55/k55_sectest_target.dat"
+      "target": ".wb1/nezha/k55/k55_sectest_target.dat",
+      "rejections": [
+        {
+          "type": "TTL_EXPIRED",
+          "at": "2026-10-20T02:15:03.632371+08:00",
+          "consumer": "c1",
+          "detail": "issued_at=2026-10-20T00:14:25.198050+08:00 ttl=3600"
+        }
+      ]
     }
   },
   "executed_order_ids": [],
@@ -67,6 +75,14 @@
       "consumer": "c1",
       "run": "39300890563",
       "detail": "anchor=6273318790 allow=6272173951"
+    },
+    {
+      "type": "TTL_EXPIRED",
+      "order_id": "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW4",
+      "at": "2026-10-20T02:15:03.632366+08:00",
+      "consumer": "c1",
+      "run": "39300890563",
+      "detail": "issued_at=2026-10-20T00:14:25.198050+08:00 ttl=3600"
     }
   ],
   "rejection_counts": {
@@ -81,6 +97,12 @@
       "last_at": "2026-10-20T02:15:00.768978+08:00",
       "last_consumer": "c1",
       "detail": "anchor=6273318790 allow=6272173951"
+    },
+    "TTL_EXPIRED:KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW4": {
+      "count": 1,
+      "last_at": "2026-10-20T02:15:03.632358+08:00",
+      "last_consumer": "c1",
+      "detail": "issued_at=2026-10-20T00:14:25.198050+08:00 ttl=3600"
     }
   },
   "history": [
@@ -125,6 +147,15 @@
       "run": "39300890563",
       "order_id": "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW3",
       "reject_type": "ANCHOR_NOT_ALLOWLISTED"
+    },
+    {
+      "at": "2026-10-20T02:15:03.632375+08:00",
+      "actor": "CLOUD_2WB",
+      "action": "auth_reject",
+      "consumer": "c1",
+      "run": "39300890563",
+      "order_id": "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW4",
+      "reject_type": "TTL_EXPIRED"
     }
   ]
 }
