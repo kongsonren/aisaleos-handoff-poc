@@ -15,12 +15,36 @@
       "target": ".wb1/nezha/k55/k55_sectest_target.dat",
       "claimer": "c2",
       "claimed_at": "2026-10-20T02:31:55.636111+08:00",
-      "claim_attempt": 1
+      "claim_attempt": 1,
+      "claim_rejections": [
+        {
+          "type": "REJECT_CLAIM_LOST",
+          "at": "2026-10-20T02:31:58.807140+08:00",
+          "consumer": "c1",
+          "detail": "outcome=CLAIMED_BY_OTHER"
+        }
+      ]
     }
   },
   "executed_order_ids": [],
-  "rejections": [],
-  "rejection_counts": {},
+  "rejections": [
+    {
+      "type": "REJECT_CLAIM_LOST",
+      "order_id": "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW9",
+      "at": "2026-10-20T02:31:58.807133+08:00",
+      "consumer": "c1",
+      "run": "39302871097",
+      "detail": "outcome=CLAIMED_BY_OTHER consumer=c1"
+    }
+  ],
+  "rejection_counts": {
+    "REJECT_CLAIM_LOST:KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW9": {
+      "count": 1,
+      "last_at": "2026-10-20T02:31:58.807114+08:00",
+      "last_consumer": "c1",
+      "detail": "outcome=CLAIMED_BY_OTHER consumer=c1"
+    }
+  },
   "history": [
     {
       "at": "2026-10-20T02:28:55.181670+08:00",
@@ -30,6 +54,15 @@
       "comment_id": 6274330467,
       "race_start_at": "2026-10-20T02:31:55.181653+08:00",
       "variant": "hardened"
+    },
+    {
+      "at": "2026-10-20T02:31:58.807145+08:00",
+      "actor": "CLOUD_2WB",
+      "action": "claim_not_won",
+      "consumer": "c1",
+      "run": "39302871097",
+      "order_id": "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW9",
+      "outcome": "CLAIMED_BY_OTHER"
     }
   ]
 }
