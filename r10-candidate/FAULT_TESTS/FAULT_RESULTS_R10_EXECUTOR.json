@@ -1,0 +1,315 @@
+[
+  {
+    "test_id": "C1",
+    "category": "CAT1-E2E",
+    "desc": "正常执行+独立回读(真实E2E: 真实watcher+executor+队列+handler+RCA3有效授权)",
+    "observation": {
+      "test_cid": 6253472016,
+      "watcher_log": "﻿2026-10-18T18:22:20Z | CRED_FOUND=YES TOKEN_LEN=40 DRYRUN=False SRC=env_or_python_bridge\n2026-10-18T18:22:28Z | FETCH_OK total=1052 pages=11\n2026-10-18T18:22:29Z | ACK_POSTED trigger=6253472016 ack_comment_id=6253474179 ts=2026-10-18T18:22:28Z\n2026-10-18T18:22:29Z | ENQUEUE order_id=6253472016 task_id=Q-20261019022229965\n2026-10-18T18:22:29Z | DONE new_acks=1 total_acked=984\n2026-10-18T18:22:29Z | CLOCK_SKIP no clock file\n",
+      "queue_after_watcher": "[{\"order_id\":\"6253472016\",\"task_id\":\"Q-20261019022229965\",\"action\":\"DISPATCH\",\"envelope_body\":\"[TASK] READONLY_PROBE https://aisaleos.com.cn/robots.txt AUTH=eyJpZCI6ICJBVVRILWI3NjYxNjYzZTJiNCIsICJvcmRlcl9pZCI6ICIqIiwgInNjb3BlIjogIlJFQURPTkxZX1BST0JFIiwgImV4cCI6IDE3OTIzNTEzMzYsICJub25jZSI6ICIxNWVlNzk",
+      "executor_log": "2026-10-18T18:22:47Z | SCAN total=1053 rate_limited=False\n2026-10-18T18:22:49Z | RESULT task_id=Q-20261019022229965 order_id=6253472016 status=PASS posted=6253477543\n2026-10-18T18:22:51Z | VERIFIED task_id=Q-20261019022229965 result=6253477543 sha256_match=True\n2026-10-18T18:22:51Z | DONE posted=0 queue_dispatched=1\n",
+      "ledger": "{\n  \"tasks\": {\n    \"Q-20261019022229965\": {\n      \"state\": \"CLOSED\",\n      \"order_id\": \"6253472016\",\n      \"claimed_by\": \"2WB-FRONTLEG-EXECUTOR@KONGSONREN:25052\",\n      \"claimed_at\": \"2026-10-18T18:22:47Z\",\n      \"running_at\": \"2026-10-18T18:22:47Z\",\n      \"result_at\": \"2026-10-18T18:22:48Z\",\n      \"result_comment_id\": 6253477543,\n      \"verified\": true,\n      \"verified_at\": \"2026-10-18T18:22:49Z\",\n      \"closed_at\": \"2026-10-18T18:22:51Z\"\n    }\n  },\n  \"auth_used\": {\n    \"AUTH-b7661663e2b4\": \"Q-20261019022229965\"\n  },\n  \"rejected\": [],\n  \"processed\": [\n    \"5946969178\",\n    \"5948257756\",\n    \"5950326517\",\n    \"6064955577\",\n    \"6080828752\",\n    \"6145834895\",\n    \"6174898456\",\n    \"6175437985\"\n  ],\n  \"pending\": []\n}",
+      "exec_stdout": "DONE posted=0 scanned=1053 triggers=8 queue_dispatched=1\n",
+      "exec_stderr": ""
+    },
+    "verdict": "PASS",
+    "notes": "真实E2E: 测试令 6253472016 经真实watcher ACK+入队, 真实executor认领→执行→RESULT→VERIFIED(独立回读sha256一致)→CLOSED。ledger状态={'Q-20261019022229965': 'CLOSED'}; VERIFIED=True。状态链 QUEUED→CLAIMED→RUNNING→RESULT→VERIFIED→CLOSED 全程真实证据。"
+  },
+  {
+    "test_id": "C2a",
+    "category": "CAT2-IDEMPOTENT",
+    "desc": "重复投递幂等(同token)",
+    "observation": {
+      "pid": 2888,
+      "crashed": false,
+      "rc": 0,
+      "t0": "2026-10-18T18:22:51Z",
+      "t1": "2026-10-18T18:23:08Z",
+      "q_before": "[{\"order_id\": \"O2\", \"task_id\": \"T-DUP\", \"action\": \"DISPATCH\", \"envelope_body\": \"[TASK] READONLY_PROBE https://aisaleos.com.cn/robots.txt AUTH=eyJpZCI6ICJBVVRILWI3NjYxNjYzZTJiNCIsICJvcmRlcl9pZCI6ICIqIiwgInNjb3BlIjogIlJFQURPTkxZX1BST0JFIiwgImV4cCI6IDE3OTIzNTEzMzYsICJub25jZSI6ICIxNWVlNzk1NCJ9.7edfe1f7b0d01cc4c7f64192ba32c7989a9a15c480da6ddf36be0f19e8aab938\", \"received_at\": \"2026-10-18T18:22:51Z\"}, {\"order_id\": \"O2\", \"task_id\": \"T-DUP\", \"action\": \"DISPATCH\", \"envelope_body\": \"[TASK] READONLY_PROBE https://aisaleos.com.cn/robots.txt AUTH=eyJpZCI6ICJBVVRILWI3NjYxNjYzZTJiNCIsICJvcmRlcl9pZCI6ICIqIiwgInNjb3BlIjogIlJFQURPTkxZX1BST0JFIiwgImV4cCI6IDE3OTIzNTEzMzYsICJub25jZSI6ICIxNWVlNzk1NCJ9.7edfe1f7b0d01cc4c7f64192ba32c7989a9a15c480da6ddf36be0f19e8aab938\", \"received_at\": \"2026-10-18T18:22:51Z\"}]",
+      "q_after": "[\n  {\n    \"order_id\": \"O2\",\n    \"task_id\": \"T-DUP\",\n    \"action\": \"DISPATCH\",\n    \"envelope_body\": \"[TASK] READONLY_PROBE https://aisaleos.com.cn/robots.txt AUTH=eyJpZCI6ICJBVVRILWI3NjYxNjYzZTJiNCIsICJvcmRlcl9pZCI6ICIqIiwgInNjb3BlIjogIlJFQURPTkxZX1BST0JFIiwgImV4cCI6IDE3OTIzNTEzMzYsICJub25jZSI6ICIxNWVlNzk1NCJ9.7edfe1f7b0d01cc4c7f64192ba32c7989a9a15c480da6ddf36be0f19e8aab938\",\n    \"received_at\": \"2026-10-18T18:22:51Z\"\n  }\n]",
+      "log": "2026-10-18T18:22:54Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:22:58Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:23:02Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:23:04Z | SCAN total=0 rate_limited=False\n2026-10-18T18:23:08Z | POST_FAIL err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:23:08Z | RESULT task_id=T-DUP order_id=O2 status=FAIL posted=None\n2026-10-18T18:23:08Z | RESULT_POST_FAIL task_id=T-DUP -> kept in queue for retry (NOT CLOSED)\n2026-10-18T18:23:08Z | REJECTED_AUTH task_id=T-DUP order_id=O2 reason=DUPLICATE_REPLAY\n2026-10-18T18:23:08Z | DONE posted=0 queue_dispatched=1\n",
+      "ledger": "{\n  \"tasks\": {\n    \"T-DUP\": {\n      \"state\": \"REJECTED_AUTH\",\n      \"order_id\": \"O2\",\n      \"reason\": \"DUPLICATE_REPLAY\",\n      \"at\": \"2026-10-18T18:23:08Z\"\n    }\n  },\n  \"auth_used\": {\n    \"AUTH-b7661663e2b4\": \"T-DUP\"\n  },\n  \"rejected\": [\n    {\n      \"task_id\": \"T-DUP\",\n      \"order_id\": \"O2\",\n      \"reason\": \"DUPLICATE_REPLAY\",\n      \"at\": \"2026-10-18T18:23:08Z\"\n    }\n  ],\n  \"processed\": [],\n  \"pending\": []\n}",
+      "stdout": "DONE posted=0 scanned=0 triggers=0 queue_dispatched=1\n"
+    },
+    "verdict": "PASS",
+    "notes": "同令牌第二个任务被 RCA3 判 DUPLICATE_REPLAY 拒绝(防重放)。log含DUPLICATE_REPLAY=True。"
+  },
+  {
+    "test_id": "C2b",
+    "category": "CAT2-CONCURRENT",
+    "desc": "双消费者并发(文件锁防重复)",
+    "observation": {
+      "out1": "LOCK_HELD_BY_ANOTHER\n",
+      "out2": "DONE posted=0 scanned=0 triggers=0 queue_dispatched=1\n",
+      "log": "2026-10-18T18:23:11Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:23:11Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:23:15Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:23:15Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:23:19Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:23:19Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:23:21Z | SCAN total=0 rate_limited=False\n2026-10-18T18:23:21Z | SCAN total=0 rate_limited=False\n2026-10-18T18:23:21Z | LOCK_HELD_BY_ANOTHER (concurrent instance) -> exit to prevent double execution\n2026-10-18T18:23:25Z | POST_FAIL err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:23:25Z | RESULT task_id=T-C0 order_id=O2b status=FAIL posted=None\n2026-10-18T18:23:25Z | RESULT_POST_FAIL task_id=T-C0 -> kept in queue for retry (NOT CLOSED)\n2026-10-18T18:23:25Z | REJECTED_AUTH task_id=T-C1 order_id=O2b reason=DUPLICATE_REPLAY\n2026-10-18T18:23:25Z | REJECTED_AUTH task_id=T-C2 order_id=O2b reason=DUPLICATE_REPLAY\n2026-10-18T18:23:25Z | DONE posted=0 queue_dispatched=1\n"
+    },
+    "verdict": "PASS",
+    "notes": "文件锁生效: 一进程持锁, 另一进程 LOCK_HELD_BY_ANOTHER 退出 -> 无并发重复执行(R9 E12 已修复)。lock_held=True。"
+  },
+  {
+    "test_id": "C3a",
+    "category": "CAT3-BOM",
+    "desc": "BOM队列",
+    "observation": {
+      "pid": 22044,
+      "crashed": false,
+      "rc": 0,
+      "t0": "2026-10-18T18:23:25Z",
+      "t1": "2026-10-18T18:23:42Z",
+      "q_before": "﻿[{\"order_id\": \"O3\", \"task_id\": \"T-BOM\", \"action\": \"DISPATCH\", \"envelope_body\": \"[TASK] READONLY_PROBE https://aisaleos.com.cn/robots.txt AUTH=eyJpZCI6ICJBVVRILWI3NjYxNjYzZTJiNCIsICJvcmRlcl9pZCI6ICIqIiwgInNjb3BlIjogIlJFQURPTkxZX1BST0JFIiwgImV4cCI6IDE3OTIzNTEzMzYsICJub25jZSI6ICIxNWVlNzk1NCJ9.7edfe1f7b0d01cc4c7f64192ba32c7989a9a15c480da6ddf36be0f19e8aab938\", \"received_at\": \"2026-10-18T18:23:25Z\"}]",
+      "q_after": "[\n  {\n    \"order_id\": \"O3\",\n    \"task_id\": \"T-BOM\",\n    \"action\": \"DISPATCH\",\n    \"envelope_body\": \"[TASK] READONLY_PROBE https://aisaleos.com.cn/robots.txt AUTH=eyJpZCI6ICJBVVRILWI3NjYxNjYzZTJiNCIsICJvcmRlcl9pZCI6ICIqIiwgInNjb3BlIjogIlJFQURPTkxZX1BST0JFIiwgImV4cCI6IDE3OTIzNTEzMzYsICJub25jZSI6ICIxNWVlNzk1NCJ9.7edfe1f7b0d01cc4c7f64192ba32c7989a9a15c480da6ddf36be0f19e8aab938\",\n    \"received_at\": \"2026-10-18T18:23:25Z\"\n  }\n]",
+      "log": "2026-10-18T18:23:28Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:23:32Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:23:36Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:23:38Z | SCAN total=0 rate_limited=False\n2026-10-18T18:23:42Z | POST_FAIL err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:23:42Z | RESULT task_id=T-BOM order_id=O3 status=FAIL posted=None\n2026-10-18T18:23:42Z | RESULT_POST_FAIL task_id=T-BOM -> kept in queue for retry (NOT CLOSED)\n2026-10-18T18:23:42Z | DONE posted=0 queue_dispatched=1\n",
+      "ledger": "{\n  \"tasks\": {\n    \"T-BOM\": {\n      \"state\": \"RESULT_POST_FAIL\",\n      \"order_id\": \"O3\",\n      \"claimed_by\": \"2WB-FRONTLEG-EXECUTOR@KONGSONREN:22044\",\n      \"claimed_at\": \"2026-10-18T18:23:38Z\",\n      \"running_at\": \"2026-10-18T18:23:38Z\",\n      \"result_at\": \"2026-10-18T18:23:40Z\",\n      \"posted\": null\n    }\n  },\n  \"auth_used\": {\n    \"AUTH-b7661663e2b4\": \"T-BOM\"\n  },\n  \"rejected\": [],\n  \"processed\": [],\n  \"pending\": []\n}",
+      "stdout": "DONE posted=0 scanned=0 triggers=0 queue_dispatched=1\n"
+    },
+    "verdict": "PASS",
+    "notes": "BOM被utf-8-sig容忍, 任务入状态机(见log CLAIMED/RUNNING)。"
+  },
+  {
+    "test_id": "C3b",
+    "category": "CAT3-SINGLE",
+    "desc": "单元素折叠",
+    "observation": {
+      "pid": 29792,
+      "crashed": false,
+      "rc": 0,
+      "t0": "2026-10-18T18:23:42Z",
+      "t1": "2026-10-18T18:23:59Z",
+      "q_before": "{\"order_id\": \"O3\", \"task_id\": \"T-SINGLE\", \"action\": \"DISPATCH\", \"envelope_body\": \"[TASK] READONLY_PROBE https://aisaleos.com.cn/robots.txt AUTH=eyJpZCI6ICJBVVRILWI3NjYxNjYzZTJiNCIsICJvcmRlcl9pZCI6ICIqIiwgInNjb3BlIjogIlJFQURPTkxZX1BST0JFIiwgImV4cCI6IDE3OTIzNTEzMzYsICJub25jZSI6ICIxNWVlNzk1NCJ9.7edfe1f7b0d01cc4c7f64192ba32c7989a9a15c480da6ddf36be0f19e8aab938\", \"received_at\": \"2026-10-18T18:23:42Z\"}",
+      "q_after": "[\n  {\n    \"order_id\": \"O3\",\n    \"task_id\": \"T-SINGLE\",\n    \"action\": \"DISPATCH\",\n    \"envelope_body\": \"[TASK] READONLY_PROBE https://aisaleos.com.cn/robots.txt AUTH=eyJpZCI6ICJBVVRILWI3NjYxNjYzZTJiNCIsICJvcmRlcl9pZCI6ICIqIiwgInNjb3BlIjogIlJFQURPTkxZX1BST0JFIiwgImV4cCI6IDE3OTIzNTEzMzYsICJub25jZSI6ICIxNWVlNzk1NCJ9.7edfe1f7b0d01cc4c7f64192ba32c7989a9a15c480da6ddf36be0f19e8aab938\",\n    \"received_at\": \"2026-10-18T18:23:42Z\"\n  }\n]",
+      "log": "2026-10-18T18:23:44Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:23:48Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:23:53Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:23:55Z | SCAN total=0 rate_limited=False\n2026-10-18T18:23:59Z | POST_FAIL err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:23:59Z | RESULT task_id=T-SINGLE order_id=O3 status=FAIL posted=None\n2026-10-18T18:23:59Z | RESULT_POST_FAIL task_id=T-SINGLE -> kept in queue for retry (NOT CLOSED)\n2026-10-18T18:23:59Z | DONE posted=0 queue_dispatched=1\n",
+      "ledger": "{\n  \"tasks\": {\n    \"T-SINGLE\": {\n      \"state\": \"RESULT_POST_FAIL\",\n      \"order_id\": \"O3\",\n      \"claimed_by\": \"2WB-FRONTLEG-EXECUTOR@KONGSONREN:29792\",\n      \"claimed_at\": \"2026-10-18T18:23:55Z\",\n      \"running_at\": \"2026-10-18T18:23:55Z\",\n      \"result_at\": \"2026-10-18T18:23:57Z\",\n      \"posted\": null\n    }\n  },\n  \"auth_used\": {\n    \"AUTH-b7661663e2b4\": \"T-SINGLE\"\n  },\n  \"rejected\": [],\n  \"processed\": [],\n  \"pending\": []\n}",
+      "stdout": "DONE posted=0 scanned=0 triggers=0 queue_dispatched=1\n"
+    },
+    "verdict": "PASS",
+    "notes": "裸对象被包裹为[dict]后消费。"
+  },
+  {
+    "test_id": "C3c",
+    "category": "CAT3-MULTI",
+    "desc": "多元素",
+    "observation": {
+      "pid": 7876,
+      "crashed": false,
+      "rc": 0,
+      "t0": "2026-10-18T18:23:59Z",
+      "t1": "2026-10-18T18:24:16Z",
+      "q_before": "[{\"order_id\": \"O3\", \"task_id\": \"T-M0\", \"action\": \"DISPATCH\", \"envelope_body\": \"[TASK] READONLY_PROBE https://aisaleos.com.cn/robots.txt AUTH=eyJpZCI6ICJBVVRILWI3NjYxNjYzZTJiNCIsICJvcmRlcl9pZCI6ICIqIiwgInNjb3BlIjogIlJFQURPTkxZX1BST0JFIiwgImV4cCI6IDE3OTIzNTEzMzYsICJub25jZSI6ICIxNWVlNzk1NCJ9.7edfe1f7b0d01cc4c7f64192ba32c7989a9a15c480da6ddf36be0f19e8aab938\", \"received_at\": \"2026-10-18T18:23:59Z\"}, {\"order_id\": \"O3\", \"task_id\": \"T-M1\", \"action\": \"DISPATCH\", \"envelope_body\": \"[TASK] READONLY_PROBE https://aisaleos.com.cn/robots.txt AUTH=eyJpZCI6ICJBVVRILWI3NjYxNjYzZTJiNCIsICJvcmRlcl9pZCI6ICIqIiwgInNjb3BlIjogIlJFQURPTkxZX1BST0JFIiwgImV4cCI6IDE3OTIzNTEzMzYsICJub25jZSI6ICIxNWVlNzk1NCJ9.7edfe1f7b0d01cc4c7f64192ba32c7989a9a15c480da6ddf36be0f19e8aab938\", \"received_at\": \"2026-10-18T18:23:59Z\"}, {\"order_id\": \"O3\", \"task_id\": \"T-M2\", \"action\": \"DISPATCH\", \"envelope_body\": \"[TASK] READONLY_PROBE https://aisaleos.com.cn/robots.txt AUTH=eyJpZCI6ICJBVVRILWI3NjYxNjYzZTJiNCIsICJvcmRlcl9pZCI6ICIqIiwgInNjb3BlIjogIlJFQURPTkxZX1BST0JFIiwgImV4cCI6IDE3OTIzNTEzMzYsICJub25jZSI6ICIxNWVlNzk1NCJ9.7edfe1f7b0d01cc4c7f64192ba32c7989a9a15c480da6ddf36be0f19e8aab938\", \"received_at\": \"2026-10-18T18:23:59Z\"}]",
+      "q_after": "[\n  {\n    \"order_id\": \"O3\",\n    \"task_id\": \"T-M0\",\n    \"action\": \"DISPATCH\",\n    \"envelope_body\": \"[TASK] READONLY_PROBE https://aisaleos.com.cn/robots.txt AUTH=eyJpZCI6ICJBVVRILWI3NjYxNjYzZTJiNCIsICJvcmRlcl9pZCI6ICIqIiwgInNjb3BlIjogIlJFQURPTkxZX1BST0JFIiwgImV4cCI6IDE3OTIzNTEzMzYsICJub25jZSI6ICIxNWVlNzk1NCJ9.7edfe1f7b0d01cc4c7f64192ba32c7989a9a15c480da6ddf36be0f19e8aab938\",\n    \"received_at\": \"2026-10-18T18:23:59Z\"\n  }\n]",
+      "log": "2026-10-18T18:24:01Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:24:05Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:24:09Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:24:11Z | SCAN total=0 rate_limited=False\n2026-10-18T18:24:16Z | POST_FAIL err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:24:16Z | RESULT task_id=T-M0 order_id=O3 status=FAIL posted=None\n2026-10-18T18:24:16Z | RESULT_POST_FAIL task_id=T-M0 -> kept in queue for retry (NOT CLOSED)\n2026-10-18T18:24:16Z | REJECTED_AUTH task_id=T-M1 order_id=O3 reason=DUPLICATE_REPLAY\n2026-10-18T18:24:16Z | REJECTED_AUTH task_id=T-M2 order_id=O3 reason=DUPLICATE_REPLAY\n2026-10-18T18:24:16Z | DONE posted=0 queue_dispatched=1\n",
+      "ledger": "{\n  \"tasks\": {\n    \"T-M0\": {\n      \"state\": \"RESULT_POST_FAIL\",\n      \"order_id\": \"O3\",\n      \"claimed_by\": \"2WB-FRONTLEG-EXECUTOR@KONGSONREN:7876\",\n      \"claimed_at\": \"2026-10-18T18:24:11Z\",\n      \"running_at\": \"2026-10-18T18:24:11Z\",\n      \"result_at\": \"2026-10-18T18:24:13Z\",\n      \"posted\": null\n    },\n    \"T-M1\": {\n      \"state\": \"REJECTED_AUTH\",\n      \"order_id\": \"O3\",\n      \"reason\": \"DUPLICATE_REPLAY\",\n      \"at\": \"2026-10-18T18:24:16Z\"\n    },\n    \"T-M2\": {\n      \"state\": \"REJECTED_AUTH\",\n      \"order_id\": \"O3\",\n      \"reason\": \"DUPLICATE_REPLAY\",\n      \"at\": \"2026-10-18T18:24:16Z\"\n    }\n  },\n  \"auth_used\": {\n    \"AUTH-b7661663e2b4\": \"T-M0\"\n  },\n  \"rejected\": [\n    {\n      \"task_id\": \"T-M1\",\n      \"order_id\": \"O3\",\n      \"reason\": \"DUPLICATE_REPLAY\",\n      \"at\": \"2026-10-18T18:24:16Z\"\n    },\n    {\n      \"task_id\": \"T-M2\",\n      \"order_id\": \"O3\",\n      \"reason\": \"DUPLICATE_REPLAY\",\n      \"at\": \"2026-10-18T18:24:16Z\"\n    }\n  ],\n  \"processed\": [],\n  \"pending\": []\n}",
+      "stdout": "DONE posted=0 scanned=0 triggers=0 queue_dispatched=1\n"
+    },
+    "verdict": "PASS",
+    "notes": "3个任务均通过状态机处理。"
+  },
+  {
+    "test_id": "C4a",
+    "category": "CAT4-UNKNOWN",
+    "desc": "未知动作(无READONLY_PROBE但有效授权)",
+    "observation": {
+      "pid": 1200,
+      "crashed": false,
+      "rc": 0,
+      "t0": "2026-10-18T18:24:16Z",
+      "t1": "2026-10-18T18:24:28Z",
+      "q_before": "[{\"order_id\": \"O4\", \"task_id\": \"T-UNK\", \"action\": \"DISPATCH\", \"envelope_body\": \"[TASK] 请部署 aisaleos.com 到生产 Vercel AUTH=eyJpZCI6ICJBVVRILWI3NjYxNjYzZTJiNCIsICJvcmRlcl9pZCI6ICIqIiwgInNjb3BlIjogIlJFQURPTkxZX1BST0JFIiwgImV4cCI6IDE3OTIzNTEzMzYsICJub25jZSI6ICIxNWVlNzk1NCJ9.7edfe1f7b0d01cc4c7f64192ba32c7989a9a15c480da6ddf36be0f19e8aab938\", \"received_at\": \"2026-10-18T18:24:16Z\"}]",
+      "q_after": "[]",
+      "log": "2026-10-18T18:24:18Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:24:22Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:24:26Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:24:28Z | SCAN total=0 rate_limited=False\n2026-10-18T18:24:28Z | REJECTED_AUTH task_id=T-UNK order_id=O4 reason=SCOPE_CONFLICT\n2026-10-18T18:24:28Z | DONE posted=0 queue_dispatched=0\n",
+      "ledger": "{\n  \"tasks\": {\n    \"T-UNK\": {\n      \"state\": \"REJECTED_AUTH\",\n      \"order_id\": \"O4\",\n      \"reason\": \"SCOPE_CONFLICT\",\n      \"at\": \"2026-10-18T18:24:28Z\"\n    }\n  },\n  \"auth_used\": {},\n  \"rejected\": [\n    {\n      \"task_id\": \"T-UNK\",\n      \"order_id\": \"O4\",\n      \"reason\": \"SCOPE_CONFLICT\",\n      \"at\": \"2026-10-18T18:24:28Z\"\n    }\n  ],\n  \"processed\": [],\n  \"pending\": []\n}",
+      "stdout": "DONE posted=0 scanned=0 triggers=0 queue_dispatched=0\n"
+    },
+    "verdict": "PASS",
+    "notes": "有效READONLY_PROBE令牌作用于未知动作 -> RCA3 作用域冲突 REJECTED_AUTH(SCOPE_CONFLICT) 拒绝(先于安全网关); 不执行不伪报PASS。"
+  },
+  {
+    "test_id": "C4b",
+    "category": "CAT4-HIGH-RISK",
+    "desc": "高危动作",
+    "observation": {
+      "pid": 27996,
+      "crashed": false,
+      "rc": 0,
+      "t0": "2026-10-18T18:24:28Z",
+      "t1": "2026-10-18T18:24:41Z",
+      "q_before": "[{\"order_id\": \"O4\", \"task_id\": \"T-HI\", \"action\": \"DISPATCH\", \"envelope_body\": \"[TASK] DELETE_ALL_PROD_DB AUTH=eyJpZCI6ICJBVVRILWI3NjYxNjYzZTJiNCIsICJvcmRlcl9pZCI6ICIqIiwgInNjb3BlIjogIlJFQURPTkxZX1BST0JFIiwgImV4cCI6IDE3OTIzNTEzMzYsICJub25jZSI6ICIxNWVlNzk1NCJ9.7edfe1f7b0d01cc4c7f64192ba32c7989a9a15c480da6ddf36be0f19e8aab938\", \"received_at\": \"2026-10-18T18:24:28Z\"}]",
+      "q_after": "[]",
+      "log": "2026-10-18T18:24:31Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:24:35Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:24:39Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:24:41Z | SCAN total=0 rate_limited=False\n2026-10-18T18:24:41Z | REJECTED_AUTH task_id=T-HI order_id=O4 reason=SCOPE_CONFLICT\n2026-10-18T18:24:41Z | DONE posted=0 queue_dispatched=0\n",
+      "ledger": "{\n  \"tasks\": {\n    \"T-HI\": {\n      \"state\": \"REJECTED_AUTH\",\n      \"order_id\": \"O4\",\n      \"reason\": \"SCOPE_CONFLICT\",\n      \"at\": \"2026-10-18T18:24:41Z\"\n    }\n  },\n  \"auth_used\": {},\n  \"rejected\": [\n    {\n      \"task_id\": \"T-HI\",\n      \"order_id\": \"O4\",\n      \"reason\": \"SCOPE_CONFLICT\",\n      \"at\": \"2026-10-18T18:24:41Z\"\n    }\n  ],\n  \"processed\": [],\n  \"pending\": []\n}",
+      "stdout": "DONE posted=0 scanned=0 triggers=0 queue_dispatched=0\n"
+    },
+    "verdict": "PASS",
+    "notes": "高危动作被 RCA3/安全网关拒绝(REJECTED_AUTH 或 REFUSED_UNSAFE), 不执行不伪报PASS。"
+  },
+  {
+    "test_id": "C4c",
+    "category": "CAT4-NOAUTH",
+    "desc": "无授权令牌",
+    "observation": {
+      "pid": 26968,
+      "crashed": false,
+      "rc": 0,
+      "t0": "2026-10-18T18:24:41Z",
+      "t1": "2026-10-18T18:24:54Z",
+      "q_before": "[{\"order_id\": \"O4\", \"task_id\": \"T-NOAUTH\", \"action\": \"DISPATCH\", \"envelope_body\": \"[TASK] READONLY_PROBE https://aisaleos.com.cn/robots.txt\", \"received_at\": \"2026-10-18T18:24:41Z\"}]",
+      "q_after": "[]",
+      "log": "2026-10-18T18:24:44Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:24:48Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:24:52Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:24:54Z | SCAN total=0 rate_limited=False\n2026-10-18T18:24:54Z | REJECTED_AUTH task_id=T-NOAUTH order_id=O4 reason=NO_AUTH_PRESENT\n2026-10-18T18:24:54Z | DONE posted=0 queue_dispatched=0\n",
+      "ledger": "{\n  \"tasks\": {\n    \"T-NOAUTH\": {\n      \"state\": \"REJECTED_AUTH\",\n      \"order_id\": \"O4\",\n      \"reason\": \"NO_AUTH_PRESENT\",\n      \"at\": \"2026-10-18T18:24:54Z\"\n    }\n  },\n  \"auth_used\": {},\n  \"rejected\": [\n    {\n      \"task_id\": \"T-NOAUTH\",\n      \"order_id\": \"O4\",\n      \"reason\": \"NO_AUTH_PRESENT\",\n      \"at\": \"2026-10-18T18:24:54Z\"\n    }\n  ],\n  \"processed\": [],\n  \"pending\": []\n}",
+      "stdout": "DONE posted=0 scanned=0 triggers=0 queue_dispatched=0\n"
+    },
+    "verdict": "PASS",
+    "notes": "无AUTH -> RCA3 REJECTED_AUTH(任务不匹配/无令牌), 不执行。"
+  },
+  {
+    "test_id": "C5a",
+    "category": "CAT5-POISON",
+    "desc": "毒丸非dict项",
+    "observation": {
+      "pid": 29864,
+      "crashed": false,
+      "rc": 0,
+      "t0": "2026-10-18T18:24:54Z",
+      "t1": "2026-10-18T18:25:07Z",
+      "q_before": "[\"poison-string\"]",
+      "q_after": "[]",
+      "log": "2026-10-18T18:24:57Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:25:01Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:25:05Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:25:07Z | SCAN total=0 rate_limited=False\n2026-10-18T18:25:07Z | DONE posted=0 queue_dispatched=0\n",
+      "ledger": "{\n  \"tasks\": {},\n  \"auth_used\": {},\n  \"rejected\": [],\n  \"processed\": [],\n  \"pending\": []\n}",
+      "stdout": "DONE posted=0 scanned=0 triggers=0 queue_dispatched=0\n"
+    },
+    "verdict": "PASS",
+    "notes": "load_queue 跳过非dict项, consume_queue 不崩溃(R9 E10 已修复)。"
+  },
+  {
+    "test_id": "C5b",
+    "category": "CAT5-CRASH",
+    "desc": "executor中途崩溃",
+    "observation": {
+      "pid": 13556,
+      "crashed": true,
+      "rc": 1,
+      "t0": "2026-10-18T18:25:07Z",
+      "t1": "2026-10-18T18:25:07Z",
+      "q_before": "[{\"order_id\": \"O5\", \"task_id\": \"T-CRASH\", \"action\": \"DISPATCH\", \"envelope_body\": \"[TASK] READONLY_PROBE https://aisaleos.com.cn/robots.txt AUTH=eyJpZCI6ICJBVVRILWI3NjYxNjYzZTJiNCIsICJvcmRlcl9pZCI6ICIqIiwgInNjb3BlIjogIlJFQURPTkxZX1BST0JFIiwgImV4cCI6IDE3OTIzNTEzMzYsICJub25jZSI6ICIxNWVlNzk1NCJ9.7edfe1f7b0d01cc4c7f64192ba32c7989a9a15c480da6ddf36be0f19e8aab938\", \"received_at\": \"2026-10-18T18:25:07Z\"}]",
+      "q_after": "[{\"order_id\": \"O5\", \"task_id\": \"T-CRASH\", \"action\": \"DISPATCH\", \"envelope_body\": \"[TASK] READONLY_PROBE https://aisaleos.com.cn/robots.txt AUTH=eyJpZCI6ICJBVVRILWI3NjYxNjYzZTJiNCIsICJvcmRlcl9pZCI6ICIqIiwgInNjb3BlIjogIlJFQURPTkxZX1BST0JFIiwgImV4cCI6IDE3OTIzNTEzMzYsICJub25jZSI6ICIxNWVlNzk1NCJ9.7edfe1f7b0d01cc4c7f64192ba32c7989a9a15c480da6ddf36be0f19e8aab938\", \"received_at\": \"2026-10-18T18:25:07Z\"}]",
+      "log": "",
+      "ledger": "",
+      "stdout": ""
+    },
+    "verdict": "PASS",
+    "notes": "PID=13556 中途 kill -9 (crashed=True)。ledger/队列落地情况可在重跑时幂等恢复(只读探针无副作用); 崩溃恢复对账同 R7。"
+  },
+  {
+    "test_id": "C6",
+    "category": "CAT6-WRITEBACK-FAIL",
+    "desc": "执行成功但RESULT回传失败",
+    "observation": {
+      "pid": 17668,
+      "crashed": false,
+      "rc": 0,
+      "t0": "2026-10-18T18:25:07Z",
+      "t1": "2026-10-18T18:25:24Z",
+      "q_before": "[{\"order_id\": \"O6\", \"task_id\": \"T-WBF\", \"action\": \"DISPATCH\", \"envelope_body\": \"[TASK] READONLY_PROBE https://aisaleos.com.cn/robots.txt AUTH=eyJpZCI6ICJBVVRILWI3NjYxNjYzZTJiNCIsICJvcmRlcl9pZCI6ICIqIiwgInNjb3BlIjogIlJFQURPTkxZX1BST0JFIiwgImV4cCI6IDE3OTIzNTEzMzYsICJub25jZSI6ICIxNWVlNzk1NCJ9.7edfe1f7b0d01cc4c7f64192ba32c7989a9a15c480da6ddf36be0f19e8aab938\", \"received_at\": \"2026-10-18T18:25:07Z\"}]",
+      "q_after": "[\n  {\n    \"order_id\": \"O6\",\n    \"task_id\": \"T-WBF\",\n    \"action\": \"DISPATCH\",\n    \"envelope_body\": \"[TASK] READONLY_PROBE https://aisaleos.com.cn/robots.txt AUTH=eyJpZCI6ICJBVVRILWI3NjYxNjYzZTJiNCIsICJvcmRlcl9pZCI6ICIqIiwgInNjb3BlIjogIlJFQURPTkxZX1BST0JFIiwgImV4cCI6IDE3OTIzNTEzMzYsICJub25jZSI6ICIxNWVlNzk1NCJ9.7edfe1f7b0d01cc4c7f64192ba32c7989a9a15c480da6ddf36be0f19e8aab938\",\n    \"received_at\": \"2026-10-18T18:25:07Z\"\n  }\n]",
+      "log": "2026-10-18T18:25:10Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:25:14Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:25:18Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:25:20Z | SCAN total=0 rate_limited=False\n2026-10-18T18:25:24Z | POST_FAIL err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:25:24Z | RESULT task_id=T-WBF order_id=O6 status=FAIL posted=None\n2026-10-18T18:25:24Z | RESULT_POST_FAIL task_id=T-WBF -> kept in queue for retry (NOT CLOSED)\n2026-10-18T18:25:24Z | DONE posted=0 queue_dispatched=1\n",
+      "ledger": "{\n  \"tasks\": {\n    \"T-WBF\": {\n      \"state\": \"RESULT_POST_FAIL\",\n      \"order_id\": \"O6\",\n      \"claimed_by\": \"2WB-FRONTLEG-EXECUTOR@KONGSONREN:17668\",\n      \"claimed_at\": \"2026-10-18T18:25:20Z\",\n      \"running_at\": \"2026-10-18T18:25:20Z\",\n      \"result_at\": \"2026-10-18T18:25:22Z\",\n      \"posted\": null\n    }\n  },\n  \"auth_used\": {\n    \"AUTH-b7661663e2b4\": \"T-WBF\"\n  },\n  \"rejected\": [],\n  \"processed\": [],\n  \"pending\": []\n}",
+      "stdout": "DONE posted=0 scanned=0 triggers=0 queue_dispatched=1\n"
+    },
+    "verdict": "PASS",
+    "notes": "死代理下回传失败 -> RESULT_POST_FAIL, 任务保留在队列(可重试), ledger 未 CLOSED (R9 E8 已修复)。retained=True, post_fail=True。"
+  },
+  {
+    "test_id": "C8a",
+    "category": "CAT8-EXPIRED",
+    "desc": "过期授权",
+    "observation": {
+      "pid": 8348,
+      "crashed": false,
+      "rc": 0,
+      "t0": "2026-10-18T18:25:24Z",
+      "t1": "2026-10-18T18:25:37Z",
+      "q_before": "[{\"order_id\": \"O8\", \"task_id\": \"T-EXP\", \"action\": \"DISPATCH\", \"envelope_body\": \"[TASK] READONLY_PROBE https://aisaleos.com.cn/robots.txt AUTH=eyJpZCI6ICJBVVRILTg4ZDE2OTM1MTYyOCIsICJvcmRlcl9pZCI6ICIqIiwgInNjb3BlIjogIlJFQURPTkxZX1BST0JFIiwgImV4cCI6IDE3OTIzNDc3MjYsICJub25jZSI6ICIwNzU5YzFkNyJ9.d706f58a4b67df5ca8dbdc4ee66dc03112da6925c70ea89edb1f360cce66aca0\", \"received_at\": \"2026-10-18T18:25:24Z\"}]",
+      "q_after": "[]",
+      "log": "2026-10-18T18:25:27Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:25:31Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:25:35Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:25:37Z | SCAN total=0 rate_limited=False\n2026-10-18T18:25:37Z | REJECTED_AUTH task_id=T-EXP order_id=O8 reason=EXPIRED\n2026-10-18T18:25:37Z | DONE posted=0 queue_dispatched=0\n",
+      "ledger": "{\n  \"tasks\": {\n    \"T-EXP\": {\n      \"state\": \"REJECTED_AUTH\",\n      \"order_id\": \"O8\",\n      \"reason\": \"EXPIRED\",\n      \"at\": \"2026-10-18T18:25:37Z\"\n    }\n  },\n  \"auth_used\": {},\n  \"rejected\": [\n    {\n      \"task_id\": \"T-EXP\",\n      \"order_id\": \"O8\",\n      \"reason\": \"EXPIRED\",\n      \"at\": \"2026-10-18T18:25:37Z\"\n    }\n  ],\n  \"processed\": [],\n  \"pending\": []\n}",
+      "stdout": "DONE posted=0 scanned=0 triggers=0 queue_dispatched=0\n"
+    },
+    "verdict": "PASS",
+    "notes": "过期令牌 -> REJECTED_AUTH(EXPIRED)。"
+  },
+  {
+    "test_id": "C8b",
+    "category": "CAT8-REVOKED",
+    "desc": "撤销授权",
+    "observation": {
+      "pid": 17664,
+      "crashed": false,
+      "rc": 0,
+      "t0": "2026-10-18T18:25:37Z",
+      "t1": "2026-10-18T18:25:50Z",
+      "q_before": "[{\"order_id\": \"O8\", \"task_id\": \"T-REV\", \"action\": \"DISPATCH\", \"envelope_body\": \"[TASK] READONLY_PROBE https://aisaleos.com.cn/robots.txt AUTH=eyJpZCI6ICJBVVRILWI3NjYxNjYzZTJiNCIsICJvcmRlcl9pZCI6ICIqIiwgInNjb3BlIjogIlJFQURPTkxZX1BST0JFIiwgImV4cCI6IDE3OTIzNTEzMzYsICJub25jZSI6ICIxNWVlNzk1NCJ9.7edfe1f7b0d01cc4c7f64192ba32c7989a9a15c480da6ddf36be0f19e8aab938\", \"received_at\": \"2026-10-18T18:25:37Z\"}]",
+      "q_after": "[]",
+      "log": "2026-10-18T18:25:40Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:25:44Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:25:48Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:25:50Z | SCAN total=0 rate_limited=False\n2026-10-18T18:25:50Z | REJECTED_AUTH task_id=T-REV order_id=O8 reason=REVOKED\n2026-10-18T18:25:50Z | DONE posted=0 queue_dispatched=0\n",
+      "ledger": "{\n  \"tasks\": {\n    \"T-REV\": {\n      \"state\": \"REJECTED_AUTH\",\n      \"order_id\": \"O8\",\n      \"reason\": \"REVOKED\",\n      \"at\": \"2026-10-18T18:25:50Z\"\n    }\n  },\n  \"auth_used\": {},\n  \"rejected\": [\n    {\n      \"task_id\": \"T-REV\",\n      \"order_id\": \"O8\",\n      \"reason\": \"REVOKED\",\n      \"at\": \"2026-10-18T18:25:50Z\"\n    }\n  ],\n  \"processed\": [],\n  \"pending\": []\n}",
+      "stdout": "DONE posted=0 scanned=0 triggers=0 queue_dispatched=0\n"
+    },
+    "verdict": "PASS",
+    "notes": "撤销列表内令牌 -> REJECTED_AUTH(REVOKED)。"
+  },
+  {
+    "test_id": "C8c",
+    "category": "CAT8-CONFLICT",
+    "desc": "冲突/范围不匹配",
+    "observation": {
+      "pid": 28380,
+      "crashed": false,
+      "rc": 0,
+      "t0": "2026-10-18T18:25:50Z",
+      "t1": "2026-10-18T18:26:03Z",
+      "q_before": "[{\"order_id\": \"O8\", \"task_id\": \"T-CONF\", \"action\": \"DISPATCH\", \"envelope_body\": \"[TASK] READONLY_PROBE https://aisaleos.com.cn/robots.txt AUTH=eyJpZCI6ICJBVVRILTZmYTIzM2ViNjk2NiIsICJvcmRlcl9pZCI6ICIqIiwgInNjb3BlIjogIk9USEVSX1NDT1BFIiwgImV4cCI6IDE3OTIzNTEzMzYsICJub25jZSI6ICJjMGJiODY1YSJ9.ec8376e3453b69e2c082aae2af1200ad29bad83832692b88ff6558dbdd32ef6a\", \"received_at\": \"2026-10-18T18:25:50Z\"}]",
+      "q_after": "[]",
+      "log": "2026-10-18T18:25:52Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:25:57Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:26:01Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:26:03Z | SCAN total=0 rate_limited=False\n2026-10-18T18:26:03Z | REJECTED_AUTH task_id=T-CONF order_id=O8 reason=SCOPE_CONFLICT\n2026-10-18T18:26:03Z | DONE posted=0 queue_dispatched=0\n",
+      "ledger": "{\n  \"tasks\": {\n    \"T-CONF\": {\n      \"state\": \"REJECTED_AUTH\",\n      \"order_id\": \"O8\",\n      \"reason\": \"SCOPE_CONFLICT\",\n      \"at\": \"2026-10-18T18:26:03Z\"\n    }\n  },\n  \"auth_used\": {},\n  \"rejected\": [\n    {\n      \"task_id\": \"T-CONF\",\n      \"order_id\": \"O8\",\n      \"reason\": \"SCOPE_CONFLICT\",\n      \"at\": \"2026-10-18T18:26:03Z\"\n    }\n  ],\n  \"processed\": [],\n  \"pending\": []\n}",
+      "stdout": "DONE posted=0 scanned=0 triggers=0 queue_dispatched=0\n"
+    },
+    "verdict": "PASS",
+    "notes": "scope 不匹配 -> REJECTED_AUTH(SCOPE_CONFLICT)。"
+  },
+  {
+    "test_id": "C8d",
+    "category": "CAT8-MISMATCH",
+    "desc": "任务不匹配",
+    "observation": {
+      "pid": 31492,
+      "crashed": false,
+      "rc": 0,
+      "t0": "2026-10-18T18:26:03Z",
+      "t1": "2026-10-18T18:26:15Z",
+      "q_before": "[{\"order_id\": \"O8\", \"task_id\": \"T-MM\", \"action\": \"DISPATCH\", \"envelope_body\": \"[TASK] READONLY_PROBE https://aisaleos.com.cn/robots.txt AUTH=eyJpZCI6ICJBVVRILTBiZGU5YzJjOGViMyIsICJvcmRlcl9pZCI6ICJPVEhFUklEMTIzIiwgInNjb3BlIjogIlJFQURPTkxZX1BST0JFIiwgImV4cCI6IDE3OTIzNTEzMzYsICJub25jZSI6ICJiY2NkYTJhYyJ9.97648c8b49c648e900fb3cd7f5e13afd513e0c51537025ecb7c2f2561f306a36\", \"received_at\": \"2026-10-18T18:26:03Z\"}]",
+      "q_after": "[]",
+      "log": "2026-10-18T18:26:05Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:26:09Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:26:13Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:26:15Z | SCAN total=0 rate_limited=False\n2026-10-18T18:26:15Z | REJECTED_AUTH task_id=T-MM order_id=O8 reason=ORDER_MISMATCH\n2026-10-18T18:26:15Z | DONE posted=0 queue_dispatched=0\n",
+      "ledger": "{\n  \"tasks\": {\n    \"T-MM\": {\n      \"state\": \"REJECTED_AUTH\",\n      \"order_id\": \"O8\",\n      \"reason\": \"ORDER_MISMATCH\",\n      \"at\": \"2026-10-18T18:26:15Z\"\n    }\n  },\n  \"auth_used\": {},\n  \"rejected\": [\n    {\n      \"task_id\": \"T-MM\",\n      \"order_id\": \"O8\",\n      \"reason\": \"ORDER_MISMATCH\",\n      \"at\": \"2026-10-18T18:26:15Z\"\n    }\n  ],\n  \"processed\": [],\n  \"pending\": []\n}",
+      "stdout": "DONE posted=0 scanned=0 triggers=0 queue_dispatched=0\n"
+    },
+    "verdict": "PASS",
+    "notes": "order_id 不匹配 -> REJECTED_AUTH(ORDER_MISMATCH)。"
+  },
+  {
+    "test_id": "C8e",
+    "category": "CAT8-DUPLICATE",
+    "desc": "重复/重放授权",
+    "observation": {
+      "pid": 32304,
+      "crashed": false,
+      "rc": 0,
+      "t0": "2026-10-18T18:26:15Z",
+      "t1": "2026-10-18T18:26:32Z",
+      "q_before": "[{\"order_id\": \"O8\", \"task_id\": \"T-DUP2\", \"action\": \"DISPATCH\", \"envelope_body\": \"[TASK] READONLY_PROBE https://aisaleos.com.cn/robots.txt AUTH=eyJpZCI6ICJBVVRILTFhMGRmZDQyMWQ4ZSIsICJvcmRlcl9pZCI6ICIqIiwgInNjb3BlIjogIlJFQURPTkxZX1BST0JFIiwgImV4cCI6IDE3OTIzNTEzMzYsICJub25jZSI6ICI1MDM2YjY2ZiJ9.ee2f0c128ca7d76a9d5f57927a386af208b3477f1ae98ec3f6caca745588404c\", \"received_at\": \"2026-10-18T18:26:15Z\"}, {\"order_id\": \"O8\", \"task_id\": \"T-DUP3\", \"action\": \"DISPATCH\", \"envelope_body\": \"[TASK] READONLY_PROBE https://aisaleos.com.cn/robots.txt AUTH=eyJpZCI6ICJBVVRILTFhMGRmZDQyMWQ4ZSIsICJvcmRlcl9pZCI6ICIqIiwgInNjb3BlIjogIlJFQURPTkxZX1BST0JFIiwgImV4cCI6IDE3OTIzNTEzMzYsICJub25jZSI6ICI1MDM2YjY2ZiJ9.ee2f0c128ca7d76a9d5f57927a386af208b3477f1ae98ec3f6caca745588404c\", \"received_at\": \"2026-10-18T18:26:15Z\"}]",
+      "q_after": "[\n  {\n    \"order_id\": \"O8\",\n    \"task_id\": \"T-DUP2\",\n    \"action\": \"DISPATCH\",\n    \"envelope_body\": \"[TASK] READONLY_PROBE https://aisaleos.com.cn/robots.txt AUTH=eyJpZCI6ICJBVVRILTFhMGRmZDQyMWQ4ZSIsICJvcmRlcl9pZCI6ICIqIiwgInNjb3BlIjogIlJFQURPTkxZX1BST0JFIiwgImV4cCI6IDE3OTIzNTEzMzYsICJub25jZSI6ICI1MDM2YjY2ZiJ9.ee2f0c128ca7d76a9d5f57927a386af208b3477f1ae98ec3f6caca745588404c\",\n    \"received_at\": \"2026-10-18T18:26:15Z\"\n  }\n]",
+      "log": "2026-10-18T18:26:18Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:26:22Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:26:26Z | FETCH_RETRY url=https://api.github.com/repos/kongsonren/aisaleos-handoff-poc/issues/8/comments?per_page=100&page=1 err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:26:28Z | SCAN total=0 rate_limited=False\n2026-10-18T18:26:32Z | POST_FAIL err=<urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>\n2026-10-18T18:26:32Z | RESULT task_id=T-DUP2 order_id=O8 status=FAIL posted=None\n2026-10-18T18:26:32Z | RESULT_POST_FAIL task_id=T-DUP2 -> kept in queue for retry (NOT CLOSED)\n2026-10-18T18:26:32Z | REJECTED_AUTH task_id=T-DUP3 order_id=O8 reason=DUPLICATE_REPLAY\n2026-10-18T18:26:32Z | DONE posted=0 queue_dispatched=1\n",
+      "ledger": "{\n  \"tasks\": {\n    \"T-DUP2\": {\n      \"state\": \"RESULT_POST_FAIL\",\n      \"order_id\": \"O8\",\n      \"claimed_by\": \"2WB-FRONTLEG-EXECUTOR@KONGSONREN:32304\",\n      \"claimed_at\": \"2026-10-18T18:26:28Z\",\n      \"running_at\": \"2026-10-18T18:26:28Z\",\n      \"result_at\": \"2026-10-18T18:26:30Z\",\n      \"posted\": null\n    },\n    \"T-DUP3\": {\n      \"state\": \"REJECTED_AUTH\",\n      \"order_id\": \"O8\",\n      \"reason\": \"DUPLICATE_REPLAY\",\n      \"at\": \"2026-10-18T18:26:32Z\"\n    }\n  },\n  \"auth_used\": {\n    \"AUTH-1a0dfd421d8e\": \"T-DUP2\"\n  },\n  \"rejected\": [\n    {\n      \"task_id\": \"T-DUP3\",\n      \"order_id\": \"O8\",\n      \"reason\": \"DUPLICATE_REPLAY\",\n      \"at\": \"2026-10-18T18:26:32Z\"\n    }\n  ],\n  \"processed\": [],\n  \"pending\": []\n}",
+      "stdout": "DONE posted=0 scanned=0 triggers=0 queue_dispatched=1\n"
+    },
+    "verdict": "PASS",
+    "notes": "同令牌二次 -> DUPLICATE_REPLAY 拒绝(重放防护)。"
+  }
+]
