@@ -17,9 +17,9 @@ r10-candidate/
 │   ├── 2WB_inbox_watcher.ps1           # SHA f422509888f5a388… 9748B
 │   └── frontleg_executor.py            # SHA 4319d5435eed472a… 13426B
 ├── PROD_CANDIDATE/                     # R10 整合候选（已隔离验收）
-│   ├── 2WB_inbox_watcher.ps1           # SHA 898cfd06288b7d4a… 9625B
+│   ├── 2WB_inbox_watcher.ps1           # SHA efe5d17eb9e75d9… 11612B（V5 修复：进程内凭据获取）
 │   ├── frontleg_executor.py            # SHA 8e17832827dd2317… 20543B
-│   ├── 2WB_pat_bridge.py               # SHA 92b51b03836e2b03… 1335B（沙箱凭据桥，非生产件）
+│   ├── 2WB_pat_bridge.py               # SHA 864b97d3c150fbd4… 2742B（V5：仅 --check 不打印明文诊断工具）
 │   ├── DIFF_BASELINE_TO_CANDIDATE.md   # 字节级 Unified Diff（787行）
 │   ├── SHA256_MANIFEST.md              # 机器 SHA256 清单
 │   └── CANDIDATE_PACKAGE.md            # P0-D 候选包+生产准入申请(PENDING_KR_GATE)
@@ -41,9 +41,9 @@ r10-candidate/
 |---|---|---|---|
 | PROD_BASELINE/2WB_inbox_watcher.ps1 | 生产原 watcher | f422509888f5a388 | 9748B |
 | PROD_BASELINE/frontleg_executor.py | 生产原 executor | 4319d5435eed472a | 13426B |
-| PROD_CANDIDATE/2WB_inbox_watcher.ps1 | 候选 watcher | 898cfd06288b7d4a | 9625B |
+| PROD_CANDIDATE/2WB_inbox_watcher.ps1 | 候选 watcher | efe5d17eb9e75d9 | 11612B |
 | PROD_CANDIDATE/frontleg_executor.py | 候选 executor | 8e17832827dd2317 | 20543B |
-| PROD_CANDIDATE/2WB_pat_bridge.py | 沙箱凭据桥(非生产) | 92b51b03836e2b03 | 1335B |
+| PROD_CANDIDATE/2WB_pat_bridge.py | 不打印明文诊断工具 | 864b97d3c150fbd4 | 2742B |
 
 > 续做前会话摘要所记候选 SHA 与磁盘不符，但文件大小完全一致且 mtime 早于测试；以磁盘 REAL SHA 为权威。
 
@@ -76,22 +76,19 @@ r10-candidate/
 | V2 | REAL_ISOLATED_E2E | PASS（17/17） |
 | V3 | FAULT_RECOVERY | PASS |
 | V4 | AUTHORIZATION_GUARD | PASS |
-| V5 | CREDENTIAL_SECURITY | **BLOCKED**（见下） |
+| V5 | CREDENTIAL_SECURITY | **PASS（V5 修复令已落地）** |
 | V6 | ROLLBACK_READINESS | PASS |
 | V7 | INDEPENDENT_REVIEW | PENDING_1WB_REVIEW |
 | V8 | PRODUCTION_ADMISSION_REQUEST | PENDING_KR_GATE |
 
-**V5 BLOCKED（KR_GATE 阻塞项）**：候选 watcher 凭据获取机制偏离生产原版——移除 `Add-Type CredRead`，改为 `env_or_python_bridge`；且 `2WB_pat_bridge.py` 明文 `print(PAT)` 到 stdout，**不得作生产凭据通道**。需 KR 就二选一裁决：
-- (A) 硬化桥：禁止明文打印，改为仅返回调用方内存变量；
-- (B) 生产宿主回退 `Add-Type CredRead`，仅沙箱测试用候选+watcher-bridge。
-**V5 未决前，整体不得进入生产（八裁决不得相互抵销）。**
+**V5 PASS（2026-10-19 V5 修复令 Plan A 落地）**：原凭据链唯一泄漏点（watcher 经 `(& python 2WB_pat_bridge.py 2>$null)` 捕获 stdout 明文 PAT）已废除。修复后 watcher 改为**进程内凭据获取**（测试钩子 > 环境变量 GITHUB_PAT > Windows Credential Manager P/Invoke `CredReadW`，UTF-8 解码匹配既有 python bridge 行为）；`2WB_pat_bridge.py` 降级为不打印明文的独立诊断工具（`--check` 仅输出 `CRED_STATUS=FOUND TOKEN_LEN=N`）。PAT 绝不写 stdout/stderr/日志/命令行/仓库/测试证据/异常报告；测试仅用 `R10_TEST_FAKE_PAT` 模拟凭据。V5 三用例 3/3 PASS（V5a-1/V5a-2/V5b），R10 executor 回归 17 cases（16 PASS + 1 SKIP 真实 E2E）。前腿初判 PASS，待 1WB 独立审查。
 
 ---
 
 ## 六、交果汇总（PASS / FAIL / BLOCKED）
 
 - 隔离验收：**PASS（17/17）**
-- 凭据安全：**BLOCKED（V5，待 KR_GATE 裁决）**
+- 凭据安全：**PASS（V5 修复令 Plan A 落地，3/3 PASS，待 1WB 独立审查）**
 - 后腿独立审查：**PENDING_1WB_REVIEW**
 - 生产准入：**PENDING_KR_GATE**
 - 生产部署 / HOLD：**未授权 / HOLD 维持**

@@ -785,3 +785,58 @@ if adv.CredReadW("git:https://github.com", 1, 0, ctypes.byref(p)):
     print(tok)
 else:
     print("")
+
+
+================================================================================
+## V5 凭据安全修复增补 (2026-10-19) — Plan A 最终实现：进程内凭据获取
+================================================================================
+
+### 审计结论：原凭据链唯一泄漏点
+- 基线 `2WB_inbox_watcher.ps1` 经 `(& $pyExe 2WB_pat_bridge.py 2>$null)` 捕获子进程
+  **stdout 明文 PAT**，再由 `$token = $sr.ReadToEnd()` 落变量。PAT 明文短暂出现于
+  子进程 stdout 与父进程捕获变量（虽不落盘，但违反 KR V5 修复令「绝不写 stdout」）。
+- `2WB_pat_bridge.py` 旧版 `__main__` 直接 `print(tok)`（L24）。
+
+### 修复方案（不授权生产部署）
+1. **watcher 改为进程内获取凭据**：测试钩子(R10_TEST_FAKE_PAT / R10_TEST_FORCE_NO_CRED)
+   > 环境变量 GITHUB_PAT > Windows Credential Manager P/Invoke(CredReadW, UTF-8 解码,
+   匹配既有 python bridge 行为)。**彻底废除子进程 stdout 捕获明文**。
+2. **2WB_pat_bridge.py 降级为不打印明文的独立诊断工具**：`--check` 仅输出
+   `CRED_STATUS=FOUND TOKEN_LEN=N` / `CRED_STATUS=NOT_FOUND`，绝不输出明文 PAT。
+3. **安全约束落地**：PAT 绝不写 stdout/stderr/日志/命令行/仓库/测试证据/异常报告；
+   测试仅用 R10_TEST_FAKE_PAT 模拟凭据，不涉及真实密钥。
+
+### 新 watcher 凭据段（进程内，L58-89 替换）
+    $token = $null
+    if ($env:R10_TEST_FAKE_PAT)        { $token = $env:R10_TEST_FAKE_PAT }
+    elseif ($env:R10_TEST_FORCE_NO_CRED -eq "1") { $token = $null }
+    elseif ($env:GITHUB_PAT)           { $token = $env:GITHUB_PAT }
+    else {
+        # 生产：进程内 CredRead (Add-Type P/Invoke, UTF-8 解码)
+        try { Add-Type @"
+            ... WinCredReader.Read("git:https://github.com") ...
+        "@; $token = [WinCredReader]::Read("git:https://github.com") } catch { $token = $null }
+    }
+    if (-not $token) { Log "CRED_FOUND=NO ..."; exit 0 }
+    Log "CRED_FOUND=YES TOKEN_LEN=$($token.Length) ... SRC=in_process_credread_or_env"
+    if ($env:R10_TEST_NO_OP -eq "1") { Log "R10_TEST_NO_OP exit"; exit 0 }
+
+### 新 2WB_pat_bridge.py（--check 仅输出长度，无明文）
+    def check_mode():
+        tok = read_pat()
+        if tok: print("CRED_STATUS=FOUND TOKEN_LEN=%d SRC=wincred_or_test_fake" % len(tok))
+        else:   print("CRED_STATUS=NOT_FOUND")
+    if __name__ == "__main__":
+        check_mode(); sys.exit(0)   # 绝不 print(tok)
+
+### 测试证据（隔离, 不触碰 GitHub）
+- V5 凭据测试 3/3 PASS（v5_credential_tests.py + V5_CREDENTIAL_RESULTS.json）：
+  V5a-1 bridge --check 不泄漏明文 / V5a-2 watcher 经钩子取 fake 长度匹配且不泄漏 /
+  V5b 无凭据 CRED_FOUND=NO exit 0。
+- R10 executor 回归 17 cases：16 PASS + 1 SKIP(真实E2E, 需 R10_E2E=1 显式启用)。
+- 全部 SHA256 见 SHA256_MANIFEST.md。
+
+### 交付状态
+- 本修复经新 Commit 更新 PR #21（分支 r10-candidate-delivery-20261019）。
+- 生产 HOLD 继续：未合并 PR、未改生产凭据、未部署、未点火、未批量消费。
+- 待 1WB 独立审查 V5 及全部 R10 候选包。

@@ -16,12 +16,12 @@
 | V2 | `REAL_ISOLATED_E2E`（隔离真实验收） | PASS（17/17，含 C1 真实 E2E，见 `FAULT_TESTS/FAULT_REPORT.md`） | PENDING_1WB_REVIEW | — |
 | V3 | `FAULT_RECOVERY`（故障恢复） | PASS（C5b 崩溃恢复 / C6 回传失败 / C8a-e 授权拒绝均验证） | PENDING_1WB_REVIEW | — |
 | V4 | `AUTHORIZATION_GUARD`（RCA3 守卫） | PASS（过期/撤销/冲突/不匹配/重放/无令牌/高危/未知 全拒） | PENDING_1WB_REVIEW | — |
-| V5 | `CREDENTIAL_SECURITY`（凭据安全） | **BLOCKED**（候选 watcher 凭据机制偏离生产原版；`2WB_pat_bridge.py` 明文 print PAT，不得作生产通道，见 `CANDIDATE_PACKAGE.md §3`） | PENDING_1WB_REVIEW | — |
+| V5 | `CREDENTIAL_SECURITY`（凭据安全） | **PASS**（Plan A 落地：watcher 进程内凭据获取，废除 stdout 明文捕获；bridge 仅 `--check` 输出长度。V5 三用例 3/3 PASS） | PENDING_1WB_REVIEW | — |
 | V6 | `ROLLBACK_READINESS`（回滚就绪） | PASS（`PROD_BASELINE` 完整保留 + 备份/回滚/未完队列恢复方案就绪） | PENDING_1WB_REVIEW | — |
 | V7 | `INDEPENDENT_REVIEW`（后腿独立审查） | —（本项即后腿职责） | **IN_PROGRESS / PENDING** | — |
 | V8 | `PRODUCTION_ADMISSION_REQUEST`（生产准入） | 申请提交，`status=PENDING_KR_GATE`；阻塞项 V5 未决 | PENDING_1WB_REVIEW | **待 KR 拍板** |
 
-> 八裁决**不得相互抵销**：任一项 BLOCKED（V5）即整体不得进入生产，须 KR 就 V5 二选一（A 硬化桥 / B 生产回退 Add-Type）裁决后方可推进 V8。
+> 八裁决**不得相互抵销**：任一项 BLOCKED 即整体不得进入生产。V5 已于 2026-10-19 修复（Plan A 进程内凭据获取，3/3 PASS），现八裁决前腿初判均为 PASS（V7/V8 待后腿/KR）；生产准入仍须 KR 显式 `可以` 拍板。
 
 ---
 

@@ -55,19 +55,61 @@ function Enqueue-Task($orderId, $body) {
     Log "ENQUEUE order_id=$orderId task_id=$taskId"
 }
 
-# ---------- R9 修复：凭据获取（避免 Add-Type 被本环境安全策略整体拦截；env 优先 + 同目录 python-ctypes 桥） ----------
-# 生产原文件用 Add-Type CredRead：本环境 PowerShell 对 Add-Type 整体安全拦截 -> CRED_FOUND=NO -> 早退（到不了检测）。
-# 候选改为：$env:GITHUB_PAT 优先；缺失则调用同目录 2WB_pat_bridge.py（python ctypes 读 wincred，本环境可用）。
-$pyExe = "C:\Users\59605\.workbuddy\binaries\python\versions\3.13.12\python.exe"
-$token = $env:GITHUB_PAT
-if (-not $token) {
+# ---------- Plan A 修复：凭据获取（受控进程内获取，绝不打印明文） ----------
+# KR V5 修复令审计结论：原设计 watcher 经 (& python 2WB_pat_bridge.py 2>$null) 捕获 stdout 明文 PAT 为唯一泄漏点。
+# 修复：PAT 仅在本进程内获取（测试钩子 / 环境变量 / Windows Credential Manager），绝不经子进程 stdout 捕获、
+#       绝不写日志/命令行/仓库/测试证据/异常报告。2WB_pat_bridge.py 现仅作不打印明文的独立诊断工具(--check)。
+$token = $null
+if ($env:R10_TEST_FAKE_PAT) {
+    # 仅测试：模拟凭据, 不涉及真实密钥
+    $token = $env:R10_TEST_FAKE_PAT
+} elseif ($env:R10_TEST_FORCE_NO_CRED -eq "1") {
+    # 仅测试：模拟无凭据(鉴权失败路径)
+    $token = $null
+} elseif ($env:GITHUB_PAT) {
+    $token = $env:GITHUB_PAT
+} else {
+    # 生产：进程内 CredRead (Add-Type P/Invoke, UTF-8 解码匹配既有 python bridge 行为)。
+    # 本环境若 PowerShell 对 Add-Type 安全拦截 -> 异常被捕获 -> CRED_FOUND=NO。
     try {
-        $raw = (& $pyExe (Join-Path $PSScriptRoot "2WB_pat_bridge.py") 2>$null)
-        if ($raw) { $token = ($raw -split "`n")[-1].Trim() }
-    } catch { $token = $null }
+        Add-Type @"
+using System;
+using System.Runtime.InteropServices;
+using System.Text;
+public class WinCredReader {
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+    public struct CREDENTIAL {
+        public uint Flags; public uint Type; public string TargetName;
+        public string Comment; public System.Runtime.InteropServices.ComTypes.FILETIME LastWritten;
+        public uint CredentialBlobSize; public IntPtr CredentialBlob; public uint Persist;
+        public uint AttributeCount; public IntPtr Attributes; public string TargetAlias; public string UserName;
+    }
+    [DllImport("advapi32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+    public static extern bool CredReadW(string target, uint type, uint reserved, out IntPtr pcred);
+    [DllImport("advapi32.dll")]
+    public static extern void CredFree(IntPtr pcred);
+    public static string Read(string target) {
+        IntPtr p = IntPtr.Zero;
+        if (CredReadW(target, 1, 0, out p)) {
+            var c = (CREDENTIAL)Marshal.PtrToStructure(p, typeof(CREDENTIAL));
+            byte[] b = new byte[c.CredentialBlobSize];
+            Marshal.Copy(c.CredentialBlob, b, 0, (int)c.CredentialBlobSize);
+            CredFree(p);
+            return Encoding.UTF8.GetString(b).TrimEnd('\0');
+        }
+        return null;
+    }
+}
+"@
+        $token = [WinCredReader]::Read("git:https://github.com")
+    } catch {
+        $token = $null
+    }
 }
 if (-not $token) { Log "CRED_FOUND=NO (watcher cannot post; will retry next run)"; exit 0 }
-Log "CRED_FOUND=YES TOKEN_LEN=$($token.Length) DRYRUN=$DryRun SRC=env_or_python_bridge"
+Log "CRED_FOUND=YES TOKEN_LEN=$($token.Length) DRYRUN=$DryRun SRC=in_process_credread_or_env"
+# R10 V5 测试钩子(仅测试用, 生产不设置)：凭据核验后立即退出, 不触发任何 GitHub 读写, 用于泄漏/鉴权测试封闭化。
+if ($env:R10_TEST_NO_OP -eq "1") { Log "R10_TEST_NO_OP exit"; exit 0 }
 
 # R7 修复：$isDecision 默认 false（原生产代码全程未定义，死代码隐患；生产 watcher L123 引用但未声明）
 $isDecision = $false
