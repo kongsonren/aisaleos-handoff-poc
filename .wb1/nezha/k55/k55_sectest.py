@@ -25,6 +25,11 @@ KR 最终令第二项三项安全测试的施工件（任务 #651/#652/#653）�
   rev1：首次 hardened 竞态逮到两个自身 bug（claim 重试后 head 未刷新；
         422 未按 CAS 处理）——执行层 exactly-once 当时已成立（1 ACK/1 RESULT/1 exec），
         账本入账失败；本 rev2 修复后重跑（DW7）。
+  rev2：DW7 竞态执行层 exactly-once 再次成立（1 ACK/1 RESULT/1 exec，双 job success），
+        但账本被败者拒绝提交覆盖（note_task_reject 改 state=REJECTED 覆盖胜者 CLAIMED），
+        且胜者 EXECUTED 冲突重试提交磁盘旧版丢 exec_events——第三处 bug；
+        本 rev3：败者拒绝走独立 claim_rejections 字段（不动 state）+ 全账本合并重试
+        （merge_ledgers：列表并集去重/计数取 max/任务逐键合并），DW9 重跑。
 铁律：只写分支 k55-proof 上的 K55-SECTEST-* 账本/目标文件；绝不碰 main 与 DW1 账本；
 只发 [ACK-2WB]/[RESULT][2WB] 标记（2WB 侧）；PAT/token 仅内存。
 """
@@ -204,6 +209,48 @@ def write_led(store, data, head, msg):
     return r.get("ok"), (r.get("commit") if r.get("ok") else head), r
 
 
+def _merge_list(a, b):
+    """列表并集去重（按 JSON 序列化判重），保留 a 的顺序在前。"""
+    seen = {json.dumps(x, sort_keys=True, ensure_ascii=False) for x in a}
+    return list(a) + [x for x in b
+                      if json.dumps(x, sort_keys=True, ensure_ascii=False) not in seen]
+
+
+def merge_ledgers(disk, local):
+    """CAS 冲突后：以磁盘版为底合并本地版。
+
+    - 列表字段（history/rejections/exec_events/claim_rejections…）并集去重；
+    - rejection_counts 取 count 最大值；
+    - tasks 逐 ORDER_ID 合并（本地执行结果覆磁盘，磁盘独有的 claim_rejections 等保留）；
+    - 绝不丢失任何一方的记录（胜者执行 + 败者拒绝都要留在账本）。
+    """
+    out = dict(disk)
+    for k in ("known_orders", "executed_order_ids"):
+        out[k] = sorted(set(disk.get(k, [])) | set(local.get(k, [])))
+    out["history"] = _merge_list(disk.get("history", []),
+                                 local.get("history", []))[-80:]
+    out["rejections"] = _merge_list(disk.get("rejections", []),
+                                    local.get("rejections", []))[-40:]
+    rc = dict(disk.get("rejection_counts", {}))
+    for k, v in local.get("rejection_counts", {}).items():
+        d = rc.get(k, {})
+        rc[k] = {"count": max(d.get("count", 0), v.get("count", 0)),
+                 "last_at": v.get("last_at") or d.get("last_at"),
+                 "last_consumer": v.get("last_consumer") or d.get("last_consumer"),
+                 "detail": v.get("detail") or d.get("detail")}
+    out["rejection_counts"] = rc
+    tasks = dict(disk.get("tasks", {}))
+    for oid, lt in local.get("tasks", {}).items():
+        dt = tasks.get(oid, {})
+        mt = dict(dt)
+        mt.update(lt)  # 本地字段覆磁盘（执行结果、state 等）
+        for lk in ("exec_events", "claim_rejections", "rejections"):
+            mt[lk] = _merge_list(dt.get(lk, []), lt.get(lk, []))
+        tasks[oid] = mt
+    out["tasks"] = tasks
+    return out
+
+
 def note_reject(led, rtype, oid, detail=""):
     key = "%s:%s" % (rtype, oid)
     led["rejection_counts"][key] = {
@@ -218,6 +265,14 @@ def note_task_reject(led, oid, rtype, detail=""):
     t = led["tasks"].setdefault(oid, {})
     t["state"] = "REJECTED"
     t.setdefault("rejections", []).append(
+        {"type": rtype, "at": now_iso(), "consumer": CONSUMER, "detail": detail[:200]})
+
+
+def note_task_claim_reject(led, oid, rtype, detail=""):
+    """claim 败者的记录：**不改变 task state**（state 归胜者的状态机），
+    只追加 claim_rejections——避免覆盖胜者的 CLAIMED→EXECUTED 转移。"""
+    t = led["tasks"].setdefault(oid, {})
+    t.setdefault("claim_rejections", []).append(
         {"type": rtype, "at": now_iso(), "consumer": CONSUMER, "detail": detail[:200]})
 
 
@@ -350,6 +405,14 @@ def recovery_pass(store, led, head):
             store, led, head,
             "[K55-SECTEST] RECOVERED receipt %s (comment %s, no re-exec)"
             % (oid, rc.get("id")))
+        if not ok:
+            # 冲突：重读合并重试（保留他人记录）
+            log("recovery commit conflict -> merge retry")
+            led2, head2 = read_led(store)
+            led2 = merge_ledgers(led2, led)
+            ok, head, r = write_led(
+                store, led2, head2,
+                "[K55-SECTEST] RECOVERED(merge) %s" % oid)
         log("RECOVERED", oid, "comment=%s" % rc.get("id"), "commit_ok=%s" % ok)
         n += 1
         if ok:
@@ -512,11 +575,18 @@ def exec_all():
                          else "REJECT_CLAIM_CONTENDED")
                 log("CLAIM outcome:", outcome, "->", rtype)
                 note_reject(led, rtype, oid, "outcome=%s consumer=%s" % (outcome, CONSUMER))
-                note_task_reject(led, oid, rtype, "outcome=%s" % outcome)
+                note_task_claim_reject(led, oid, rtype, "outcome=%s" % outcome)
                 note_hist(led, "CLOUD_2WB", "claim_not_won", order_id=oid,
                           outcome=outcome)
                 okc, head, r = write_led(
                     store, led, head, "[K55-SECTEST] %s %s" % (rtype, oid))
+                if not okc:
+                    # 冲突：重读后合并重试（不覆盖胜者状态）
+                    log("claim-lost commit conflict -> merge retry")
+                    led2, head2 = read_led(store)
+                    led2 = merge_ledgers(led2, led)
+                    okc, head, r = write_led(
+                        store, led2, head2, "[K55-SECTEST] %s(merge) %s" % (rtype, oid))
                 log(rtype, oid, "commit_ok=%s" % okc)
                 summary["claim_lost"] = True
                 summary["verdict"] = "CLAIM_NOT_WON_NO_EXEC"
@@ -625,20 +695,21 @@ def exec_all():
             "[K55-SECTEST] EXECUTED %s -> %s (ack=%s result=%s)"
             % (oid, "PASS" if match else "FAIL", ack_id, rc.get("id")))
         if not okc:
-            # 入账冲突：重读核对是否他人已入账（防双计），否则再试一次
+            # 入账冲突：重读核对是否他人已入账（防双计）；否则合并本地执行结果重试
             log("EXECUTED commit conflict:", r.get("error"), "-> re-read check")
             led2, head2 = read_led(store)
             t2 = led2["tasks"].get(oid) or {}
-            if t2.get("state") == "EXECUTED" and t2.get("result", {}).get(
+            if t2.get("state") == "EXECUTED" and (t2.get("result") or {}).get(
                     "consumer") != CONSUMER:
                 log("another consumer already EXECUTED (no double count)", oid)
                 summary["executed"] = {"order_id": oid, "state": "EXECUTED_BY_OTHER"}
                 summary["verdict"] = "EXECUTED_BY_OTHER"
                 print("SECTEST_SUMMARY " + json.dumps(summary, ensure_ascii=False))
                 return 0
+            led2 = merge_ledgers(led2, led)
             okc2, head2, r2 = write_led(
-                store, led2, head2, "[K55-SECTEST] EXECUTED(retry) %s" % oid)
-            log("EXECUTED retry commit_ok=%s" % okc2)
+                store, led2, head2, "[K55-SECTEST] EXECUTED(merge) %s" % oid)
+            log("EXECUTED merge commit_ok=%s" % okc2)
         log("RESULT posted", oid, "comment=%s" % rc.get("id"))
         summary["executed"] = {
             "order_id": oid, "state": "EXECUTED", "result_comment_id": rc.get("id"),
