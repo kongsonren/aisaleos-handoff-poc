@@ -1,0 +1,32 @@
+{
+  "state": "DISPATCHED",
+  "known_orders": [
+    "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW1"
+  ],
+  "tasks": {
+    "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW1": {
+      "state": "DISPATCHED",
+      "dispatched_by": "CLOUD_1WB",
+      "dispatched_at": "2026-10-20T02:09:51.878307+08:00",
+      "dispatch_comment_id": 6273976633,
+      "race_start_at": "2026-10-20T02:12:51.878293+08:00",
+      "variant": "orig",
+      "expected_sha256": "70e74b1591ed967918e90ba673f8ec56fd3157966e5fdb8dec222c8775307a0e",
+      "target": ".wb1/nezha/k55/k55_sectest_target.dat"
+    }
+  },
+  "executed_order_ids": [],
+  "rejections": [],
+  "rejection_counts": {},
+  "history": [
+    {
+      "at": "2026-10-20T02:09:51.878310+08:00",
+      "actor": "CLOUD_1WB",
+      "action": "dispatch",
+      "order_id": "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW1",
+      "comment_id": 6273976633,
+      "race_start_at": "2026-10-20T02:12:51.878293+08:00",
+      "variant": "orig"
+    }
+  ]
+}
