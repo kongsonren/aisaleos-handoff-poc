@@ -1,0 +1,54 @@
+{
+  "state": "DISPATCHED",
+  "order_seq": 1,
+  "cycles_done": 0,
+  "current_order": {
+    "order_id": "KR-NEZHA-CLOUD-K55-HARDEN-20261020-DW1",
+    "task_id": "K55-HARDEN-2WB-DW1",
+    "anchor_comment_id": "6272173951",
+    "parent_order": "KR-NEZHA-CLOUD-K55-20261019",
+    "issuer": "CLOUD_1WB",
+    "scope": "READONLY_SHA256",
+    "target": ".wb1/nezha/k55/k55_test_target.dat",
+    "expected_sha256": "b7e1850430dcea9ec58210ff7f1703e7c7a7bf02370bc350a7138a057ebc14d1",
+    "issued_at": "2026-10-20T01:26:22.275716+08:00",
+    "ttl_seconds": 3600,
+    "target_sha16": "b7e1850430dcea9e",
+    "dispatch_comment_id": 6273128544
+  },
+  "tasks": {
+    "KR-NEZHA-CLOUD-K55-HARDEN-20261020-DW1": {
+      "state": "DISPATCHED",
+      "dispatched_by": "CLOUD_1WB",
+      "dispatched_at": "2026-10-20T01:26:23.338173+08:00",
+      "dispatch_comment_id": 6273128544,
+      "expected_sha256": "b7e1850430dcea9ec58210ff7f1703e7c7a7bf02370bc350a7138a057ebc14d1",
+      "target": ".wb1/nezha/k55/k55_test_target.dat",
+      "post_selfcheck": {
+        "get_status": 200,
+        "order_in_body": true
+      }
+    }
+  },
+  "executed_order_ids": [],
+  "rejections": [],
+  "rejection_counts": {},
+  "circuit": {
+    "consecutive_failures": 0,
+    "open": false,
+    "opened_at": null,
+    "reason": null
+  },
+  "history": [
+    {
+      "at": "2026-10-20T01:26:23.338200+08:00",
+      "actor": "CLOUD_1WB",
+      "action": "dispatch",
+      "run": "39294091643",
+      "order_id": "KR-NEZHA-CLOUD-K55-HARDEN-20261020-DW1",
+      "comment_id": 6273128544,
+      "target_sha16": "b7e1850430dcea9e",
+      "post_selfcheck": true
+    }
+  ]
+}
