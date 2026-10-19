@@ -228,6 +228,42 @@
       "received_at": "2026-10-15T04:16Z",
       "first_line_excerpt": "[TO-1WB][KR_DIRECTIVE] ORDER_ID=KR-Q1-READONLY-AUDIT-20261015",
       "note": "KR audit order. Cloud WB1 cannot reach local E:\\ files; full SHA256/diff/audit to be executed by rear-leg when 黑武士 online. No production ignition. Awaiting 嗨姐/JUDGE independent read-only review."
+    },
+    {
+      "comment_id": 6252352137,
+      "type": "SELF_SOLVE",
+      "instruction": "# KR-NEZHA-R6-CLOSEOUT-20261019-01 收口交果（五线汇总｜真实链路核查｜零点火）\n\n**执行体**：1WB（1号机黑武士 WORKBUDDY）｜**令**：KR-NEZHA-R6-CLOSEOUT-20261019-01｜**交果时间**：2026-10-18T16:33:54Z\n**纪律**：简体中文；不洗绿两个方向；不代发 KR 令；不擅自解除 HOLD；不扩大生产权限；隔离与生产分账；有令有果，谁接令谁收果。\n\n---\n\n## 一、五线总状态（统一交果纪律字段）\n\n| 线 | 任务 | 原始令ID | 实际动作 | 最终状态 | 下一步 |\n|---|---|---|---|---|---|\n| P0 | #562-#565 | KR-NEZHA-E2E-CLOSE-20261019-01（P0 主令） | 真实链路核查+14条积压盘点+隔离E2E+准入材料 | **P0 四步 COMPLETED**（隔离窄 PASS；生产消费者 FAIL 如实） | 生产接线三选项待 KR_GATE |\n| P1-A | #566 | 同主令 P1-M6 | M6 守卫 v2 独立复核（SHA+走读+独立重跑+4补充测试采信） | **COMPLETED**（READY_FOR_KR_GATE） | KR 裁定部署 |\n| P1-B | #567 | 同主令 P1-M2 | M2 幂等层独立复核+生产桥适配评估（双跑31/31） | **COMPLETED**（隔离 PASS，未接生产） | KR 裁定接入 |\n| P1-C | #568 | 同主令 P1-RCA3 | RCA3 真实点火申请准备（11项核实+三选项+验收清单） | **PREPARED_NOT_IGNITED**（零点火） | KR 一次性授权（Q1） |\n| P1-D | #56",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-18T16:33:55Z",
+      "detected_at": "2026-10-19T04:22:26Z",
+      "queued_at": "2026-10-19T04:22:26Z"
+    },
+    {
+      "comment_id": 6252792413,
+      "type": "SELF_SOLVE",
+      "instruction": "# KR-1WB-P0-EXECUTION-RETURN-20261019-01 P1 真实执行回报（四项裁决｜不相互抵销）\n\n**执行体**：1WB（1号机黑武士 WORKBUDDY）｜**令**：KR-1WB-P0-EXECUTION-RETURN-20261019-01（P0 执行回报攻坚令，承接基线=R6 收口 6252352137）｜**交果时间**：2026-10-18T17:16:43Z\n**纪律**：简体中文；不洗绿两个方向；ACK/计划/报告不冒充 RESULT；超授权立即 STOP；HOLD 继续有效；本令不授权生产点火/部署。\n\n---\n\n## 一、四项裁决总表（各仅 PASS/FAIL/BLOCKED/UNKNOWN，不相互抵销）\n\n| # | 裁决项 | 裁决 | 一句话依据 |\n|---|---|---|---|\n| V1 | ISOLATED_CONSUMER_E2E | **PASS**（隔离窄） | 新授权只读令全链真实消费 **19/19**，消费者子进程实际领取，SHA 独立重算一致 |\n| V2 | RCA3_AUTH_GUARD | **PASS**（机制层，替身传输） | 授权守卫回归 **18/18**；旧授权（真实仍有效）未武装→零点火；过期/撤销/重复/冲突/不匹配全类型化拒绝 |\n| V3 | PRODUCTION_CONSUMER | **FAIL**（未变，缺口扩大） | 14 条积压零消费 **131.2 分钟**（R6=62min→R7-A1=114.4min→现在 131.2min），生产无消费者订阅 |\n| V4 | PRODUCTION_DEPLOYMENT | **BLOCKED**（未授权未执行） | HOLD 继续；零接线、零部署、零计划任务、零生产变更 |\n\n**不相互抵销声明**：V1/V2 的 P",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-18T17:16:44Z",
+      "detected_at": "2026-10-19T04:22:26Z",
+      "queued_at": "2026-10-19T04:22:26Z"
+    },
+    {
+      "comment_id": 6252982127,
+      "type": "SELF_SOLVE",
+      "instruction": "# KR-NEZHA-R10-CONSUMER-INTEGRATION-20261019-01 后腿状态交果（R10-D｜等前腿候选包）\n\n**执行体**：1WB（1号机黑武士 WORKBUDDY，后腿 INDEPENDENT_REVIEW 角色）｜**令**：KR-NEZHA-R10-CONSUMER-INTEGRATION-20261019-01（P0）｜**交果时间**：2026-10-18T17:34:42Z\n**纪律**：简体中文；不洗绿两个方向；ACK/计划/报告不冒充 RESULT；隔离 PASS≠生产 PASS；候选包完成≠部署获准；HOLD 继续有效。\n\n---\n\n## 一、后腿三段状态总表\n\n| 段 | 任务 | 状态 | 一句话结论 |\n|---|---|---|---|\n| R10-A | #577 令号登记+角色确认 | **DONE** | 1WB=后腿独立审查角色登记；通道探针四轮+NAS 探测；前腿 2WB 在 #8 实时活跃，**R10 候选包未提交** |\n| R10-B | #578 前腿 R8 基线独立核验 | **DONE（分级）** | 行为层 **REAL**（间接）/源码层 **UNKNOWN**（1WB 面不可达，SHA 重算须等候选包）/三缺陷清单 **UNKNOWN**（仅见 array-format fix 痕迹） |\n| R10-C | #579 独立审查清单编制 | **DONE** | **35 项检查就绪**（5 组映射令§三/四/五/六/七→八项裁决口径）；2 项纪律检查观察 PASS；33 项待候选包 |\n| R10-D | #580 状态交果 | **本条** | 等前腿候选包；八项裁决 **全部 UNKNOWN**；生产零改动；HOLD 继续 |\n\n## 二、R10-B 前腿 R8 基线核验（分级如实）",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-18T17:34:43Z",
+      "detected_at": "2026-10-19T04:22:26Z",
+      "queued_at": "2026-10-19T04:22:26Z"
+    },
+    {
+      "comment_id": 6253828729,
+      "type": "SELF_SOLVE",
+      "instruction": "[R10-PHASE1-RESULT][TO-1WB]\nORDER_ID=KR-NEZHA-R10-PARALLEL-DISPATCH-20261019-01\nHANDOFF_ID=R10-CODEX-584-PHASE1-20261019-01\nSOURCE=KR授权的Codex核验交接（非WorkBuddy执行体自报）\nLOCAL_TASK_ID=584\nHOLD=CONTINUES\n\n本轮已只读核实：WorkBuddy 本地任务 #581/#582/#583 completed，#584 in_progress。#584 是补充令第一阶段交果任务，不是 GitHub Issue 编号。已独立重算五份既有审查证据 SHA256，均匹配 R10-P1 基线；35项检查清单可读。核查的五个后腿生产组件及14条积压队列与旧基线一致。复用 R7 消费者19/19、授权守卫18/18报告，未重跑全量测试；授权守卫的替身传输范围保留。F-01旧SHA记账缺陷保留，不泛称旧证据无缺陷。\n\n本机审查基线：C:\\Users\\59605\\.wb1\\r10_p1_review_baseline.json\n审查清单：C:\\Users\\59605\\.wb1\\r10_c_review_checklist.json\n清单SHA256=b9f2af77e4bd273f08dd1ab4952f97feb80aec51e790b2df0a6efb7fc5451169\n本轮核验报告目录：C:\\Users\\59605\\.codex\\.chatgpt-projects\\g-p-6a8437c626508191bcc3bde036554c2b\\evidence\\r10-current-audit-20261019\n\n候选审查=BLOCKED：已查GitHub main/handoff-state树及NAS前腿IN",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-18T18:57:23Z",
+      "detected_at": "2026-10-19T04:22:26Z",
+      "queued_at": "2026-10-19T04:22:26Z"
     }
   ],
   "processed": [
