@@ -1,0 +1,45 @@
+name: K55-2WB-CLOUD-CONSUMER
+
+# 第55刀加固令（KR-NEZHA-CLOUD-K55-HARDEN-20261020）· 第二关 2WB 云端主体（前腿侧独立消费者）
+# 与 1WB ticker 相互独立：独立 workflow 文件 / runner / schedule（错峰 2-59/5，晚 1WB 两分钟接令）。
+# 职责：扫 Issue #8 未处理 [TO-2WB][TASK] -> 五要素授权校验 -> dedup -> 真实重算 READONLY_SHA256
+#       -> 先 [ACK-2WB] 后 [RESULT][2WB] -> CAS 入账；连续失败 >=3 熔断隔离。
+# 铁律：只发 [ACK-2WB]/[RESULT][2WB]；重复 ORDER_ID 类型化拒绝不重执；仅写分支 k55-proof 的 K55-* 账本。
+on:
+  schedule:
+    - cron: "2-59/5 * * * *"
+  workflow_dispatch:
+    inputs:
+      note:
+        description: "K55 2WB cloud consumer (dual-wheel autonomy, gate2)"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: k55-2wb-consumer
+  cancel-in-progress: false
+
+jobs:
+  wb2_exec:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: "2WB cloud consumer: 验权/执行/回传"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          K55_BRANCH: k55-proof
+          K55_ISSUE: "8"
+          K55_ANCHOR_COMMENT_ID: "6272173951"
+          K55_TRUSTED_ISSUER: kongsonren
+          K55_PARENT_ORDER: KR-NEZHA-CLOUD-K55-20261019
+          K55_ORDER_FAMILY: KR-NEZHA-CLOUD-K55-HARDEN-20261020
+          K55_MAX_CYCLES: "1"
+        run: python .wb1/nezha/k55/k55_proof.py exec

@@ -1,0 +1,45 @@
+name: K55-1WB-CLOUD-TICK
+
+# 第55刀加固令（KR-NEZHA-CLOUD-K55-HARDEN-20261020）· 第一关+第二关 1WB 云端主体
+# 受控云端自动起跑：schedule(cron UTC) 触发，不依赖本地 1WB/2WB/WorkBuddy，不依赖人工 dispatch。
+# 职责：状态机 tick —— IDLE 派唯一只读测试令到 Issue #8 -> DISPATCHED；
+#       扫 [RESULT][2WB] -> GET 回读核验 -> CLOSED -> IDLE（周期上限 K55_MAX_CYCLES=1）。
+# 铁律：只发 [TO-2WB][TASK]；严禁代 2WB 生成 ACK/RESULT；仅写分支 k55-proof 的 K55-* 账本。
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+    inputs:
+      note:
+        description: "K55 1WB cloud ticker (dual-wheel autonomy, gate1+2)"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: k55-1wb-tick
+  cancel-in-progress: false
+
+jobs:
+  wb1_tick:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: "1WB cloud tick: 派令/核验/关闭 状态机"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          K55_BRANCH: k55-proof
+          K55_ISSUE: "8"
+          K55_ANCHOR_COMMENT_ID: "6272173951"
+          K55_TRUSTED_ISSUER: kongsonren
+          K55_PARENT_ORDER: KR-NEZHA-CLOUD-K55-20261019
+          K55_ORDER_FAMILY: KR-NEZHA-CLOUD-K55-HARDEN-20261020
+          K55_MAX_CYCLES: "1"
+        run: python .wb1/nezha/k55/k55_proof.py tick
