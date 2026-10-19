@@ -1,0 +1,58 @@
+name: K55-SECTEST-RUN
+
+# 第55刀最终令（K55-FINAL）· 安全测试隔离工作流（非生产 / dispatch-only / K55-SECTEST-* 命名空间）
+# job_type=race  → matrix 双 job = 两个云端消费者真实并行（验最多一次执行/一次 RESULT）
+# job_type=single → 单消费者（验三类授权拒绝 / 回执失败恢复）
+# 铁律：本工作流仅为安全测试件；绝不冒充 schedule（AUTO_WAKE 另论）；
+#       只写 k55-proof 分支的 K55-SECTEST-* 账本；只发 [ACK-2WB]/[RESULT][2WB]。
+on:
+  workflow_dispatch:
+    inputs:
+      job_type:
+        description: "race (dual-consumer matrix) or single (one consumer)"
+        required: true
+        default: "single"
+      variant:
+        description: "orig|hardened (claim on/off; race only)"
+        required: false
+        default: "hardened"
+      ledger:
+        description: "sectest ledger path (repo-relative, on k55-proof)"
+        required: true
+      fail_result_post:
+        description: "1 = simulate RESULT POST failure (recover test run 1)"
+        required: false
+        default: "0"
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  sectest:
+    strategy:
+      fail-fast: false
+      matrix:
+        consumer: ${{ fromJSON(inputs.job_type == 'race' && '["c1","c2"]' || '["c1"]') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      K55_BRANCH: k55-proof
+      K55_ISSUE: "8"
+      K55_ANCHOR_COMMENT_ID: "6272173951"
+      K55_TRUSTED_ISSUER: kongsonren
+      K55_PARENT_ORDER: KR-NEZHA-CLOUD-K55-20261019
+      K55_SECTEST_FAMILY: KR-NEZHA-CLOUD-K55-SECTEST-20261020
+      SECTEST_LEDGER: ${{ inputs.ledger }}
+      SECTEST_TARGET: .wb1/nezha/k55/k55_sectest_target.dat
+      SECTEST_CONSUMER_ID: ${{ matrix.consumer }}
+      SECTEST_CLAIM: ${{ inputs.variant == 'hardened' && '1' || '0' }}
+      SECTEST_FAIL_RESULT_POST: ${{ inputs.fail_result_post }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: "sectest consumer exec-all"
+        run: python .wb1/nezha/k55/k55_sectest.py exec-all
