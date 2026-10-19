@@ -33,7 +33,16 @@
       },
       "result_comment_id": 6274490879,
       "recovered_at": "2026-10-20T02:37:10.892553+08:00",
-      "recovered_by": "c1"
+      "recovered_by": "c1",
+      "result": {
+        "status": "PASS",
+        "computed_sha256": "70e74b1591ed967918e90ba673f8ec56fd3157966e5fdb8dec222c8775307a0e",
+        "match": true,
+        "executed_by": "CLOUD_2WB",
+        "completion_id": "K55-SECTEST-144b8e8a0a2f",
+        "executed_at": "2026-10-20T02:35:11.181639+08:00",
+        "recovered": true
+      }
     }
   },
   "executed_order_ids": [
@@ -91,6 +100,13 @@
       "order_id": "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW10",
       "result_comment_id": 6274490879,
       "stored_executed_at": "2026-10-20T02:35:11.181639+08:00"
+    },
+    {
+      "at": "2026-10-20T02:41:06.984681+08:00",
+      "actor": "CLOUD_1WB",
+      "action": "backfill_result_field",
+      "order_id": "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW10",
+      "note": "recovered task bookkeeping repair: result backfilled from pending_post payload"
     }
   ]
 }
