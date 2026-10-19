@@ -5,7 +5,7 @@
   ],
   "tasks": {
     "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW10": {
-      "state": "EXECUTED",
+      "state": "CLOSED",
       "dispatched_by": "CLOUD_1WB",
       "dispatched_at": "2026-10-20T02:34:44.044399+08:00",
       "dispatch_comment_id": 6274442487,
@@ -42,6 +42,16 @@
         "completion_id": "K55-SECTEST-144b8e8a0a2f",
         "executed_at": "2026-10-20T02:35:11.181639+08:00",
         "recovered": true
+      },
+      "verified_by": "CLOUD_1WB",
+      "verified_at": "2026-10-20T02:41:35.908769+08:00",
+      "verify_checks": {
+        "marker": true,
+        "order_id": true,
+        "computed_sha256": true,
+        "match": true,
+        "executed_by": true,
+        "completion_id": true
       }
     }
   },
@@ -107,6 +117,23 @@
       "action": "backfill_result_field",
       "order_id": "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW10",
       "note": "recovered task bookkeeping repair: result backfilled from pending_post payload"
+    },
+    {
+      "at": "2026-10-20T02:41:35.908782+08:00",
+      "actor": "CLOUD_1WB",
+      "action": "verify_close",
+      "consumer": "local",
+      "run": "local",
+      "order_id": "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW10",
+      "result_comment_id": 6274490879,
+      "checks": {
+        "marker": true,
+        "order_id": true,
+        "computed_sha256": true,
+        "match": true,
+        "executed_by": true,
+        "completion_id": true
+      }
     }
   ]
 }
