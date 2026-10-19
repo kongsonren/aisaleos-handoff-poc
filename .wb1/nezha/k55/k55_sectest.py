@@ -396,6 +396,16 @@ def recovery_pass(store, led, head):
         t["result_comment_id"] = rc.get("id")
         t["recovered_at"] = now_iso()
         t["recovered_by"] = CONSUMER
+        # 回填 result 字段（恢复通道的账本自洽：verify 六项核验需要）
+        t["result"] = {
+            "status": "PASS" if p.get("match") else "FAIL",
+            "computed_sha256": p.get("computed_sha256"),
+            "match": bool(p.get("match")),
+            "executed_by": "CLOUD_2WB",
+            "completion_id": p.get("completion_id"),
+            "executed_at": p.get("executed_at"),
+            "consumer": CONSUMER,
+            "recovered": True}
         if oid not in led["executed_order_ids"]:
             led["executed_order_ids"].append(oid)
         note_hist(led, "CLOUD_2WB", "recover_receipt", order_id=oid,
