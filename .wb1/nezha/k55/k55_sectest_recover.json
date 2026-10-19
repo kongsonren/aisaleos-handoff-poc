@@ -5,7 +5,7 @@
   ],
   "tasks": {
     "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW10": {
-      "state": "EXECUTED_PENDING_POST",
+      "state": "EXECUTED",
       "dispatched_by": "CLOUD_1WB",
       "dispatched_at": "2026-10-20T02:34:44.044399+08:00",
       "dispatch_comment_id": 6274442487,
@@ -30,10 +30,15 @@
         "ack_comment_id": 6274451310,
         "failed_at": "2026-10-20T02:35:11.181669+08:00",
         "fail_reason": "SIMULATED_RESULT_POST_FAILURE"
-      }
+      },
+      "result_comment_id": 6274490879,
+      "recovered_at": "2026-10-20T02:37:10.892553+08:00",
+      "recovered_by": "c1"
     }
   },
-  "executed_order_ids": [],
+  "executed_order_ids": [
+    "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW10"
+  ],
   "rejections": [],
   "rejection_counts": {},
   "history": [
@@ -52,6 +57,16 @@
       "run": "39303681702",
       "order_id": "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW10",
       "fail_reason": "SIMULATED"
+    },
+    {
+      "at": "2026-10-20T02:37:10.892579+08:00",
+      "actor": "CLOUD_2WB",
+      "action": "recover_receipt",
+      "consumer": "c1",
+      "run": "39303984205",
+      "order_id": "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW10",
+      "result_comment_id": 6274490879,
+      "stored_executed_at": "2026-10-20T02:35:11.181639+08:00"
     }
   ]
 }
