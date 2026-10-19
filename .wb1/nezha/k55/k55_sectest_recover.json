@@ -39,8 +39,24 @@
   "executed_order_ids": [
     "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW10"
   ],
-  "rejections": [],
-  "rejection_counts": {},
+  "rejections": [
+    {
+      "type": "RESULT_VERIFY_FAILED",
+      "order_id": "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW10",
+      "at": "2026-10-20T02:39:47.899900+08:00",
+      "consumer": "local",
+      "run": "local",
+      "detail": "{\"marker\": true, \"order_id\": true, \"computed_sha256\": false, \"match\": true, \"executed_by\": true, \"completion_id\": true}"
+    }
+  ],
+  "rejection_counts": {
+    "RESULT_VERIFY_FAILED:KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW10": {
+      "count": 1,
+      "last_at": "2026-10-20T02:39:47.899889+08:00",
+      "last_consumer": "local",
+      "detail": "{\"marker\": true, \"order_id\": true, \"computed_sha256\": false, \"match\": true, \"executed_by\": true, \"completion_id\": true}"
+    }
+  },
   "history": [
     {
       "at": "2026-10-20T02:34:44.044409+08:00",
