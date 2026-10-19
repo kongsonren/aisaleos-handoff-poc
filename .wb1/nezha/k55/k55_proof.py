@@ -79,10 +79,10 @@ import urllib.request, urllib.error  # noqa: E402  (置于 api 定义后仅作�
 
 
 def parse_kv_body(body):
-    """'KEY: value' 行式信封 -> dict；无法识别的行忽略。"""
+    """'KEY: value' 行式信封 -> dict；无法识别的行忽略。键允许字母/数字/下划线（如 EXPECTED_SHA256）。"""
     out = {}
     for ln in body.splitlines():
-        m = re.match(r"^([A-Z_]+):\s*(.+)$", ln.strip())
+        m = re.match(r"^([A-Z0-9_]+):\s*(.+)$", ln.strip())
         if m:
             out[m.group(1)] = m.group(2).strip()
     return out
