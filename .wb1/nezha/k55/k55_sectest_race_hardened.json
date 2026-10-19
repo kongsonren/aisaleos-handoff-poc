@@ -1,20 +1,18 @@
 {
   "state": "DISPATCHED",
   "known_orders": [
-    "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW5"
+    "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW7"
   ],
   "tasks": {
-    "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW5": {
-      "state": "CLAIMED",
+    "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW7": {
+      "state": "DISPATCHED",
       "dispatched_by": "CLOUD_1WB",
-      "dispatched_at": "2026-10-20T02:13:31.911704+08:00",
-      "dispatch_comment_id": 6274043763,
-      "race_start_at": "2026-10-20T02:16:31.911691+08:00",
+      "dispatched_at": "2026-10-20T02:21:11.456990+08:00",
+      "dispatch_comment_id": 6274185224,
+      "race_start_at": "2026-10-20T02:24:11.456976+08:00",
       "variant": "hardened",
       "expected_sha256": "70e74b1591ed967918e90ba673f8ec56fd3157966e5fdb8dec222c8775307a0e",
-      "target": ".wb1/nezha/k55/k55_sectest_target.dat",
-      "claimer": "c1",
-      "claimed_at": "2026-10-20T02:16:35.197037+08:00"
+      "target": ".wb1/nezha/k55/k55_sectest_target.dat"
     }
   },
   "executed_order_ids": [],
@@ -22,12 +20,12 @@
   "rejection_counts": {},
   "history": [
     {
-      "at": "2026-10-20T02:13:31.911708+08:00",
+      "at": "2026-10-20T02:21:11.456993+08:00",
       "actor": "CLOUD_1WB",
       "action": "dispatch",
-      "order_id": "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW5",
-      "comment_id": 6274043763,
-      "race_start_at": "2026-10-20T02:16:31.911691+08:00",
+      "order_id": "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW7",
+      "comment_id": 6274185224,
+      "race_start_at": "2026-10-20T02:24:11.456976+08:00",
       "variant": "hardened"
     }
   ]
