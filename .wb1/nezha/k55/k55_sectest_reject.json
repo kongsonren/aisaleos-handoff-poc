@@ -7,13 +7,21 @@
   ],
   "tasks": {
     "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW2": {
-      "state": "DISPATCHED",
+      "state": "REJECTED",
       "dispatched_by": "CLOUD_1WB",
       "dispatched_at": "2026-10-20T02:13:58.575234+08:00",
       "dispatch_comment_id": 6274051206,
       "forged_field": "issuer",
       "expected_sha256": "70e74b1591ed967918e90ba673f8ec56fd3157966e5fdb8dec222c8775307a0e",
-      "target": ".wb1/nezha/k55/k55_sectest_target.dat"
+      "target": ".wb1/nezha/k55/k55_sectest_target.dat",
+      "rejections": [
+        {
+          "type": "ISSUER_MISMATCH",
+          "at": "2026-10-20T02:14:58.472251+08:00",
+          "consumer": "c1",
+          "detail": "issuer=CLOUD_9WB"
+        }
+      ]
     },
     "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW3": {
       "state": "DISPATCHED",
@@ -35,8 +43,24 @@
     }
   },
   "executed_order_ids": [],
-  "rejections": [],
-  "rejection_counts": {},
+  "rejections": [
+    {
+      "type": "ISSUER_MISMATCH",
+      "order_id": "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW2",
+      "at": "2026-10-20T02:14:58.472241+08:00",
+      "consumer": "c1",
+      "run": "39300890563",
+      "detail": "issuer=CLOUD_9WB"
+    }
+  ],
+  "rejection_counts": {
+    "ISSUER_MISMATCH:KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW2": {
+      "count": 1,
+      "last_at": "2026-10-20T02:14:58.472220+08:00",
+      "last_consumer": "c1",
+      "detail": "issuer=CLOUD_9WB"
+    }
+  },
   "history": [
     {
       "at": "2026-10-20T02:13:58.575245+08:00",
@@ -61,6 +85,15 @@
       "order_id": "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW4",
       "comment_id": 6274060343,
       "forged_field": "ttl"
+    },
+    {
+      "at": "2026-10-20T02:14:58.472264+08:00",
+      "actor": "CLOUD_2WB",
+      "action": "auth_reject",
+      "consumer": "c1",
+      "run": "39300890563",
+      "order_id": "KR-NEZHA-CLOUD-K55-SECTEST-20261020-DW2",
+      "reject_type": "ISSUER_MISMATCH"
     }
   ]
 }
