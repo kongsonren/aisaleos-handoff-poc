@@ -81,13 +81,6 @@
     {
       "type": "REJECT_DUPLICATE_ORDER",
       "order_id": "KR-NEZHA-CLOUD-K55-HARDEN-20261020-DW1",
-      "at": "2026-10-23T13:24:27.264627+08:00",
-      "run": "39905559092",
-      "detail": "state=CLOSED executed_before=True"
-    },
-    {
-      "type": "REJECT_DUPLICATE_ORDER",
-      "order_id": "KR-NEZHA-CLOUD-K55-HARDEN-20261020-DW1",
       "at": "2026-10-23T18:16:10.886918+08:00",
       "run": "39937870764",
       "detail": "state=CLOSED executed_before=True"
@@ -287,6 +280,13 @@
       "at": "2026-10-28T06:24:19.290254+08:00",
       "run": "40594530774",
       "detail": "state=CLOSED executed_before=True"
+    },
+    {
+      "type": "REJECT_DUPLICATE_ORDER",
+      "order_id": "KR-NEZHA-CLOUD-K55-HARDEN-20261020-DW1",
+      "at": "2026-10-28T09:29:37.288357+08:00",
+      "run": "40615349533",
+      "detail": "state=CLOSED executed_before=True"
     }
   ],
   "rejection_counts": {
@@ -297,9 +297,9 @@
       "detail": "target=.wb1/nezha/k55/k55_test_target.dat"
     },
     "REJECT_DUPLICATE_ORDER:KR-NEZHA-CLOUD-K55-HARDEN-20261020-DW1": {
-      "count": 51,
-      "last_at": "2026-10-28T06:24:19.290234+08:00",
-      "last_run": "40594530774",
+      "count": 52,
+      "last_at": "2026-10-28T09:29:37.288328+08:00",
+      "last_run": "40615349533",
       "detail": "state=CLOSED executed_before=True"
     }
   },
