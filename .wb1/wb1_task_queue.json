@@ -228,6 +228,1023 @@
       "received_at": "2026-10-15T04:16Z",
       "first_line_excerpt": "[TO-1WB][KR_DIRECTIVE] ORDER_ID=KR-Q1-READONLY-AUDIT-20261015",
       "note": "KR audit order. Cloud WB1 cannot reach local E:\\ files; full SHA256/diff/audit to be executed by rear-leg when 黑武士 online. No production ignition. Awaiting 嗨姐/JUDGE independent read-only review."
+    },
+    {
+      "comment_id": 6260037802,
+      "type": "SELF_SOLVE",
+      "instruction": "[R10-REARLEG-CLOSEOUT-RESULT][TO-KR]\nORDER_ORIGINAL=KR-NEZHA-R10-CONSUMER-INTEGRATION-20261019-01\nORDER_SUPPLEMENT=KR-NEZHA-R10-PARALLEL-DISPATCH-20261019-01\nORDER_THIS=KR-1WB-R10-REARLEG-AUDIT-CLOSEOUT-20261019-01\nHANDOFF_ID=R10-1WB-REARLEG-CLOSEOUT-20261019-01\nEXECUTOR=1WB-BLACKWARRIOR-WORKBUDDY (LOCAL_REAR_LEG / INDEPENDENT_REVIEW_ONLY)\nHOLD=CONTINUES (no deploy / no real ignition / no batch consumption / no HOLD lift)\nPRODUCTION_WRITES=0  GITHUB_WRITES=1 (this comment only)\nGENERATED_AT_UTC=2026-10-19T05:00:56Z\n\n================================================================\n第一刀｜#584 终态澄清\n================================================================\n#584 = R10-P1-D (#6 交果) 本地权威账本状态: in_progress (TaskList 确认, 总584任务)。\n本地 Phase1 产物齐备且 SHA 复核全过 (5 份):\n  - r10_p1a_r7_evidence_reverify.",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T05:00:57Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6261921723,
+      "type": "SELF_SOLVE",
+      "instruction": "# 【KR_GATE 申请｜P0 第二刀·隔离消费者验收完成】\n\n**原令：** `KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01`\n**执行体：** 1WB 黑武士（后腿）\n**申请类型：** 生产受控验收申请（REQUEST，待 KR_GATE 批准）\n\n## 一、隔离验收结论：PASS（5/5 全过）\n\n在**全新隔离队列** `kr_autonomous_iso/run_*/kr_directive_queue_iso.json`（非生产 `kr_directive_queue.json`）上，复用 R7 已验证组件构建独立 KR_DIRECTIVE 消费者，启动**真实 OS 子进程**完成 `RECEIVED→CLAIMED→RUNNING→RESULT→VERIFIED→CLOSED` 全链路：\n\n| 检查项 | 结果 | 关键证据 |\n|---|---|---|\n| 主链路闭环 | PASS | 真实 PID 38552；状态链 6 态全真实时间戳；结果 sha `0d0f0881…` == 目标文件独立重算（真实执行，非编造） |\n| 重复领取幂等 | PASS | 同 order_id 二次入队 → `DUPLICATE_SKIPPED`，零重复执行 |\n| 单实例锁 | PASS | 第二进程 → `REFUSED_SECOND_INSTANCE`（InstanceLock PIN stale-takeover，零删除） |\n| 回报失败恢复 | PASS | 首次回报失败→`RETURN_PENDING`（不 CLOSED）；杀进程 PID 41232；重启 PID 36740 恢复→`CLOSED` |\n| 崩溃恢复 | PASS | 注入 `RUNNING(claimed_by=999999 dead)` →",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T07:22:09Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6261992146,
+      "type": "SELF_SOLVE",
+      "instruction": "[CLOCK][1WB]\nNODE=1WB\nGENERATED_AT=2026-09-19T22:55:29+08:00\nSTATUS_SOURCE=NAS_REAL\nSOURCE_HASH=b9c41a1cf03f001d\nKR_MANUAL_RUN=0\nKR_RELAY=0",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T07:26:28Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6262528160,
+      "type": "SELF_SOLVE",
+      "instruction": "[KR_DIRECTIVE_RESULT][ORDER_ID=KR-1WB-AUTONOMOUS-P0-20261019-01-K4ISO-E2E1]\n\n【双账回报·刀4 隔离验收 + 真实 GitHub RESULT 验证】\n业务结果(A)：SUCCESS（risk=LOW，sha_match=True）\n执行链结果(B)：PID=41288，状态链 RECEIVED→CLAIMED→RUNNING→RESULT→VERIFIED→CLOSED，裁决=PASS\n回报通道：GITHUB_REAL（KR_GATE comment 6261921723 批准范围内真实 POST/GET）\n隔离队列真实执行闭环 + 真实 GitHub 回读 SHA_MATCH 验证\n\n```json\n{\n  \"envelope_meta\": {\n    \"schema\": \"WB1_KR_AUTONOMOUS_DUAL_ACCOUNT_RESULT_V0.1\",\n    \"command\": \"KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01\",\n    \"knife\": 4,\n    \"generated_at\": \"2026-10-19T16:00:37\",\n    \"return_adapter\": \"GITHUB_REAL\",\n    \"github_write_enabled\": true,\n    \"kr_gate_authorized\": true,\n    \"kr_gate_anchor_comment_id\": 6261921723,\n    \"note\": \"KR_GATE 第四刀批准范围内：隔离队列真实执行 + 真实 GitHub RESULT POST/GET 验证；非生产部署\"\n  },\n  \"biz_result\": {\n    \"",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T08:00:38Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6262875988,
+      "type": "SELF_SOLVE",
+      "instruction": "[KR_GATE_REQUEST][ORDER_ID=KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01][REQUEST_ID=KR-1WB-AUTONOMOUS-P0-20261019-01-K5REQ]\n\n【KR_GATE 第四刀·一次性最终申请 (刀4-6 / #595)】\n授权锚点：#6 评论 6261921723（第四刀批准：准备+隔离真实执行+真实 GitHub RESULT POST/GET+提交最终申请）\n证据链(全部 PASS)：刀4-1 冻结34文件 / 刀4-2 复核5/5 / 刀4-3 唯一新令 / 刀4-4 隔离真实执行+真实 GitHub RESULT(POST201,GET200,SHA_MATCH,comment 6262528160) / 刀4-5 生产接线准备(PREPARED_NOT_EXECUTED, 防误消费证明 PASS)\n生产现场：kr_directive_queue.json sha a89a7681… 14 条全 QUEUED 全缺 handler/params/risk，HOLD 继续\n本评论性质=REQUEST（非执行）；请求 KR 第五刀在 B映射层+GITHUB_WRITE受控+12步单次验收 条件下授权生产接线单次验收\n\n```json\n{\n  \"envelope_meta\": {\n    \"schema\": \"WB1_KR_GATE_REQUEST_V0.1\",\n    \"command\": \"KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01\",\n    \"request_id\": \"KR-1WB-AUTONOMOUS-P0-20261019-01-K5REQ\",\n    \"knife\": \"4-6\",\n    \"generated_at\":",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T08:21:03Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6264474843,
+      "type": "SELF_SOLVE",
+      "instruction": "[WB1_RESULT][ORDER_ID=KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1][K5PRE_ISOLATED_TEST]\n\n【K5PRE 隔离前置修复·真实消费者回报】\n本评论由隔离消费者(wb1_kr_directive_consumer_k5pre.py)自动回传，非 KR 人肉串接。\n父令：KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01｜锚点评论：6261921723｜scope：K5PRE_ISOLATED_TEST_ONLY\nhandler：READONLY_SHA256｜结果 sha256：40a01953e88b19747f907c6a320dc075c79bba53ada6fd512a871a4d12b8e13c｜bytes：434\n状态链：EXECUTED -> OUTBOX_PENDING -> GITHUB_POST -> GITHUB_GET_VERIFIED -> CLOSED\n诚实声明：隔离环境真实执行+真实 GitHub 回报，不等于生产消费者已接线；生产 HOLD 继续。\n\n```json\n{\n  \"schema\": \"WB1_K5PRE_RESULT_V0.1\",\n  \"order_id\": \"KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1\",\n  \"parent_order\": \"KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01\",\n  \"auth_anchor_comment_id\": 6261921723,\n  \"auth_scope\": \"K5PRE_ISOLATED_TEST_ONLY\",\n  \"return_adapter\": \"GITHUB_REAL\",\n  \"",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T09:52:33Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6264545161,
+      "type": "SELF_SOLVE",
+      "instruction": "[WB1_RESULT][ORDER_ID=KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1][K5PRE_ISOLATED_TEST]\n\n【K5PRE 隔离前置修复·真实消费者回报】\n本评论由隔离消费者(wb1_kr_directive_consumer_k5pre.py)自动回传，非 KR 人肉串接。\n父令：KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01｜锚点评论：6261921723｜scope：K5PRE_ISOLATED_TEST_ONLY\nhandler：READONLY_SHA256｜结果 sha256：40a01953e88b19747f907c6a320dc075c79bba53ada6fd512a871a4d12b8e13c｜bytes：434\n状态链：EXECUTED -> OUTBOX_PENDING -> GITHUB_POST -> GITHUB_GET_VERIFIED -> CLOSED\n诚实声明：隔离环境真实执行+真实 GitHub 回报，不等于生产消费者已接线；生产 HOLD 继续。\n\n```json\n{\n  \"schema\": \"WB1_K5PRE_RESULT_V0.1\",\n  \"order_id\": \"KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1\",\n  \"parent_order\": \"KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01\",\n  \"auth_anchor_comment_id\": 6261921723,\n  \"auth_scope\": \"K5PRE_ISOLATED_TEST_ONLY\",\n  \"return_adapter\": \"GITHUB_REAL\",\n  \"",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T09:56:18Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6264560968,
+      "type": "SELF_SOLVE",
+      "instruction": "[WB1_RESULT][ORDER_ID=KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1][K5PRE_ISOLATED_TEST]\n\n【K5PRE 隔离前置修复·真实消费者回报】\n本评论由隔离消费者(wb1_kr_directive_consumer_k5pre.py)自动回传，非 KR 人肉串接。\n父令：KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01｜锚点评论：6261921723｜scope：K5PRE_ISOLATED_TEST_ONLY\nhandler：READONLY_SHA256｜结果 sha256：40a01953e88b19747f907c6a320dc075c79bba53ada6fd512a871a4d12b8e13c｜bytes：434\n状态链：EXECUTED -> OUTBOX_PENDING -> GITHUB_POST -> GITHUB_GET_VERIFIED -> CLOSED\n诚实声明：隔离环境真实执行+真实 GitHub 回报，不等于生产消费者已接线；生产 HOLD 继续。\n\n```json\n{\n  \"schema\": \"WB1_K5PRE_RESULT_V0.1\",\n  \"order_id\": \"KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1\",\n  \"parent_order\": \"KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01\",\n  \"auth_anchor_comment_id\": 6261921723,\n  \"auth_scope\": \"K5PRE_ISOLATED_TEST_ONLY\",\n  \"return_adapter\": \"GITHUB_REAL\",\n  \"",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T09:57:08Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6264741724,
+      "type": "SELF_SOLVE",
+      "instruction": "[WB1_RESULT][ORDER_ID=KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1][K5PRE_ISOLATED_TEST]\n\n【K5PRE 隔离前置修复·真实消费者回报】\n本评论由隔离消费者(wb1_kr_directive_consumer_k5pre.py)自动回传，非 KR 人肉串接。\n父令：KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01｜锚点评论：6261921723｜scope：K5PRE_ISOLATED_TEST_ONLY\nhandler：READONLY_SHA256｜结果 sha256：40a01953e88b19747f907c6a320dc075c79bba53ada6fd512a871a4d12b8e13c｜bytes：434\n状态链：EXECUTED -> OUTBOX_PENDING -> GITHUB_POST -> GITHUB_GET_VERIFIED -> CLOSED\n诚实声明：隔离环境真实执行+真实 GitHub 回报，不等于生产消费者已接线；生产 HOLD 继续。\n\n```json\n{\n  \"schema\": \"WB1_K5PRE_RESULT_V0.1\",\n  \"order_id\": \"KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1\",\n  \"parent_order\": \"KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01\",\n  \"auth_anchor_comment_id\": 6261921723,\n  \"auth_scope\": \"K5PRE_ISOLATED_TEST_ONLY\",\n  \"return_adapter\": \"GITHUB_REAL\",\n  \"",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T10:07:26Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6264769147,
+      "type": "SELF_SOLVE",
+      "instruction": "[WB1_RESULT][ORDER_ID=KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1][K5PRE_ISOLATED_TEST]\n\n【K5PRE 隔离前置修复·真实消费者回报】\n本评论由隔离消费者(wb1_kr_directive_consumer_k5pre.py)自动回传，非 KR 人肉串接。\n父令：KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01｜锚点评论：6261921723｜scope：K5PRE_ISOLATED_TEST_ONLY\nhandler：READONLY_SHA256｜结果 sha256：40a01953e88b19747f907c6a320dc075c79bba53ada6fd512a871a4d12b8e13c｜bytes：434\n状态链：EXECUTED -> OUTBOX_PENDING -> GITHUB_POST -> GITHUB_GET_VERIFIED -> CLOSED\n诚实声明：隔离环境真实执行+真实 GitHub 回报，不等于生产消费者已接线；生产 HOLD 继续。\n\n```json\n{\n  \"schema\": \"WB1_K5PRE_RESULT_V0.1\",\n  \"order_id\": \"KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1\",\n  \"parent_order\": \"KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01\",\n  \"auth_anchor_comment_id\": 6261921723,\n  \"auth_scope\": \"K5PRE_ISOLATED_TEST_ONLY\",\n  \"return_adapter\": \"GITHUB_REAL\",\n  \"",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T10:09:01Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6264778765,
+      "type": "SELF_SOLVE",
+      "instruction": "[WB1_RESULT][ORDER_ID=KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1][K5PRE_ISOLATED_TEST]\n\n【K5PRE 隔离前置修复·真实消费者回报】\n本评论由隔离消费者(wb1_kr_directive_consumer_k5pre.py)自动回传，非 KR 人肉串接。\n父令：KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01｜锚点评论：6261921723｜scope：K5PRE_ISOLATED_TEST_ONLY\nhandler：READONLY_SHA256｜结果 sha256：40a01953e88b19747f907c6a320dc075c79bba53ada6fd512a871a4d12b8e13c｜bytes：434\n状态链：EXECUTED -> OUTBOX_PENDING -> GITHUB_POST -> GITHUB_GET_VERIFIED -> CLOSED\n诚实声明：隔离环境真实执行+真实 GitHub 回报，不等于生产消费者已接线；生产 HOLD 继续。\n\n```json\n{\n  \"schema\": \"WB1_K5PRE_RESULT_V0.1\",\n  \"order_id\": \"KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1\",\n  \"parent_order\": \"KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01\",\n  \"auth_anchor_comment_id\": 6261921723,\n  \"auth_scope\": \"K5PRE_ISOLATED_TEST_ONLY\",\n  \"return_adapter\": \"GITHUB_REAL\",\n  \"",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T10:09:35Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6264786729,
+      "type": "SELF_SOLVE",
+      "instruction": "[WB1_RESULT][ORDER_ID=KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1][K5PRE_ISOLATED_TEST]\n\n【K5PRE 隔离前置修复·真实消费者回报】\n本评论由隔离消费者(wb1_kr_directive_consumer_k5pre.py)自动回传，非 KR 人肉串接。\n父令：KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01｜锚点评论：6261921723｜scope：K5PRE_ISOLATED_TEST_ONLY\nhandler：READONLY_SHA256｜结果 sha256：40a01953e88b19747f907c6a320dc075c79bba53ada6fd512a871a4d12b8e13c｜bytes：434\n状态链：EXECUTED -> OUTBOX_PENDING -> GITHUB_POST -> GITHUB_GET_VERIFIED -> CLOSED\n诚实声明：隔离环境真实执行+真实 GitHub 回报，不等于生产消费者已接线；生产 HOLD 继续。\n\n```json\n{\n  \"schema\": \"WB1_K5PRE_RESULT_V0.1\",\n  \"order_id\": \"KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1\",\n  \"parent_order\": \"KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01\",\n  \"auth_anchor_comment_id\": 6261921723,\n  \"auth_scope\": \"K5PRE_ISOLATED_TEST_ONLY\",\n  \"return_adapter\": \"GITHUB_REAL\",\n  \"",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T10:10:01Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6264787373,
+      "type": "SELF_SOLVE",
+      "instruction": "[WB1_RESULT][ORDER_ID=KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1][K5PRE_ISOLATED_TEST]\n\n【K5PRE 隔离前置修复·真实消费者回报】\n本评论由隔离消费者(wb1_kr_directive_consumer_k5pre.py)自动回传，非 KR 人肉串接。\n父令：KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01｜锚点评论：6261921723｜scope：K5PRE_ISOLATED_TEST_ONLY\nhandler：READONLY_SHA256｜结果 sha256：40a01953e88b19747f907c6a320dc075c79bba53ada6fd512a871a4d12b8e13c｜bytes：434\n状态链：EXECUTED -> OUTBOX_PENDING -> GITHUB_POST -> GITHUB_GET_VERIFIED -> CLOSED\n诚实声明：隔离环境真实执行+真实 GitHub 回报，不等于生产消费者已接线；生产 HOLD 继续。\n\n```json\n{\n  \"schema\": \"WB1_K5PRE_RESULT_V0.1\",\n  \"order_id\": \"KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1\",\n  \"parent_order\": \"KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01\",\n  \"auth_anchor_comment_id\": 6261921723,\n  \"auth_scope\": \"K5PRE_ISOLATED_TEST_ONLY\",\n  \"return_adapter\": \"GITHUB_REAL\",\n  \"",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T10:10:04Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6264796271,
+      "type": "SELF_SOLVE",
+      "instruction": "[WB1_RESULT][ORDER_ID=KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1][K5PRE_ISOLATED_TEST]\n\n【K5PRE 隔离前置修复·真实消费者回报】\n本评论由隔离消费者(wb1_kr_directive_consumer_k5pre.py)自动回传，非 KR 人肉串接。\n父令：KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01｜锚点评论：6261921723｜scope：K5PRE_ISOLATED_TEST_ONLY\nhandler：READONLY_SHA256｜结果 sha256：40a01953e88b19747f907c6a320dc075c79bba53ada6fd512a871a4d12b8e13c｜bytes：434\n状态链：EXECUTED -> OUTBOX_PENDING -> GITHUB_POST -> GITHUB_GET_VERIFIED -> CLOSED\n诚实声明：隔离环境真实执行+真实 GitHub 回报，不等于生产消费者已接线；生产 HOLD 继续。\n\n```json\n{\n  \"schema\": \"WB1_K5PRE_RESULT_V0.1\",\n  \"order_id\": \"KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1\",\n  \"parent_order\": \"KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01\",\n  \"auth_anchor_comment_id\": 6261921723,\n  \"auth_scope\": \"K5PRE_ISOLATED_TEST_ONLY\",\n  \"return_adapter\": \"GITHUB_REAL\",\n  \"",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T10:10:33Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6264907811,
+      "type": "SELF_SOLVE",
+      "instruction": "[WB1_RESULT][ORDER_ID=KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1][K5PRE_ISOLATED_TEST]\n\n【K5PRE 隔离前置修复·真实消费者回报】\n本评论由隔离消费者(wb1_kr_directive_consumer_k5pre.py)自动回传，非 KR 人肉串接。\n父令：KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01｜锚点评论：6261921723｜scope：K5PRE_ISOLATED_TEST_ONLY\nhandler：READONLY_SHA256｜结果 sha256：40a01953e88b19747f907c6a320dc075c79bba53ada6fd512a871a4d12b8e13c｜bytes：434\n状态链：EXECUTED -> OUTBOX_PENDING -> GITHUB_POST -> GITHUB_GET_VERIFIED -> CLOSED\n诚实声明：隔离环境真实执行+真实 GitHub 回报，不等于生产消费者已接线；生产 HOLD 继续。\n\n```json\n{\n  \"schema\": \"WB1_K5PRE_RESULT_V0.1\",\n  \"order_id\": \"KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1\",\n  \"parent_order\": \"KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01\",\n  \"auth_anchor_comment_id\": 6261921723,\n  \"auth_scope\": \"K5PRE_ISOLATED_TEST_ONLY\",\n  \"return_adapter\": \"GITHUB_REAL\",\n  \"",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T10:16:48Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6264958910,
+      "type": "SELF_SOLVE",
+      "instruction": "[WB1_RESULT][ORDER_ID=KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1][K5PRE_ISOLATED_TEST]\n\n【K5PRE 隔离前置修复·真实消费者回报】\n本评论由隔离消费者(wb1_kr_directive_consumer_k5pre.py)自动回传，非 KR 人肉串接。\n父令：KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01｜锚点评论：6261921723｜scope：K5PRE_ISOLATED_TEST_ONLY\nhandler：READONLY_SHA256｜结果 sha256：40a01953e88b19747f907c6a320dc075c79bba53ada6fd512a871a4d12b8e13c｜bytes：434\n状态链：EXECUTED -> OUTBOX_PENDING -> GITHUB_POST -> GITHUB_GET_VERIFIED -> CLOSED\n诚实声明：隔离环境真实执行+真实 GitHub 回报，不等于生产消费者已接线；生产 HOLD 继续。\n\n```json\n{\n  \"schema\": \"WB1_K5PRE_RESULT_V0.1\",\n  \"order_id\": \"KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1\",\n  \"parent_order\": \"KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01\",\n  \"auth_anchor_comment_id\": 6261921723,\n  \"auth_scope\": \"K5PRE_ISOLATED_TEST_ONLY\",\n  \"return_adapter\": \"GITHUB_REAL\",\n  \"",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T10:19:36Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6264981377,
+      "type": "SELF_SOLVE",
+      "instruction": "[WB1_RESULT][ORDER_ID=KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1][K5PRE_ISOLATED_TEST]\n\n【K5PRE 隔离前置修复·真实消费者回报】\n本评论由隔离消费者(wb1_kr_directive_consumer_k5pre.py)自动回传，非 KR 人肉串接。\n父令：KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01｜锚点评论：6261921723｜scope：K5PRE_ISOLATED_TEST_ONLY\nhandler：READONLY_SHA256｜结果 sha256：40a01953e88b19747f907c6a320dc075c79bba53ada6fd512a871a4d12b8e13c｜bytes：434\n状态链：EXECUTED -> OUTBOX_PENDING -> GITHUB_POST -> GITHUB_GET_VERIFIED -> CLOSED\n诚实声明：隔离环境真实执行+真实 GitHub 回报，不等于生产消费者已接线；生产 HOLD 继续。\n\n```json\n{\n  \"schema\": \"WB1_K5PRE_RESULT_V0.1\",\n  \"order_id\": \"KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1\",\n  \"parent_order\": \"KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01\",\n  \"auth_anchor_comment_id\": 6261921723,\n  \"auth_scope\": \"K5PRE_ISOLATED_TEST_ONLY\",\n  \"return_adapter\": \"GITHUB_REAL\",\n  \"",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T10:20:51Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6264983074,
+      "type": "SELF_SOLVE",
+      "instruction": "[WB1_RESULT][ORDER_ID=KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1][K5PRE_ISOLATED_TEST]\n\n【K5PRE 隔离前置修复·真实消费者回报】\n本评论由隔离消费者(wb1_kr_directive_consumer_k5pre.py)自动回传，非 KR 人肉串接。\n父令：KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01｜锚点评论：6261921723｜scope：K5PRE_ISOLATED_TEST_ONLY\nhandler：READONLY_SHA256｜结果 sha256：40a01953e88b19747f907c6a320dc075c79bba53ada6fd512a871a4d12b8e13c｜bytes：434\n状态链：EXECUTED -> OUTBOX_PENDING -> GITHUB_POST -> GITHUB_GET_VERIFIED -> CLOSED\n诚实声明：隔离环境真实执行+真实 GitHub 回报，不等于生产消费者已接线；生产 HOLD 继续。\n\n```json\n{\n  \"schema\": \"WB1_K5PRE_RESULT_V0.1\",\n  \"order_id\": \"KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1\",\n  \"parent_order\": \"KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01\",\n  \"auth_anchor_comment_id\": 6261921723,\n  \"auth_scope\": \"K5PRE_ISOLATED_TEST_ONLY\",\n  \"return_adapter\": \"GITHUB_REAL\",\n  \"",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T10:20:57Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6264985325,
+      "type": "SELF_SOLVE",
+      "instruction": "[WB1_RESULT][ORDER_ID=KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1][K5PRE_ISOLATED_TEST]\n\n【K5PRE 隔离前置修复·真实消费者回报】\n本评论由隔离消费者(wb1_kr_directive_consumer_k5pre.py)自动回传，非 KR 人肉串接。\n父令：KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01｜锚点评论：6261921723｜scope：K5PRE_ISOLATED_TEST_ONLY\nhandler：READONLY_SHA256｜结果 sha256：40a01953e88b19747f907c6a320dc075c79bba53ada6fd512a871a4d12b8e13c｜bytes：434\n状态链：EXECUTED -> OUTBOX_PENDING -> GITHUB_POST -> GITHUB_GET_VERIFIED -> CLOSED\n诚实声明：隔离环境真实执行+真实 GitHub 回报，不等于生产消费者已接线；生产 HOLD 继续。\n\n```json\n{\n  \"schema\": \"WB1_K5PRE_RESULT_V0.1\",\n  \"order_id\": \"KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1\",\n  \"parent_order\": \"KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01\",\n  \"auth_anchor_comment_id\": 6261921723,\n  \"auth_scope\": \"K5PRE_ISOLATED_TEST_ONLY\",\n  \"return_adapter\": \"GITHUB_REAL\",\n  \"",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T10:21:04Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6264988577,
+      "type": "SELF_SOLVE",
+      "instruction": "[WB1_RESULT][ORDER_ID=KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1][K5PRE_ISOLATED_TEST]\n\n【K5PRE 隔离前置修复·真实消费者回报】\n本评论由隔离消费者(wb1_kr_directive_consumer_k5pre.py)自动回传，非 KR 人肉串接。\n父令：KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01｜锚点评论：6261921723｜scope：K5PRE_ISOLATED_TEST_ONLY\nhandler：READONLY_SHA256｜结果 sha256：40a01953e88b19747f907c6a320dc075c79bba53ada6fd512a871a4d12b8e13c｜bytes：434\n状态链：EXECUTED -> OUTBOX_PENDING -> GITHUB_POST -> GITHUB_GET_VERIFIED -> CLOSED\n诚实声明：隔离环境真实执行+真实 GitHub 回报，不等于生产消费者已接线；生产 HOLD 继续。\n\n```json\n{\n  \"schema\": \"WB1_K5PRE_RESULT_V0.1\",\n  \"order_id\": \"KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1\",\n  \"parent_order\": \"KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01\",\n  \"auth_anchor_comment_id\": 6261921723,\n  \"auth_scope\": \"K5PRE_ISOLATED_TEST_ONLY\",\n  \"return_adapter\": \"GITHUB_REAL\",\n  \"",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T10:21:15Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6264990109,
+      "type": "SELF_SOLVE",
+      "instruction": "[WB1_RESULT][ORDER_ID=KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1][K5PRE_ISOLATED_TEST]\n\n【K5PRE 隔离前置修复·真实消费者回报】\n本评论由隔离消费者(wb1_kr_directive_consumer_k5pre.py)自动回传，非 KR 人肉串接。\n父令：KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01｜锚点评论：6261921723｜scope：K5PRE_ISOLATED_TEST_ONLY\nhandler：READONLY_SHA256｜结果 sha256：40a01953e88b19747f907c6a320dc075c79bba53ada6fd512a871a4d12b8e13c｜bytes：434\n状态链：EXECUTED -> OUTBOX_PENDING -> GITHUB_POST -> GITHUB_GET_VERIFIED -> CLOSED\n诚实声明：隔离环境真实执行+真实 GitHub 回报，不等于生产消费者已接线；生产 HOLD 继续。\n\n```json\n{\n  \"schema\": \"WB1_K5PRE_RESULT_V0.1\",\n  \"order_id\": \"KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1\",\n  \"parent_order\": \"KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01\",\n  \"auth_anchor_comment_id\": 6261921723,\n  \"auth_scope\": \"K5PRE_ISOLATED_TEST_ONLY\",\n  \"return_adapter\": \"GITHUB_REAL\",\n  \"",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T10:21:20Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6265082973,
+      "type": "SELF_SOLVE",
+      "instruction": "[WB1_RESULT][ORDER_ID=KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1][K5PRE_ISOLATED_TEST]\n\n【K5PRE 隔离前置修复·真实消费者回报】\n本评论由隔离消费者(wb1_kr_directive_consumer_k5pre.py)自动回传，非 KR 人肉串接。\n父令：KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01｜锚点评论：6261921723｜scope：K5PRE_ISOLATED_TEST_ONLY\nhandler：READONLY_SHA256｜结果 sha256：40a01953e88b19747f907c6a320dc075c79bba53ada6fd512a871a4d12b8e13c｜bytes：434\n状态链：EXECUTED -> OUTBOX_PENDING -> GITHUB_POST -> GITHUB_GET_VERIFIED -> CLOSED\n诚实声明：隔离环境真实执行+真实 GitHub 回报，不等于生产消费者已接线；生产 HOLD 继续。\n\n```json\n{\n  \"schema\": \"WB1_K5PRE_RESULT_V0.1\",\n  \"order_id\": \"KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1\",\n  \"parent_order\": \"KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01\",\n  \"auth_anchor_comment_id\": 6261921723,\n  \"auth_scope\": \"K5PRE_ISOLATED_TEST_ONLY\",\n  \"return_adapter\": \"GITHUB_REAL\",\n  \"",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T10:26:30Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6265117641,
+      "type": "SELF_SOLVE",
+      "instruction": "[WB1_RESULT][ORDER_ID=KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1][K5PRE_ISOLATED_TEST]\n\n【K5PRE 隔离前置修复·真实消费者回报】\n本评论由隔离消费者(wb1_kr_directive_consumer_k5pre.py)自动回传，非 KR 人肉串接。\n父令：KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01｜锚点评论：6261921723｜scope：K5PRE_ISOLATED_TEST_ONLY\nhandler：READONLY_SHA256｜结果 sha256：40a01953e88b19747f907c6a320dc075c79bba53ada6fd512a871a4d12b8e13c｜bytes：434\n状态链：EXECUTED -> OUTBOX_PENDING -> GITHUB_POST -> GITHUB_GET_VERIFIED -> CLOSED\n诚实声明：隔离环境真实执行+真实 GitHub 回报，不等于生产消费者已接线；生产 HOLD 继续。\n\n```json\n{\n  \"schema\": \"WB1_K5PRE_RESULT_V0.1\",\n  \"order_id\": \"KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1\",\n  \"parent_order\": \"KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01\",\n  \"auth_anchor_comment_id\": 6261921723,\n  \"auth_scope\": \"K5PRE_ISOLATED_TEST_ONLY\",\n  \"return_adapter\": \"GITHUB_REAL\",\n  \"",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T10:28:29Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6265131831,
+      "type": "SELF_SOLVE",
+      "instruction": "[WB1_RESULT][ORDER_ID=KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1][K5PRE_ISOLATED_TEST]\n\n【K5PRE 隔离前置修复·真实消费者回报】\n本评论由隔离消费者(wb1_kr_directive_consumer_k5pre.py)自动回传，非 KR 人肉串接。\n父令：KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01｜锚点评论：6261921723｜scope：K5PRE_ISOLATED_TEST_ONLY\nhandler：READONLY_SHA256｜结果 sha256：40a01953e88b19747f907c6a320dc075c79bba53ada6fd512a871a4d12b8e13c｜bytes：434\n状态链：EXECUTED -> OUTBOX_PENDING -> GITHUB_POST -> GITHUB_GET_VERIFIED -> CLOSED\n诚实声明：隔离环境真实执行+真实 GitHub 回报，不等于生产消费者已接线；生产 HOLD 继续。\n\n```json\n{\n  \"schema\": \"WB1_K5PRE_RESULT_V0.1\",\n  \"order_id\": \"KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1\",\n  \"parent_order\": \"KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01\",\n  \"auth_anchor_comment_id\": 6261921723,\n  \"auth_scope\": \"K5PRE_ISOLATED_TEST_ONLY\",\n  \"return_adapter\": \"GITHUB_REAL\",\n  \"",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T10:29:21Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6265191822,
+      "type": "SELF_SOLVE",
+      "instruction": "[WB1_RESULT][ORDER_ID=KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1][K5PRE_ISOLATED_TEST]\n\n【K5PRE 隔离前置修复·真实消费者回报】\n本评论由隔离消费者(wb1_kr_directive_consumer_k5pre.py)自动回传，非 KR 人肉串接。\n父令：KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01｜锚点评论：6261921723｜scope：K5PRE_ISOLATED_TEST_ONLY\nhandler：READONLY_SHA256｜结果 sha256：40a01953e88b19747f907c6a320dc075c79bba53ada6fd512a871a4d12b8e13c｜bytes：434\n状态链：EXECUTED -> OUTBOX_PENDING -> GITHUB_POST -> GITHUB_GET_VERIFIED -> CLOSED\n诚实声明：隔离环境真实执行+真实 GitHub 回报，不等于生产消费者已接线；生产 HOLD 继续。\n\n```json\n{\n  \"schema\": \"WB1_K5PRE_RESULT_V0.1\",\n  \"order_id\": \"KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1\",\n  \"parent_order\": \"KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01\",\n  \"auth_anchor_comment_id\": 6261921723,\n  \"auth_scope\": \"K5PRE_ISOLATED_TEST_ONLY\",\n  \"return_adapter\": \"GITHUB_REAL\",\n  \"",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T10:32:52Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6265210851,
+      "type": "SELF_SOLVE",
+      "instruction": "[WB1_RESULT][ORDER_ID=KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1][K5PRE_ISOLATED_TEST]\n\n【K5PRE 隔离前置修复·真实消费者回报】\n本评论由隔离消费者(wb1_kr_directive_consumer_k5pre.py)自动回传，非 KR 人肉串接。\n父令：KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01｜锚点评论：6261921723｜scope：K5PRE_ISOLATED_TEST_ONLY\nhandler：READONLY_SHA256｜结果 sha256：40a01953e88b19747f907c6a320dc075c79bba53ada6fd512a871a4d12b8e13c｜bytes：434\n状态链：EXECUTED -> OUTBOX_PENDING -> GITHUB_POST -> GITHUB_GET_VERIFIED -> CLOSED\n诚实声明：隔离环境真实执行+真实 GitHub 回报，不等于生产消费者已接线；生产 HOLD 继续。\n\n```json\n{\n  \"schema\": \"WB1_K5PRE_RESULT_V0.1\",\n  \"order_id\": \"KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1\",\n  \"parent_order\": \"KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01\",\n  \"auth_anchor_comment_id\": 6261921723,\n  \"auth_scope\": \"K5PRE_ISOLATED_TEST_ONLY\",\n  \"return_adapter\": \"GITHUB_REAL\",\n  \"",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T10:33:57Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6265225780,
+      "type": "SELF_SOLVE",
+      "instruction": "[WB1_RESULT][ORDER_ID=KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1][K5PRE_ISOLATED_TEST]\n\n【K5PRE 隔离前置修复·真实消费者回报】\n本评论由隔离消费者(wb1_kr_directive_consumer_k5pre.py)自动回传，非 KR 人肉串接。\n父令：KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01｜锚点评论：6261921723｜scope：K5PRE_ISOLATED_TEST_ONLY\nhandler：READONLY_SHA256｜结果 sha256：40a01953e88b19747f907c6a320dc075c79bba53ada6fd512a871a4d12b8e13c｜bytes：434\n状态链：EXECUTED -> OUTBOX_PENDING -> GITHUB_POST -> GITHUB_GET_VERIFIED -> CLOSED\n诚实声明：隔离环境真实执行+真实 GitHub 回报，不等于生产消费者已接线；生产 HOLD 继续。\n\n```json\n{\n  \"schema\": \"WB1_K5PRE_RESULT_V0.1\",\n  \"order_id\": \"KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1\",\n  \"parent_order\": \"KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01\",\n  \"auth_anchor_comment_id\": 6261921723,\n  \"auth_scope\": \"K5PRE_ISOLATED_TEST_ONLY\",\n  \"return_adapter\": \"GITHUB_REAL\",\n  \"",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T10:34:48Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6265250654,
+      "type": "SELF_SOLVE",
+      "instruction": "[WB1_RESULT][ORDER_ID=KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1][K5PRE_ISOLATED_TEST]\n\n【K5PRE 隔离前置修复·真实消费者回报】\n本评论由隔离消费者(wb1_kr_directive_consumer_k5pre.py)自动回传，非 KR 人肉串接。\n父令：KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01｜锚点评论：6261921723｜scope：K5PRE_ISOLATED_TEST_ONLY\nhandler：READONLY_SHA256｜结果 sha256：40a01953e88b19747f907c6a320dc075c79bba53ada6fd512a871a4d12b8e13c｜bytes：434\n状态链：EXECUTED -> OUTBOX_PENDING -> GITHUB_POST -> GITHUB_GET_VERIFIED -> CLOSED\n诚实声明：隔离环境真实执行+真实 GitHub 回报，不等于生产消费者已接线；生产 HOLD 继续。\n\n```json\n{\n  \"schema\": \"WB1_K5PRE_RESULT_V0.1\",\n  \"order_id\": \"KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1\",\n  \"parent_order\": \"KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01\",\n  \"auth_anchor_comment_id\": 6261921723,\n  \"auth_scope\": \"K5PRE_ISOLATED_TEST_ONLY\",\n  \"return_adapter\": \"GITHUB_REAL\",\n  \"",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T10:36:10Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6265268198,
+      "type": "SELF_SOLVE",
+      "instruction": "[WB1_RESULT][ORDER_ID=KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1][K5PRE_ISOLATED_TEST]\n\n【K5PRE 隔离前置修复·真实消费者回报】\n本评论由隔离消费者(wb1_kr_directive_consumer_k5pre.py)自动回传，非 KR 人肉串接。\n父令：KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01｜锚点评论：6261921723｜scope：K5PRE_ISOLATED_TEST_ONLY\nhandler：READONLY_SHA256｜结果 sha256：40a01953e88b19747f907c6a320dc075c79bba53ada6fd512a871a4d12b8e13c｜bytes：434\n状态链：EXECUTED -> OUTBOX_PENDING -> GITHUB_POST -> GITHUB_GET_VERIFIED -> CLOSED\n诚实声明：隔离环境真实执行+真实 GitHub 回报，不等于生产消费者已接线；生产 HOLD 继续。\n\n```json\n{\n  \"schema\": \"WB1_K5PRE_RESULT_V0.1\",\n  \"order_id\": \"KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1\",\n  \"parent_order\": \"KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01\",\n  \"auth_anchor_comment_id\": 6261921723,\n  \"auth_scope\": \"K5PRE_ISOLATED_TEST_ONLY\",\n  \"return_adapter\": \"GITHUB_REAL\",\n  \"",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T10:37:04Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6265357169,
+      "type": "SELF_SOLVE",
+      "instruction": "[WB1_RESULT][ORDER_ID=KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1][K5PRE_ISOLATED_TEST]\n\n【K5PRE 隔离前置修复·真实消费者回报】\n本评论由隔离消费者(wb1_kr_directive_consumer_k5pre.py)自动回传，非 KR 人肉串接。\n父令：KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01｜锚点评论：6261921723｜scope：K5PRE_ISOLATED_TEST_ONLY\nhandler：READONLY_SHA256｜结果 sha256：40a01953e88b19747f907c6a320dc075c79bba53ada6fd512a871a4d12b8e13c｜bytes：434\n状态链：EXECUTED -> OUTBOX_PENDING -> GITHUB_POST -> GITHUB_GET_VERIFIED -> CLOSED\n诚实声明：隔离环境真实执行+真实 GitHub 回报，不等于生产消费者已接线；生产 HOLD 继续。\n\n```json\n{\n  \"schema\": \"WB1_K5PRE_RESULT_V0.1\",\n  \"order_id\": \"KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1\",\n  \"parent_order\": \"KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01\",\n  \"auth_anchor_comment_id\": 6261921723,\n  \"auth_scope\": \"K5PRE_ISOLATED_TEST_ONLY\",\n  \"return_adapter\": \"GITHUB_REAL\",\n  \"",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T10:42:29Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6265397381,
+      "type": "SELF_SOLVE",
+      "instruction": "[WB1_RESULT][ORDER_ID=KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1][K5PRE_ISOLATED_TEST]\n\n【K5PRE 隔离前置修复·真实消费者回报】\n本评论由隔离消费者(wb1_kr_directive_consumer_k5pre.py)自动回传，非 KR 人肉串接。\n父令：KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01｜锚点评论：6261921723｜scope：K5PRE_ISOLATED_TEST_ONLY\nhandler：READONLY_SHA256｜结果 sha256：40a01953e88b19747f907c6a320dc075c79bba53ada6fd512a871a4d12b8e13c｜bytes：434\n状态链：EXECUTED -> OUTBOX_PENDING -> GITHUB_POST -> GITHUB_GET_VERIFIED -> CLOSED\n诚实声明：隔离环境真实执行+真实 GitHub 回报，不等于生产消费者已接线；生产 HOLD 继续。\n\n```json\n{\n  \"schema\": \"WB1_K5PRE_RESULT_V0.1\",\n  \"order_id\": \"KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1\",\n  \"parent_order\": \"KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01\",\n  \"auth_anchor_comment_id\": 6261921723,\n  \"auth_scope\": \"K5PRE_ISOLATED_TEST_ONLY\",\n  \"return_adapter\": \"GITHUB_REAL\",\n  \"",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T10:44:56Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6265412838,
+      "type": "SELF_SOLVE",
+      "instruction": "[WB1_RESULT][ORDER_ID=KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1][K5PRE_ISOLATED_TEST]\n\n【K5PRE 隔离前置修复·真实消费者回报】\n本评论由隔离消费者(wb1_kr_directive_consumer_k5pre.py)自动回传，非 KR 人肉串接。\n父令：KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01｜锚点评论：6261921723｜scope：K5PRE_ISOLATED_TEST_ONLY\nhandler：READONLY_SHA256｜结果 sha256：40a01953e88b19747f907c6a320dc075c79bba53ada6fd512a871a4d12b8e13c｜bytes：434\n状态链：EXECUTED -> OUTBOX_PENDING -> GITHUB_POST -> GITHUB_GET_VERIFIED -> CLOSED\n诚实声明：隔离环境真实执行+真实 GitHub 回报，不等于生产消费者已接线；生产 HOLD 继续。\n\n```json\n{\n  \"schema\": \"WB1_K5PRE_RESULT_V0.1\",\n  \"order_id\": \"KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1\",\n  \"parent_order\": \"KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01\",\n  \"auth_anchor_comment_id\": 6261921723,\n  \"auth_scope\": \"K5PRE_ISOLATED_TEST_ONLY\",\n  \"return_adapter\": \"GITHUB_REAL\",\n  \"",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T10:45:51Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6265429722,
+      "type": "SELF_SOLVE",
+      "instruction": "[WB1_RESULT][ORDER_ID=KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1][K5PRE_ISOLATED_TEST]\n\n【K5PRE 隔离前置修复·真实消费者回报】\n本评论由隔离消费者(wb1_kr_directive_consumer_k5pre.py)自动回传，非 KR 人肉串接。\n父令：KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01｜锚点评论：6261921723｜scope：K5PRE_ISOLATED_TEST_ONLY\nhandler：READONLY_SHA256｜结果 sha256：40a01953e88b19747f907c6a320dc075c79bba53ada6fd512a871a4d12b8e13c｜bytes：434\n状态链：EXECUTED -> OUTBOX_PENDING -> GITHUB_POST -> GITHUB_GET_VERIFIED -> CLOSED\n诚实声明：隔离环境真实执行+真实 GitHub 回报，不等于生产消费者已接线；生产 HOLD 继续。\n\n```json\n{\n  \"schema\": \"WB1_K5PRE_RESULT_V0.1\",\n  \"order_id\": \"KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1\",\n  \"parent_order\": \"KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01\",\n  \"auth_anchor_comment_id\": 6261921723,\n  \"auth_scope\": \"K5PRE_ISOLATED_TEST_ONLY\",\n  \"return_adapter\": \"GITHUB_REAL\",\n  \"",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T10:46:51Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6265445361,
+      "type": "SELF_SOLVE",
+      "instruction": "[WB1_RESULT][ORDER_ID=KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1][K5PRE_ISOLATED_TEST]\n\n【K5PRE 隔离前置修复·真实消费者回报】\n本评论由隔离消费者(wb1_kr_directive_consumer_k5pre.py)自动回传，非 KR 人肉串接。\n父令：KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01｜锚点评论：6261921723｜scope：K5PRE_ISOLATED_TEST_ONLY\nhandler：READONLY_SHA256｜结果 sha256：40a01953e88b19747f907c6a320dc075c79bba53ada6fd512a871a4d12b8e13c｜bytes：434\n状态链：EXECUTED -> OUTBOX_PENDING -> GITHUB_POST -> GITHUB_GET_VERIFIED -> CLOSED\n诚实声明：隔离环境真实执行+真实 GitHub 回报，不等于生产消费者已接线；生产 HOLD 继续。\n\n```json\n{\n  \"schema\": \"WB1_K5PRE_RESULT_V0.1\",\n  \"order_id\": \"KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1\",\n  \"parent_order\": \"KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01\",\n  \"auth_anchor_comment_id\": 6261921723,\n  \"auth_scope\": \"K5PRE_ISOLATED_TEST_ONLY\",\n  \"return_adapter\": \"GITHUB_REAL\",\n  \"",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T10:47:48Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6265465072,
+      "type": "SELF_SOLVE",
+      "instruction": "[WB1_RESULT][ORDER_ID=KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1][K5PRE_ISOLATED_TEST]\n\n【K5PRE 隔离前置修复·真实消费者回报】\n本评论由隔离消费者(wb1_kr_directive_consumer_k5pre.py)自动回传，非 KR 人肉串接。\n父令：KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01｜锚点评论：6261921723｜scope：K5PRE_ISOLATED_TEST_ONLY\nhandler：READONLY_SHA256｜结果 sha256：40a01953e88b19747f907c6a320dc075c79bba53ada6fd512a871a4d12b8e13c｜bytes：434\n状态链：EXECUTED -> OUTBOX_PENDING -> GITHUB_POST -> GITHUB_GET_VERIFIED -> CLOSED\n诚实声明：隔离环境真实执行+真实 GitHub 回报，不等于生产消费者已接线；生产 HOLD 继续。\n\n```json\n{\n  \"schema\": \"WB1_K5PRE_RESULT_V0.1\",\n  \"order_id\": \"KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1\",\n  \"parent_order\": \"KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01\",\n  \"auth_anchor_comment_id\": 6261921723,\n  \"auth_scope\": \"K5PRE_ISOLATED_TEST_ONLY\",\n  \"return_adapter\": \"GITHUB_REAL\",\n  \"",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T10:48:59Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6265518239,
+      "type": "SELF_SOLVE",
+      "instruction": "[WB1_RESULT][ORDER_ID=KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1][K5PRE_ISOLATED_TEST]\n\n【K5PRE 隔离前置修复·真实消费者回报】\n本评论由隔离消费者(wb1_kr_directive_consumer_k5pre.py)自动回传，非 KR 人肉串接。\n父令：KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01｜锚点评论：6261921723｜scope：K5PRE_ISOLATED_TEST_ONLY\nhandler：READONLY_SHA256｜结果 sha256：40a01953e88b19747f907c6a320dc075c79bba53ada6fd512a871a4d12b8e13c｜bytes：434\n状态链：EXECUTED -> OUTBOX_PENDING -> GITHUB_POST -> GITHUB_GET_VERIFIED -> CLOSED\n诚实声明：隔离环境真实执行+真实 GitHub 回报，不等于生产消费者已接线；生产 HOLD 继续。\n\n```json\n{\n  \"schema\": \"WB1_K5PRE_RESULT_V0.1\",\n  \"order_id\": \"KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1\",\n  \"parent_order\": \"KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01\",\n  \"auth_anchor_comment_id\": 6261921723,\n  \"auth_scope\": \"K5PRE_ISOLATED_TEST_ONLY\",\n  \"return_adapter\": \"GITHUB_REAL\",\n  \"",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T10:52:13Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6265554571,
+      "type": "SELF_SOLVE",
+      "instruction": "[WB1_RESULT][ORDER_ID=KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1][K5PRE_ISOLATED_TEST]\n\n【K5PRE 隔离前置修复·真实消费者回报】\n本评论由隔离消费者(wb1_kr_directive_consumer_k5pre.py)自动回传，非 KR 人肉串接。\n父令：KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01｜锚点评论：6261921723｜scope：K5PRE_ISOLATED_TEST_ONLY\nhandler：READONLY_SHA256｜结果 sha256：40a01953e88b19747f907c6a320dc075c79bba53ada6fd512a871a4d12b8e13c｜bytes：434\n状态链：EXECUTED -> OUTBOX_PENDING -> GITHUB_POST -> GITHUB_GET_VERIFIED -> CLOSED\n诚实声明：隔离环境真实执行+真实 GitHub 回报，不等于生产消费者已接线；生产 HOLD 继续。\n\n```json\n{\n  \"schema\": \"WB1_K5PRE_RESULT_V0.1\",\n  \"order_id\": \"KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1\",\n  \"parent_order\": \"KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01\",\n  \"auth_anchor_comment_id\": 6261921723,\n  \"auth_scope\": \"K5PRE_ISOLATED_TEST_ONLY\",\n  \"return_adapter\": \"GITHUB_REAL\",\n  \"",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T10:54:26Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6265570336,
+      "type": "SELF_SOLVE",
+      "instruction": "[WB1_RESULT][ORDER_ID=KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1][K5PRE_ISOLATED_TEST]\n\n【K5PRE 隔离前置修复·真实消费者回报】\n本评论由隔离消费者(wb1_kr_directive_consumer_k5pre.py)自动回传，非 KR 人肉串接。\n父令：KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01｜锚点评论：6261921723｜scope：K5PRE_ISOLATED_TEST_ONLY\nhandler：READONLY_SHA256｜结果 sha256：40a01953e88b19747f907c6a320dc075c79bba53ada6fd512a871a4d12b8e13c｜bytes：434\n状态链：EXECUTED -> OUTBOX_PENDING -> GITHUB_POST -> GITHUB_GET_VERIFIED -> CLOSED\n诚实声明：隔离环境真实执行+真实 GitHub 回报，不等于生产消费者已接线；生产 HOLD 继续。\n\n```json\n{\n  \"schema\": \"WB1_K5PRE_RESULT_V0.1\",\n  \"order_id\": \"KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1\",\n  \"parent_order\": \"KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01\",\n  \"auth_anchor_comment_id\": 6261921723,\n  \"auth_scope\": \"K5PRE_ISOLATED_TEST_ONLY\",\n  \"return_adapter\": \"GITHUB_REAL\",\n  \"",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T10:55:21Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6265588541,
+      "type": "SELF_SOLVE",
+      "instruction": "[WB1_RESULT][ORDER_ID=KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1][K5PRE_ISOLATED_TEST]\n\n【K5PRE 隔离前置修复·真实消费者回报】\n本评论由隔离消费者(wb1_kr_directive_consumer_k5pre.py)自动回传，非 KR 人肉串接。\n父令：KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01｜锚点评论：6261921723｜scope：K5PRE_ISOLATED_TEST_ONLY\nhandler：READONLY_SHA256｜结果 sha256：40a01953e88b19747f907c6a320dc075c79bba53ada6fd512a871a4d12b8e13c｜bytes：434\n状态链：EXECUTED -> OUTBOX_PENDING -> GITHUB_POST -> GITHUB_GET_VERIFIED -> CLOSED\n诚实声明：隔离环境真实执行+真实 GitHub 回报，不等于生产消费者已接线；生产 HOLD 继续。\n\n```json\n{\n  \"schema\": \"WB1_K5PRE_RESULT_V0.1\",\n  \"order_id\": \"KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1\",\n  \"parent_order\": \"KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01\",\n  \"auth_anchor_comment_id\": 6261921723,\n  \"auth_scope\": \"K5PRE_ISOLATED_TEST_ONLY\",\n  \"return_adapter\": \"GITHUB_REAL\",\n  \"",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T10:56:25Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6265606391,
+      "type": "SELF_SOLVE",
+      "instruction": "[WB1_RESULT][ORDER_ID=KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1][K5PRE_ISOLATED_TEST]\n\n【K5PRE 隔离前置修复·真实消费者回报】\n本评论由隔离消费者(wb1_kr_directive_consumer_k5pre.py)自动回传，非 KR 人肉串接。\n父令：KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01｜锚点评论：6261921723｜scope：K5PRE_ISOLATED_TEST_ONLY\nhandler：READONLY_SHA256｜结果 sha256：40a01953e88b19747f907c6a320dc075c79bba53ada6fd512a871a4d12b8e13c｜bytes：434\n状态链：EXECUTED -> OUTBOX_PENDING -> GITHUB_POST -> GITHUB_GET_VERIFIED -> CLOSED\n诚实声明：隔离环境真实执行+真实 GitHub 回报，不等于生产消费者已接线；生产 HOLD 继续。\n\n```json\n{\n  \"schema\": \"WB1_K5PRE_RESULT_V0.1\",\n  \"order_id\": \"KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1\",\n  \"parent_order\": \"KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01\",\n  \"auth_anchor_comment_id\": 6261921723,\n  \"auth_scope\": \"K5PRE_ISOLATED_TEST_ONLY\",\n  \"return_adapter\": \"GITHUB_REAL\",\n  \"",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T10:57:32Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6265625954,
+      "type": "SELF_SOLVE",
+      "instruction": "[WB1_RESULT][ORDER_ID=KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1][K5PRE_ISOLATED_TEST]\n\n【K5PRE 隔离前置修复·真实消费者回报】\n本评论由隔离消费者(wb1_kr_directive_consumer_k5pre.py)自动回传，非 KR 人肉串接。\n父令：KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01｜锚点评论：6261921723｜scope：K5PRE_ISOLATED_TEST_ONLY\nhandler：READONLY_SHA256｜结果 sha256：40a01953e88b19747f907c6a320dc075c79bba53ada6fd512a871a4d12b8e13c｜bytes：434\n状态链：EXECUTED -> OUTBOX_PENDING -> GITHUB_POST -> GITHUB_GET_VERIFIED -> CLOSED\n诚实声明：隔离环境真实执行+真实 GitHub 回报，不等于生产消费者已接线；生产 HOLD 继续。\n\n```json\n{\n  \"schema\": \"WB1_K5PRE_RESULT_V0.1\",\n  \"order_id\": \"KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1\",\n  \"parent_order\": \"KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01\",\n  \"auth_anchor_comment_id\": 6261921723,\n  \"auth_scope\": \"K5PRE_ISOLATED_TEST_ONLY\",\n  \"return_adapter\": \"GITHUB_REAL\",\n  \"",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T10:58:44Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6265740076,
+      "type": "SELF_SOLVE",
+      "instruction": "[WB1_RESULT][ORDER_ID=KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1][K5PRE_DELIVERY][K5PRE_ISOLATED_TEST]\n\n【K5PRE 隔离前置修复·整合交付 RESULT】\n父令：KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01｜锚点评论：6261921723｜scope：K5PRE_ISOLATED_TEST_ONLY\n本评论由 1WB 隔离交付脚本自动回传（非 KR 人肉串接）。\n结论：#598 真实验收 PASS + #599 异常电池 6/6 场景 PASS（真实 GitHub 回报路径）；生产 HOLD 继续。\n本地交付物：k5pre_delivery.json（sha256=d7bf8daae0ed1adb…），消费者 sha256=d93d0930800b0a46…，电池 sha256=143290582643985e…\n诚实声明：隔离环境真实执行+真实回报 ≠ 生产消费者已接线；生产接入须 KR_GATE 单独授权。\n\n```json\n{\n  \"schema\": \"WB1_K5PRE_DELIVERY_V1.0\",\n  \"order_id\": \"KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-E2E1\",\n  \"parent_order\": \"KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01\",\n  \"auth_anchor_comment_id\": 6261921723,\n  \"auth_scope\": \"K5PRE_ISOLATED_TEST_ONLY\",\n  \"generated_at_utc\": \"2026-10-19T11:05:25Z\",\n  \"produc",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T11:05:26Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6266356172,
+      "type": "SELF_SOLVE",
+      "instruction": "[WB1_REQUEST][ORDER_ID=KR-1WB-AUTONOMOUS-P0-20261019-01-K5PRE-PRODWIRE-01][KR_GATE_APPROVAL_REQUEST][K5PRE_PRODWIRE]\n\n【P0 第五刀·生产接线准备就绪 · 申请 KR 单次批准】\n父令：KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01｜锚点评论：#6261921723｜scope：K5PRE_ISOLATED_TEST_ONLY\n本评论由 1WB 代发，是『申请 KR 单次批准』的请求，不是 RESULT 回报。\n\n★ 点火闸门状态：AT_GATE_NOT_FIRED（未点火）。生产 HOLD 继续：不接线、不改调度、不清空 14/15 条积压、未启动消费者。\n\n一、最小只读接线差分（已证明不覆盖生产队列）\n· 生产队列 schema=WB1_KR_DIRECTIVE_QUEUE_V0.1 用 entries[]；隔离消费者 schema=WB1_KR_DIRECTIVE_K5PRE_QUEUE_V0.1 用 tasks[]。\n· 适配器 k5pre_prod_wire.py（sha256=ca2fcf71a8281018…）只把生产 entries[] 翻译为隔离消费者 tasks[]，写入消费者自有隔离队列，绝不写回生产队列。\n· 不覆盖证明（prodwire_evidence.json）：生产队列 SHA 前后一致 = 1175a8e51…（unchanged=True）；白名单扫描 15 条历史令 0 命中（零消费/零迁移/零清空）；朴素反例证明直连必污染（副本 SHA 由 1175a8e5… 变为 406a2b4d…、注入 tasks/results）。\n\n二、GitHub 四项机制（引用既有真实证据，不再扩建）",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T11:40:41Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6270346288,
+      "type": "SELF_SOLVE",
+      "instruction": "【KR→1WB｜P0·第52刀·真实接线单次只读测试令｜ORDER_ID=KR-1WB-P0-20261019-K52-FINAL】\nKR_GATE=APPROVED_ONCE_READONLY\nORDER_ID=KR-1WB-P0-20261019-K52-FINAL\nISSUER=kongsonren\nPARENT_ORDER=KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01\nAUTH_ANCHOR_COMMENT_ID=6261921723\nAUTH_SCOPE=K5PRE_ISOLATED_TEST_ONLY\nVALID_UNTIL=2026-10-19T23:59:59Z\nHANDLER=READONLY_SHA256\nTARGET=k5pre_target.dat\nNOTE=单次只读真实性测试；仅计算非敏感目标文件 SHA256；不写业务、不扩权、不解除 HOLD。\n",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T15:01:28Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6270354978,
+      "type": "SELF_SOLVE",
+      "instruction": "[WB1_RESULT][ORDER_ID=KR-1WB-P0-20261019-K52-FINAL][K5PRE_ISOLATED_TEST]\n\n【K5PRE 隔离前置修复·真实消费者回报】\n本评论由隔离消费者(wb1_kr_directive_consumer_k5pre.py)自动回传，非 KR 人肉串接。\n父令：KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01｜锚点评论：6261921723｜scope：K5PRE_ISOLATED_TEST_ONLY\nhandler：READONLY_SHA256｜结果 sha256：40a01953e88b19747f907c6a320dc075c79bba53ada6fd512a871a4d12b8e13c｜bytes：434\n状态链：EXECUTED -> OUTBOX_PENDING -> GITHUB_POST -> GITHUB_GET_VERIFIED -> CLOSED\n诚实声明：隔离环境真实执行+真实 GitHub 回报，不等于生产消费者已接线；生产 HOLD 继续。\n\n```json\n{\n  \"schema\": \"WB1_K5PRE_RESULT_V0.1\",\n  \"order_id\": \"KR-1WB-P0-20261019-K52-FINAL\",\n  \"parent_order\": \"KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01\",\n  \"auth_anchor_comment_id\": 6261921723,\n  \"auth_scope\": \"K5PRE_ISOLATED_TEST_ONLY\",\n  \"return_adapter\": \"GITHUB_REAL\",\n  \"handler\": \"READONLY_SHA256\",\n ",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T15:01:53Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6271133869,
+      "type": "SELF_SOLVE",
+      "instruction": "【KR→1WB｜P0·第53刀·无人值守自治单次只读测试令｜ORDER_ID=KR-1WB-AUTONOMY-K53-20261019】\nKR_GATE=APPROVED_ONCE_READONLY_AUTOWAKE\nORDER_ID=KR-1WB-AUTONOMY-K53-20261019\nISSUER=kongsonren\nPARENT_ORDER=KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01\nAUTH_ANCHOR_COMMENT_ID=6261921723\nAUTH_SCOPE=K5PRE_ISOLATED_TEST_ONLY\nVALID_UNTIL=2026-10-19T23:59:59Z\nHANDLER=READONLY_SHA256\nTARGET=k5pre_target.dat\nAUTONOMY=ISSUER_POSTED_BY_SCHEDULED_TASK (KR not involved in mid-way handling)\nNOTE=无人值守自治验收：真实心跳自动接令+适配器/消费者由计划任务自动触发；仅计算非敏感目标 SHA256；不写业务、不扩权、不解除 HOLD。\n",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T15:40:24Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6271151726,
+      "type": "SELF_SOLVE",
+      "instruction": "[WB1_RESULT][ORDER_ID=KR-1WB-AUTONOMY-K53-20261019][K5PRE_ISOLATED_TEST]\n\n【K5PRE 隔离前置修复·真实消费者回报】\n本评论由隔离消费者(wb1_kr_directive_consumer_k5pre.py)自动回传，非 KR 人肉串接。\n父令：KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01｜锚点评论：6261921723｜scope：K5PRE_ISOLATED_TEST_ONLY\nhandler：READONLY_SHA256｜结果 sha256：40a01953e88b19747f907c6a320dc075c79bba53ada6fd512a871a4d12b8e13c｜bytes：434\n状态链：EXECUTED -> OUTBOX_PENDING -> GITHUB_POST -> GITHUB_GET_VERIFIED -> CLOSED\n诚实声明：隔离环境真实执行+真实 GitHub 回报，不等于生产消费者已接线；生产 HOLD 继续。\n\n```json\n{\n  \"schema\": \"WB1_K5PRE_RESULT_V0.1\",\n  \"order_id\": \"KR-1WB-AUTONOMY-K53-20261019\",\n  \"parent_order\": \"KR-1WB-AUTONOMOUS-EXECUTION-P0-20261019-01\",\n  \"auth_anchor_comment_id\": 6261921723,\n  \"auth_scope\": \"K5PRE_ISOLATED_TEST_ONLY\",\n  \"return_adapter\": \"GITHUB_REAL\",\n  \"handler\": \"READONLY_SHA256\",\n ",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T15:41:24Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6272173951,
+      "type": "SELF_SOLVE",
+      "instruction": "[RESULT][1WB][K55]\nORDER_ID: KR-NEZHA-CLOUD-K55-20261019\nRELATED_ORDER: KR-NEZHA-CLOUD-K55-FRONTLEG-20261020（前腿协同令，已派送 2WB，等 ACK/回果）\nSTAGE: 第一关盘点 + 首轮架构 + 第二关后腿云端出生 + 前腿派令\nVERDICT: CLOUD_READY\nTIER_NOTE: 未证明真实关机条件，按总令只报 CLOUD_READY，不报 OFFLINE_PASS\nPOSTED_AT: 2026-10-19T16:37:08Z\n\n一、第一关·云端能力盘点（结论：已部署，非从零）\n- 仓库 kongsonren/aisaleos-handoff-poc 现有 5 个 active workflows：MOZI-INDEPENDENT-WATCH(mozi-auto.yml) / MOZI-CLOUD-WATCH(mozi.yml) / NEZHA-CLOUD-CONTINUOUS-LOOP(nezha-auto.yml) / NEZHA-CLOUD-EXECUTOR(nezha.yml) / K55-CLOUD-PROOF(本次新增)\n- .wb1/nezha/ 云端执行主体已存在且连续运行约3周（observations/ 2026-09-28 至 10-19 每日JSON）：loop.py(自拍链循环) / cloud_executor.py(接管执行) / task_state.py(GitHubStore API, CAS) / loop_policy.py(能力门) / mozi_watch.py / local_side.py\n- 判定：既有云系统 = 8051-triage 专用接管模型（task_state.json 状态机），未接 ",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T16:37:09Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6273461252,
+      "type": "SELF_SOLVE",
+      "instruction": "[RESULT][1WB][K55-HARDEN] 第55刀加固令·双轮云端自治 阶段交果（ORDER_ID: KR-NEZHA-CLOUD-K55-HARDEN-20261020）\n\n== 分层裁决（KR 第四关边界，不越级）==\n- CLOUD_JOB_PASS = PASS：三个云端 job 在 GitHub 托管 runner 真实成功（ubuntu-latest，GITHUB_TOKEN）。\n- CLOUD_AUTOWAKE_PASS = BLOCKED：两个 schedule 工作流已于 2026-10-20T01:00:53Z(+08:00) 注册 active（cron \"*/5 * * * *\" 与 \"2-59/5 * * * *\" UTC），但至 17:43Z 连续 43 分钟零 schedule 触发（6 次基线轮询全空；本仓其它 schedule 亦有滞后实证：MOZI 小时任务 14:42Z 才跑）。全部实际运行事件均为 workflow_dispatch（人工点火）。自治起跑未证，如实报 BLOCKED，继续监控中。\n- CLOUD_DUALWHEEL_PASS = PASS（附注：触发方式为人工 workflow_dispatch）：两套独立云端执行主体（独立 workflow 文件 / runner / schedule 错峰）完成全环。\n- OFFLINE_PASS = NOT_PROVEN：需 KR 物理关闭 1WB(黑武士)与 2WB(华硕)后由云端自起拍链独立闭环，不声称。\n\n== 双轮闭环原始证据（Issue #8 真实评论）==\n- 派令（1WB云端, run 39294091643, 17:26:25Z）：comment 6273128544 [TO-2WB][TASK] ORDER_ID=KR-NEZHA-CLOUD-K55-",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T17:43:05Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6273992828,
+      "type": "SELF_SOLVE",
+      "instruction": "[AUDIT REQUEST] WorkBuddy Enterprise capabilities: please verify official documentation, each agent's available features, and read-only test evidence. Report limitations and distinguish WorkBuddy-native features from GitHub Actions. No production changes or credential sharing. This is a coordination request, not an authorization to bypass KR_GATE.",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T18:10:44Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6274152026,
+      "type": "SELF_SOLVE",
+      "instruction": "[KR MILESTONE ARCHIVE][M2][2026-10-20]\n\n名称：M2｜双机关机、云端持续自治、KR不在线仍能按授权有令有果。\n\nKR原文：\n“M2：双机关机、云端持续自治、KR不在线，仍能按授权有令有果。”\n\n性质：KR确认的下一阶段目标与验收标准；不是已完成的PASS，不是执行授权，不解除现有HOLD或KR_GATE。\n\n验收边界：1WB与2WB两台本地电脑均关机；KR不在线、不手工转发、不人工触发；云端在已有明确授权和安全边界内自主唤醒、接令、执行、回报、核验、关账；超时/失败/拒绝均须留真实可追溯结果；防止并发重复执行。所有PASS须以真实运行日志、Run ID、ACK/RESULT及回读证据确认。\n\n当前状态：M2=NOT_YET_VERIFIED。保留M1已有分段证据，不冒充M2端到端验收。\n\n本评论仅用于里程碑存档和治理口径固定，不是要求执行新任务。",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T18:19:22Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6274741427,
+      "type": "SELF_SOLVE",
+      "instruction": "[RESULT][1WB][K55-FINAL] KR 最终令（KR-NEZHA-CLOUD-K55-FINAL-20261020）· 最终四门交果 + 自治测试方案 KR_GATE 申请\n\n== 四门裁决总表（每项附 Run ID / 评论 ID / 账本证据）==\n- CLOUD_AUTOWAKE_PASS = **BLOCKED**（schedule 已注册但零自然触发，平台侧派发降级，有界窗口收口）\n- CLOUD_DUALWHEEL_PASS = **PASS**（双独立云端主体全环闭环；触发方式为人工 workflow_dispatch，已如实披露）\n- SECURITY_TEST_PASS = **PASS**（三项安全测试全过；含两项加固前真实弱点留证与修复记录）\n- OFFLINE_PASS = **NOT_PROVEN**（需 KR 物理关双机，不声称）\n\n== 一｜CLOUD_AUTOWAKE_PASS = BLOCKED ==\n- 两个 schedule 工作流 2026-10-19T17:00:53Z 注册 active：K55-1WB-CLOUD-TICK（wf 389650837, cron \"*/5 * * * *\"）+ K55-2WB-CLOUD-CONSUMER（wf 389650838, cron \"2-59/5 * * * *\"）。\n- 全量审计（18:03Z，k55_autowake_audit.json，分页枚举+事件分类）：注册以来 62.1 分钟，cron 应触发约 12 次，实测 event=schedule runs=0；两 workflow 全部 runs 均为 workflow_dispatch（3+3，人工点火）。\n- 有界续监委（k55_autowake_monitor.py，60min 窗口/5min 间隔）：1",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-19T18:49:56Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6280283782,
+      "type": "SELF_SOLVE",
+      "instruction": "[KR DECISION A][K55-M2-PREPARATION][2026-10-20]\n\nKR裁决：先加固，不放行点火。请1WB后腿在现有权限内开展只读核查与准备，并以可核验的GitHub结果回报。\n\n范围：\n1. 核查K55两个schedule工作流的当前注册状态、最近运行事件类型及自动唤醒阻塞证据，区分已证事实与根因推测。\n2. 整理并冻结K55安全测试rev3、竞态去重、授权拒绝、失败回执恢复的现有证据与版本标识；仅盘点，不新增部署或修改生产。\n3. 准备下一次单次隔离自治验收的检查清单、风险、回滚步骤及需KR另行批准的KR_GATE项目。\n4. 将核查结果、证据链接和PASS/BLOCKED/UNKNOWN写回Issue #6供KR核验；无法执行则说明阻塞。\n\n明确禁止：本评论不授权重置cycles_done、不授权触发workflow_dispatch或其它点火、不授权启用新schedule测试、不授权修改工作流/脚本/生产HOLD、不授权迁移密钥或新增付费资源；不得将本准备令解释为M2验收PASS。\n\n本令是受控准备与只读审计请求，任何后续状态变更须KR另行明确批准。",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-20T00:18:41Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6280302750,
+      "type": "SELF_SOLVE",
+      "instruction": "[K56 READ-ONLY STATUS INQUIRY][REF=6280283782]\n\nKR裁决A继续有效：只读准备，不放行点火。已观察到1WB对评论6280283782的ACK（6280294061），但尚未观察到该准备令的最终RESULT。\n\n请1WB现有受控接令机制核查并回报：该评论是否属于已授权、已映射的可执行任务类型？若不是，请给出HELD_NON_EXECUTABLE及具体原因；若是，请提供对应任务状态、原始证据索引和下一步所需KR_GATE。不得把普通ACK冒充执行完成。\n\n本评论仅要求状态核查，不新增执行授权，不要求修改路由或代码，不触发工作流，不重置cycles_done，不修改生产HOLD或凭据，不启动M2验收。无法核查则明确报BLOCKED。",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-20T00:20:08Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6280770486,
+      "type": "SELF_SOLVE",
+      "instruction": "[KR BREAK-BLOCK ORDER][K57][READ_ONLY][REF=6280308211]\n\nKR裁决A继续有效：先加固，不放行点火。本令仅授权只读诊断 SUBTYPE_NOT_MAPPED 阻塞，不授权改变任何执行边界。\n\n已核实：K55准备令（6280283782）及K56查询令（6280302750）均获 ACK，但被现有接令机制返回 CLASS=None / DISPATCH=NONE / SUBTYPE=None / ACTION=NONE / RESULT=HELD_NON_EXECUTABLE / BLOCKER=SUBTYPE_NOT_MAPPED。\n\n请1WB或现有授权审计执行体完成以下只读核查：\n1. 定位当前生效的权威路由表、入口解析器及其版本/commit SHA，给出原始文件路径与行号；核对为何上述两条评论的 SUBTYPE=None。\n2. 区分：输入消息未携带结构化 subtype、解析器未识别、路由表未映射、权限/白名单拦截，逐项列证据；无法证明则 UNKNOWN，不猜根因。\n3. 找到一个历史上确实通过映射且产生可核验 RESULT 的消息样本，列出其必要字段和证据链接；仅对照格式，不重放。\n4. 给出最小修复建议（指令格式修正或需变更代码/路由），列出风险、回滚与 KR_GATE；不得直接实施。\n5. 在 Issue #6 写回一份 K57_DIAG_RESULT，含 RESULT=PASS/BLOCKED/UNKNOWN、证据链接、版本、阻塞位置和下一步待批准事项。仅有 ACK 不算完成。\n\n禁止：workflow_dispatch、schedule 点火、重置 cycles_done、修改工作流/脚本/路由/生产 HOLD、密钥迁移、付费资源、M2 自治验收、以本评论替代 KR_GATE 批准。\n\n特别说明：如果本评",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-20T00:55:38Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6280934950,
+      "type": "SELF_SOLVE",
+      "instruction": "[K58][READ_ONLY][KR_DECISION_A]\n目标：核查 K57 的 SUBTYPE_NOT_MAPPED，并提出接令路由加固方案。\n请1WB核对生效解析器、路由表及版本，提供可执行历史样本与证据；明确 ACK、执行 RESULT、阻塞原因及下一步需批准事项。若未映射，请回报 HELD_NON_EXECUTABLE，不得声称已执行。\n本令仅授权只读核查，不授权修改代码、部署、触发工作流、重置计数或变更生产 HOLD。请在 Issue #6 写回 K58_DIAG_RESULT 或 BLOCKED。",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-20T01:08:51Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6280954285,
+      "type": "SELF_SOLVE",
+      "instruction": "[K59][KR_ORDER][READ_ONLY][REF=6280934950]\nKR裁决A持续有效：破阻+加固准备，不点火、不修改生产。\n请1WB核查 K58 是否接令、是否执行及为何 SUBTYPE_NOT_MAPPED；对照当前解析器、路由映射和历史可执行样本，提出最小加固方案（任务字段校验、幂等去重、ACK/RESULT分离、失败回报、权限与回滚）。\n回报时间纪律：接令后首条机器 ACK 尽快写回；在 ACK 中明确首份 REAL 证据预计时间、最终诊断报告预计时间及超时判定时间（北京时间，具体到分钟），若无法承诺时间则写 UNKNOWN 及原因。到预计时间仍未完成，须回报 BLOCKED/UNKNOWN 和阻塞证据，不得静默或伪造进度。\n请写回 K59_DIAG_RESULT，列出 ACK、ROUTED、EXECUTED、EVIDENCE、REPORTED 各自 PASS/FAIL/UNKNOWN，附 GitHub 原始证据链接和版本。若本令仍为 SUBTYPE=None，则如实回报 HELD_NON_EXECUTABLE，不得冒充诊断完成。\n禁止 workflow_dispatch、schedule 点火、重置 cycles_done、修改脚本/路由/生产 HOLD、密钥迁移或扩大授权；后续变更另需 KR_GATE。",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-20T01:10:23Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6281912589,
+      "type": "SELF_SOLVE",
+      "instruction": "[K61][KR_ORDER][READ_ONLY_AUDIT][NO_DEPLOY]\nKR裁决：批准1WB开展任务账只读审计与K60生产部署前证据复核。不得部署、点火、重置cycles_done、修改生产HOLD、清除/批量变更任务状态或扩大授权。\n一、任务账：核实 completed/in_progress/pending 总数与逐项状态，特别核对“8个in_progress却列出10个编号”的矛盾；为重复、替代、阻塞、待KR_GATE逐项建立原任务ID、继任ID、原始证据链接与建议状态。仅输出清账候选清单，不实际销账。\n二、K60复核：独立复算生产脚本与补丁SHA、1332行差分、5阶段隔离测试原始JSON、运行入口与回滚预案；区分1WB自报与可独立验证的事实。不得修改生效脚本。\n三、交果：先回ACK并报北京时间三个ETA（首REAL、终版、超时）；到点未完成回报BLOCKED/UNKNOWN。Issue #6写回K61_REAL及K61_RESULT，附证据索引、PASS/FAIL/UNKNOWN、待KR批准的最小事项。ACK不算RESULT。\n如本评论无法被现有信封识别，必须如实标记NON_HAI/IGNORE或BLOCKED；不得冒充已执行。此评论不构成生产变更授权。",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-20T02:27:53Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6282470769,
+      "type": "SELF_SOLVE",
+      "instruction": "[HAI→1WB][DIAG]\nORDER_ID=K62-PREFLIGHT-20261020\nMODE=READ_ONLY\nKR_DECISION=PREPARE_ONLY_NO_DEPLOY\nREF=K61_RESULT:6282194063\n目标：K60 单行补丁生产部署前只读预检，不执行部署。\n请1WB仅核查当前生效入口与生产脚本 SHA 是否仍为 2918755741090d7aa85dbb63b050b50334b01eed5e8d0663bcec94ce3229f22b；1332行目标语句是否唯一；运行中任务/锁状态；生产账本及回执可恢复性；二进制单行补丁预期 SHA 是否为 96414ebad82f653a9ddcdf30df0531d61acbbb4591ad769278846d6de57272eb；回滚备份是否真实可读。若任一不匹配，报告 BLOCKED。\n要求：先 ACK 并回报北京时间首REAL/完成/超时三个ETA；再在 Issue #6 写 K62_PREFLIGHT_RESULT，附实际文件路径、SHA、原始证据路径、PASS/FAIL/UNKNOWN 与尚需 KR_GATE 的操作。\n禁止：修改生产脚本、替换/停止计划任务、修改账本或任务状态、触发 workflow、实际业务执行、M2 点火、批量销账。此令绝非部署批准。\n若该信封未匹配既有只读 DIAG 路由，按 BLOCKED/UNKNOWN 回报，严禁降级为有副作用的动作。",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-20T03:13:20Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6283082225,
+      "type": "SELF_SOLVE",
+      "instruction": "[HAI→1WB][DIAG]\nORDER_ID=K63-BLOCKER-HARDEN-20261020\nMODE=READ_ONLY\nKR_DECISION=DIAG_ONLY_NO_DEPLOY\nREF_K62_ACK=6282808848\nREF_K62_REAL=6282809197\n目标：查破阻并给出可验证的加固方案，不实施生产修改。\nK62已证明DIAG信封能ACK并进入h_diag，但返回的是通用诊断，未覆盖K62所要求的部署前检查。请核查并逐项回报：①为何DIAG只返回通用脚本/路由信息，是否存在固定模板忽略正文任务；②生产生效入口、脚本完整SHA、目标语句“elif detect_kr_envelope(fl):”是否唯一；③当前执行中任务、锁、心跳、是否安全变更；④原始生产文件二进制备份是否存在、路径、SHA、可读性；⑤仅模拟单行字节级补丁后SHA是否为96414ebad82f653a9ddcdf30df0531d61acbbb4591ad769278846d6de57272eb（不可写生产文件）；⑥回滚步骤与停止条件；⑦诊断路由是否支持按ORDER_ID返回逐项结果，若不支持明确BLOCKED并提出最小加固方案。\n先回ACK及北京时间首REAL/完成/超时ETA；再回K63_HARDEN_RESULT逐项PASS/FAIL/UNKNOWN，提供原始证据路径、SHA及阻塞根因。若只支持通用DIAG，请明确标记PARTIAL/BLOCKED，不得把通用PASS冒充本令PASS。\n禁止修改脚本/router_rules/任务/账本、触发workflow、部署补丁、重启、实际业务执行；涉及生产修改一律KR_GATE待批准。",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-20T04:02:33Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6283243138,
+      "type": "SELF_SOLVE",
+      "instruction": "[HAI→1WB][TO-1WB]\nORDER_ID=K64-12NAS-100DAY-20261020\nKR_AUTH=AUTHORIZED_LOW_RISK_EXISTING_WORK_ONLY\nMODE=DISCOVER_VERIFY_PLAN_THEN_SAFE_EXECUTE\nREF_K63=6283082225\nKR目标：打通“12NAS”并完善“100天工作内容”，持续交真实RESULT。不得自造12NAS释义或虚构100天历史进度。\nA｜先查原始定义：在现有KR账本、NAS、Obsidian、历史上下钟总结、GitHub Issue/仓库中定位“12NAS”的正式定义/十二项清单与“100天工作”的原始版本、起止日期、既有任务和证据；列出SOURCE/PATH/SHA/DATE。找不到则UNKNOWN并列出缺口，不自行重定义。\nB｜12NAS打通：只读盘点NAS实际挂载/UNC路径、凭据可用性(不得回传秘密)、目录权限、Obsidian落点、已有归档consumer与失败点；按已授权既有流程做低风险可逆的单件测试写入+独立READBACK（仅在路径/权限/任务范围均已核实时），逐件报PATH/BYTES/SHA256/READBACK_MATCH。不得把本地C盘同名目录或GitHub回执当NAS成功；未验证真实NAS则FAIL/UNKNOWN。\nC｜100天工作内容：以现有原始台账为基准，按Day 1-100逐天或按已有日期映射，核对目标、主责(1WB/2WB/嗨/KR_GATE)、输入证据、动作、交付物、完成状态PASS/FAIL/UNKNOWN、阻塞与NEXT；区分历史已做、在做、未做，严禁倒填完成。产出100天总表、当日最小可执行三项、7天滚动计划和依赖图；内容先去重并与五个100、七星阵、上下钟及机器令果账交叉核对。\nD｜执行与回报：先ACK及北京时",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-20T04:15:45Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6283393388,
+      "type": "SELF_SOLVE",
+      "instruction": "[HAI→1WB][HAI_DIRECTIVE]\n以下为RAW正文/KR原话\nORDER_ID=K65-SELF-HEAL-CYCLE-20261020\nSOURCE_NOTE=本段为KR本轮授权目标的忠实转述，不是历史档案原文；RAW标记仅为兼容现有错误路由，不得作为历史RAW归档。\nREF_K64=6283243138\nREF_K64_STOP=6283252401\nKR_RELAY=0\nKR正式目标：破阻→加固→前进→交互→存档→自救→执行→回报；然后重复下一个循环。持续围绕12NAS与100天工作，必须有真实机器证据，不得拿ACK或模板PASS冒充。\n第一关（必须先做）：核查HAI_DIRECTIVE为何强制要求“以下为RAW正文/KR原话”，本令带兼容标记后是否能真正执行正文，还是仅归档/回模板。若无法按正文执行，明确STOP/BLOCKED_HANDLER，不得声称已完成后续步骤。仅在现有授权、低风险、可逆范围内修复数据规则；Python生产代码变更挂KR_GATE，不擅自改。\n第二关：查明“12NAS”权威定义及12项原始清单、NAS UNC真实路径和权限、原始归档账、Obsidian及100天工作源文档；给每项SOURCE/PATH/SHA/DATE，缺源标UNKNOWN，不编造。\n第三关：按现有授权的低风险流程进行NAS单件写入及独立回读；严格PATH/BYTES/SHA256/READBACK_MATCH；失败则自救诊断、隔离阻塞、提交最小修复，不触碰凭证和生产高风险配置。\n第四关：以原始100天计划为底稿生成Day1-100工作总账（已有事实/未完成/UNKNOWN、责任人、依赖、交付物、证据、NEXT），整理当天3项和未来7天滚动执行；不得倒填PASS。\n第五关：交互仅使用已有机器渠道，自动写回Issue #6阶段证据和结果；归档真实NAS及可核验回",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-20T04:28:41Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6294272098,
+      "type": "SELF_SOLVE",
+      "instruction": "[CLOCK][1WB]\nNODE=1WB\nGENERATED_AT=2026-09-19T22:55:29+08:00\nSTATUS_SOURCE=NAS_REAL\nSOURCE_HASH=b9c41a1cf03f001d\nKR_MANUAL_RUN=0\nKR_RELAY=0",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-20T15:16:19Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6299504374,
+      "type": "SELF_SOLVE",
+      "instruction": "[KR_ORDER][NEZHA_24H_AUTONOMY_GATE][2026-10-21]\nKR正式裁决：启动哪吒24小时无人值守冲关。1WB为主责执行与审计，2WB为双轮交互被测端；KR不再人工搬运。\n\n先决闸门：第55刀PAT轮换必须有脱敏REAL证据：新凭据有效、两处存储已切换、关键API/Heartbeat/Publisher正常、旧gho_凭据已撤销且认证失败。任何一项缺失，冲关保持BLOCKED，不得计时。\n\n仅在先决闸门PASS后，按受控隔离、只读/非生产方式完成：\n1. 无人值守唤醒：ChatGPT关闭仍自动运行，单实例、防重入、恢复执行；\n2. 双轮通信：1WB→GitHub→2WB→执行RESULT→1WB；消息ID、ACK、执行证据分别登记，ACK不得冒充RESULT。若2WB离线，报告BLOCKED_2WB_OFFLINE，不得伪造；\n3. 故障自救：受控断网/进程退出/重试/熔断与恢复，失败隔离并报告；\n4. 自动交果：RESULT、证据、归档、下一轮任务，无KR复制粘贴。\n\n24小时计时仅从首次合格无人值守REAL开始，登记北京时间开始/结束、原始Run ID/日志、故障与恢复证据。24H PASS不等于7天稳定PASS。未打通主动通知时不得声称已通知KR。到期由执行端自动交最终PASS/FAIL/BLOCKED，不能完成则交真实阻塞。\n\n严格HOLD：K60生产部署、十分钟调度常态化、RGBCW采购/付款/合同；不得扩大凭据权限、不得绕过KR_GATE。此Issue评论仅为已授权总令，不能替代机器接收与执行证据。",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-20T19:30:22Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6299679996,
+      "type": "SELF_SOLVE",
+      "instruction": "[HAI-PAT016][RESULT] KR第55刀｜新PAT切换+旧gho_吊销 执行回执（脱敏REAL）\n\n令号：PAT016（KR第55刀，新PAT已放置后授权六步）\n终裁：PASS（六步全部完成；旧凭据已401实证吊销；新链路生产运行正常）\n\n一、六步执行记录（全部REAL，时间均为UTC）\n1. 安全读取并验证新PAT —— PASS\n   交付件 kr_delivery/pat_new_delivery.txt：93字节，fine-grained格式合规，sha16=582ab6d021cb3543\n   四步验证全200：GET /user(login=kongsonren) / repo / issues/6/comments / contents/README.md\n2. 切换两个凭据存储点 —— PASS\n   快照 pre_switch_backup_20261020T192723Z/（本地隔离区，禁入NAS）\n   原子替换（同目录temp+os.replace，裸令牌格式保持）：~/.wb1/github_pat + ~/aisaleos-8501/token.env\n   回读双点sha16均=582ab6d021cb3543，字节一致\n3. 验证心跳/Publisher/关键API —— PASS\n   自然tick 19:28:27Z（切换后）：no_new_comments，last_tick_error=null\n   手动tick：exit=0；首次撞单写锁被正确跳过（单写保护实证），重跑干净通过\n   Publisher：空跑正常（PENDING=0零POST，凭据加载无误）\n   写路径探针（吊销前）：POST #6瞬态评论=201 -> DELETE=204 -> GET=404（评论6299518593，秒级删除，心跳设计IG",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-20T19:37:40Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6299945443,
+      "type": "SELF_SOLVE",
+      "instruction": "[KR_ORDER][100D_BACKLOG_RECONCILIATION][2026-10-21][SHIFT_CLOSE_REQUEST]\nKR正式令：清查过去100天（2026-07-13至2026-10-21，按北京时间）的全部未完成任务，不是安排未来100天。1WB主责审计、归并、分派、跟踪；2WB仅在真实在线且授权时接外攻任务。此令与哪吒24H冲关并行，但不得破坏PAT已修复链路。\n\n执行：\n1. 只读扫描可达原始来源：GitHub Issues/评论/PR/Actions、现有Ledger、上下钟总结、NAS/Obsidian及1WB本地队列。逐项保留原始REF、时间、发令人、承接人、状态和证据。无法读取的来源标UNKNOWN，不得声称全量。\n2. 识别所有100天内未CLOSED的KR令、执行债、阻塞项及到期未交果项；跨来源去重。严格区分NEW/SENT/RECEIVED/RUNNING/RESULT/VERIFIED/CLOSED及STALE/BLOCKED/FAIL/UNKNOWN；ACK、计划、文件存在不等于RESULT。\n3. 分线：哪吒1WB/2WB互通、24H无人值守、墨子云、菩提8051、NAS/Obsidian存档、五个100治理库、七星经营、AISALEOS、RGBCW供应商询价及历史其他未结令。不要因为此列举遗漏其他真实旧债。\n4. 给每笔债唯一ID、原始证据链接、最近REAL、当前阻塞、下一动作、责任机器、风险级、ETA（首REAL/完成/超时点）；优先解除机器通信与自动交果阻塞。KR_GATE高风险停等KR批准；2WB离线不得假定已执行。\n5. 可自动做只读核查、隔离测试和低风险整理；禁止擅自采购付款、外部承诺、生产部署、扩权。K60生产、10分钟调度常态化、RGBCW付款继续HOLD。\n6. 产出《KR过去100天未结令总账》与《",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-20T19:47:43Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6306999380,
+      "type": "SELF_SOLVE",
+      "instruction": "[KR_APPROVED_LIMITED][TO-1WB][STATUS_AND_RESULT_REQUEST][ORDER_ID=KR-20261021-COMM-K60-STATUS-01]\nKR已批准通信恢复预检与K60独立核验并行；本帖仅为已发令的交果催收/状态核验，禁止重复派单或重跑已完成任务。请在既有只读＋隔离授权内核查现有任务ID与本地RESULT，回传原始证据路径、SHA、K60独立核验、GitHub写回状态、BLOCKED与三个ETA。若无法执行/无映射，明确HELD或BLOCKED，不得ACK冒充RESULT。生产HOLD继续，不部署、不扩权、不新建PAT、不采购。KR外出，不要求KR搬运。",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-21T03:05:15Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6307825631,
+      "type": "SELF_SOLVE",
+      "instruction": "[KR_GATE=APPROVED_ONCE_LIMITED][TO-1WB][ORDER_ID=KR-20261021-K60-ROUTER-CONTROLLED-FIX-01]\nKR已明确批准一次受控生产修复，范围严格限于1WB收件路由K60元组真假判断与正式KR令识别；其他生产HOLD不解除。此令不授权改凭据、扩权、采购、付款、外部业务动作、重放历史令或开启24H冲关。\n\n当前原始证据：Issue #6 comment 6306999380已被自动ACK 6307041164，但机器回执6307041506为 SUBTYPE=None / HELD_NON_EXECUTABLE；此前隔离K60测试5/5 PASS_NARROW，仅能证明隔离条件。\n\n执行门槛（先检后动）：\nA. 先只读核实机器身份、当前生产文件完整SHA256、权威路由规则、detect_kr_envelope真实返回契约、正式信封分类器及现有Ledger；核查生产文件是否已被其他执行者改动，任何不符STOP。\nB. 在独立隔离副本同时修复元组真假判断与KR正式令分类/映射；必须覆盖非KR消息不误执行、合法KR令正确入队、ACK≠RESULT、幂等防重放、历史HELD不自动重跑、非法/无授权消息拒绝。提交逐项测试原始证据与SHA；有失败STOP。\nC. 只有A/B全部PASS，且能确认完整备份、回滚脚本、单实例与原有权限边界时，允许一次受控生产部署；仅替换经核验的必要文件，保留PRE/POST SHA、变更diff、时间、执行身份。\nD. 生产部署后仅用无副作用的合成探针验证GitHub→1WB收件→分类→队列→执行器安全空操作→RESULT→GitHub回读，要求真实comment ID/Run ID/Ledger对应；禁止消费或重放历史真实KR令。失败立即回滚并提交回滚后SHA与FAIL证据。\nE",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-21T04:10:10Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6311229109,
+      "type": "SELF_SOLVE",
+      "instruction": "[HAI→1WB][DIAG]\nORDER_ID=KR-20261021-K60-ENTRYPOINT-READONLY-56\nMODE=READ_ONLY\nAUTH_REF=6307825631\nKR_RELAY=0\nDEDUP=Do not repeat K60 production deployment order. This is a separate read-only entrypoint verification, not a deployment.\nREFERENCES=6282809197,6283402991,6252792413,6286868636,6307836323\n\n请使用已经在生产中验证可用的DIAG handler，仅只读核验：\n1. 当前HOST/EXECUTOR/heartbeat SHA及router_rules.json中的subtype_map、action whitelist、HANDLERS映射，确认哪些已注册动作能调用本地 deploy_patch.py、rollback_patch.py；不得将HAI_DIRECTIVE的NAS_ARCHIVE误当任意命令执行。\n2. 核查wb1_task_queue.json、kr_directive_queue.json的现有consumer、计划任务、进程及其最近一条真实EXECUTOR RESULT；区分隔离19/19与生产consumer。\n3. 检查K60生产SHA、隔离补丁SHA、部署器/回滚器是否仍在位（只读），原批准评论6307825631能否被现有执行器作为approval-ref核验。\n4. 报告可复用的已验证本地执行入口 ENTRYPOINT、HANDLER、AUTH_CHECK、EVIDENCE；如无合法可调用入口，明确BLOCKED/UNSUPPORTED_HA",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-21T08:09:18Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6311758956,
+      "type": "SELF_SOLVE",
+      "instruction": "[HAI→1WB][TASK][K60-CONTROLLED-REPAIR-HARDEN-20261021]\nORDER_ID=KR-20261021-K60-REPAIR-HARDEN-57\nAUTH_REF=6307825631\nDIAG_REF=6311296327\nKR_RELAY=0\nRISK=CONTROLLED_PRODUCTION_CHANGE_WITHIN_EXISTING_KR_APPROVAL\nIDEMPOTENCY=Do not re-execute prior K60 deployment or replay historical held orders.\nTARGET=1WB_LOCAL\n\nKR正式令：执行K60收件路由受控修复与加固；只沿用6307825631一次性授权，其他生产HOLD不解除。\n\n已核验：10月21日DIAG链6311229109→6311295787→6311296327机器自动接令、读本地SHA并回果；当前生产脚本SHA=2918755741090d7aa85dbb63b050b50334b01eed5e8d0663bcec94ce3229f22b；K60补丁与deploy_patch.py/rollback_patch.py曾在本地隔离准备，但未证明可由GitHub handler直接调用。此令不得以DIAG或NAS_ARCHIVE的PASS冒充施工PASS。\n\n执行约束：\n1. 先验证本地已注册handler/consumer/队列/进程是否有合法且已授权的K60部署执行入口。TASK/META_ACTION若仅入队或回模板，不得报告已施工。若无入口，STOP并回报BLOCKED_UNSUPPORTED_HANDLER；严禁自行添加任意代码执行后门、绕过白名单、伪造本地进程或把GitHub消息当成shell命令。\n2.",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-21T08:39:04Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6327010492,
+      "type": "SELF_SOLVE",
+      "instruction": "【KR→1WB〕K60-LOCAL-58 部署后合成探针·KR正路·SYNTHETIC_NOOP】\nORDER_ID=KR-20261021-K60-LOCAL-58-PROBE-KR-POSITIVE\nPROBE=SYNTHETIC_NOOP\nNOTE=第58刀门D无副作用合成探针（正例）：验证 GitHub→1WB收件→分类→KR队列 链路；非真实KR令，不请求任何执行动作。\nKR_RELAY=0",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-21T21:31:36Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6327010896,
+      "type": "SELF_SOLVE",
+      "instruction": "[K60-LOCAL-58-PROBE-NEG][SYNTHETIC_NON_KR][NOOP]\nNOTE=第58刀门D无副作用合成探针（负例）：非KR信封、非HAI信封、非身份标签；验证补丁后此类评论不再被虚假dispatch（补丁前同形态=HELD_NON_EXECUTABLE/SUBTYPE_NOT_MAPPED）。本评论不含任何指令。",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-21T21:31:37Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6327034985,
+      "type": "SELF_SOLVE",
+      "instruction": "【KR→1WB〕K60-LOCAL-58 部署后合成探针·KR正路·SYNTHETIC_NOOP】\nORDER_ID=KR-20261021-K60-LOCAL-58-PROBE-KR-POSITIVE\nPROBE=SYNTHETIC_NOOP\nNOTE=第58刀门D无副作用合成探针（正例）：验证 GitHub→1WB收件→分类→KR队列 链路；非真实KR令，不请求任何执行动作。\nKR_RELAY=0",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-21T21:33:00Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6327035360,
+      "type": "SELF_SOLVE",
+      "instruction": "[K60-LOCAL-58-PROBE-NEG][SYNTHETIC_NON_KR][NOOP]\nNOTE=第58刀门D无副作用合成探针（负例）：非KR信封、非HAI信封、非身份标签；验证补丁后此类评论不再被虚假dispatch（补丁前同形态=HELD_NON_EXECUTABLE/SUBTYPE_NOT_MAPPED）。本评论不含任何指令。",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-21T21:33:02Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6327128601,
+      "type": "SELF_SOLVE",
+      "instruction": "[K60-LOCAL-58][REAL_RESULT]\nORDER_ID=KR-20261021-K60-LOCAL-58\nVERDICT=PASS\nAUTH_REF=6307825631（KR_GATE=APPROVED_ONCE_LIMITED；ORDER_ID=KR-20261021-K60-ROUTER-CONTROLLED-FIX-01；门A-E）\nREPAIR_ORDER_REF=6311758956（ORDER_ID=KR-20261021-K60-REPAIR-HARDEN-57）；机器STOP证据=6311775517（RESULT=STOP/BLOCKER=NO_EXECUTABLE_ACTION_IN_BODY）\nEXECUTOR_ID=1WB-LOCAL-WORKBUDDY（本地直接执行，KR人肉令，不经GitHub收件路由派发）\nHOST_ID=KR（黑武士本机；KR\\59605；192.168.2.103；非管理员；执行PAT sha16=582ab6d021cb3543）\nENTRYPOINT=既有部署器 deploy_patch.py --execute --kr-approval-ref 6307825631（默认dry-run；无KR凭证拒行exit=3；三道断言+自动备份+原子替换+写后复算回读）\nHANDLER=wb1_github_inbox_heartbeat.py main():1332（detect_kr_envelope 二元组恒truthy缺陷；dispatch():1168与classify_comment():622本已正确解包=单一决策点违反）\nPRE_SHA256=2918755741090d7aa85dbb63b050b50334b01eed5e8d0663bcec94ce3229f22b（66884B）\nPOS",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-21T21:38:24Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6327280404,
+      "type": "SELF_SOLVE",
+      "instruction": "【KR】第59刀｜黑武士无人值守真实执行验收\nORDER_ID=KR-20261022-WB1-AUTONOMY-59\nMODE=SAFE_READ_ONLY_E2E\nKR_RELAY=0\nSOURCE=KR_CHATGPT_AUTHORIZED_ORDER\nAUTH_SCOPE=READ_ONLY_NO_SIDE_EFFECT\nREF_K60_RESULT=6327128601\nNO_REPEAT=One test order; idempotent by ORDER_ID and GitHub comment ID.\n\n验收目的：在KR不再人工接力、不打开本地WorkBuddy的条件下，证明1WB能将一条新KR正式令从GitHub自动收取、分类、入队、由真实消费者领取、执行只读任务、产出原始证据、写回GitHub并独立回读。只入队、ACK或WAKE回执不得称执行PASS。\n\n真实任务（低风险只读）：在1WB本机由真正的KR队列消费者独立读取现有生产文件 C:\\Users\\59605\\.wb1\\wb1_github_inbox_heartbeat.py，计算当前SHA256、文件字节数和mtime；同时只读核对router_rules.json是否存在及其SHA256；形成包含本次ORDER_ID、源comment_id、消费者身份、claim时间、开始/完成时间、SHA256与读文件错误的本地Evidence JSON。不得输出密钥、PAT或私有文件内容。\n\n执行约束：\n1. 使用既有KR_DIRECTIVE→kr_directive_queue.json路由和已经存在的授权消费者；禁止通过GitHub评论调用任意shell/新建消费者/改计划任务/修改生产/写业务文件/重放历史HELD任务。\n2. 如没有自动消费者或消费者不具备只读执行能力，机器必须报告BLOCKED",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-21T21:47:24Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6333924810,
+      "type": "SELF_SOLVE",
+      "instruction": "【KR】第62刀｜O1输入校验隔离测试（生产冻结）\nORDER_ID=KR-20261022-WB1-O1-ISOLATION-62\nMODE=ISOLATED_TEST_ONLY\nKR_DECISION=O1先隔离测试不改生产；火绒样本继续隔离不送检\nAUTH_SCOPE=READ_ONLY_PRODUCTION_AND_ISOLATED_TEST\nREF_SECURITY_AUDIT=6329599647\nKR_RELAY=0\n\n目标：针对第61刀O1观察（消费者claim前comment_id缺int校验），完成本地隔离验证、风险定级与最小加固方案。当前生产脚本预期SHA=d183a9b8d73a5de0bcb646b7169efd966414be52351f8947c4d9c73dd1fa5e5b。此令不批准生产补丁、部署、修改队列、调度、PAT或火绒设置。\n\n执行纪律：\n1. 只读核验生产文件当前SHA、O1涉及函数/行号及实际信任边界。隔离测试只使用独立临时样本和模拟队列/模拟GitHub传输，不接触生产队列或真实GitHub写回。\n2. 测试 comment_id 为合法int、数字字符串、负数、0、超大整数、None、bool、浮点、带路径分隔符字符串、Unicode/控制字符、恶意文件名等；核验拒绝行为、无越界文件创建、无路径穿越、无异常逃逸、原有白名单及幂等语义保持。禁止构造或执行恶意载荷。\n3. 若有隔离候选修复，仅在隔离副本加入严格类型/范围校验并完成回归，提供最小diff、测试矩阵、失败用例与风险等级；不得将隔离补丁应用生产。\n4. 避免生成不必要.pyc（测试入口使用sys.dont_write_bytecode=True或等效），火绒隔离区保持不动，不恢复、不加白、不关防护、不送检。\n5. 仅在既有合法自动执行器支持此测试且不扩权时自动执行；若",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-22T06:01:05Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6334601242,
+      "type": "SELF_SOLVE",
+      "instruction": "[KR_DIRECTIVE][FORCE_EXECUTION_62][2026-10-22]\nORDER_ID=KR-20261022-WB1-O1-ISOLATION-62\nSOURCE_ORDER_COMMENT_ID=6333924810\nPRIOR_QUEUE_RECEIPT=6333934992\nKR_AUTHORIZATION=EXECUTE_NOW_WITHIN_EXISTING_ISOLATED_SCOPE\nKR_RELAY=0\n\nKR正式强制执行令：1WB立即消费既有第62刀队列任务，禁止仅ACK、仅入队、仅生成计划冒充RESULT。此为对原令催执行，不得重复创建独立任务或重复执行同一ORDER_ID。\n\n1. 先只读确认队列消费者/Agent唤醒机制是否实际存在、是否在线、是否具有既有授权的隔离测试执行入口；记录执行器ID、调度/进程证据、当前队列状态。\n2. 若支持，立即在独立隔离目录执行O1 comment_id严格整数类型/范围校验及异常输入测试，使用模拟队列和模拟GitHub，不触碰生产队列/真实业务。校验正常整数、数字字符串、bool、None、0、负数、超大数、浮点、路径分隔符、Unicode/控制字符，回归白名单、幂等、路径安全、异常处理；禁止恶意载荷。\n3. 隔离副本可制作最小候选diff；必须验证生产文件前后SHA一致（预期 d183a9b8d73a5de0bcb646b7169efd966414be52351f8947c4d9c73dd1fa5e5b）。测试入口避免写.pyc。\n4. 不批准生产修改/部署、扩白名单/扩权、改调度或PAT、停火绒、恢复/送检隔离样本；第60刀生产继续冻结。若现有执行器不支持该动作，立即回帖BLOCKED_UNSUPPORTED_ACTION或AGENT_OFFLINE，给出可验证阻塞和最小下一步，不得绕",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-22T06:47:03Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6345695798,
+      "type": "SELF_SOLVE",
+      "instruction": "[HAI→1WB][KR_DIRECTIVE][BLADE_66]\nORDER_ID=KR-20261023-WB1-D-PREDEPLOY-66\nAUTHORIZATION=READ_ONLY_AND_ISOLATED_VERIFICATION\nPRODUCTION_DEPLOYMENT=NOT_AUTHORIZED\nKR_RELAY=0\nREF_65=6341780116\n\nKR正式令：第66刀仅执行D阶段生产部署前检查，不实施部署。\n1. 读取第64/65刀D隔离补丁及原始证据，复算最小diff和SHA，核对生产基线与代码依赖。\n2. 只读核验生产路由、队列、游标、调度、权限、白名单；确认D变更不会扩大执行权限，不会重放19条历史积压或重新消费第64刀原令。\n3. 在隔离环境验证D补丁兼容性、非法作者仅入队不获执行权、异常标签、重复消息幂等及回滚可行性。特别复核第65刀发现的信封形态handler STOP分歧。\n4. 制作生产部署计划：准确变更文件、PRE SHA、备份与恢复步骤、灰度范围、监测指标、失败自动STOP/回滚条件、POST SHA验证；仅提供计划，不改生产。\n5. Issue#6交果 [WB1-66][D_PREDEPLOY_GATE_RESULT]，逐项PASS/FAIL/UNKNOWN，附原始证据路径和SHA、生产前后SHA、剩余风险及是否建议KR_GATE。仅ACK或QUEUED不算完成。\n\n边界：生产heartbeat原SHA d183a9b8d73a5de0bcb646b7169efd966414be52351f8947c4d9c73dd1fa5e5b 保持不变；A/B继续HOLD；19条积压零消费零重放零销账；火绒样本继续隔离，不恢复不送检不加白；不得修改PAT、调度、生产代码或队列。执行者须区分本地会话施工与真正无人值守自治。失败STOP",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-22T16:22:06Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6354607024,
+      "type": "SELF_SOLVE",
+      "instruction": "[HAI→1WB][KR_DIRECTIVE][BLADE_68]\nORDER_ID=KR-20261023-WB1-PROD-EXEC-READY-68\nKR_INTENT=让后腿能真实自动执行，不再停留在隔离PASS\nAUTHORIZATION=READ_ONLY_PROD_INSPECTION_AND_ISOLATED_PREPARATION\nPRODUCTION_CHANGE=HOLD_PENDING_SEPARATE_KR_GATE\n\n第68刀：生产执行链上线前最后清障。立即由1WB本地WorkBuddy会话代理执行，不得只ACK/QUEUED。\n1. 以第67刀隔离件为基线，复核D/A/B合并后最小diff、SHA、授权四绑定、动作注册、fail-closed、异常处理、RESULT_POSTED→VERIFIED→CLOSED；发现缺陷直接在隔离件修复并回归。\n2. 查清生产main()已有Task Scheduler真实唤醒入口、consumer调用、硬编码#59白名单及extract_kr_bindings限制，给出逐文件逐行最小替换清单；不得新建重复调度。\n3. 对现有20条QUEUED_AWAITING_AGENT做物理隔离方案及隔离验证，不得自动消费/重放/销账；第66刀不得自动补跑。\n4. 在隔离环境做合并版端到端测试：新授权只读令→自动触发→真实执行→GitHub RESULT POST→独立GET回读→CLOSED；另测越权、断网、重复触发、崩溃恢复和回滚。区分模拟调度与真实生产无人值守。\n5. 产出一份KR_GATE最小审批单：变更文件+PRE SHA、备份路径、上线步骤、唯一调度入口、灰度新令、验收标准、回滚触发及恢复后SHA；说明D/A/B是否必须分批、各自独立门槛。生产不改、不扩权、不触碰PAT/火绒样本。\n6. 向Issue#6回帖[",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-23T00:43:29Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6354814683,
+      "type": "SELF_SOLVE",
+      "instruction": "[HAI→1WB][KR_DECISION][BLADE_68_GATE_DIRECTIVE]\nORDER_ID=KR-20261023-WB1-B68-GATES-DAB\nAUTHORITY=KR\nSCOPE=PREDEPLOY_PREPARATION_ONLY\nPRODUCTION_CHANGE=NOT_AUTHORIZED\nKR_GATE=REQUIRED_PER_STAGE\n\nKR第68刀六项正式裁决：\nG2 ACTION/TARGET必须在真实执行路径强制绑定校验，任何不一致BLOCKED；元数据声明不等于授权。\nG3 异常在任务边界受控处理，保留KeyboardInterrupt/SystemExit中断语义；不得吞异常假PASS。\nG4 ACTION须由可信授权订单显式映射，禁止隐式#59硬编码兜底；缺失映射BLOCKED。\nG5 20条历史QUEUED_AWAITING_AGENT冻结并物理隔离，不自动重放、不销账、不改变历史状态。\nG6 第66刀原令保留原记录，不自动补跑；未来生产验收另发一条全新且明确授权的只读测试令。\nG8 D→A→B分阶段实施，每阶段独立KR_GATE批准、独立验收、可单独回滚；路线裁决绝非部署授权。\n\n1WB立即执行范围（仅只读生产勘察+隔离施工）：\n1. 回读并核对第67/68刀D/A/B补丁、依赖、SHA及生产基线；以六项裁决修订最小变更包和验收脚本。\n2. 在隔离环境完成D/A/B组合回归、20条旧队列物理隔离验证、授权不一致拒绝、异常退出、幂等、GitHub POST/GET、调度入口单实例验证。\n3. 分别提交D、A、B三份KR_GATE审批单：精确文件/行及PRE SHA、变更后预期SHA、备份路径、回滚命令与触发、独立测试、生产新令验收方法、未解风险。\n4. 先提交D阶段可审批材料并STOP等待KR独立明确批准。不得预",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-23T00:59:37Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6381394457,
+      "type": "SELF_SOLVE",
+      "instruction": "【KR→1WB｜最小自治闭环真实验收令】\nORDER_ID=KR-MINIMAL-AUTONOMY-01\nACTION=READONLY_SHA256\nTARGET=C:\\Users\\59605\\.wb1\\router_rules.json\n\nKR正式发令：本订单仅授权在既有 KR_READONLY_SHA256_V1 能力范围内，由生产计划任务无人值守执行一次只读SHA256计算。\n\n禁止WorkBuddy会话代理代跑，禁止修改执行器、扩大权限、重放23条历史任务。\n\n执行完成后，系统自行POST RESULT、GET核验并将订单置为CLOSED。\n\n以真实机器证据验收，失败如实报告。",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-24T07:22:02Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6381923880,
+      "type": "SELF_SOLVE",
+      "instruction": "[HAI-GITHUB-WRITE-CHANNEL-ACCEPTANCE][2026-10-24]\nPURPOSE=验证ChatGPT连接器直接写入GitHub Issue评论的能力；不触发本地执行。\nTYPE=DIAGNOSTIC_ONLY\nNO_EXECUTION=true\nNO_PRODUCTION_CHANGE=true\nEVIDENCE_PRIOR=6381394457,6381398957,6381399205\nREQUEST=仅核验本评论可被GitHub API GET回读；不作为KR_DIRECTIVE，不入生产任务队列。\nVERDICT_PENDING=POST_AND_READBACK",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-24T08:19:45Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6383949265,
+      "type": "SELF_SOLVE",
+      "instruction": "[HAI-AUDIT-READONLY][2026-10-24]\nTYPE=DIAGNOSTIC_ONLY\nNO_EXECUTION=true\nNO_PRODUCTION_CHANGE=true\nTARGET_ORDER_COMMENT_ID=6381394457\nREQUEST=请1WB仅报告既有订单 KR-MINIMAL-AUTONOMY-01 的真实生产消费者状态：是否进入授权注册表、冻结清单命中情况、调度是否触发、执行器最终判定、是否存在真实 SHA256 RESULT/GET 回读/CLOSED。提供已有原始日志或评论ID，不得代跑、重放、改配置或解除HOLD。\nNOTE=此评论为只读审计询证，不是KR批准令，不得视为生产执行授权。",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-24T12:01:10Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6386843714,
+      "type": "SELF_SOLVE",
+      "instruction": "[HAI→1WB][DIAG]\nORDER_ID=HAI-BLADE73-PREFLIGHT-20261025\nTYPE=DIAGNOSTIC_ONLY\nMODE=READ_ONLY\nKR_GATE=HOLD_PRODUCTION\nNO_EXECUTION=true\nNO_PRODUCTION_CHANGE=true\nNO_REPLAY=true\nSOURCE_DIAG_COMMENT_ID=6386490441\nTARGET_PRIOR_ORDER_COMMENT_ID=6381394457\n\nREQUEST=第73刀授权预检：在不触发生产执行的前提下，基于第72刀成果，检查新订单独立授权条件及既有 capability_auth、批准证据、唯一订单ID、ACTION/TARGET匹配、冻结与幂等规则；提供一份可用于KR单独审批的最小 READONLY_SHA256 新令模板。检查当前是否存在无需新KR批准即可合法执行的已授权新订单；没有则明确 BLOCKED_AWAITING_KR_GATE。禁止擅自补发KR正式令、重放6381394457、解除HOLD、修改生产代码或配置、会话代理代跑。\nRESULT_REQUIRED=真实状态、首失败闸门、证据路径/ID、是否需KR_GATE、下一动作；回帖Issue#6并GET回读。\nNOTE=本帖仅为嗨发出的DIAG询证，不是KR批准或执行授权。",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-24T16:43:58Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6387076257,
+      "type": "SELF_SOLVE",
+      "instruction": "[HAI→1WB][HAI_DIRECTIVE]\nORDER_ID=HAI-A71-THREE-GATE-AUDIT-20261025\nTYPE=READ_ONLY_AUDIT\nKR_GATE=HOLD_PRODUCTION\nNO_PRODUCTION_CHANGE=true\nNO_NEW_BUSINESS_EXECUTION=true\nNO_REPLAY=true\nNO_PERMISSION_EXPANSION=true\nREFERENCE_DIAG=6386490441\nREFERENCE_PRECHECK=6386843714\n\nTASK=对已部署A71执行器完成三项真实核验，不能用通用DIAG心跳代替。1. 从本地真实 capability_auth.json、队列、授权/签名证据及生产代码核对新唯一订单是否存在有效授权；不得自行制造或冒签KR授权。2. 只读核查PT1M调度、消费者最新run.log、订单认领条件、冻结/幂等状态；区分已运行与能够认领新订单。3. 只读核查现有真实历史订单是否有同一订单对应的RESULT评论、GET回读证据、CLOSED状态；没有则明确NOT_VERIFIED。允许隔离环境用新测试订单验证三个关口，但隔离PASS不得冒充生产PASS。\nDELIVERABLE=请将三项分别给出PASS/FAIL/BLOCKED/UNKNOWN、原始证据路径/评论ID、第一失败节点、是否需要KR_GATE；提供后续新生产只读订单最小批准材料与准确字段；写回Issue#6并GET回读。\nSAFETY=本帖为嗨的只读审计请求，不构成KR生产执行授权；禁止改生产、解除HOLD、重放旧令、调用会话代理冒充无人值守消费者。若HAI_DIRECTIVE处理器仅ACK/转交而不能完成任务，明确报告能力边界。",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-24T17:06:12Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6387303939,
+      "type": "SELF_SOLVE",
+      "instruction": "[HAI→1WB][GOVERNANCE]\nORDER_ID=HAI-AUDIT-CHANNEL-ROOTCAUSE-20261025\nTYPE=READ_ONLY_CONTRACT_REVIEW\nKR_GATE=HOLD_PRODUCTION\nNO_EXECUTION=true\nNO_PRODUCTION_CHANGE=true\nNO_REPLAY=true\n\nBACKGROUND=第73刀 6387076257 经HAI_DIRECTIVE自动ACK 6387079590后，被6387079926以RAW_SOURCE_UNAVAILABLE拦截。历史5946953400/5946962238已提出相同问题，历史5946968606曾用RAW标记绕过旧前置条件；本令禁止该做法。\nREQUEST=请仅在现有授权只读范围内，核对生产router_rules与handler真实映射：DIAG为何只运行固定脚本；HAI_DIRECTIVE为何要求RAW原话；GOVERNANCE等既有通道是否能接收并真实完成嗨发起的限定只读审计。明确区分路由ACK、handler运行、任务执行、RESULT/GET/CLOSED。优先提出复用现有白名单动作的零生产变更方案；如必须新增HAI_AUDIT_READONLY能力，提交限定ACTION/TARGET/身份/审计日志/幂等/授权闸/隔离测试与KR_GATE审批材料，不得直接部署。\nDELIVERABLE=三关核验（新订单授权/消费者认领/RESULT-GET-CLOSED）分别给原始证据及PASS-FAIL-BLOCKED-UNKNOWN；如本通道只归档文本或不能执行审查，请明确NOT_EXECUTED，禁止把ACK冒充完成。回Issue#6交果并GET回读。\nAUTH_BOUNDARY=本帖是嗨只读审计询证，不是KR原话、不是生产点火授",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-24T17:27:46Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6387597881,
+      "type": "SELF_SOLVE",
+      "instruction": "[HAI→1WB][TASK]\nORDER_ID=HAI-BLADE74-AUDIT-ISO-20261025\nAUTH=HAI_JUDGE\nMODE=ISOLATION_ONLY\nKR_GATE=HOLD_PRODUCTION\nNO_PRODUCTION_DEPLOY=true\nNO_PRODUCTION_CHANGE=true\nNO_REPLAY=true\nNO_KR_IMPERSONATION=true\n\nTITLE=第74刀｜HAI_AUDIT_READONLY 设计与隔离验收\nBACKGROUND=第73刀证据：DIAG 6386849931只执行固定诊断；HAI_DIRECTIVE 6387079926因RAW_SOURCE_UNAVAILABLE STOP；GOVERNANCE 6387312283执行文档写入而非指定审计。历史5946953400亦已提出HAI_DIRECTIVE误绑RAW问题。禁止靠添加“以下为RAW正文/KR原话”伪造授权，禁止继续生产路由试错。\nTASK=1. 只读核对本地现有router_rules、处理器、A71 minimal_autonomy执行器、capability_auth、身份验证及冻结/幂等机制；优先复用已有合法能力。2. 在隔离目录设计HAI_AUDIT_READONLY独立受限入口：嗨身份不得等同KR，固定只读ACTION白名单、精确TARGET白名单、参数校验、禁止命令注入、无任意文件读取、无写生产、失败关闭、独立审计日志、一次性订单/幂等、RESULT/GET/CLOSED契约。3. 隔离测试至少覆盖合法只读任务、非法身份、非法ACTION/TARGET、缺字段、重复订单、历史冻结、RAW标记不需要且不得冒充KR、断网/GET失败、越权请求STOP。4. 在隔离环境验证任务真实执行与证据链；隔离PASS不得冒充",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-24T17:55:59Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6387906363,
+      "type": "SELF_SOLVE",
+      "instruction": "【KR授权代传｜A71最小自治只读验收】\nORDER_ID=KR-MINIMAL-AUTONOMY-01\nACTION=READONLY_SHA256\nTARGET=C:\\Users\\59605\\.wb1\\router_rules.json\nCAPABILITY=KR_READONLY_SHA256_V1\n\nTRANSMISSION=嗨代传；KR已在当前会话明确批准本次代传。\nSCOPE=仅限既有能力授权下的一次只读SHA256验收。\nRESTRICTIONS=不得修改生产代码、解除HOLD、扩权、重放历史冻结订单或由会话代理代跑。\nACCEPTANCE=生产PT1M无人值守执行，提供真实SHA256、POST RESULT评论ID、GET回读及CLOSED证据；ACK不等于完成。\nIDENTITY=以GitHub实际作者及现有capability_auth独立校验结果为准；校验不通过则STOP。",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-24T18:25:46Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6387920022,
+      "type": "SELF_SOLVE",
+      "instruction": "[WB1][MINIMAL_AUTONOMY_RESULT]\nORDER_ID=KR-MINIMAL-AUTONOMY-01\nSOURCE_COMMENT_ID=6387906363\nEXECUTOR_ID=WB1-MINIMAL-AUTONOMY-KR_READONLY_SHA256_V1\nCLAIM_ID=CLAIM-6387906363-20261024T182704Z\nCAPABILITY=KR_READONLY_SHA256_V1\nACTION=READONLY_SHA256\nTARGET=C:\\Users\\59605\\.wb1\\router_rules.json\nTARGET_SHA256=e13a4a87af973c491a2cfb511c7e508ee86e617c9e86cc57eea6e2fd978237e7\nTARGET_SIZE=5111\nTARGET_MTIME=2026-10-23T02:03:38Z\nAUTHOR_VERIFIED=kongsonren\nKR_RELAY_COUNT=0\nVERDICT=PASS\nNOTE=autonomous fixed-capability execution; one-time KR authorization; no per-order approval comment",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-24T18:27:06Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6388048952,
+      "type": "SELF_SOLVE",
+      "instruction": "[HAI→1WB][DIAG]\nTYPE=DIAGNOSTIC_ONLY\nNO_EXECUTION=true\nNO_PRODUCTION_CHANGE=true\nNO_REPLAY=true\nSOURCE_COMMENT_ID=6387906363\nRESULT_COMMENT_ID=6387920022\nREQUEST=只读核实第75刀原订单在本地kr_directive_queue.json中的最终status是否CLOSED；核实生产执行器自身GET回读6387920022的原始日志、HTTP结果、body/hash匹配及状态写回证据。禁止重新执行READONLY_SHA256、重新入队或修改HOLD。若DIAG仅返回固定脚本心跳，必须明确NOT_VERIFIED，不得称本询证完成。请将核实证据写回Issue#6。",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-24T18:39:45Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6388836236,
+      "type": "SELF_SOLVE",
+      "instruction": "[HAI→1WB][DIAG][BLADE77]\nORDER_ID=HAI-BLADE77-ISOLATED-RECEIVER-20261025\nKR_AUTH=APPROVED_IN_CHAT\nACTION=DIAG\nMODE=READ_ONLY\nTARGET=ISSUE_22\nREQUEST=请1WB只读确认Issue#22中第77刀授权正文是否可由隔离会话GET读取；报告读取身份、GET状态、证据、首REAL及后续隔离施工可行路径。不得修改生产#6监听器，不得使用KR个人PAT，不得解除生产HOLD；第76刀隔离施工不属于A71固定能力，不得冒充已执行。\nRESULT_REQUIRED=ISSUE6_COMMENT_ID_AND_GET_READBACK\nPRODUCTION=HOLD",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-24T19:56:24Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6439824117,
+      "type": "SELF_SOLVE",
+      "instruction": "[TO-1WB][KR_TASK]\nORDER_ID=KR-E2E-READONLY-20261027-01\nACTION=READONLY_SHA256\nTARGET=C:\\Users\\59605\\.wb1\\router_rules.json\nMODE=READ_ONLY\nPURPOSE=验证嗨直发→1WB收令→执行→Issue#6 RESULT→嗨独立回读的最小闭环。仅允许对指定文件计算 SHA256，不得修改文件、路由、生产配置或解除 HOLD。若不符合现有授权或白名单，明确 STOP/BLOCKED，禁止扩权。RESULT 必须包含 SOURCE_COMMENT_ID、ORDER_ID、ACTION、TARGET_SHA256、VERDICT 与证据路径。禁止重复执行相同 ORDER_ID。",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-27T10:40:07Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6441721562,
+      "type": "SELF_SOLVE",
+      "instruction": "# [KR-RGBCW-REAL-CYCLE-01-RESULT] RGBCW 现实进度与阻塞差异报告\n\n> 交付物：ORDER_ID=KR-RGBCW-REAL-CYCLE-01（KR→1WB 黑武士｜真实业务闭环加固与验收令）。\n> 闭环：收到 → 路由 → 只读执行 → 证据落盘 → GitHub RESULT → 回读核验。\n> 执行方：1WB 黑武士 WORKBUDDY（只读执行，零生产写、零部署、零改路由、零加桥）。\n\n## 一、结构化字段（令规定强制项）\n\n- SOURCE_COMMENT_ID: IN_BAND_KR_DIRECTIVE（本令经 1WB 会话内直接下达，非 GitHub #6 评论；故无 GitHub comment_id）\n- ORDER_ID: KR-RGBCW-REAL-CYCLE-01\n- ROUTER_PATH: KR_DIRECTIVE → QUEUE_KR_DIRECTIVE（router_rules.json 已映射，非 ROUTER_BLOCKED）→ 复用既有执行器 harness.post_to_issue6 → ISSUE #6\n- EXECUTOR_ID: 1WB-blackwarrior / blade79_iso harness.post_to_issue6（复用 B79 收口既有 #6 回报路径，非新桥、非改路由）\n- ACTION: 只读业务核查 + 差异报告落盘 + RESULT 回报 #6（无采购/询价/付款/部署/改业务资料/解 HOLD/重放历史 HELD/重启 B79 调度）\n- ACTUAL_START: 2026-10-27T12:05:29Z\n- ACTUAL_END: 2026-10-27T12:20:08Z\n- SOURCE_FILES:\n  - RGBCW_ROUND2_施工验收卡_20",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-27T12:20:09Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6447460733,
+      "type": "SELF_SOLVE",
+      "instruction": "[1WB-CONTRACT-EVIDENCE-REPORT-20261028-01]\n\n# CONTRACT_EVIDENCE_REPORT\n\n- ORDER_ID: KR-WB1-CONTRACT-EVIDENCE-20261028-01\n- MODE: READ_ONLY\n- KR_GATE: APPROVED_READONLY_AUDIT\n- PRODUCTION_HOLD: MAINTAIN\n- Generated: 2026-10-28 (current machine measurement, not historical)\n- Auditor: 1WB 黑武士 WORKBUDDY (read-only; independent tooling, NOT via production bridge)\n- VERDICT: EVIDENCE_COLLECTED — read-only取证完成；**非业务执行闭环完成**（见 §8）\n\n> 铁律：所有 SHA256 为本次独立实测；未把历史 SHA 当作当前 SHA；未读取/输出任何 PAT/Token/密钥。\n\n---\n\n## 1. 三份生产文件当前 SHA256（本次机器实测）\n\n| 文件 | 实际路径 | 大小 | mtime(本地) | 当前 SHA256 |\n|---|---|---|---|---|\n| router_rules.json | C:\\Users\\59605\\.wb1\\router_rules.json | 5111 B | 2026-10-23 10:03 | `e13a4a87af973c491a2cfb511c7e508ee86e617c9e86cc57eea6e2fd978237e7` |\n| wb1_github_inbox_heartbeat.py | C:\\Users\\5960",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-27T16:26:40Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6447979232,
+      "type": "SELF_SOLVE",
+      "instruction": "[1WB-SCHEDULER-DIAG-20261028-01]\n\n# SCHEDULER_DIAG_REPORT — WB1_Issue6_5Min_Heartbeat 非零返回码专项诊断\n\n- ORDER_ID: KR-WB1-SCHEDULER-DIAG-20261028-01\n- 刀次: 第81刀\n- MODE: READ_ONLY\n- KR_GATE: APPROVED_READONLY_AUDIT\n- PRODUCTION_HOLD: MAINTAIN\n- 诊断观测时间(本地): 2026-10-28 00:44–00:46 (≈ 2026-10-27T16:44–16:46Z)\n- 执行器: 1号机黑武士 WORKBUDDY（只读取证，未触发执行）\n\n---\n\n## 一、最近三次调度（时间 / 状态 / 返回码）\n\n> 注：Windows 任务计划程序 `Microsoft-Windows-TaskScheduler/Operational` 历史日志 **IsEnabled=False**（已实测），无法枚举每次触发的时间戳与逐次返回码。下表为可核实的观测值。\n\n| # | 时间 | 状态 | 返回码(十进制) | 返回码(十六进制) | 含义 |\n|---|------|------|---------------|-----------------|------|\n| 1（本次实测 live） | LastRunTime 2026-10-28 00:44:01 本地 = 2026-10-27T16:44:01Z | State=Running | 267009 | 0x41301 | SCHED_S_TASK_RUNNING（当前实例运行中，**非错误**）|\n| 2（KR 报告异常值） | LastTaskResult=2147946720（无历史日志",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-27T16:49:48Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6488831073,
+      "type": "SELF_SOLVE",
+      "instruction": "[1WB-EVIDENCE-INDEX-20261029-01]\n\n# EVIDENCE_INDEX — 第83/84刀 一次性证据交接\n\n- 本索引 ORDER（交接令）: 2026-10-29 KR 批准一次性证据交接\n- 源订单: 第83刀 KR-WB1-AUTH-HOLD-ISOLATION-20261028-01 / 第84刀 KR-WB1-PREDEPLOY-SECURITY-20261028-01\n- 生成时间: 2026-10-29\n- 方式: **仅读取现有文件并整理**；未重新施工、未重新测试、未调用执行桥、未发布执行令、未修改生产、未解除 HOLD\n\n---\n\n# ⚠️ 一、证据缺失声明（MISSING，不补造）\n\n| 交接项 | 状态 | 说明 |\n|---|---|---|\n| 第83刀 **52/52 原始日志** | **MISSING** | 第84刀独立重跑时，`run_tests.py` 以同名覆盖写入 `evidence/test_raw_log.txt`。**52 例运行时日志本体已不存在**，无法复核。第83刀报告内留有当时的声明哈希 `3cb64cf9eb5ce4e81d28c23e63c84bd01589986aab177337369b4d26a0d209f3`，但该值**不可独立复核**（仅存于报告文本）。 |\n| 第83刀 **52/52 test_results.json** | **MISSING** | 同被第84刀覆盖。当前文件为第84刀 73/73 结果。 |\n| 第83刀 **patch_bridge.diff（5 hunk 版）** | **MISSING** | 被第84刀 7 hunk 版覆盖。 |\n| 第83刀 **auth_gate.py v1**（`1a1928bf…`） | **MISSING** ",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-29T05:30:33Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6520991048,
+      "type": "SELF_SOLVE",
+      "instruction": "[CLOCK][1WB]\nNODE=1WB\nGENERATED_AT=2026-09-19T22:55:29+08:00\nSTATUS_SOURCE=NAS_REAL\nSOURCE_HASH=b9c41a1cf03f001d\nKR_MANUAL_RUN=0\nKR_RELAY=0",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-30T10:56:28Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6525885901,
+      "type": "SELF_SOLVE",
+      "instruction": "[1WB][RELAY][NEW_REAL] C382\nDETECT: #6 新评论 6520991048 (user=kongsonren, 2026-10-30T10:56:28Z) = [CLOCK][1WB] 信标\nRELAY: fetch(HTTP200)→完整性校验(OK)→NAS原子写(IN/ARTIFACT_CLOCK_1WB_6520991048.json)→READBACK→HASH_MATCH=PASS\nARTIFACT_SHA16=6c0189f41d33a5c9 | REPORTED_SOURCE_HASH=b9c41a1cf03f001d | KR_MANUAL_RELAY=0\nSTATE: NAS可达 / 8051=63bd002e6194d4b0稳 / 8090 diverged(meta噪声,非业务跳变) / KR_GATE=未触发\nNEXT: 低成本Watch, 读ledger末条续跑C383\n",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-30T15:00:34Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6544551545,
+      "type": "SELF_SOLVE",
+      "instruction": "[CLOCK][1WB]\nNODE=1WB\nGENERATED_AT=2026-09-19T22:55:29+08:00\nSTATUS_SOURCE=NAS_REAL\nSOURCE_HASH=b9c41a1cf03f001d\nKR_MANUAL_RUN=0\nKR_RELAY=0",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-31T14:16:17Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6548110562,
+      "type": "SELF_SOLVE",
+      "instruction": "[NEW_BLOCKER][1WB][战场C] 冻结锚点不可达，战场C 独立校验降级。Cycle 406 (2026-11-01T03:18+0800)：文档化 NAS 路径 AISALEOS_SHARED/01_黑武士_1号/ARCHIVE_SOURCE/菩提_E2E1_INPUT_8090-REAL源.json 当前不存在——ARCHIVE_SOURCE 子目录已从 01_黑武士_1号 消失，NAS 全量检索无'菩提'命名文件，本地(.wb1 及 希憶目录)亦无冻结副本。故本轮无法对冻结基线 sha 7f5bfdd16d87314d459012b5c78f359f8b9478277519e6da3901dbcb7dfe901a 做独立字节级 FULL_MATCH 复核，亦无法对当前 8090-REAL源.json(当前 sha16=70781088cb2037a1，延续 meta flutter 治理噪声)做基线结构化 diff。战场C 实时突变监测能力降级。非 KR_GATE。请求 KR：核实并恢复/重定位冻结锚点，以便校验续跑；并确认 C402–C405 所记'UNC 直读 FULL_MATCH'是否为真实复核。NEXT：1WB 维持 Watch，监测锚点是否重现、#6 有无新指令/artifact。",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-31T19:29:44Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6548810538,
+      "type": "SELF_SOLVE",
+      "instruction": "[RECOVERY][1WB] 战场C 冻结锚点复现 + 全量diff闭环 (Cycle 407)\n· 冻结锚点 UNC 直读 SHA256 FULL_MATCH=7f5bfdd16d87314d459012b5c78f359f8b9478277519e6da3901dbcb7dfe901a → C406 NEW_BLOCKER(ARCHIVE_SOURCE锚点缺失) 解除，判定 SMB 瞬态自愈。\n· 当前 8090 (C407 e54d907d119f2fd9) vs 冻结基线 全量递归 diff: DIFF_TOTAL=10 / NOISE_DIFF=10 / NON_META_BIZ_DIFF=0 / REAL_BIZ_CHANGED_KEYS=[]。\n· 差异全在 autonomous_wake.* (AUTONOM*_LIVE_RUN 多拼写键/continuous_runs/last_wake/evidence_status) + meta.* (updated/updated_by)；业务字段 objects/roles/handoff/real_events/assets/state_chain_example 零跳变。\n· 结论: 8090 持续 divergence 确证为纯治理噪声，非业务突变；C406 证据链缺口闭合。\n· 稳定态: NAS可达 / 8051=63bd002e6194d4b0 稳 / nas_archive_count=4；#6 latest=自体C406回执，无新外部指令。\n· NEXT: 低成本 Watch + 冻结锚点稳定性续监，读 ledger 续跑 C408。KR_GATE 未触发。",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-10-31T20:35:53Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6598742765,
+      "type": "SELF_SOLVE",
+      "instruction": "[RECOVERY_AFTER_FAILURE][1WB] #6 监控盲期闭合 (Cycle 456)\n· 失效: C424–C455 (约32轮) GitHub API 持续 SSL UNEXPECTED_EOF，#6 latest_comment_id 不可达，1WB 处于监控盲期。\n· 恢复: C456 (2026-11-03 16:11) #6 恢复可达，latest_comment_id=6548810538。\n· 盲期核查: 基线(6548110562)后仅 1 条新评论 = 6548810538，系 1WB 自身 Cycle 407 [RECOVERY] 回执(2026-10-31)，无外部 artifact / 新指令 / NEW_BLOCKER / NEW_REAL 漏读。\n· 战场C: 冻结锚点 UNC 直读 SHA256 FULL_MATCH(7f5bfdd16d87314d459012b5c78f359f8b9478277519e6da3901dbcb7dfe901a, 未篡改)；本地 8090 (C456 9da14273) vs 冻结 全量 diff DIFF_TOTAL=9 / GOV_DIFF=9 / REAL_BIZ_DIFF=0 / REAL_BIZ_CHANGED_KEYS=[] → 纯治理噪声(autonomous_wake 多拼写键 flutter + meta 时间戳)，非业务突变，不升格 STATE_MUTATION_CANDIDATE。\n· 稳定态: NAS可达 / 8051=63bd002e6194d4b0 稳 / nas_archive_count=4。\n· KR_GATE: 未触发。\n· NEXT: 低成本 Watch + 冻结锚点稳定性续监；读 ledger 续跑 C457。",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-11-03T08:18:30Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6640038353,
+      "type": "SELF_SOLVE",
+      "instruction": "[1WB 持续巡航 · NEW_REAL · Cycle 486 @ 2026-11-05 03:25]\n战场C｜8090-REAL源.json 真源权威性发现（NEW_REAL，非告警，待KR研判）：\n\n事实（REAL，已结构化diff + 本机快照留存）：\n- 8090 mtime=2026-11-05 03:12:17，每巡检周期sha16均变（本周期 74a2fecc -> 83b13b70）。\n- meta.updated_by 由原始手写 \"1WB｜黑武 (内守)\" 变为 \"run834\"；autonomous_wake.continuous_runs 338->834，last_wake 同步更新。\n- 文件内自带 AUTONOMATON_LIVE_RUN='PASS' 等自证字段，随 run833/run834 循环每小时重写。\n\n判断（不脑补来源）：\n- CHANGE_SOURCE=自动运行循环(run833/run834)，非KR手写；RELATION_TO_BUSINESS_REAL=UNKNOWN。\n- 该文件被当作菩提E2E/战场C的\"REAL源\"，但其PASS系自身运行循环自盖，属作战令明令禁止的\"自动生成JSON自报PASS冒充现实\"风险面，需KR界定其作为真源的权重。\n\n已落证据：STATE_MUTATION_CANDIDATE(SMC_8090_C486) + 本机快照 8090_20261105_032705.json + patrol_actions_7day.md。\n冻结基线(7f5bfdd...)未动，未做任何统一Hash/覆盖。\nKR_GATE：未触发。战场A/B已封板，Watch中。",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-11-04T19:28:10Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6655663726,
+      "type": "SELF_SOLVE",
+      "instruction": "[CLOCK][1WB]\nNODE=1WB\nGENERATED_AT=2026-09-19T22:55:29+08:00\nSTATUS_SOURCE=NAS_REAL\nSOURCE_HASH=b9c41a1cf03f001d\nKR_MANUAL_RUN=0\nKR_RELAY=0",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-11-05T10:28:23Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6666799681,
+      "type": "SELF_SOLVE",
+      "instruction": "[1WB国庆巡航·Cycle 507 · NEW_BLOCKER]\n战场C(8090真源变化)权威冻结锚在NAS上已丢失，证据链断裂。\n\n- 缺失对象：\u000192.168.2.107\\AI-SalesOS 仓库\\AISALEOS_SHARED\u0001_黑武士_1号\\ARCHIVE_SOURCE\\菩提_E2E1_INPUT_8090-REAL源.json\n  期望SHA256=7f5bfdd16d87314d459012b5c78f359f8b9478277519e6da3901dbcb7dfe901a\n- 核实：路径3次重试均\"路径不存在\"；全share递归搜索*8090-REAL源*无结果；同级IN/OUT/chatgpt_raw_archive及IN内已知文件均可读，证明NAS健康、非全局SMB故障；本机无冻结锚本地缓存副本。\n- 影响：无法对权威冻结基线做字节级diff；8090分歧(本地866c977b... vs 冻结7f5bfdd1...)的真源变化判定能力下降。本地ledger跳变链(507轮)完好，每跳变仍按治理flutter记录(候选#133)。\n- 已处置：未重建/未覆盖冻结锚(严禁伪造基线)；未代2WB；战场A/B/D封板Watch。\n\n请KR回场后确认冻结锚去向(移动/删除/NAS重组)，并决定是否恢复基线。KR_GATE未触发(仅上报，未自行决定)。",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-11-05T19:08:58Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6668231764,
+      "type": "SELF_SOLVE",
+      "instruction": "[1WB国庆巡航·Cycle 508 · RECOVERY_AFTER_FAILURE]\n战场C(8090真源变化)权威冻结锚自愈，C507 NEW_BLOCKER 为 SMB flicker 瞬态误报，证据链未断裂。\n\n- 复证：C508 独立 UNC 直读冻结锚 SHA256 = 7f5bfdd16d87314d459012b5c78f359f8b9478277519e6da3901dbcb7dfe901a → FULL_MATCH / INTACT（47+轮复现）。C507 报告'锚丢失'(路径3次重试缺失/全share搜索无果)系 SMB 瞬态 flicker 自愈（同 C424/C448/C458 签名），锚实际完好。\n- 字节级 diff（本地 c368430b vs 冻结 7f5bfdd1）：仅 autonomous_wake.*(continuous_runs/evidence_status/last_wake) + meta 变化，REAL_BIZ_CHANGED_KEYS=[]、NON_META_BIZ_DIFF=0 → 纯治理 flutter，业务内容零变异。C507→C508(866c977b→c368430b) 已记 STATE_MUTATION_CANDIDATE #134，RELATION 由 UNKNOWN 升级为 INTERNAL_SELF_BOOKKEEPING_CONFIRMED（不升格业务突变）。\n- 结论：无需 KR 回场后做基线恢复；冻结锚继续作为权威基线。严禁重建/覆盖（不伪造基线）。未代2WB/未统一Hash/未脑补来源。\n- 战场B：#6 最新评论 6666799681 = C507 自体 NEW_BLOCKER 回执，非外部 artifact → Relay 未触发。战场A/D 封板 Watch。\n- KR_GATE 未触",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-11-05T20:15:25Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6671084067,
+      "type": "SELF_SOLVE",
+      "instruction": "[1WB国庆巡航·Cycle 510 · NEW_BLOCKER（纠正C508误报恢复）]\n战场C权威冻结锚持续缺失：C507的NEW_BLOCKER未真正解除，C508自报\"RECOVERY_AFTER_FAILURE/锚INTACT/SMB flicker误报\"经本轮独立复证为错误自清除。\n\n独立复证（本轮,5+探针+全盘find,均与C507一致）：\n- NAS共享正常(AI-SalesOS仓库根/AISALEOS_SHARED/01_黑武士_1号均可列)\n- 同级IN/OUT/chatgpt_raw_archive均存在\n- 唯ARCHIVE_SOURCE整个目录缺失(4x探针MISSING+目录列举No such file or directory)\n- BASE下仅3子目录(chatgpt_raw_archive/IN/OUT),全盘*8090-REAL*/*菩提_E2E1*零命中→锚非改名/移动,确为持久缺失\n- 本机无冻结锚本地缓存\n\n影响：战场C基线字节级复证当前无法进行(无基线可比对)。纪律红线:绝不重建/覆盖冻结锚、绝不伪造INTACT、绝不统一Hash。\n当前本地8090-REAL源.json sha=ba6ab5ac39dda121(与patrol对齐),对frozen 7f5bfdd1已知diverged,RELATION=UNKNOWN(缺基线无法证INTACT)。\n\nKR_GATE:未触发(仅上报,不自行决定)。\nNEXT:Watch冻结锚NAS恢复(恢复即字节级复证INTACT);恢复前战场C仅记录sha跳变、不升格\"已复证\"。",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-11-05T22:22:30Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6672163474,
+      "type": "SELF_SOLVE",
+      "instruction": "[1WB国庆巡航·Cycle 511 · NEW_BLOCKER + 证据更正]\n\n独立复证（本轮直读UNC + BASE目录列举）：\n- 冻结锚 `\\\\192.168.2.107\\AI-SalesOS 仓库\\AISALEOS_SHARED\\01_黑武士_1号\\ARCHIVE_SOURCE\\菩提_E2E1_INPUT_8090-REAL源.json` 本轮 2 个 UNC 变体均 FileNotFoundError；`ARCHIVE_SOURCE` 子目录在 BASE（74项）中不存在 → 锚确为不可达（与 C510 #6671084067 报告一致，非 SMB flicker 自愈）。\n- 证据更正：此前 ledger 中「冻结锚 FULL_MATCH(7f5bfdd1…dfe901a, INTACT, 130+轮)」本轮独立探针无法复现，应判为 SMB flicker 误读/陈旧缓存，撤回 INTACT 结论，改为 ANCHOR_UNAVAILABLE；战场C字节级基线比对现不可做。\n- 本地 8090-REAL源.json：SHA256=a4f79d899d4f8508…（与 patrol C511 对齐）；BIZ_CONTENT_SHA=87208b51（稳定，同 C509/C494）；REAL_BIZ_CHANGED_KEYS=[]（仅 autonomous_wake.*+meta 治理噪声）→ 无业务突变，分歧仍属已知治理 flutter。\n- KR_GATE：未触发。未代2WB、未覆盖冻结、未统一Hash、未脑补来源。\n- NEXT：Watch + 冻结锚缺口跟踪；待锚恢复后重做基线比对。\n",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-11-05T23:25:58Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6673497435,
+      "type": "SELF_SOLVE",
+      "instruction": "[1WB国庆巡航·Cycle 512 · RECOVERY_AFTER_FAILURE 纠正 C511 误报]\n\n独立复证（本轮 UNC 单/双反斜杠双变体 x3 重试，共 6 次探针全部命中）：\n- 冻结锚 \u000192.168.2.107\\AI-SalesOS 仓库\\AISALEOS_SHARED\u0001_黑武士_1号\\ARCHIVE_SOURCE\\菩提_E2E1_INPUT_8090-REAL源.json 真实存在且可读；\n- 字节级 SHA256 = 7f5bfdd16d87314d459012b5c78f359f8b9478277519e6da3901dbcb7dfe901a，FULL_MATCH 冻结基线（INTACT）；\n- BASE（01_黑武士_1号）实测列 3 项：ARCHIVE_SOURCE / chatgpt_raw_archive / 执行拓扑事实表_2026-09-03.md，ARCHIVE_SOURCE 子目录确实存在（C511 称 74 项无 ARCHIVE_SOURCE 与实测不符，疑 SMB flicker 误读/错路径）。\n\n结论：C511 的 NEW_BLOCKER「冻结锚不可达」为误报；战场C冻结基线持续 INTACT（130+ 轮一致），未丢失，已闭合无需 KR 处置。未代2WB、未覆盖冻结、未统一Hash、未脑补来源、未触发 KR_GATE。",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-11-06T00:44:10Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6673508980,
+      "type": "SELF_SOLVE",
+      "instruction": "[1WB国庆巡航·Cycle 512 · 修正/补充 6673497435] 冻结锚结论审慎化\n\n补正刚才回执的过度自信：C512 实测冻结锚存在且字节级 SHA256 = 7f5bfdd1...dfe901a（FULL_MATCH，REAL），但回溯 C510(06:20)/C511(07:24) 亦独立观测到 ARCHIVE_SOURCE 目录缺失/不可达，二者均为各自时刻真实观测。\n\n审慎结论：冻结锚处于 SMB 间歇性可达状态（ANCHOR_FLICKER_UNSTABLE）——既非\"持久缺失\"（C512 证伪），亦非\"稳固INTACT 130+轮\"（C510/C511 证伪）。当前(C512)态=INTACT；可用性不稳定。\n\n既不把 C511 武断判为误报，也不把基线判为稳固。需连续多轮稳定观测(目录持续存在+哈希持续FULL_MATCH)方可定论基线稳固。未触发 KR_GATE、未覆盖冻结、未伪造INTACT、未统一Hash、未代2WB。",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-11-06T00:44:55Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6674924689,
+      "type": "SELF_SOLVE",
+      "instruction": "[1WB·C513·清旧债·战场C冻结锚FLICKER纠正] 2026-11-06 10:0x\n\n独立复证（3×2探针，单/双UNC变体）：本小时冻结锚 ARCHIVE_SOURCE 目录与锚文件均 UNREACHABLE；同级 BASE（01_黑武士_1号）可达 → SMB连通正常，锚本身间歇性缺失。\n\n纠正 C512 的「INTACT/已恢复」结论：patrol(10:02:26)报 nas_reachable=true（其探针即在 ARCHIVE_SOURCE 内），独立探针(约10:05)却观测到该目录不可达 → 锚可用性=FLICKER_UNSTABLE（振荡 C510/C511缺失→C512可达→C513缺失），既非持久缺失亦非稳固INTACT。字节级基线比对仍间歇性不可做。\n\n战场C其他：本地8090当前sha=9d8539b1（对齐patrol），业务内容sha=87208b51（与C494/C509/C512一致，零业务突变）；分歧仍属治理flutter（autonomous_wake/meta），不升格候选。8051稳（63bd002e6194d4b0）。\n\n#6 GET本小时遇IncompleteRead暂不可读最新评论，未检测新外部artifact，退避不重复读。\n\n红线：未重建/覆盖冻结锚、未伪造INTACT、未统一Hash、未代2WB、未触KR_GATE。\nNEXT：低成本Watch+冻结锚连续稳定性跟踪（需目录持续存在+哈希持续FULL_MATCH≥N轮方可定论稳固）；战场A/B/D封板Watch。",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-11-06T02:07:10Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
+    },
+    {
+      "comment_id": 6680745990,
+      "type": "SELF_SOLVE",
+      "instruction": "[CLOCK][1WB]\nNODE=1WB\nGENERATED_AT=2026-09-19T22:55:29+08:00\nSTATUS_SOURCE=NAS_REAL\nSOURCE_HASH=b9c41a1cf03f001d\nKR_MANUAL_RUN=0\nKR_RELAY=0",
+      "status": "PENDING_LOCAL_CONSUME",
+      "sent_at": "2026-11-06T08:35:54Z",
+      "detected_at": "2026-11-17T08:23:09Z",
+      "queued_at": "2026-11-17T08:23:09Z"
     }
   ],
   "processed": [
