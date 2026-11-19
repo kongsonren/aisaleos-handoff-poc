@@ -1,9 +1,9 @@
 {
-  "round_seq": 492,
-  "round_at": "2026-11-19T07:54:51.655031+08:00",
+  "round_seq": 493,
+  "round_at": "2026-11-19T12:58:42.322958+08:00",
   "actor": "CLOUD_NEZHA",
-  "runner": "runnervmccnms",
-  "run_id": "44424697173",
+  "runner": "ip-10-0-128-193",
+  "run_id": "44461919307",
   "run_attempt": "1",
   "decision": {
     "kind": "GENUINE_IDLE",
